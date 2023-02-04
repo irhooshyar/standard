@@ -1,0 +1,706 @@
+:root {
+  --menu_color: #1481c0;
+  --bg_color: #f8f9fa;
+  --nav_link_color: #f2f2f2;
+  --brand_name_color: white;
+  --nav_active_color: white;
+  --nav_hover_color: rgb(20, 162, 245);
+  --header_color: #488fb8;
+}
+
+
+body {
+    margin: 0;
+    font-family:Helvetica, sans-serif ;
+    background-color: var(--bg_color);
+}
+
+.tooltip {
+  font-family: vazir;
+  direction: ltr;
+}
+
+
+.dropdown-toggle::after {
+  position: relative;
+  top: 2px;
+}
+
+.nav_menu {
+  background-color: var(--menu_color);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 4;
+  font-size: 12px;
+
+}
+
+.nav_menu a {
+  color: var(--nav_link_color);
+  text-decoration: none;
+ 
+}
+
+.nav_menu a:hover,
+.nav_menu a:focus {
+  background-color: var(--nav_hover_color);
+  color: white;
+  text-decoration: none;
+}
+
+
+
+.nav_menu a.active {
+  background-color: var(--nav_active_color);
+  color: rgb(20, 129, 192);
+  border-bottom: 1px solid var(--menu_color);
+}
+
+.nav_menu .dropdown-menu a.active {
+  background-color: var(--nav_hover_color);
+  color: white;
+}
+
+
+
+/* dropdownn menu */
+
+
+.nav_menu .dropdown-menu a {
+  color: var(--menu_color);
+  background-color: white;
+  font-size: 14px;
+}
+
+.nav_menu .dropdown-menu a:hover, .nav_menu .dropdown-menu a:focus {
+  color: white !important;
+  background-color: var(--nav_hover_color) !important;
+}
+
+/* Set the border color */
+
+.navbar-toggler {
+  border-color: white;
+}
+/* Setting the stroke to green using rgb values (0, 128, 0) */
+
+ .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+
+.topnav a img {
+  width: 25px;
+}
+
+.nav_menu #language {
+  font-size: 13px;
+  margin-top: 5px;
+  color: var(--nav_link_color);
+  background-color: transparent;
+  border: 1px solid white;
+  outline: 2px solid var(--menu_color);
+  
+}
+.nav_menu #language option {
+  color: var(--menu_color);
+  background-color: transparent;
+  border: 1px solid white;
+}
+
+.topnav a#logout {
+  float: left;
+}
+
+.topnav #menu_icon {
+  display: none;
+  float: right;
+}
+
+#logout_icon {
+  /* flip logout icon */
+  transform: scaleX(-1);
+  margin-right: 5px;
+  position: relative;
+  top: 2px;
+  font-weight: bold;
+}
+
+
+
+#document_download,
+#document_select,
+#show_result,
+#graph_show {
+  background-color: var(--menu_color);
+  color: white;
+}
+
+.document_select_box {
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+a#download_link {
+  text-decoration: none;
+  color: white;
+}
+
+#download_link:hover,
+#download_link:focus {
+  text-decoration: none;
+  color: white;
+}
+
+.vertical div svg {
+  margin-top: -75px;
+  height: 400px;
+}
+
+#document_search,
+#document_select,
+#document_download,
+#save_2Gram,
+#save_3Gram,
+#Source_document_select,
+#Destination_document_select {
+  background-color: var(--menu_color);
+  color: white;
+}
+
+.dropdown_icon {
+  font-size: 13px;
+  position: relative;
+  top: -4px;
+}
+
+#copy_document i {
+  color: var(--menu_color);
+}
+
+#copy_document {
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+#copy_document i {
+  font-size: 35px;
+  position: relative;
+  top: -18px;
+}
+
+.topnav #help_link {
+  float: left;
+  display: block;
+}
+
+#help_icon {
+  
+  font-size: 16px;
+  position: relative;
+  top: -4px;
+  transform: scaleX(1);
+}
+
+/* #note_icon {
+  font-size: 16px;
+  position: relative;
+  top: -4px;
+} */
+
+.welcometext {
+  direction: ltr;
+  text-align: center;
+  width: 50%;
+  line-height: 3;
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+}
+
+.helptext {
+  direction: ltr;
+  text-align: center;
+  line-height: 3;
+  font-size: 16px;
+  font-weight: bold;
+  margin: auto !important;
+  display: block;
+}
+
+#advanced_search,
+#constraints_setting {
+  background-color: white;
+  color: var(--menu_color);
+  border: 1px solid var(--menu_color);
+}
+
+h6.header {
+  background-color: #488fb8;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  /* background-color: rgb(105, 104, 104); */
+  /* background-color: rgb(21, 87, 126); */
+}
+
+.header_icon {
+  position: relative;
+  top: -5px;
+}
+
+thead {
+  background-color: #488fb8;
+  position: sticky;
+  top: 0;
+}
+
+h6.table_header,
+.TF_IDF_header,
+.Term_count_header,
+.subject_keywords,
+.subject_distribution,
+.bigram_header,
+.trigram_header,
+.comparison_header,
+.document_year,
+.document_subject,
+.chart_header,
+.document_level,
+.actors_distribution,
+.accordin_header,
+.tools_distribution,
+.extractected_references {
+  color: var(--menu_color);
+}
+
+#def_keywords_pane,
+#def_keywords_pane1 {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+th {
+  direction: ltr;
+  color: white;
+  font-weight: normal;
+}
+
+td,
+th {
+  text-align: center !important;
+  direction: ltr;
+  vertical-align: middle !important;
+}
+
+#original_tabs,
+#pills-tab {
+  border-bottom: 1px solid var(--header_color);
+}
+
+/* .doc_info_table thead,
+.tf_idf_table thead,
+#Primary_Keywords_header,
+#Final_Keywords_header,
+#First_two_para_header,
+#Last_two_para_header {
+    background-color: rgb(87, 87, 87);
+} */
+
+h5 a,
+h6 a,
+li a,
+tr a {
+  text-decoration: none;
+  display: block;
+  color: #212529;
+  direction: ltr;
+}
+
+tr button.detail {
+  color: var(--menu_color);
+}
+
+h5 a:hover,
+h6 a:hover,
+li a:hover,
+tr a:hover {
+  text-decoration: none;
+  color: var(--menu_color);
+}
+
+.nav-link {
+  color: rgb(20, 129, 192);
+}
+
+.nav-pills .nav-link.active:not(.modal_nav_link),
+.nav-pills .show > .nav-link:not(.modal_nav_link) {
+  /* color: #fff; */
+  color: rgb(20, 129, 192);
+  /* background-color: var(--menu_color); */
+  /* background-color: rgb(72, 143, 184); */
+  background-color: white;
+  border-radius: 5px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top: 1px solid var(--menu_color);
+  border-right: 1px solid var(--menu_color);
+  border-left: 1px solid var(--menu_color);
+  position: relative;
+  top: 1px;
+}
+
+label,
+option,
+select,
+li {
+  direction: ltr;
+}
+
+.badge {
+  position: relative;
+}
+
+.modal_btn {
+  background-color: var(--menu_color);
+  color: white;
+}
+
+.modal_btn:hover,
+.modal_btn:focus {
+  background-color: var(--menu_color);
+  color: white;
+}
+
+/* modal style */
+
+.modal-body,
+.modal-title {
+  direction: ltr;
+}
+
+.anychart-credits {
+  display: none;
+}
+
+#scroll_btn {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: #ccc;
+}
+
+#scroll_btn i {
+  font-size: 35px;
+}
+
+#scroll_btn:hover {
+  color: #488fb8;
+}
+
+
+.blue_dotted_border {
+  border: 2px dashed var(--menu_color);
+  padding: 0 2px;
+  border-radius: 5px;
+
+}
+
+.gray_dotted_border {
+  border-bottom: 2px dashed gray;
+  padding: 0 2px;
+  border-radius: 5px;
+
+}
+
+.green_dotted_border {
+  border-bottom: 2px dashed green;
+  padding: 0 2px;
+  border-radius: 5px;
+
+}
+
+/*  style configuration for smaller screens*/
+
+@media screen and (max-width: 784px) {
+  .topnav a:not(:nth-child(2)) {
+    display: none;
+    /* hidden all links except menu_icon and brand_name */
+  }
+  .topnav a#menu_icon {
+    float: right;
+    display: block;
+  }
+  /* remove hover on menu icon at responsive view */
+  .topnav a#menu_icon:hover {
+    background-color: var(--menu_color);
+    color: white;
+  }
+  i#brand_logo {
+    display: none;
+  }
+}
+
+@media (min-width: 576px) {
+  /* .modal-dialog {
+        max-width: 900px !important;
+    } */
+}
+
+/* when click on menu icon  */
+
+@media screen and (max-width: 784px) {
+  /* .topnav.responsive {
+        position: relative;
+    } */
+  /* put each link on bottom of each other by display=block */
+  .topnav.responsive a:not(:nth-child(1)) {
+    float: none;
+    display: block;
+    text-align: right;
+  }
+  .topnav a#logout {
+    float: right;
+  }
+  a#brand_name {
+    float: none;
+    display: block;
+    text-align: right;
+  }
+  i#brand_logo {
+    display: none;
+  }
+}
+
+/* custom scrollbar */
+
+/* width */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 1px;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 1px;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+.spinner-border {
+  display: none;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px !important;
+  vertical-align: middle !important;
+  margin-top: 1.4px !important;
+}
+
+.spinner-border.active {
+  display: block;
+}
+
+#original_tabs {
+  /*z-index: 2;*/
+}
+
+#SearchResultLable,
+#VoteResultLable,
+#DocsWithoutSubject {
+  position: relative;
+  top: 10px;
+  text-align: left;
+  direction: ltr;
+}
+
+#simple_graph_container svg {
+  width: 100% !important;
+}
+
+.source_header,
+.destination_header {
+  border: 1px solid rgb(20, 129, 192);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: rgb(20, 129, 192);
+}
+
+.source_container,
+.destination_container {
+  border-left: 1px solid rgb(20, 129, 192);
+  border-right: 1px solid rgb(20, 129, 192);
+  border-bottom: 1px solid rgb(20, 129, 192);
+}
+
+.footable-filtering-search {
+  width: 100% !important;
+}
+
+.input-group-btn {
+  display: none !important;
+}
+
+.table.footable > thead > tr.footable-filtering > th div.input-group {
+  width: 100% !important;
+}
+
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+
+.pagination > li {
+  display: inline;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #337ab7;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.pagination > li > a:hover,
+.pagination > li > a:focus,
+.pagination > li > span:hover,
+.pagination > li > span:focus {
+  z-index: 2;
+  color: #23527c;
+  background-color: #eee;
+  border-color: #ddd;
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+  z-index: 3;
+  color: #fff;
+  cursor: default;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+
+.pagination > .disabled > a,
+.pagination > .disabled > a:focus,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > span,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > span:hover {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+#ModalBody div table thead,
+#ModalBody_Source div table thead,
+#ModalBody_Destination div table thead {
+  position: relative !important;
+}
+
+.footable-pagination-wrapper .label {
+  display: none;
+}
+
+input[type="checkbox"] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(1.4);
+  padding: 10px;
+}
+
+.ngram-textbox {
+  width: 80%;
+  margin-left: 5%;
+}
+
+.ngram-div {
+  display: flex;
+  justify-content: center;
+}
+
+.multi-select-menuitems label {
+  width: 90% !important;
+}
+
+.multi-select-menuitems input[type="checkbox"] {
+  right: 3%;
+}
+
+.sign-out-btn {
+  font-size: 16px;
+  padding: 5px 0;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  top: -1px;
+  transform: scaleX(-1);
+  
+}
+
+/* added */
+ol li::marker {
+  font-weight: bold;
+}
+
+.popover-header,
+.popover-body {
+  direction: ltr;
+  text-align: right;
+  font-family: vazir;
+}
+
+.btn-danger {
+  width: 3.5rem;
+}
+
+.btn-success {
+  width: 3.5rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

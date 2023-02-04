@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>مشاهده گزارشات خطاها</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#AdminDropdown').addClass('active');
+            $('#admin_user_report_bug').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" autocomplete="off" novalidate>
+
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mx-auto">
+
+                <!-- Main Panel -->
+                <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">پنل اصلی:</label>
+                    <select dir="rtl" id="panel_name" name="panel_name" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;" onchange="PanelChanged()">
+                    </select>
+
+                </div>
+
+
+                <!-- Branch of Panel -->
+                <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">زیر پنل:</label>
+                    <select dir="rtl" id="branch_name" name="branch_name" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;">
+                        <option value="all">همه</option>
+                    </select>
+                    
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">وضعیت بررسی:</label>
+                    <select dir="rtl" id="status" name="status" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;">
+                        <option value="all">همه</option>
+                        <option value="F">بررسی نشده</option>
+                        <option value="T">بررسی شده</option>
+                    </select>
+                    
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        جست‌وجو
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+        
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست‌وجو</button>
+                </li>
+                <!--
+                <li class="nav-item float-right" role="presentation">
+                    <button id="terms_graph_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#terms_graph_pane" type="button" role="tab" aria-controls="terms_graph_pane" aria-selected="false">گراف کلمات</button>
+                </li>
+                -->
+                <li class="nav-item float-right" role="presentation">
+                    <button id="bar_chart_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#bar_chart_info_pane" type="button" role="tab"
+                        aria-controls="bar_chart_info_pane" aria-selected="false">داشبورد آماری</button>
+                </li>
+
+
+                <!-- Download Buttons -->
+
+                <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+
+                <!-- Result Count -->
+                <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Bar chart Info Pane -->
+                <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                    id="bar_chart_info_pane" role="tabpanel" aria-labelledby="bar_chart_info_tab">
+
+                    <div class="row mt-4 w-100 flex-row-reverse mx-0 px-0">
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Document Subject  segment -->
+                            <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                نام زیر پنل
+                            </h5>
+                            <br>
+                            <div style="margin-left: 1px !important;" id="branch_container"
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ChartModal Container -->
+    <button type="button" id="ChartModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+        data-bs-target="#ChartModal"></button>
+    <div class="modal fade" id="ChartModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ChartModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="ChartModalText" class="modal-body text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+    <!-- Intro Js -->
+    <script src="../../static/js/search/search_tour.js"></script>
+    <script src="../../static/js/tour.js"></script>
+
+<script>
+    initSearchableSelects()
+
+    const panel_branch = {
+        'branch':{
+            'لاگین': 
+                ['لاگین'],
+            'تحلیل مصوبات': 
+                ['نمایش مصوبات','جست و جوی مصوبات', 'گراف مصوبات'],
+            'تحلیل کنشگران': 
+                ['نمایش کنشگران','جست و جوی کنشگران', 'گراف کنشگران', 'کنشگران جمعی'],
+            'تحلیل موضوعی': 
+                ['تحلیل موضوعی','انطباق موضوعی', 'گراف موضوعی', 'تحلیل آماری', 'مقایسه اسناد'],
+            'تحلیل اختصاصی': 
+                ['تحلیل آرا','تحلیل شعار سال', 'تحلیل درگاه', 'تحلیل تعاریف', 'انطباق ادبیات حقوقی', 'تحلیل آیین نامه های اجرایی', 'نظارت بر آیین نامه های اجرایی', 'تحلیل اصول مندرج در مصوبات'],
+            'تحلیل تنطیم گری': 
+                ['ابزار تنظیم گری','تحلیل پنجره واحد', 'مشاوره به کسب و کار ها', 'تحلیل مراجع رسمی', 'چرخه حیات تنظیم گری'],
+            'تحلیل هوشمند': 
+                ['استخراج خودکار موضوعات'],
+            'کار های آتی': 
+                ['کار های آتی'],
+            'انتقادات و پیشنهادات': 
+                ['انتقادات و پیشنهادات'],
+            'گزارش خطا': 
+                ['گزارش خطا'],
+            'راهنما': 
+                ['راهنما'],
+            'پنل ادمین': 
+                ['پنل ادمین'],
+        }
+    }
+
+    const status_dic = {
+        'all': 'همه',
+        'T': 'بررسی شده',
+        'F': 'بررسی نشده'
+    }
+
+        var main_response = ""
+
+        init()
+
+        ReportsValue = [];
+
+        container_id_list = ['SearchResultLable', 'SearchTable', 'branch_container',]
+
+        function clearPrevResults(container_id_list) {
+            for (container_id of container_id_list) {
+                document.getElementById(container_id).innerHTML = "";
+            }
+        }
+
+        async function init() {
+            request_link = 'http://' + location.host + "/get_all_panels/";
+            response = await fetch(request_link).then(response => response.json());
+            
+            main_response = response;
+
+            document.getElementById('panel_name').innerHTML = '<option value="all">همه</option>'
+            document.getElementById("branch_name").innerHTML = ""
+    
+            for (main_panel of main_response["all_panels"]) {
+                document.getElementById('panel_name').innerHTML += "<option value='" + main_panel['id'] + "'>" + main_panel['persian_name'] + "</option>"
+            }
+
+            document.getElementById("branch_name").innerHTML = '<option value="all">همه</option>'
+
+            for (main_panel of main_response["all_panels"]) {
+                for (branch of main_panel['sub_panels']) {
+                    document.getElementById("branch_name").innerHTML += "<option value='" + branch['id'] + "'>" + branch['persian_name'] + "</option>"
+                }
+            }
+
+            syncAllSelects()
+        }
+    
+    
+        async function PanelChanged() {
+            let selectd_panel = document.getElementById('panel_name').value
+            let options = [{ value:"all", text: 'همه'}];
+
+            for (main_panel of main_response["all_panels"]) {
+                if (main_panel['id'] == selectd_panel || selectd_panel == 'all') {
+                    for (branch of main_panel['sub_panels']) {
+                        options.push({value: branch['id'], text: branch['persian_name']});
+                    }
+                }
+            }
+            syncSelectOptions("branch_name", options)
+        }
+
+        async function ChangeCheckStatus(report_bug_id) {
+            try {
+                request_link = 'http://' + location.host + "/ChangeReportBugCheckStatus/" + report_bug_id + "/";
+                response = await fetch(request_link).then(response => response.json());
+                notyf.success('وضعیت  گزارش تغییر کرد');
+            }catch (e) {
+                console.error(e)
+                notyf.error('لطفا دوباره تلاش کنید');
+            }
+        }
+
+        async function ShowReport(panel_name, branch_name, report_bug_text) {
+            document.getElementById('ModalHeader').innerHTML = "";
+            document.getElementById('DetailText').innerHTML = "";
+            $('#myModal').modal('show');
+    
+            panel_name = 'نام پنل: ' + panel_name
+            branch_name = 'نام زیرپنل: ' + branch_name
+            const paragraph_tag = '<h4>' + 'گزارش: ' + '</h4>' + '<p>' + report_bug_text + '</p>'
+            document.getElementById('ModalHeader').innerHTML += panel_name + ' <br> ' + branch_name 
+            document.getElementById('DetailText').innerHTML += paragraph_tag
+        }
+
+        async function showReportInformation(panel_id,branch_id,status,response) {    
+            let index = 1;
+            let report_result = [];
+            ReportsValue = response['report_bug'];
+
+            document.getElementById("SearchResultLable").innerText = (response['report_bug'].length).toString() + " گزارش یافت شد";
+            document.getElementById("SearchTable").innerHTML = "";
+    
+            for (let report of response['report_bug']) {
+                const id = report['id']
+                const first_name = report['first_name']
+                const last_name = report['last_name']
+                const email = report['email']
+                const date = report['date']
+                const panel_name = report['panel_name']
+                const branch_name = report['branch_name']
+                const report_bug_text = report['report_bug_text']
+                var checked = report['checked']
+                
+                const detail_function = "ShowReport('" + panel_name + "', '" + branch_name + "', '" + report_bug_text + "')";
+                const detail = '<button style="background-color:lightblue" type="button" class="btn d-flex float-right mr-4" id="report_bug_text" onclick="' + detail_function + '">مشاهده</button>'
+                var checked_tag = '<input name="task" type="checkbox" onclick="ChangeCheckStatus(\'' + id + '\')">';
+                if (checked) {
+                    checked_tag = '<input name="task" type="checkbox" checked onclick="ChangeCheckStatus(' + id + ')">';
+                }
+    
+                const row = { "index": index, "first_name": first_name, "last_name": last_name, "email": email, "date": date, "panel_name": panel_name + ' (' + branch_name + ')', "detail": detail, "checked": checked_tag };
+    
+                report_result.push(row);
+                index += 1;
+            }
+            $('#SearchTable').empty();
+            $('.SearchTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گزارشی یافت نشد.",
+                "columns": [{
+                    "name": "index",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "first_name",
+                    "title": "نام",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "last_name",
+                    "title": "نام خانوادگی",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "email",
+                    "title": "ایمیل",
+                    "style": {
+                        "width": "25%"
+                    }
+                }, {
+                    "name": "date",
+                    "title": "تاریخ",
+                    "style": {
+                        "width": "15%"
+                    }
+                }, {
+                    "name": "panel_name",
+                    "title": "نام پنل (زیرپنل)",
+                    "style": {
+                        "width": "25%"
+                    }
+                }, {
+                    "name": "detail",
+                    "title": "گزارش کاربر",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "checked",
+                    "title": "بررسی شده",
+                    "style": {
+                        "width": "5%"
+                    }
+                }
+                ],
+                "rows": report_result
+            });
+        }
+
+
+        async function GetDocumentsInformation() {
+
+            let request_link = '';
+            notyf.dismissAll();
+            var panel_id = document.getElementById("panel_name").value
+            var branch_id = document.getElementById("branch_name").value
+            var status = document.getElementById("status").value
+            
+            request_link = 'http://' + location.host + "/GetReportBugByFilter/" + panel_id + "/" + branch_id + "/" + status + "/";
+            response = await fetch(request_link).then(response => response.json());
+
+            startBlockUI('SearchTable');
+
+
+            /*  Show Table Result */
+            showReportInformation(panel_id,branch_id,status,response);
+            stopBlockUI('SearchTable', 'نتایج جست‌وجو');
+
+            /* Show Chart  */
+            const branch_chart_data = response["branches_count"]
+            console.log(response["branches_count"])
+            startBlockUI('bar_chart_info_pane');
+
+            showChartData(branch_chart_data, "branch_container", response["report_bug"], false)
+
+            stopBlockUI('bar_chart_info_pane', 'داشبورد آماری');
+        }
+
+        function showChartData(data, container, reports_information_result, keySort) {
+            let chart_data = []
+            for (const [key, value] of Object.entries(data)) {
+                chart_data.push([key, value])
+            }
+            showChart(chart_data, container, reports_information_result, keySort)
+        }
+
+        $('#definition_keywords_graph_tab').hide();
+        async function ShowResult() {
+            // clear previous results
+            clearPrevResults(container_id_list);
+            await SpinnerModeFunction("Active");
+            GetDocumentsInformation();
+            await SpinnerModeFunction("Disable");
+        }
+
+        function showChart(data, position, reports_information_result, keySort) {
+            var status = document.getElementById("status").value;
+
+            if (keySort === true) {
+                data.sort(function (element_a, element_b) {
+                    return element_a[0] - element_b[0];
+                });
+            }
+            else {
+                data.sort(function (element_a, element_b) {
+                    return element_a[1] - element_b[1];
+                });
+            }
+
+            data.sort(function (x, y) { return x[0] === 'نامشخص' ? -1 : y[0] === 'نامشخص' ? 1 : 0; });
+
+            // Sorts the data by descending.
+            data = anychart.data.set(data)
+
+            document.getElementById(position).innerHTML = ""
+
+            chart = anychart.column();
+            chart.container(position);
+            // create a column series and set the data
+            var series = chart.column(data);
+            chart
+                .animation(true)
+                .padding([10, 40, 5, 20])
+
+
+            chart.background().fill('#ffffff');
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // var state = series.normal();
+            // state.fill('#1481c0')
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("تعداد گزارش");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            yAxis.title().height(40);
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("{%value}");
+
+            chart.xAxis().labels().height(60);
+
+            chart.yAxis().labels().format("{%value}");
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+
+            // initiate drawing the chart
+            chart.draw();
+
+            chart.listen('Click', async function (event) {
+                const click_tag = event.domTarget.tag;
+                console.log(click_tag)
+                const index = click_tag["index"]
+                const branch = data.row(index)[0];
+
+                let header = "نام زیر پنل: " + branch + '\n' + "وضعیت بررسی: " + status_dic[status]
+
+                document.getElementById("ChartModalHeader").innerText = header
+                document.getElementById("ChartModalText").innerHTML = ""
+                i = 1
+                for (report of reports_information_result)
+                {
+                    if (report['branch_name'] == branch) {
+                        document.getElementById("ChartModalText").innerHTML += '<p>' + i + ". " + report['report_bug_text'] + '</p>';
+                        i += 1
+                    }
+                }
+                $("#ChartModalBtn").click();
+            })
+        }
+
+        async function SpinnerModeFunction(mode) {
+            if (mode === "Active") {
+                $(".spinner-border").addClass("active");
+            } else if (mode === "Disable") {
+                $(".spinner-border").removeClass("active");
+            }
+        }
+
+</script>
+
+<script src="../../static/js/zipDownload/jszip.min.js"></script>
+<script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+<script>
+
+        async function ExportExcelSerachResultFunction() {
+            var csv = "";
+    
+            sep = ","
+            let Csv = "نام" + sep + "نام خانوادگی" + sep + "آدرس ایمیل" + sep + "تاریخ" + sep +
+            "پنل اصلی" + sep + "زیرپنل" + sep + "گزارش کاربر" + sep + "وضعیت بررسی" + "\n"
+            for (const report of ReportsValue) {
+                Csv += report["first_name"] + sep + report["last_name"] + sep + report["email"] + sep +
+                report["date"] + sep + report["panel_name"] + sep + report["branch_name"] + sep + 
+                report["report_bug_text"] + sep + report['checked'] + "\n";
+            }
+    
+            let save_file_name = "گزارش خطا‌‌ها"
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click()
+        }
+
+
+        /* Search after press Enter */
+        $("#info_form").submit(function () { return false; });
+        $("#SearchBox").keyup(function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                $("#document_search").click();
+            }
+        });
+
+    </script>
+</body>
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+</script>
+
+<script src="../../static/js/tooltip_handler.js"></script>
+
+<!-- Intro Js -->
+<script src="../../static/js/search/search_tour.js">
+</script>
+<script src="../../static/js/tour.js"></script>
+
+<script src="../../static/js/signout_function.js"></script>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>مشاهده گزارشات خطاها</title>
+    {% include "doc/title_icon.html" %}
+
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#AdminDropdown').addClass('active');
+            $('#manage_users_tab').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+
+        <div dir="rtl" class="row w-100 p-0">
+
+            <!-- Download Buttons -->
+            <div dir="ltr" class="text">
+                <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+                    <!-- Result Count -->
+                <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+            </div>
+            <hr style="color:darkblue">
+            <div class="searching">
+                <form class="d-flex pb-2">
+                    <input class="form-control me-2" id="myInput" type="search" placeholder="جستجو......"
+                           aria-label="Search">
+                </form>
+            </div>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right" id="pills-tabContent">
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-2">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <div dir="rtl" class="row list-table mt-3 mx-auto p-3 mb-4" id="permissionslist">
+                    </div>
+                </div>
+                {% comment %} <nav dir="rtl" class="navbar nav_menu navbar-expand-lg p-0 mt-0">
+                    {% include "doc/header_access.html" %}
+                </nav> {% endcomment %}
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+    <!-- Intro Js -->
+    <script src="../../static/js/search/search_tour.js"></script>
+    <script src="../../static/js/tour.js"></script>
+
+</body>
+
+<script>
+    ShowResult();
+
+    async function ChangePermission(panel_name,username) {
+        try {
+            request_link = 'http://' + location.host + "/create_or_delete_user_panels/" + panel_name + "/" + username + "/";
+            response = await fetch(request_link).then(response => response.json());
+            if (response['status'] == 'created') {
+                notyf.success('دسترسی با موفقیت اضافه شد');
+            }
+            else {
+                notyf.success('دسترسی با موفقیت حذف شد');
+            }
+        } catch (e) {
+            console.error(e)
+            notyf.error('لطفا دوباره تلاش کنید');
+        }
+    }
+
+
+    async function ShowPermissions(username) {
+        const request_url = 'http://' + location.host + '/get_allowed_panels/' + username + '/';
+        const response = await fetch(request_url).then(response => response.json());
+
+        document.getElementById("ModalHeader").innerHTML = '<h4>' + 'دسترسی های کاربر: ' + username + '</h4>'
+
+        $('#myModal').modal('show');
+
+        document.getElementById("permissionslist").innerHTML = ""
+        const all_panels = response['all_panels']
+        const user_panels = response['user_panels']
+
+        for (const panel of all_panels)
+        {
+            const main_panel = panel['main_panel'];
+            const main_persian_name = panel['persian_name'];
+            const sub_panels = panel['sub_panels'];
+            document.getElementById("permissionslist").innerHTML += '<h5>' + main_persian_name + '</h5>'
+            for (const sub_panel of sub_panels) { 
+                english_name = sub_panel['english_name']
+                persian_name = sub_panel['persian_name']
+                let checked = ""
+                if (user_panels.includes(sub_panel['english_name']))
+                    checked = "checked"
+                const tag =    '<div class="col-3 checkbox p-2 text-right">'+
+                                    '<input type="checkbox" '+ checked +' class="doc_checkbox" value="'+english_name+'" onclick="ChangePermission(\'' + english_name + '\',\'' + username + '\')">'+
+                                    '<label class="m-2">'+
+                                            persian_name+
+                                    '</label>'+
+                                '</div>';
+                document.getElementById("permissionslist").innerHTML += tag
+            }
+            document.getElementById("permissionslist").innerHTML += '<hr>'
+        }
+    }
+
+
+    async function ShowUsers(response) {    
+        let index = 1;
+        let user_result = [];
+
+        document.getElementById("SearchResultLable").innerText = (response['admins'].length).toString() + " کاربر یافت شد";
+        document.getElementById("SearchTable").innerHTML = "";
+
+        for (let user of response['admins']) {
+            const id = user['id']
+            const first_name = user['first_name']
+            const last_name = user['last_name']
+            const username = user['username']
+            const email = user['email']
+            const phone = user['phone']
+            var panels = user['panels']
+
+            const detail_function = "ShowPermissions('" + username + "')";
+            const detail = '<button style="background-color:lightblue" type="button" class="btn float-none mr-4" id="report_bug_text" onclick="' + detail_function + '">مشاهده</button>'
+
+            const row = { "index": index, "first_name": first_name, "last_name": last_name, "username": username, "email": email, "phone": phone, "permissions": detail };
+            
+            user_result.push(row);
+            index += 1;
+        }
+        columns = [{
+            "name": "index",
+            "title": "ردیف",
+            "breakpoints": "xs sm",
+            "type": "number",
+            "style": {
+                "width": "5%"
+            }
+        }, {
+            "name": "first_name",
+            "title": "نام",
+            "style": {
+                "width": "10%"
+            }
+        }, {
+            "name": "last_name",
+            "title": "نام خانوادگی",
+            "style": {
+                "width": "10%"
+            }
+        }, {
+            "name": "username",
+            "title": "نام کاربری",
+            "style": {
+                "width": "10%"
+            }
+        }, {
+            "name": "email",
+            "title": "آدرس ایمیل",
+            "style": {
+                "width": "30%"
+            }
+        }, {
+            "name": "phone",
+            "title": "شماره تماس",
+            "style": {
+                "width": "10%"
+            }
+        }, {
+            "name": "permissions",
+            "title": "دسترسی ها",
+            "style": {
+                "width": "20%"
+            }
+        }
+        ];
+
+
+        $('#SearchTable').empty();
+        $('.SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                 strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "کاربری یافت نشد.",
+            "columns": columns,
+            "rows": user_result
+        });
+    }
+
+    async function ExportExcelSerachResultFunction() {
+        var csv = "";
+
+        sep = ","
+        let Csv = "نام" + sep + "نام خانوادگی" + sep + "نام کاربری" + sep + "آدرس ایمیل" + sep + "شماره تماس" + sep
+        const response = await fetch('http://' + location.host + '/get_permissions_excel/').then(response => response.json());
+
+        for (const panel of Object.keys(response['panels'])) {
+            console.log(panel)
+            Csv += response['panels'][panel] + sep
+        }
+        Csv += "\n"
+
+        for (const user of response['users']) {
+            for (const col of Object.keys(user)) {
+                Csv += user[col] + sep
+            }
+            Csv += "\n"
+        }
+
+        let save_file_name = "گزارش دسترسی"
+        let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+        var link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", save_file_name + ".csv");
+        document.body.appendChild(link);
+        link.click()
+    }
+
+    $('#definition_keywords_graph_tab').hide();
+    async function ShowResult() {
+        // clear previous results
+        await SpinnerModeFunction("Active");
+        let request_link = '';
+        {% comment %} notyf.dismissAll(); {% endcomment %}
+
+        request_link = 'http://' + location.host + "/manage_users/";
+        response = await fetch(request_link).then(response => response.json());
+
+        startBlockUI('SearchTable');
+        /*  Show Table Result */
+        ShowUsers(response);
+        stopBlockUI('SearchTable', 'نتایج جست‌وجو');
+        await SpinnerModeFunction("Disable");
+    }
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#SearchTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+</script>
+
+<script src="../../static/js/tooltip_handler.js"></script>
+
+<!-- Intro Js -->
+<script src="../../static/js/search/search_tour.js">
+</script>
+<script src="../../static/js/tour.js"></script>
+
+<script src="../../static/js/signout_function.js"></script>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+
+</html>

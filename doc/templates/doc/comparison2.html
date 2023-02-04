@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css" />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/information_chart.css">
+    <meta charset="UTF-8">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+
+    <title>مقایسه دو سند</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#GraphDropdown').addClass('active');
+            $('#graph_panel').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+    <!-- End of Menu -->
+
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+
+        <h5 class="comparison_header">
+            <label class="text-right float-right"><i class="header_icon bi bi-intersect"></i>
+                مقایسه اسناد :</label>
+        </h5>
+
+        <ul class="float-right list-group">
+            <li id="doc1Name" class="text-right list-group-item w-100 p-2">
+            </li>
+            <li id="doc2Name" class="list-group-item text-right float-right w-100 p-2">
+            </li>
+        </ul>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="reference_tab" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#reference_pane" type="button" role="tab" aria-controls="reference_pane"
+                    aria-selected="false">ارجاعات</button>
+            </li>
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="doc_info_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#common_terms_pane"
+                    type="button" role="tab" aria-controls="common_terms_pane" aria-selected="true">واژه‌های
+                    مشترک</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="common_keywords_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#common_keywords_pane" type="button" role="tab" aria-controls="common_keywords_pane"
+                    aria-selected="false">کلیدواژه‌های مشترک</button>
+            </li>
+
+
+        </ul>
+
+        <div id="original_pane" class="tab-content float-right bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <!-- Common terms Pane -->
+            <div id="common_terms_pane" class="tab-pane w-100 fade show float-right" role="tabpanel"
+                aria-labelledby="common_terms_tab">
+                <h6 class="header mt-4  text-white d-block w-100 pt-2 px-2 float-right">
+                    <label class="text-right float-right">
+                        <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        واژه‌های مشترک در دو سند
+                        <span id="common_terms_count" title="تعداد واژه‌های مشترک"
+                            class="badge bg-transparent border p-2 mr-2"></span>
+
+                    </label>
+                </h6>
+                <div id="common_terms_content" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+            </div>
+
+            <!-- Common keywords Pane -->
+            <div class="tab-pane w-100 fade show float-right  px-0 border-0" id="common_keywords_pane" role="tabpanel"
+                aria-labelledby="common_keywords_tab">
+
+                <h6 class="header mt-4  text-white d-block w-100 pt-2 px-2 float-right">
+                    <label class="text-right float-right">
+                        <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        کلیدواژه‌های مشترک در دو سند
+                        <span id="common_keywords_count" title="تعداد کلیدواژه‌های مشترک"
+                            class="badge bg-transparent border p-2 mr-2"></span>
+
+                    </label>
+                </h6>
+                <div id="common_keywords_content" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+            </div>
+
+            <!-- Reference Pane -->
+            <div class="tab-pane w-100 float-right fade show active" id="reference_pane" role="tabpanel"
+                aria-labelledby="reference_tab">
+
+                <!-- First two paragraph -->
+
+                <h6 id="First_Paragraph_header"
+                    class="header mt-4 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label id="references_header_doc1" class="text-right float-right"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                    </label>
+                </h6>
+
+                <div id="doc1_references" dir="rtl" class="text-right bg-light border p-4 mt-5" > 
+                </div>
+
+                <!-- Last two paragraph -->
+                <h6 id="Last_Paragraph_header"
+                    class="header mt-0 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label id="references_header_doc2" class="text-right float-right"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                    </label>
+                </h6>
+
+                <div id="doc2_references" dir="rtl" class="text-right bg-light border p-4">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <script>
+
+        init()
+
+        async function init() {
+            /*    Document name in header   */
+            const url = new URL(window.location.href);
+            const documents_id = url.searchParams.get("id").split("__");
+
+            const document1_id = parseInt(documents_id[0]);
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + document1_id + "/";
+            const document1 = await fetch(request_link).then(response => response.json());
+            const document1_name = document1["document_information"][0]["name"]
+
+            const document2_id = parseInt(documents_id[1]);
+            request_link = 'http://' + location.host + "/GetDocumentById/" + document2_id + "/";
+            const document2 = await fetch(request_link).then(response => response.json());
+            const document2_name = document2["document_information"][0]["name"]
+
+            var link1 = 'http://' + location.host + "/information?id=" + document1_id
+            var link2 = 'http://' + location.host + "/information?id=" + document2_id
+
+            document.getElementById("doc1Name").innerHTML = "<a href='" + link1 + "' >" + document1_name + "</a>";
+            document.getElementById("doc2Name").innerHTML = "<a href='" + link2 + "'>" + document2_name + "</a>";
+
+            /* References tables Header Update */
+            document.getElementById("references_header_doc1").innerHTML = '<i class="header_icon bi bi-pin-angle-fill p-1"></i>' + "ارجاع توسط سند: " + document1_name;
+            document.getElementById("references_header_doc2").innerHTML = '<i class="header_icon bi bi-pin-angle-fill p-1"></i>' + "ارجاع توسط سند: " + document2_name;
+
+
+            /* References Between 2 Doc */
+            startFullPageBlockUI();
+
+
+            request_link = 'http://' + location.host + "/GetReferences2Doc/" + document1_id + "/" + document2_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+
+            const references_from_doc1 = response["references_from_doc1"]
+            const references_from_doc2 = response["references_from_doc2"]
+
+            if (references_from_doc1.length > 0) {
+                document.getElementById("doc1_references").innerHTML = GenerateReferencesHighlightedTag(references_from_doc1);
+            } else {
+                document.getElementById("doc1_references").innerHTML = "ارجاعی توسط الگوهای تشخیص ارجاع پیدا نشد.";
+            }
+
+            if (references_from_doc2.length > 0) {
+                console.log(GenerateReferencesHighlightedTag(document1_name, references_from_doc2))
+                document.getElementById("doc2_references").innerHTML = GenerateReferencesHighlightedTag(references_from_doc2);
+            } else {
+                document.getElementById("doc2_references").innerHTML = "ارجاعی توسط الگوهای تشخیص ارجاع پیدا نشد.";
+            }
+
+            stopFullPageBlockUI('ارجاعات');
+
+
+            /* Common Words and KeyWords Between 2 Doc */
+
+            request_link = 'http://' + location.host + "/GetCommonWords2Doc/" + document1_id + "/" + document2_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const CommonWords = response["common_words"]
+            const CommonWords_Text = CommonWords.join(" - ")
+            const CommonKeyWords = response["common_keywords"]
+            const CommonKeyWords_Text = CommonKeyWords.join(" - ")
+
+            if (CommonWords.length > 0) {
+                document.getElementById("common_terms_content").innerText = CommonWords_Text;
+                document.getElementById("common_terms_count").innerText = CommonWords.length;
+            } else {
+                document.getElementById("common_terms_content").innerText = "هیچ کلیدواژه مشترکی بین دو سند پیدا نشد.";
+                document.getElementById("common_terms_count").innerText = 0;
+            }
+
+
+            if (CommonKeyWords.length > 0) {
+                document.getElementById("common_keywords_content").innerText = CommonKeyWords_Text;
+                document.getElementById("common_keywords_count").innerText = CommonKeyWords.length;
+            } else {
+                document.getElementById("common_keywords_content").innerText = "هیچ کلیدواژه مشترکی بین دو سند پیدا نشد.";
+                document.getElementById("common_keywords_count").innerText = 0;
+            }
+
+
+
+        }
+
+        function GenerateReferencesHighlightedTag(paragraphs_text) {
+            let document_paragraphs_result = []
+
+            paragraphs_text = paragraphs_text.replaceAll('<em>', "<span class='text-primary bold'>").replaceAll('</em>', '</span>');
+
+            const paragraphs_List = paragraphs_text.split('\n')
+
+            let result_tag = ""
+            for (const paragraph of paragraphs_List) {
+                result_tag += "<li class='mb-3 lh-lg'>" + paragraph + "</li>"
+            }
+            return result_tag
+        }
+
+    </script>
+
+</body>
+<script src="../../static/js/UserLogSave.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+
+</html>

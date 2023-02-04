@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+
+    django_dev:
+        build:
+            context: .
+            dockerfile: ./docker/django/dev/Dockerfile
+            args:
+                LOAD_MODELS: false
+        ports:
+            - "8765:8000"
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/app
+            - django_dev_static_volume:/app/static
+            - django_dev_media_cdn_volume:/app/media_cdn
+        environment:
+            ES_URL: '37.156.144.109:7085'
+            DB_FA_NAME: 'prod_fa'
+            DB_EN_NAME: 'prod_en'
+            DB_URL: '37.156.144.109'
+            DB_PORT: '7084'
+            LOAD_MODELS: false
+            DOCKER_BUILDKIT: 1
+
+
+
+volumes:
+    django_dev_static_volume:
+    django_dev_media_cdn_volume:
+
+

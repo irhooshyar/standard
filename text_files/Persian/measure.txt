@@ -1,0 +1,2 @@
+شباهت جاکارد,JaccardSimilarity,UnDirected
+گراف ارجاعات,ReferenceSimilarity,Directed

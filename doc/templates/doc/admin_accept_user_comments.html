@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <script src="../../static/js/signout_function.js"></script>
+
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title> تایید نظرات تحلیل اسناد</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#AdminDropdown').addClass('active');
+            $('#admin_accept_user_comments').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+
+<!--container-->
+<div class="container-users mt-4">
+    <div class="row">
+        <div class="col">
+
+            <!--recommendation data table-->
+            <div class="row data-table">
+                <div class="col">
+                </div>
+                <div class="col-10">
+                <br>
+                <br>
+                <br>
+                    <div class="text"><p
+                            class="recom-list align-content-center">
+                    <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                    </button>
+                        مشاهده نظرات کاربر:</p>
+                    </div>
+                    <hr style="color:darkblue">
+                    <div>
+                    <div class="searching">
+                        <form class="d-flex pb-2">
+                            <input class="form-control me-2" id="myInput" type="search" placeholder="جستجو......"
+                                   aria-label="Search">
+                        </form>
+                    </div>
+                        <div class="table-responsive tbl">
+                            <table class="table-striped table footable cm_table">
+
+                                <thead>
+                                <th scope="col">#</th>
+                                <th scope="col">نام</th>
+                                <th scope="col">نام خانوادگی</th>
+                                <th scope="col">نام سند</th>
+                                <th scope="col">نظر تحلیلی کاربر</th>
+                                <th scope="col">تایید یا عدم تایید نظر کاربر</th>
+                                <th scope="col">تعداد موافق</th>
+                                <th scope="col">تعداد مخالف</th>
+                                <th scope="col">تاریخ</th>
+
+                                </thead>
+
+                                <tbody id="user-com-table">
+                                    {% for i in comments %}
+                                    <tr>
+                                        <td class="row-n"></td>
+                                        <td class="text-center">{{ i.first_name}}</td>
+                                        <td class="text-center">{{ i.last_name }}</td>
+                                        <td class="text-center">{{ i.document_name }}</td>
+                                        <td class="text-center">
+                                            {{ i.comment }}
+                                        </td>
+
+                                        <td class="text-center">
+                                        <div class="">
+                                            {% if i.is_accept != 1 %}
+                                            <button type="button" data-change-to="accepted"
+                                                    class="btn btn-success btn-change-comment-state"
+                                                    data-comment-id="{{ i.id }}"><i class="bi bi-check"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="پذیرش"></i></button>
+                                            {% endif %}
+                                            {% if i.is_accept != -1%}
+                                            <button type="button" data-change-to="rejected"
+                                                    class="btn btn-danger btn-change-comment-state"
+                                                    data-comment-id="{{ i.id }}"><i class="bi bi-x"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="عدم پذیرش"></i></button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                   <td class="text-center cursor-pointer" id="comment_agree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction({{ i.id }}, true)">{{ i.agreed_count }}</td>
+                                   <td class="text-center cursor-pointer" id="comment_disagree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction({{ i.id }}, false)">{{ i.disagreed_count }}</td>
+                                   <td>{{ i.time }}</td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+        </div>
+
+        <!--end recommendation data table-->
+    </div>
+</div>
+<!--end container-->
+
+    <!-- Vote Details Modal Container -->
+    <div class="modal fade" id="VoteDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="VoteModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <div id="VoteDetailText" class="bg-light text-justify">
+                          <div dir="rtl" class="voter_info_table">
+                            <table class="table table-light table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام کاربر</th>
+                                        <th class="text-center" scope="col">تاریخ اولین ثبت رای</th>
+                                        <th class="text-center" scope="col">تاریخ آخرین تغییر رای</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vote_table_body">
+                                    <tr>
+                                        <td class="text-center" id="voter_number">-</td>
+                                        <td class="text-center" id="voter_name">-</td>
+                                        <td class="text-center" id="voter_date">-</td>
+                                        <td class="text-center" id="voter_modify_date">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer flex-row-reverse">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- bootstrap5 dataTables js cdn -->
+<script src="../../static/library/notyf.min.js"></script>
+
+<script src="../../static/js/logincheck.js"></script>
+
+<script>
+
+    async function VoteDetailFunction(document_comment_id, agreed) {
+        let request_link = 'http://' + location.host + "/GetDocumentCommentVoters/" + document_comment_id + "/" + agreed + "/"
+        let response = await fetch(request_link).then(response => response.json());
+        /*  Show detail Result */
+        let result = response["result"]
+        await showVoteDetailModal(result)
+    }
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+    }
+
+    async function showVoteDetailModal(voters) {
+        /* Title Text */
+        document.getElementById("VoteModalHeader").innerHTML = "اطلاعات نظر دهندگان"
+
+        /* Body Text */
+        let modal_body = voters.map(function(voter, i){
+            return`<tr>
+                        <td class="text-center" id="voter_number">${i+1}</td>
+                        <td class="text-center" id="voter_name">${voter.first_name} ${voter.last_name}</td>
+                        <td class="text-center" id="voter_date">${voter.created_at}</td>
+                        <td class="text-center" id="voter_modify_date">${voter.modified_at}</td>
+                    </tr>`
+        }).join(' ')
+
+        document.getElementById("vote_table_body").innerHTML = modal_body
+        popup_handler();
+    }
+
+     const notyf = new Notyf();
+
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#user-com-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function listen_on_buttons(pg){
+        const rows = document.querySelectorAll('#user-com-table tr');
+        let inc = 1;
+        if (pg){
+            inc = ((pg.page-1)*pg.size)+1
+        }
+        for (const row of rows) {
+            row.querySelector('td.row-n').innerText = inc.toString()
+            inc += 1;
+
+             const buttons = row.querySelectorAll('.btn-change-comment-state');
+             for (const button of buttons) {
+                 button.onclick = async function () {
+                    const state = button.getAttribute("data-change-to");
+                    const comment_id = button.getAttribute("data-comment-id");
+                    const request_link = 'http://' + location.host + "/changeCommentState/" + comment_id + "/" + state + "/";
+                    let response = await fetch(request_link);
+                    try {
+                        response = await response.json();
+                        if (state == "accepted") {
+                            notyf.success('نظر کاربر با موفقیت پذیرفته شده است');
+                        } else if (state == "rejected") {
+                            notyf.error(' نظر کاربر با موفقیت رد شده است');
+                        }
+                        button.remove()
+                    } catch (err) {
+                        notyf.error('عملیات ناموفق بوده است');
+                    }
+
+                }
+            }
+
+        }
+    }
+
+     $('.cm_table').footable({
+            "on": {"ready.ft.table":function (e, ft){listen_on_buttons()},
+                    "after.ft.paging": function (e, ft, pg){listen_on_buttons(pg)}},
+            "sorting": {
+                "enabled": true
+            },
+            "paging": {
+                    "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                    "enabled": false
+            },
+            "empty": "نظری ثبت نشده است.",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }    }],
+     });
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2788 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <!--<script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="../../static/library/html2pdf.bundle.min-0.9.3.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/information_chart.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+
+    <title> نمایش مصوبات</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#BooksDropdown').addClass('active');
+            $('#information').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+
+        <!-- Form Inputs -->
+        <form autocomplete="on" action="" id="information_form" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+            <div class="row flex-row-reverse mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+                    <label for="country" class=" text-right bg-light float-right">مجموعه کتاب:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+
+                        <option value="{{ k }}">{{ v }}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- selected document -->
+                <div id="document_div" class="col-md-6 pt-3 col-12 col-lg-6 mt-1">
+                    <label for="document" class="text-right bg-light float-right">کتاب:</label>
+                    <select id="document" dir="rtl" name="document"
+                        class="form-select d-none text-right float-right document_select_box" onchange="ShowResult()"
+                        disabled>
+                    </select>
+                    <button dir="rtl" id="document_select" type="button"
+                        class="btn d-inline-block text-truncate w-100 text-right text-black float-right mx-0 bg-white border"
+                        data-bs-toggle="modal" data-bs-target="#SelectDocumentModal">
+                        <i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>
+                        انتخاب نمایید
+                    </button>
+                </div>
+
+                <!-- Download button -->
+                <div class="col-lg-4 col-md-2 pt-5 col-12 mt-1 px-0">
+                    <button type="button" id="copy_document" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="کپی نام کتاب" class="float-right text-right p-0 d-none" onclick="copyDocumentName()">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+
+                    <button type="button" id="document_search" onclick="ShowDocumentContent()"
+                        class="btn d-flex float-right  mr-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+
+
+                    <div dir="rtl" class="dropdown float-right mr-2">
+                        <button id="document_download" class="btn dropdown-toggle float-right text-right" type="button"
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            دانلود کتاب
+                        </button>
+                        <ul dir="rtl" class="dropdown-menu px-0 mx-0" aria-labelledby="dropdownMenuButton1">
+                            <li class="text-left" id="pdf_download" onclick="generatePDF()"><a class="dropdown-item"
+                                    href="#">PDF</a></li>
+                            <li class="text-left"><a class="dropdown-item" id="txt_download" download href="#">TXT</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="doc_info_tab" class="nav-link active" data-bs-toggle="pill" data-bs-target="#doc_info_pane"
+                    type="button" role="tab" aria-controls="doc_info_pane" aria-selected="true">داشبورد آماری</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="multiple_terms_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#multiple_terms_pane" type="button" role="tab" aria-controls="multiple_terms_pane"
+                    aria-selected="false">عبارات و اصطلاحات</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="subject_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#subject_analysis_pane" type="button" role="tab"
+                    aria-controls="subject_analysis_pane" aria-selected="false">تحلیل موضوعی</button>
+            </li>
+        </ul>
+
+        <div id="original_pane" class="tab-content float-right bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <!-- Statistical Info Pane -->
+            <div id="doc_info_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                aria-labelledby="doc_info_tab">
+
+                <!-- statistical doc info segment -->
+                <h6 class="Term_count_header pr-2">
+                    <label class="text-right float-right mt-5">تعداد واژه‌های
+                        کتاب:</label>
+                </h6>
+                <div dir="rtl" class="doc_info_table">
+                    <table class="table table-light">
+                        <thead class="table bg-secondary">
+                            <tr>
+                                <th class="text-center" scope="col">کل واژه‌ها</th>
+                                <th class="text-center" scope="col">ایست‌واژه‌ها</th>
+                                <th class="text-center" scope="col">واژه‌های متمایز</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" id="total_words">-</td>
+                                <td class="text-center" id="stop_words">-</td>
+                                <td class="text-center" id="distinct_words">-</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TF-IDF Segment -->
+                <h6 class="TF_IDF_header pr-2">
+                    <label class="text-right float-right mt-4">واژه‌های مهم کتاب براساس تکرار:</label>
+                </h6>
+
+                <div dir="rtl" class="doc_info_table">
+                    <table class="table table-light table-striped">
+                        <thead class="table bg-secondary">
+                            <tr>
+                                <th class="text-center" scope="col">ردیف</th>
+                                <th class="text-center" scope="col">واژه</th>
+                                <th class="text-center" scope="col"> فراوانی واژه</th>
+                                <th class="text-center" scope="col">درصد فراوانی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="TFIDF_table">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Definition and keywords Pane -->
+            <div id="def_keywords_pane" class="tab-pane w-100 fade float-right  px-0 border-0" role="tabpanel"
+                aria-labelledby="def_keywords_tab">
+
+                <!-- Definition Segment -->
+                <h6 id="Definition_header" class="header mt-4  text-white d-block w-100 pt-2 px-2 float-right">
+                    <label for="definition_container" class="text-right float-right d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        بخش تعاریف و اصطلاحات</label>
+                </h6>
+                <div id="definition_container" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+                <!-- General definition Segment -->
+                <h6 id="general_definition_header" class="header mt-4  text-white d-block w-100 pt-2 px-2 float-right">
+                    <label for="general_definition_container" class="text-right float-right d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        بخش تعاریف کلی</label>
+                </h6>
+                <div id="general_definition_container" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+                <!-- Final Keywords Segment -->
+                <h6 id="Final_Keywords_header"
+                    class="header bg-secondary mt-0 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label class="text-right float-right"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        کلید واژه‌های نهایی</label>
+                </h6>
+
+                <div id="final_Keywords_container" dir="rtl" class="text-right bg-light border p-4">
+
+                </div>
+
+            </div>
+
+            <!-- Multiple Terms Pane -->
+            <div class="tab-pane fade float-right w-100 " id="multiple_terms_pane" role="tabpanel"
+                aria-labelledby="multiple_terms_tab">
+
+                <div class="row mt-4 w-100 flex-row-reverse mx-auto">
+
+                    <!-- container for 2-gram words whit (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-6 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم 2-کلمه‌ای
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">امتیاز</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                        <th class="text-center" scope="col"> تایید</th>
+                                        <th class="text-center" scope="col">حذف</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="2gram_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 2Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-right ngram-textbox"
+                                placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required=""
+                                name="2gram_TextBox" id="2gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('2gram')"
+                                class="btn float-right mx-0">
+                                ذخیره
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                    <!-- container for 3-gram words with (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-6 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم 3-کلمه‌ای
+                        </h6>
+                        <div class="mt-0 pr-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-secondary">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">امتیاز</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                        <th class="text-center" scope="col"> تایید</th>
+                                        <th class="text-center" scope="col">حذف</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="3gram_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 3Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-right ngram-textbox"
+                                placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required=""
+                                name="3gram_TextBox" id="3gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('3gram')"
+                                class="btn float-right mx-0">
+                                ذخیره
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- Reference Pane -->
+            <div class="tab-pane w-100 fade float-right" id="reference_pane" role="tabpanel"
+                aria-labelledby="reference_tab">
+                <!-- References in doc -->
+                <h6 class="header mt-4 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label class="text-right float-right "><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        ارجاعات موجود در کتاب</label>
+                </h6>
+
+
+                <div class="text-right bg-light border border-top-0  px-4 mt-5">
+                    <ul dir="rtl" id="references_list">
+                    </ul>
+                </div>
+
+                <!-- Docs referenced to this doc -->
+                <h6 class="header mt-0 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label class="text-right float-right"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        اسناد ارجاع داده به کتاب</label>
+                </h6>
+
+                <div class="text-right bg-light border px-4">
+                    <ul dir="rtl" id="citation_list">
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- user comments pane -->
+            <div class="tab-pane w-100 fade float-right" id="user_comments_pane" role="tabpanel"
+                aria-labelledby="user_comments_tab">
+                    <div class="row flex-row-reverse px-0 m-0 mt-5">
+                    <div class="col-9">
+
+                        <div dir="rtl" class="doc_info_table">
+                            <table class="table table-light table-striped cm_table footable">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام کاربر</th>
+                                        <th class="text-center" scope="col">نظر</th>
+                                        <th class="text-center" scope="col">موافقت یا مخالفت با نظر کاربر</th>
+                                        <th class="text-center" scope="col">تعداد موافق</th>
+                                        <th class="text-center" scope="col">تعداد مخالف</th>
+                                        <th class="text-center" scope="col">تاریخ</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="comments_table_body">
+                                    <tr>
+                                        <td class="text-center" id="comment_number">-</td>
+                                        <td class="text-center" id="comment_first_name">-</td>
+                                        <td class="text-center" id="follow">-</td>
+                                        <td class="text-center" id="comment_text">-</td>
+                                        <td class="text-center">
+                                        <div class="">
+                                            <button type="button" data-change-to="agree"
+                                                    class="btn btn-success btn-agree-state"
+                                                    data-document-comment-id=""><i class="bi bi-hand-thumbs-up-fill"
+                                                                                style="position:relative;top:-3px;"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="موافق"></i></button>
+                                            <button type="button" data-change-to="disagree"
+                                                    class="btn btn-danger btn-agree-state"
+                                                    data-document-comment-id=""><i class="bi bi-hand-thumbs-down-fill"
+                                                                                style="position:relative;top:-3px;"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="مخالف"></i></button>
+                                        </div>
+                                    </td>
+                                        <td class="text-center" id="comment_agree">-</td>
+                                        <td class="text-center" id="comment_disagree">-</td>
+                                        <td class="text-center" id="comment_date">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="col-3">
+                     <form class="shadow p-4 bg-white" id="comment_form" dir="rtl" method="POST">
+                        <div class="row text">
+                            <div class="mb-3">
+                                  <label for="exampleFormControlTextarea1" class="form-label">لطفا نظر خود را در مورد کتاب انتخابی در کادر زیر وارد نمایید <span style="color: red">*</span>:</label>
+                                  <textarea class="form-control" id="form_comment_text" rows="10"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                 <input class="form-check-input p-1" style=" margin:5px " type="checkbox" value="true" id="form_comment_show_info" checked>
+                                 <label class="form-check-label" style="margin-right: 28px" for="form_comment_show_info">
+                                    نمایش اطلاعات شخصی
+                                 </label>
+                            </div>
+                            <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" value="submit">ثبت نظر</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- user notes Pane -->
+            <div class="tab-pane w-100 fade float-right" id="user_notes_pane" role="tabpanel"
+                aria-labelledby="user_notes_tab">
+                    <div class="row flex-row-reverse px-0 m-0 mt-5">
+                    <div class="col-7">
+
+                        <div dir="rtl" class="doc_info_table">
+                            <table class="table table-light table-striped note_table footable">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">متن یادداشت </th>
+                                        <th class="text-center" scope="col"> تاریخ</th>
+                                        <th class="text-center" scope="col"> برچسب</th>
+                                        <th class="text-center" scope="col"> ستاره دار</th>
+                                        <th class="text-center" scope="col"> دانلود </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notes_table_body">
+                                    <tr>
+                                        <td class="text-center" id="note_number">-</td>
+                                        <td class="text-center" id="note_text">-</td>
+                                        <td class="text-center" id="note_time">-</td>
+                                        <td class="text-center" id="note_label">-</td>
+                                        <td class="text-center" id="note_starred">-</td>
+                                        <td class="text-center" id="note_download">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                     <form class="shadow p-4 bg-white" id="note_form" dir="rtl" method="POST">
+                        <div class="row text">
+                            <div class="mb-3">
+                                  <label for="exampleFormControlTextarea1" class="form-label">لطفا یادداشت خود را در مورد کتاب انتخابی در کادر زیر وارد نمایید <span style="color: red">*</span>:</label>
+                                  <textarea class="form-control" id="form_note_text" rows="10"></textarea>
+                            </div>
+
+                            <div class="ngram-div">
+                                <input class="float-left form-control text-right ngram-textbox mr-3"
+                                    placeholder="برچسب یادداشت" type="text" 
+                                    name="form_note_label" id="form_note_label" value="">
+                            </div>
+                            
+                            <div class="mt-3 d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" value="submit">ثبت یادداشت</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Pane -->
+            <div class="tab-pane fade float-right w-100" id="subject_analysis_pane" role="tabpanel"
+                aria-labelledby="subject_analysis_tab">
+                <!-- Subject distribution segment -->
+                <h6 class="subject_distribution pr-2 w-100 mt-4 text-right float-right">
+                    توزیع موضوعی کتاب
+                </h6>
+                <br>
+
+
+                <div id="subject_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+
+                </div>
+
+                <!-- Keywords for each subject segment -->
+                <h6 class="subject_keywords pr-2">
+                    <label for="doc_info" class="text-right float-right mt-5">واژه‌های کلیدی کتاب در هر موضوع</label>
+                </h6>
+                <div dir="rtl" class="table-responsive">
+                    <table class="table table-light table-striped  caption-top">
+                        <thead class="table">
+                            <tr>
+                                <th class="text-center" scope="col">ردیف</th>
+                                <th class="text-center" scope="col"> موضوع</th>
+                                <th class="text-center" scope="col">واژه‌های کلیدی در متن ( تعداد تکرار )</th>
+                                <th class="text-center" scope="col">واژه‌های کلیدی در عنوان ( تعداد تکرار )</th>
+                                <th class="text-center" scope="col">مرجع تخصصی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject_table">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Actors Pane -->
+            <div class="tab-pane fade float-right w-100" id="actor_analysis_pane" role="tabpanel"
+                aria-labelledby="actor_analysis_tab">
+
+                <!-- Acotrs distribution segment -->
+                <h6 class="actors_distribution pr-2 w-100 mt-4 text-right float-right">
+                    توزیع کنش‌گران کتاب
+                </h6>
+                <br>
+
+                <div id="actors_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                </div>
+
+                <!-- Actors paragraphs-->
+
+                <div class="accordion" id="actors_paragraph_container">
+
+                    <!-- Motevalian paragraphs -->
+                    <div class="accordion-item float-right w-100">
+
+                        <h2 class="accordion-header d-block w-100 float-right" id="motevalian_hader">
+                            <button
+                                class="accordion-button accordin_header text-right float-right d-inline-block w-100 pr-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#motevalian_collapse"
+                                aria-expanded="true" aria-controls="motevalian_collapse">
+                                متولیان اجرا
+                                <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            </button>
+                        </h2>
+
+                        <div id="motevalian_collapse" class="accordion-collapse w-100 collapse show float-right"
+                            aria-labelledby="motevalian_hader">
+
+                            <div class="accordion-body bg-light text-right">
+
+                                <ul dir="rtl" class="" id="motevalian_list">
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hamkaran paragraphs -->
+                    <div class="accordion-item float-right w-100">
+                        <h2 class="accordion-header d-block w-100 float-right" id="hamkaran_header">
+                            <button
+                                class="accordion-button accordin_header text-right float-right d-inline-block w-100 collapsed pr-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#hamkaran_collapse"
+                                aria-expanded="true" aria-controls="hamkaran_collapse">
+                                همکاران
+                                <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            </button>
+                        </h2>
+                        <div id="hamkaran_collapse" class="accordion-collapse collapse  w-100 float-right"
+                            aria-labelledby="hamkaran_header">
+                            <div class="accordion-body bg-light text-right">
+                                <ul dir="rtl" class="" id="hamkaran_list">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salahiat paragraphs -->
+                    <div class="accordion-item float-right w-100">
+                        <h2 class="accordion-header d-block w-100 float-right" id="salahiat_header">
+                            <button
+                                class="accordion-button accordin_header text-right float-right d-inline-block w-100 collapsed pr-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#salahiat_collapse"
+                                aria-expanded="true" aria-controls="salahiat_collapse">
+                                دارای صلاحیت اختیاری
+                                <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            </button>
+                        </h2>
+                        <div id="salahiat_collapse" class="accordion-collapse collapse w-100 float-right"
+                            aria-labelledby="salahiat_header">
+                            <div class="accordion-body bg-light text-right">
+
+                                <ul dir="rtl" class="" id="salahiat_list">
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+        <!-- show document content modal -->
+        <!-- Modal Container for detail  -->
+        <div class="modal fade" id="documentContent">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="documentContentHeader" class="modal-title">نام کتاب</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="DocumentContentBody">
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Container -->
+        <div class="modal fade" id="SelectDocumentModal">
+            <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="ModalHeader" class="modal-title">انتخاب کتاب</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+
+                    <!-- Modal body -->
+                    <div id="ModalBody" class="modal-body text-justify">
+                        <div class="container">
+
+
+                            <div class="d-flex col-12 mb-2">
+                                <input
+                                    style="direction: rtl;width: 90%; border-bottom-left-radius: 0;border-top-left-radius: 0;"
+                                    class="form-control text-right" placeholder="جستجو کتاب ..." type="text" required=""
+                                    name="SearchBox" id="SearchBox" value="">
+
+                                <button class="btn mr-0"
+                                    style="border-bottom-right-radius: 0;border-top-right-radius: 0;" type="button"
+                                    id="document_search" onclick="Search_Document_ByName()"
+                                    class="btn d-flex float-right mr-4">
+                                    <i class="bi bi-search" style="font-size: 16px;position: relative; top: -5px;"></i>
+                                </button>
+
+                                <div class="col-md-6  pt-3 col-12 col-lg-2" style="padding-top: 0px!important;">
+                                    <select name="load_count" id="LoadCount" class="form-select text-right float-right"
+                                        onchange="pagingchange()">
+                                        <option value="10">۱۰</option>
+                                        <option value="20">۲۰</option>
+                                        <option value="30">۳۰</option>
+                                        <option value="40">۴۰</option>
+                                        <option value="50">۵۰</option>
+                                    </select>
+                                </div>
+
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="تازه‌سازی"
+                                    style="font-size: 25px; text-align: center; cursor: pointer;color: var(--menu_color);"
+                                    class="fa fa-refresh mr-3 mt-2" onclick="CountryChanged()"></span>
+                            </div>
+
+                            <table id="PopUpTable" class="table table-striped PopUpTable">
+                            </table>
+
+                            <p>
+                                <span>از میان </span>
+                                <span style="color: #1A01CC" id="all_doc_count"></span>
+                                <span> کتاب، </span>
+                                <span style="color: #3e8f3e" id="load_doc_count"></span>
+                                <span> کتاب بازیابی شده است </span>
+                            </p>
+
+                            <span class="add-row"></span>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ChartModal Container -->
+        <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#actors_modal"></button>
+        <div class="modal fade" id="actors_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="actor_paragraphs" class="modal-body text-justify">
+                        <div id="actor_modal_body">
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- References Container -->
+        <button type="button" id="references_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#references_modal"></button>
+        <div class="modal fade" id="references_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="references_modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="references_modal_paragraphs" class="modal-body text-justify">
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button class="btn btn-secondary" id="references_modal_btn">بستن
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+
+    <!-- Toast -->
+    <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+        <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+                <i style="position: relative; top: -4px; font-size: 18px;"
+                    class="bi bi-info-circle-fill  text-info"></i>
+                <span id="toast_message">
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Vote Details Modal Container -->
+    <div class="modal fade" id="VoteDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="VoteModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <div id="VoterDetailText" class="bg-light text-justify">
+                          <div dir="rtl" class="voter_info_table">
+                            <table class="table table-light table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام کاربر</th>
+                                        <th class="text-center" scope="col">تاریخ اولین ثبت رای</th>
+                                        <th class="text-center" scope="col">تاریخ آخرین تغییر رای</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vote_table_body">
+                                    <tr>
+                                        <td class="text-center" id="voter_number">-</td>
+                                        <td class="text-center" id="voter_name">-</td>
+                                        <td class="text-center" id="voter_date">-</td>
+                                        <td class="text-center" id="voter_modify_date">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <!-- bootstrap5 dataTables js cdn -->
+    <!-- <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
+
+
+    <!-- Blocking UI Script -->
+    <script>
+        function startBlockUI() {
+            $.blockUI({
+
+                // BlockUI code for element blocking
+                message: ("<div class='lds-ellipsis'><div></div><div></div><div></div><div></div></div><h6 style = 'font-family:vazir;'>...در حال دریافت اطلاعات<h6>"),
+
+                css: { color: 'var(--menu_color)', border: 'none', borderRadius: '5px', borderColor: 'var(--menu_color)', paddingTop: '5px' }
+            });
+
+            startTimer();
+        }
+        function stopBlockUI() {
+
+            $.unblockUI();
+            elapsed_time = endTimer();
+            toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+
+            {#if (elapsed_time > 0)#}
+            {#    showToastMessage(toast_message);#}
+
+        }
+
+
+        function showToastMessage(message_text) {
+            document.getElementById('toast_message').innerHTML = message_text
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl)
+            });
+            toastList.forEach(toast => toast.show())
+        }
+
+    </script>
+
+
+    <script>
+
+
+        var startTime, endTime;
+
+        function startTimer() {
+            startTime = new Date();
+        };
+
+        function endTimer() {
+            endTime = new Date();
+            var timeDiff = endTime - startTime; //in ms
+            // strip the ms
+            timeDiff /= 1000;
+
+            // get seconds
+            var seconds = Math.round(timeDiff);
+            console.log(seconds + " seconds");
+            return seconds;
+        }
+    </script>
+
+    <script>
+
+        /* Footable */
+        var paging_size = document.getElementById("LoadCount").value
+        var counter = 0;
+
+        var load_size = 250;
+
+        var loaded_doc = 0;
+        var ft = FooTable.init('#PopUpTable', {
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "در حال بازیابی اسناد (لطفا صبر نمایید)",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }
+            }, {
+                "name": "document_name",
+                "title": "نام کتاب"
+            }, {
+                "name": "subject",
+                "title": "موضوع کتاب"
+            }, {
+                "name": "tag",
+                "title": "انتخاب"
+            }],
+        });
+        var first_loading = true
+
+        /* Gloabal Constants */
+        const motevalian_punctuations = ['.', '،', 'ـ', '-', ':'];
+        const hamkaran_punctuations = ['،', ')', ':']
+
+        const motevali_keywords = ['موظف است', 'مکلف است', 'مکلف‌اند', 'موظف‌اند', 'موظفند', 'مکلفند', 'موظف به', 'مکلف به'];
+        const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+        const salahiat_keywords = ['مختار است', 'اختیار دارد', 'می‌تواند', 'می تواند', 'میتواند', 'می­تواند', 'می‏تواند', 'مجاز است'];
+
+
+        let actors_list = []
+
+        init()
+
+        async function init() {
+
+            /* Get Actors List */
+            const request_link = 'http://' + location.host + "/GetActorsList/";
+            const response = await fetch(request_link).then(response => response.json());
+            actors_list = response["actorsList"]
+
+            const url = new URL(window.location.href);
+            var document_id = url.searchParams.get("id");
+
+            if (document_id) {
+                const request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+                let response = await fetch(request_link).then(response => response.json());
+                response = response["document_information"][0]
+
+                document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+                document.getElementById("country").value = response["country_id"]
+
+                document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>' + response['name']
+                document.getElementById('document_select').innerHTML = document_select_tag;
+                document.getElementById('document_select').title = response['name'];
+
+                /* disable country , document */
+                document.getElementById("document_select").disabled = true;
+                document.getElementById("country").disabled = true;
+
+                await ShowResult();
+
+            } else {
+                const text = "انتخاب نمایید"
+                document.getElementById("document").innerHTML = "<option value=" + 0 + " disabled>" + text + "</option>";
+                document.getElementById("document_download").disabled = true;
+                document.getElementById("pdf_download").disabled = true;
+                document.getElementById("document_search").disabled = true;
+                CountryChanged();
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+
+        }
+
+        $("#document_select").click(function () {
+            if ($('.add-row-1').length === 0) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        });
+
+
+        async function CountryChanged() {
+
+            startBlockUI();
+            document.getElementById("document_select").disabled = true;
+
+            const country_name = $("#country option:selected").text();
+
+            document.getElementById('ModalHeader').innerText = 'مجموعه کتاب: ' + country_name;
+
+            document.getElementById("document_select").disabled = false;
+
+            counter = 0;
+            loaded_doc = 0
+            first_loading = true
+
+            $(".add-row-1").css('visibility', 'visible');
+
+            document.getElementById("document_select").disabled = true;
+            await setTimeout(loaddata, 1000)
+            document.getElementById("document_select").disabled = false;
+            // new
+            if ($('.add-row-1').length === 0) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+            stopBlockUI()
+        }
+
+        async function pagingchange() {
+            paging_size = $('#LoadCount option:selected').val()
+            FooTable.get('#PopUpTable').pageSize(paging_size);
+            window.setTimeout(function () {
+                $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+            }, 1000);
+        }
+
+
+        function loaddata() {
+            $('.add-row').trigger('click');
+            stopBlockUI();
+        }
+
+        async function loadMoreDoc() {
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count) {
+                $(".add-row-1").css('visibility', 'hidden');
+            }
+            else {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+
+
+        $(".add-row").click(async function (e) {
+            e.preventDefault()
+
+
+
+            console.log(counter)
+
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count)
+                $(".add-row").css('visibility', 'hidden');
+        })
+
+
+        async function SelectDocumentFunction(document_id) {
+            const request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+            document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+
+            document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>' + response['name']
+            document.getElementById('document_select').innerHTML = document_select_tag;
+            document.getElementById('document_select').title = response['name'];
+            ShowResult();
+        }
+
+        async function DownloadLinkSet() {
+            var country_id = document.getElementById("country").value;
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            var document_name = document.getElementById("document").innerText;
+
+            if (document_name !== "انتخاب نمایید ...") {
+                var file_path = "";
+
+                if (country_name.includes("فاوا")) {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.docx';
+                } else {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.txt';
+                }
+                document.getElementById("txt_download").href = file_path;
+
+                const document_id = document.getElementById("document").value;
+
+            } else {
+                document.getElementById("txt_download").href = "#";
+                return false;
+            }
+        }
+
+
+        async function ShowResult() {
+            await DownloadLinkSet();
+            await ShowDocumentComment();
+            await ShowDocumentNote();
+
+            const document_id = document.getElementById("document").value
+            document.getElementById("document_download").disabled = false;
+            document.getElementById("pdf_download").disabled = false;
+            document.getElementById("document_search").disabled = false;
+
+            /******************************* Features **********************************/
+
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+
+            document.getElementById("total_words").innerText = response["word_count"];
+            document.getElementById("stop_words").innerText = response["stopword_count"];
+            document.getElementById("distinct_words").innerText = response["distinct_word_count"];
+
+            document_chart_data = response["actors_chart_data"];
+
+            showActorsChart('actors_chart_container', document_chart_data);
+
+            /******************************* TFIDF **********************************/
+            request_link = 'http://' + location.host + "/GetTFIDFByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_tfidf_list"]
+            let show_count = 10
+            document.getElementById("TFIDF_table").innerHTML = "";
+
+            for (var i = 0; i < show_count; i++) {
+                const index = i + 1;
+                const word = response[i]["word"]
+                const count = response[i]["count"]
+                const weight = response[i]["weight"]
+
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-4'>" + word + "</td>" +
+                    "<td class='col-3'>" + count + "</td>" +
+                    "<td class='col-3'>" + weight + "</td>" +
+                    "</tr>";
+
+                document.getElementById("TFIDF_table").innerHTML += tag;
+            }
+
+            /******************************* Definition **********************************/
+            request_link = 'http://' + location.host + "/GetPersianDefinitionByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_definition"][0]
+
+            document.getElementById("definition_container").innerText = response["text"];
+            let final_keywords = response["keywords"];
+
+            /******************************* General definition **********************************/
+            request_link = 'http://' + location.host + "/GetGeneralDefinition/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response['result']
+            let data = ''
+            const definition_keywords = []
+
+            if (response.length == 0)
+                data = "بخش تعاریف کلی برای این کتاب توسط سامانه پیدا نشد.";
+
+            for (let i = 0; i < response.length; i++) {
+                const word = response[i]["word"]
+                const definition = response[i]["definition"]
+                definition_keywords.push(word)
+                data += `<p>${i + 1}- ${word}: ${definition}</p>`
+            }
+            document.getElementById("general_definition_container").innerHTML = data;
+
+            /******************************* final_keywords **********************************/
+            if (final_keywords == 'هیچ کلمه کلیدی برای این کتاب توسط سامانه پیدا نشد.' && definition_keywords.length>0){
+                final_keywords = '';
+            }
+            if (final_keywords.length>0){
+                final_keywords += ' - '
+            }
+            final_keywords += definition_keywords.filter(function (k){return !final_keywords.includes(k)}).join(' - ')
+            document.getElementById("final_Keywords_container").innerText = final_keywords;
+
+            /******************************* 2-Gram **********************************/
+
+            request_link = 'http://' + location.host + "/GetNGramByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("2gram_table").innerHTML = "";
+            for (let i = 0; i < show_count && i < response.length; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-3'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+                document.getElementById("2gram_table").innerHTML += tag;
+            }
+
+
+            /******************************* 3-Gram **********************************/
+
+            request_link = 'http://' + location.host + "/GetNGramByDocumentId/" + document_id + "/" + 3 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("3gram_table").innerHTML = "";
+
+            for (let i = 0; i < show_count && i < response.length; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-5'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+
+                document.getElementById("3gram_table").innerHTML += tag;
+            }
+
+            /******************************* References List **********************************/
+            request_link = 'http://' + location.host + "/GetReferencesByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+
+            if (response.length > 0) {
+                document.getElementById("references_list").innerHTML = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    const doc_id = response[i]["doc_id"]
+                    const doc_name = response[i]["doc_name"]
+                    let tag = "<li onclick='References_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></li>"
+                    document.getElementById("references_list").innerHTML += tag;
+                }
+            } else {
+                document.getElementById("references_list").innerText = "هیچ ارجاعی در این کتاب پیدا نشد";
+            }
+
+            /******************************* Citation List **********************************/
+            request_link = 'http://' + location.host + "/GetReferencesByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+
+            if (response.length > 0) {
+                document.getElementById("citation_list").innerHTML = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    const doc_id = response[i]["doc_id"]
+                    const doc_name = response[i]["doc_name"]
+                    let tag = "<li onclick='Citation_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></li>"
+                    document.getElementById("citation_list").innerHTML += tag;
+                }
+            } else {
+                document.getElementById("citation_list").innerText = "هیچ ارجاعی در این کتاب پیدا نشد";
+            }
+
+            /******************************* Subject **********************************/
+            request_link = 'http://' + location.host + "/GetSubjectByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_subject_list"]
+
+            document.getElementById("subject_table").innerHTML = ""
+
+            let chart_value_list = []
+
+            for (let i = 0; i < response.length; i++) {
+                const subject = response[i]["subject"]
+                const weight = response[i]["weight"] * 100  /* For Scale To 0-100*/
+                const keywords_text = response[i]["keywords_text"]
+                const keywords_title = response[i]["keywords_title"]
+                const special_references = response[i]["special_references"]
+
+                tag = "<tr>" +
+                    "<td class='col-1'>" + (i + 1) + "</td>" +
+                    "<td class='col-2'>" + subject + "</td>" +
+                    "<td class='col-4'>" + keywords_text + "</td>" +
+                    "<td class='col-3'>" + keywords_title + "</td>" +
+                    "<td class='col-1'>" + special_references + "</td>" +
+                    "</tr>";
+
+                document.getElementById("subject_table").innerHTML += tag;
+
+                chart_value_list.push([subject, weight])
+            }
+
+            document.getElementById("subject_chart_container").innerHTML = "";
+            showChart(chart_value_list, "subject_chart_container");
+
+            /******************************* Actor Paragraphs **********************************/
+
+            request_link = 'http://' + location.host + "/GetActorsPararaphsByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            actors_paragraphs = response["actors_paragraphs"]
+            console.log(actors_paragraphs)
+
+            doc_motevali_paragraphs = actors_paragraphs['document_motevali_ejra_paragraphs']
+            doc_salahiat_paragraphs = actors_paragraphs['document_salahiat_ekhtiar_paragraphs']
+            doc_hamkar_paragraphs = actors_paragraphs['document_hamkaran_paragraphs']
+
+
+            showActor_Paragraphs('motevalian_list', doc_motevali_paragraphs);
+            showActor_Paragraphs('hamkaran_list', doc_hamkar_paragraphs);
+            showActor_Paragraphs('salahiat_list', doc_salahiat_paragraphs);
+
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نتایج جست و جو"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+
+        }
+
+
+
+
+        async function showActor_Paragraphs(para_container, para_info_dict, actor_role) {
+
+            document.getElementById(para_container).innerHTML = "";
+
+
+            if (Object.keys(para_info_dict).length == 0) {
+
+                if (para_container == 'motevalian_list') {
+                    document.getElementById(para_container).innerHTML = "هیچ متولی اجرایی در این کتاب یافت نشد.";
+                }
+                else if (para_container == 'hamkaran_list') {
+                    document.getElementById(para_container).innerHTML = "هیچ همکاری در این کتاب یافت نشد.";
+                }
+
+                else if (para_container == 'salahiat_list') {
+                    document.getElementById(para_container).innerHTML = "هیچ ذی‌صلاحی در این کتاب یافت نشد.";
+                }
+
+            }
+
+
+            for (const [para_id, para_info] of Object.entries(para_info_dict)) {
+                paragraph_text = para_info['text']
+                actor_role = para_info['actor_role']
+                actor_form = para_info['actor_form']
+
+                is_ref_actor = para_info['is_ref_actor']
+                ref_text = para_info['ref_text']
+
+                highlighted_paragraph = await highlightParagraph(paragraph_text, actor_role, actor_form, true, is_ref_actor, ref_text);
+
+                paragraph_tag = '<li class="px-1 lh-lg">' + highlighted_paragraph + '</li>'
+                document.getElementById(para_container).innerHTML += paragraph_tag;
+
+                var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+                var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl)
+                });
+
+            }
+        }
+
+        async function References_Show_Paragraphs(tag) {
+            const main_doc_id = document.getElementById("document").value
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/information?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "ارجاع داده شده به:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const references = response["references_from_doc1"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of references) {
+                const tag = "<span class='text-primary'>" + document_name + "</span>"
+                const text = paragraph.replaceAll(document_name, tag)
+                result_tag += "<li class='mb-3' >" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+        async function Citation_Show_Paragraphs(tag) {
+            const main_doc_id = document.getElementById("document").value
+
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/information?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "ارجاع شده توسط:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const citations = response["references_from_doc2"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of citations) {
+                const tag = "<span class='text-primary'>" + main_document_name + "</span>"
+                const text = paragraph.replaceAll(main_document_name, tag)
+                console.log(text)
+                result_tag += "<li class='mb-3'>" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+
+
+        async function highlightParagraph(paragraph, actor_role, paragraph_actor_form, all_hamkar, is_ref_actor, ref_paragraph_text) {
+
+            paragraph_text = '';
+
+            if (actor_role.includes('متولی اجرا')) {
+
+                paragraph_text = await highlightMotevalian(paragraph, paragraph_actor_form, motevali_keywords, 'bg-primary', is_ref_actor, ref_paragraph_text)
+
+            } else if (actor_role.includes('همکار')) {
+                paragraph_text = await highlightHamkaran(paragraph, paragraph_actor_form, hamkaran_keywords, 'bg-success', all_hamkar);
+
+            } else {
+                paragraph_text = await highlightSalahiat(paragraph, paragraph_actor_form, salahiat_keywords, 'bg-warning', is_ref_actor, ref_paragraph_text)
+
+            }
+
+
+            return paragraph_text
+        }
+
+
+
+        async function highlightMotevalian(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+
+                        if (is_ref_actor) {
+
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        } else {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+                }).join('.')
+
+            }
+
+
+
+            /* Highlight with actors list */
+            eghdam_keywords = ['اقدام کند', 'اقدام‌کند', 'اقدام نماید', 'اقدام‌نماید']
+            non_eghdam_keywords = pattern_keywords.filter(x => !eghdam_keywords.includes(x));
+
+            paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+                for (e_kw of eghdam_keywords) {
+
+                    pattern_keyword_tag1 = "<span class='bg-secondary text-white rounded px-1'>" + e_kw + "</span>"
+
+                    if (sentence.includes(e_kw) && !check_non_eghdam_kw_exists(sentence, non_eghdam_keywords)) {
+
+                        actor_tag1 = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                        sentence = sentence.replaceAll(actor_form + ' ', actor_tag1 + ' ');
+
+                        sentence = sentence.replaceAll(e_kw, pattern_keyword_tag1);
+
+
+                    }
+
+                }
+
+                return sentence
+            }).join('.')
+
+
+
+
+            return paragraph_text;
+
+
+        }
+
+
+
+        function check_non_eghdam_kw_exists(sentence, pattern_keywords) {
+            for (p_kw of pattern_keywords) {
+                pattern = p_kw
+                if (sentence.includes(pattern)) {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+
+
+        async function highlightHamkaran(paragraph_text, actor_form, pattern_keywords, bg_color, all_hamkar) {
+            let all_actors = actors_list
+
+            const window_length = 100;
+
+            let space_counter = 0;
+
+            /* Highlight pattern keywords and references */
+            for (pattern_keyword of pattern_keywords) {
+
+
+                /* Highlight more with actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'با همکاری') {
+                    regex = /با همکاری/gi;
+                } else {
+                    regex = /باهمکاری/gi;
+                }
+
+                while ((result = regex.exec(paragraph_text))) {
+                    indices.push(result.index);
+                }
+
+                for (const index of indices) {
+
+                    let start_index = (index + pattern_keyword.length);
+                    let substring = paragraph_text.substring(start_index, start_index + window_length);
+                    let current_substring = substring;
+
+                    if (!all_hamkar) {
+                        all_actors = [actor_form]
+                    }
+                    for (actor of all_actors) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                        substring = substring.replaceAll(' ' + actor + ' ', ' ' + actor_tag + ' ');
+                        substring = substring.replaceAll(' ' + actor + '،', ' ' + actor_tag + '،');
+                        substring = substring.replaceAll('(' + actor + ')', '(' + actor_tag + ')');
+
+                        for (symbol of hamkaran_punctuations) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor + symbol, ' ' + actor_tag + symbol);
+
+                        }
+
+                        actor_without_prefix = actor.replaceAll('وزارت ', '').replaceAll('سازمان ', '')
+
+                        if (actor_without_prefix != 'اطلاعات' && actor_without_prefix != 'کشور' && !substring.includes(actor)) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+                            substring = substring.replaceAll(' ' + actor_without_prefix + '،', ' ' + actor_tag + '،');
+                            substring = substring.replaceAll('(' + actor_without_prefix + ')', '(' + actor_tag + ')');
+
+                            for (symbol of hamkaran_punctuations) {
+
+                                actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                                substring = substring.replaceAll(' ' + actor_without_prefix + symbol, ' ' + actor_tag + symbol);
+
+                            }
+
+                        } else if (actor_without_prefix == 'کشور' && substring.includes('وزارتخانه')) {
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_without_prefix + "</span>"
+
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+
+                        }
+
+                    }
+
+                    paragraph_text = paragraph_text.replaceAll(current_substring, substring);
+
+                }
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                paragraph_text = paragraph_text.replaceAll(pattern_keyword, pattern_keyword_tag);
+
+            }
+
+
+
+            return paragraph_text;
+
+
+
+        }
+
+        async function highlightSalahiat(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+
+                        if (is_ref_actor) {
+
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+
+                        } else {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+                }).join('.')
+
+            }
+
+
+
+            return paragraph_text;
+
+        }
+
+
+
+        async function showActorsChart(chart_container, chart_data) {
+
+
+            document.getElementById(chart_container).innerHTML = ""
+            // create a data set
+            var data = anychart.data.set(chart_data);
+
+            // map the data
+            var salahiat_series_data = data.mapAs({ x: 0, value: 3 });
+            var hamkaran_series_data = data.mapAs({ x: 0, value: 2 });
+            var motevalian_series_data = data.mapAs({ x: 0, value: 1 });
+
+
+            // create a chart
+            var chart = anychart.column();
+
+            chart
+                .animation(true)
+                .padding([10, 60, 10, 0])
+
+            chart.background().fill('#ffffff');
+
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("تعداد کتاب");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            yAxis.title().height(40);
+
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+
+            // set the container id
+            chart.container(chart_container);
+
+            // create the second series, set the data and name
+            var salahiat_series = chart.column(salahiat_series_data);
+            salahiat_series.normal().stroke("#28a745", 0);
+            salahiat_series.normal().fill("#ffc107");
+            salahiat_series.name("دارای صلاحیت اختیاری");
+
+
+            // create the second series, set the data and name
+            var hamkaran_series = chart.column(hamkaran_series_data);
+            hamkaran_series.normal().stroke("#28a745", 0);
+            hamkaran_series.normal().fill("#28a745");
+            hamkaran_series.name("همکار");
+
+
+            // create the first series, set the data and name
+            var motevalian_series = chart.column(motevalian_series_data);
+            // configure the visual settings of the first series
+            motevalian_series.normal().fill("#007bff");
+            motevalian_series.normal().stroke("#28a745", 0);
+            motevalian_series.name("متولی اجرا");
+
+            // enable the legend
+            chart.legend(true);
+
+            var legend = chart.legend();
+            legend.fontFamily('vazir')
+
+            // set position mode
+            legend.positionMode("inside");
+            // set position and alignement
+            legend.position("top");
+            legend.align("center");
+            legend.itemsLayout("horizontalExpandable");
+            // initiate drawing the chart
+            chart.draw();
+
+            // motevalian columns
+            motevalian_series.listen('click', async function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'متولی اجرا';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+            // hamkaran columns
+            hamkaran_series.listen('click', function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'همکار';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+            // salahiat columns
+            salahiat_series.listen('click', function (e) {
+                /* Modal Headers */
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'دارای صلاحیت اختیاری';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+        }
+
+        async function showActorParagraphs_Modal(actor_name, actor_role_name) {
+            doc_id = document.getElementById('document').value
+
+            request_link = 'http://' + location.host + "/GetDocActorParagraphs_Column_Modal/" + doc_id + "/" + actor_name + "/" + actor_role_name + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const actor_paragraphs = response["actor_paragraphs"]
+            modal_title = actor_role_name + ": " + actor_name
+            $('#actors_modal #modal_header').text(modal_title)
+            $('#actors_modal_btn').click();
+
+            paragraph_list = "";
+            for (const [para_id, para_info] of Object.entries(actor_paragraphs)) {
+                paragraph_text = para_info['text']
+                actor_role = para_info['actor_role']
+                actor_form = para_info['actor_form']
+                is_ref_actor = para_info['is_ref_actor']
+                ref_text = para_info['ref_text']
+
+
+                highlighted_paragraph = await highlightParagraph(paragraph_text, actor_role, actor_form, false, is_ref_actor, ref_text);
+
+                paragraph_tag = '<li class="mb-1 px-1 lh-lg">' + highlighted_paragraph + '</li>'
+
+                paragraph_list += paragraph_tag
+            }
+            document.getElementById("actor_modal_body").innerHTML = "<ol start='1'>" + paragraph_list + "</ol>";
+
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            });
+
+
+        }
+
+        function showChart(data, position) {
+
+            data.sort(function (x, y) { return x[0] === 'نامشخص' ? -1 : y[0] === 'نامشخص' ? 1 : 0; });
+
+
+            chart = anychart.column();
+
+            // create a column series and set the data
+            var series = chart.column(data);
+
+
+            chart.animation(true);
+            chart.background().fill('#f8f9fa');
+
+            chart.background().fill('white');
+
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("%{%value}");
+
+            // set all axis title
+            var xAxis = chart.xAxis();
+            xAxis.title("موضوع");
+            xAxis.title().fontFamily('vazir');
+xAxis.title().fontWeight("bold");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("درصد شباهت");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            chart.yAxis().labels().format("٪{%value}");
+
+            chart.xAxis().labels().height(30);
+
+            chart.container(position);
+            chart.draw();
+        }
+
+        async function SaveGram_function(name) {
+            const document_id = document.getElementById("document").value
+            const gram = parseInt(name.charAt(0))
+
+            const table_id = name + "_table";
+
+            const checkedBoxesId = $("#" + table_id).find("input[type=checkbox]:checked").map(function () {
+                return this.id;
+            }).get();
+
+            let checkedBoxesConcatedId = "-1"
+            if (checkedBoxesId.length > 0) {
+                checkedBoxesConcatedId = checkedBoxesId.join("__")
+            }
+            const request_link = 'http://' + location.host + "/UpdateNgramScore/" + document_id + "/" + gram + "/" + checkedBoxesConcatedId + "/";
+            await fetch(request_link).then(response => response.json());
+
+
+            const textbox_id = name + "_TextBox"
+            const textbox_value = document.getElementById(textbox_id).value.replaceAll("/", "__")
+
+            if (textbox_value.trim() !== "") {
+                const request_link = 'http://' + location.host + "/InsertNgram/" + document_id + "/" + gram + "/" + textbox_value + "/";
+
+                await fetch(request_link).then(response => response.json());
+
+                document.getElementById(textbox_id).value = ""
+            }
+
+            ShowResult();
+
+        }
+
+
+        async function DeleteNGramWords(id) {
+            const request_link = 'http://' + location.host + "/DeleteNgram/" + id + "/";
+            await fetch(request_link).then(response => response.json());
+            ShowResult();
+        }
+
+
+        // show document content
+        async function ShowDocumentContent() {
+
+            document.getElementById('DocumentContentBody').innerHTML = ""
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک کتاب را انتخاب نمایید.')
+                return
+            }
+            $('#documentContent').modal('show');
+
+            const request_link = 'http://' + location.host + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"]
+
+            for (var i = 0; i < response.length; i++) {
+                const document_name = response[i]["document_name"]
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p>' + paragraph_text + '</p>'
+                document.getElementById('documentContentHeader').innerText = document_name
+                document.getElementById('DocumentContentBody').innerHTML += paragraph_tag
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش کتاب"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+
+        // search document by name document content
+        async function Search_Document_ByName() {
+            const country_id = document.getElementById("country").value
+            let search_text = document.getElementById("SearchBox").value
+
+            const request_link = 'http://' + location.host + "/SearchDocumentByname/" + country_id + "/" + search_text + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let document_count = response["document_count"]
+
+            document.getElementById("all_doc_count").innerText = document_count.toString()
+
+            ft.rows.load(documentsList);
+
+            loaded_doc = document_count;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+
+            if (loaded_doc === document_count)
+                $(".add-row-1").css('visibility', 'hidden');
+            else {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+        /* Search after press Enter */
+        $("#SearchBox").keyup(function (event) {
+            if (event.keyCode === 13) {
+                Search_Document_ByName();
+            }
+        });
+
+    </script>
+
+    <script>
+        async function generatePDF() {
+            startBlockUI();
+
+            const approval_reference = document.getElementById("approval_reference").innerText
+            const approval_date = document.getElementById("approval_date").innerText
+
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک کتاب را انتخاب نمایید.');
+                return;
+            }
+            const request_link = 'http://' + location.host + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"];
+            const document_name = response[0]["document_name"];
+            let element = "<div class='container-fluid' style='direction: rtl'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> <div > <p>سامانه هوشیاران</p> </div> " +
+                "<div> <span>www.virtualjuristic.datakaveh.com</span> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>"+document_name+"</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span> تاریخ تصویب  </span> <span> "+approval_date+" </span> </div> " +
+                "<div class='d-flex'> <span>مرجع تصویب:   </span> <span> "+approval_reference+" </span> </div> </div> </div> </div>"
+
+            for (let i = 0; i < response.length; i++) {
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p>' + paragraph_text + '</p>';
+                element += paragraph_tag;
+            }
+            element += '</div>';
+            console.log(element);
+
+            let opt = {
+                margin: 1,
+                filename: document_name + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "دانلود کتاب"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+    </script>
+
+</body>
+
+<script>
+
+    function copyDocumentName() {
+        /* Get the text field */
+        var copyText = document.getElementById("document_select");
+
+        /* Copy the text to clipboard */
+        navigator.clipboard.writeText(copyText.innerText);
+
+        // Update js
+        $('.tooltip-inner').html('کپی شد!');
+
+    }
+
+</script>
+
+<script src="../../static/library/notyf.min.js"></script>
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = "127.0.0.0"
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+    }
+
+    const notyf = new Notyf({position:{x:'left', y:'bottom'}});
+    document.getElementById("comment_form").addEventListener('submit', SubmitDocumentComment)
+    document.getElementById("note_form").addEventListener('submit', SubmitDocumentNote)
+
+    async function SubmitDocumentComment(e){
+        let date = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        let comment_time = new Date().toLocaleDateString('fa-IR-u-nu-latn',date);
+        comment_time = comment_time.replace("/","-")
+        comment_time = comment_time.replace("/","-")
+        console.log(comment_time);
+
+        e.preventDefault()
+        try {
+            const document_id = document.getElementById("document").value
+            const comment_text = document.getElementById("form_comment_text").value
+            const comment_show_info = document.getElementById("form_comment_show_info").checked
+            const username = getCookie("username")
+
+            if (comment_text == '' || document_id == '') {
+                notyf.error('لطفا تمامی فیلد ها را پر نمایید.');
+                return
+            }
+
+            /* Post Comment */
+            const request_link = 'http://' + location.host + "/CreateDocumentComment/" + document_id + "/" + comment_text + "/" + username + "/" + comment_show_info + "/" + comment_time + "/";
+            const response = await fetch(request_link).then(response => response.json());
+            notyf.success('نظر شما با موفقیت ثبت شد');
+            document.getElementById("form_comment_text").value = "";
+            await ShowDocumentComment();
+
+        } catch (e){
+            notyf.error('لطفا دوباره تلاش کنید.');
+        }
+
+    }
+
+    async function SubmitDocumentNote(e){
+
+        // var todayFa = new Date().toLocaleDateString('fa-IR');
+        let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        let todayFa = new Date().toLocaleDateString('fa-IR-u-nu-latn',options);
+        todayFa = todayFa.replace("/","-")
+        todayFa = todayFa.replace("/","-")
+        // console.log(todayFa);
+
+        // var todayEn = new Date();
+        // var dd = todayEn.getDate();
+        // var mm = todayEn.getMonth()+1; 
+        // var yyyy = todayEn.getFullYear();
+        // if(dd<10) 
+        // {
+        //     dd='0'+dd;
+        // } 
+        // if(mm<10) 
+        // {
+        //     mm='0'+mm;
+        // } 
+        // todayEn = dd+'-'+mm+'-'+yyyy;
+        // console.log(todayEn);
+
+        e.preventDefault()
+        try {
+            const document_id = document.getElementById("document").value
+            const note_text = document.getElementById("form_note_text").value
+            let note_label = document.getElementById("form_note_label").value
+            const username = getCookie("username")
+            
+            if (note_label == '') {
+                note_label = "بدون برچسب"
+            }
+            if (note_text == '' || document_id == '') {
+                notyf.error('لطفا تمامی فیلد ها را پر نمایید');
+                return
+            }
+            /* Post Note */
+            let request_link = 'http://' + location.host + "/CreateDocumentNote/" + document_id + "/" + encodeURIComponent(note_text) + "/" + username + "/" + todayFa + "/" + encodeURIComponent(note_label) + "/";
+            // request_link = encodeURIComponent(request_link)
+            const response = await fetch(request_link).then(response => response.json());
+            const n_id = response['note_id']
+            // console.log(n_id);
+
+            let hash_tags_in_text = note_text.match(/#(\S+)/g); // returns an array with the matches. returns null if no match is found.
+            console.log(hash_tags_in_text);
+            if(hash_tags_in_text != null)
+            {
+                for(let i=0; i<hash_tags_in_text.length; i++)
+                {
+                    let hash_tag = hash_tags_in_text[i];
+                    let hash_tag_name = hash_tag.slice(1);
+                    // let hash_tag_link = 'http://' + location.host + "/CreateHashTagForNote/" + n_id + "/" + hash_tag_name + "/";
+                    let hash_tag_link = 'http://' + location.host + "/CreateHashTagForNote/" + n_id + "/" + encodeURIComponent(hash_tag) + "/";
+                    console.log(hash_tag_link);
+                    const hash_tag_response = await fetch(hash_tag_link).then(response => response.json());
+                    console.log(hash_tag_response['hash_tags']);
+                }
+            }
+
+            notyf.success('یادداشت شما با موفقیت ثبت شد.');
+            document.getElementById("form_note_text").value = "";
+            document.getElementById("form_note_label").value = "";
+            await ShowDocumentNote();
+
+        } catch (e){
+            notyf.error('لطفا دوباره تلاش کنید.');
+        }
+
+    }
+
+    async function ShowDocumentComment(){
+        const document_id = document.getElementById("document").value
+        const username = getCookie("username")
+
+        const request_link = 'http://' + location.host + "/GetDocumentComments/" + document_id + "/" + username + "/";
+        const response = await fetch(request_link).then(response => response.json());
+        const comments = response['comments']
+
+        let table_data = ''
+        for (let i=0;i<comments.length;i++){
+            let follow_btn = '-'
+            if (comments[i].user_id && comments[i].followed){
+                follow_btn= `<div class="text-light" >
+                                <button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" id="follow-btn" onclick="OnUnFollowClick(${comments[i].user_id})">unfollow</button>
+                              </div>`
+            }
+            if (comments[i].user_id && !comments[i].followed){
+                follow_btn= `<div class="text-light" >
+                                <button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" id="follow-btn" onclick="OnFollowClick(${comments[i].user_id})">follow</button>
+                              </div>`
+            }
+            table_data+=`<tr>
+                                <td class="text-center" id="comment_number">${i+1}</td>
+                                <td class="text-center" id="comment_first_name">${comments[i].first_name} ${comments[i].last_name}</td>
+                                
+                                <td class="text-center" id="comment_text">${comments[i].comment}</td>
+                                <td class="text-center">
+                                <div class="">
+                                    <button type="button" onclick="OnVoteClick('agree', ${comments[i].id})"
+                                            class="btn btn-success btn-agree-state">
+                                            <i class="bi bi-hand-thumbs-up-fill" style="position:relative;top:-3px;"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="موافق"></i></button>
+                                    <button type="button" onclick="OnVoteClick('disagree', ${comments[i].id})"
+                                            class="btn btn-danger btn-agree-state">
+                                           <i class="bi bi-hand-thumbs-down-fill" style="position:relative;top:-3px;"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="مخالف"></i></button>
+                                </div>
+                            </td>
+                            <td class="text-center cursor-pointer" id="comment_agree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, true)">${comments[i].agreed_count}</td>
+                            <td class="text-center cursor-pointer" id="comment_disagree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, false)">${comments[i].disagreed_count}</td>
+                            <td class="text-center" id="comment_date" >${comments[i].time}</td>
+                         </tr>`
+        }
+        if (comments.length==0){
+            table_data=` <tr>
+                                <td class="text-center" id="comment_number">-</td>
+                                <td class="text-center" id="comment_first_name">-</td>
+                                <td class="text-center" id="follow">-</td>
+                                <td class="text-center" id="comment_text">-</td>
+                                <td class="text-center">
+                                <div class="">
+                                    <button type="button" data-change-to="agree"
+                                            class="btn btn-success btn-agree-state"
+                                            data-document-comment-id=""><i class="bi bi-hand-thumbs-up-fill"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="موافق"></i></button>
+                                    <button type="button" data-change-to="disagree"
+                                            class="btn btn-danger btn-agree-state"
+                                            data-document-comment-id=""><i class="bi bi-hand-thumbs-down-fill"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="مخالف"></i></button>
+                                </div>
+                            </td>
+                            <td class="text-center" id="comment_agree">-</td>
+                            <td class="text-center" id="comment_disagree">-</td>
+                            <td class="text-center" id="comment_date">-</td>
+                         </tr>`
+        }
+        document.getElementById('comments_table_body').innerHTML=table_data;
+        $('.cm_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            }
+        });
+    }
+
+    async function ShowDocumentNote(){
+        const document_id = document.getElementById("document").value
+        const username = getCookie("username")
+
+        const request_link = 'http://' + location.host + "/GetDocumentNotes/" + document_id + "/" + username + "/";
+        const response = await fetch(request_link).then(response => response.json());
+        // const notes = response['notes']
+        let notes = response['notes'].sort(function(a, b){
+                    if (a.starred == b.starred) {
+                        return 0;
+                    }
+                    else if (a.starred == true) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+
+        let table_data = ''
+        for (let i=0;i<notes.length;i++){
+            if (notes[i].label === null) {
+                notes[i].label = "بدون برچسب"
+            }
+            if (notes[i].starred) {
+                table_data+=`<tr>
+                                    <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                    <td class="text-center" id="note_text_${i+1}">${notes[i].note}</td>
+                                    <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                    <td class="text-center" id="note_label_${i+1}">${notes[i].label}</td>
+                                    <td class="text-center" >
+                                        <button value="0" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')" id="note_starred_${i+1}">
+                                            <span class="fa fa-star checked"></span>
+                                        </button>
+                                    </td>
+                                    <td class="text-center " id="note_download_${i+1}">
+                                        <div class="text-center">
+                                            <button type="button" id="document_download" onclick="generatePDFNote('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')" 
+                                                class="btn d-flex float-center  mr-2 ">
+                                                PDF
+                                            </button> 
+                                        </div>      
+                                    </td>
+                            </tr>`
+            }
+            else{
+                table_data+=`<tr>
+                                    <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                    <td class="text-center" id="note_text_${i+1}">${notes[i].note}</td>
+                                    <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                    <td class="text-center" id="note_label_${i+1}">${notes[i].label}</td>
+                                    <td class="text-center" >
+                                        <button value="1" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')"  id="note_starred_${i+1}">
+                                            <span class="fa fa-star"></span>
+                                        </button>
+                                    </td>
+                                    <td class="text-center " id="note_download_${i+1}">
+                                        <div class="text-center">
+                                            <button type="button" id="document_download" onclick="generatePDFNote('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')" 
+                                                class="btn d-flex float-center  mr-2 ">
+                                                PDF
+                                            </button> 
+                                        </div>      
+                                    </td>
+                            </tr>`
+            }
+        }
+        if (notes.length==0){
+            table_data=`<tr>
+                                <td class="text-center" id="note_number">-</td>
+                                <td class="text-center" id="note_text">-</td>
+                                <td class="text-center" id="note_time">-</td>
+                                <td class="text-center" id="note_label">-</td>
+                                <td class="text-center" id="note_starred">-</td>
+                                <td class="text-center" id="note_download">-</td>
+                        </tr>`
+        }
+        document.getElementById('notes_table_body').innerHTML=table_data;
+        $('.note_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            }
+        });
+    }
+
+    async function ToggleStar(note_id,star_id) {
+        const request_link = 'http://' + location.host + "/ToggleNoteStar/" + note_id + "/";
+        console.log(request_link)
+        fetch(request_link).then(response => response.json()).then(response => {
+            if (response['starred']){
+                document.getElementById(star_id).innerHTML=`<span class="fa fa-star checked"></span>`
+            }
+            else{
+                document.getElementById(star_id).innerHTML=`<span class="fa fa-star"></span>`
+            }
+        }).catch(error => {
+            console.log(error)
+        }
+    ,)
+    }
+</script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+{#<script src="../../static/js/UserLogSave.js"></script>#}
+
+<!-- Intro Js -->
+<script src="../../static/js/information/information_tour.js">
+</script>
+<script src="../../static/js/tour.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+
+
+<script>
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    });
+
+    async function OnVoteClick(state, document_comment){
+            try {
+                const username = getCookie("username")
+                const request_link = 'http://' + location.host + "/changeVoteState/" + username + "/" + document_comment + "/" + state + "/";
+                let response = await fetch(request_link);
+                if (state == "agree") {
+                    notyf.success('شما با این نظر موافقت کردید');
+
+                } else if (state == "disagree") {
+                    notyf.error('شما با این نظر مخالفت کردید');
+                }
+            } catch (err) {
+                notyf.error('عملیات ناموفق بوده است');
+            }
+    ShowDocumentComment()
+    }
+
+    async function VoteDetailFunction(document_comment_id, agreed) {
+        let request_link = 'http://' + location.host + "/GetDocumentCommentVoters/" + document_comment_id + "/" + agreed + "/"
+        let response = await fetch(request_link).then(response => response.json());
+        /*  Show detail Result */
+        let result = response["result"]
+        await showVoteDetailModal(result)
+    }
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+    }
+
+    async function showVoteDetailModal(voters) {
+        /* Title Text */
+        document.getElementById("VoteModalHeader").innerHTML = "اطلاعات نظر دهندگان"
+
+        /* Body Text */
+        let modal_body = voters.map(function(voter, i){
+            return`<tr>
+                        <td class="text-center" id="voter_number">${i+1}</td>
+                        <td class="text-center" id="voter_name">${voter.first_name} ${voter.last_name}</td>
+                        <td class="text-center" id="voter_date">${voter.created_at}</td>
+                        <td class="text-center" id="voter_modify_date">${voter.modified_at}</td>
+                    </tr>`
+        }).join(' ')
+
+        document.getElementById("vote_table_body").innerHTML = modal_body
+        popup_handler();
+    }
+
+
+    async function generatePDFNote(docName,docDate,docNote) {
+            startBlockUI();
+
+            let element = "<div class='container-fluid' style='direction: rtl'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>"+docName+"</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span style='direction: rtl'>  تاریخ تصویب </span> <span> "+docDate+" </span> </div> " +
+                "</div> </div> </div>"
+            
+            element += "<p style='direction: rtl'>" + 'متن یادداشت' + '</p>' + "<p style='direction: rtl'>" + docNote + '</p>'
+
+            element += '</div>';
+            // console.log(element);
+
+            let opt = {
+                margin: 1,
+                filename: docName + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+        }
+        
+    async function OnFollowClick(following_user_id){
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/follow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "already followed!") {
+                notyf.success('شما قبلا این کاربر را دنبال کرده‌اید.');
+
+            } else if (response.status == "followed!") {
+                notyf.success('شما با موفقیت کاربر را دنبال کردید.');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده است');
+        }
+        ShowDocumentComment()
+    }
+    async function OnUnFollowClick(following_user_id){
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/unfollow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "successfully unfollowed!") {
+                notyf.success('شما با موفقیت کاربر را آنفالو کردید.');
+
+            } else if (response.status == "already unfollowed!") {
+                notyf.success('-');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده است');
+        }
+        ShowDocumentComment()
+    }
+
+
+</script>
+
+
+
+</html>

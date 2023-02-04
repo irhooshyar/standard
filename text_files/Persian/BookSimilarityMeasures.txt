@@ -1,0 +1,7 @@
+BM25
+DFR
+DFI
+IB
+LMDirichlet
+LMJelinekMercer
+scripted

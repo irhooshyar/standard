@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+   <script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/recommendation.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+
+    <title> انتقادات و پیشنهادات </title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#recommendation').addClass('active');
+            $('#ProfileDropdown').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+
+        <div class="col">
+        </div>
+        <div class="col-7">
+
+
+            <form class="shadow p-4 bg-white" id="recommendation_form" method="POST">
+
+                <div class="row text">
+                    <div class="form_title mb-3">
+                     <p class="title mt-3">فرم انتقادات و پیشنهادات</p>
+                    </div>
+                    <div class="col mb-3">
+                        <label for="firstname">نام <span style="color: red">*</span>:</label>
+                        <input type="text" class="form-control fa-input" id="firstname" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="lastname">نام خانوادگی<span style="color: red">*</span>:</label>
+                        <input type="text" class="form-control fa-input" id="lastname" required>
+                    </div>
+
+                    <div class="mb-3">
+                         <label for="email">ایمیل <span style="color: red">*</span>:</label>
+                         <input type="email" class="form-control" id="email" required placeholder="example@example.com">
+                     </div>
+
+                    <div class="mb-3">
+                      <label for="rating">امتیاز شما به سامانه:<span style="color: red">*</span>:</label>
+                    <!-- Rating Stars Box -->
+                      <div class='rating-stars text-center'>
+                        <ul id='stars'>
+                          <li class='star' data-value='1'>
+                            <i class='fa fa-star fa-fw'></i>
+                          </li>
+                          <li class='star' data-value='2'>
+                            <i class='fa fa-star fa-fw'></i>
+                          </li>
+                          <li class='star' data-value='3'>
+                            <i class='fa fa-star fa-fw'></i>
+                          </li>
+                          <li class='star' data-value='4'>
+                            <i class='fa fa-star fa-fw'></i>
+                          </li>
+                          <li class='star' data-value='5'>
+                            <i class='fa fa-star fa-fw'></i>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                          <label for="exampleFormControlTextarea1" class="form-label">لطفا نظرات خود را در کادر زیر وارد نمایید <span style="color: red">*</span>:</label>
+                          <textarea class="form-control" id="recommendation_text" rows="20" ></textarea>
+                    </div>
+
+                    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                        <button class="btn btn-primary" value="submit" onclick=SubmitResult()>ثبت و ارسال</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col">
+        </div>
+
+
+    </div>
+</body>
+
+
+<script src="../../static/library/notyf.min.js"></script>
+
+<script>
+    const notyf = new Notyf();
+    let ratingValue = 0
+    async function SubmitResult() {
+        try {
+            var first_name = document.getElementById("firstname").value;
+            var last_name = document.getElementById("lastname").value;
+            var email = document.getElementById("email").value;
+            var recommendation_text = document.getElementById("recommendation_text").value.replace(/\n/g, "<br>")
+
+            if (first_name == '' || last_name == '' || email == '' || recommendation_text == '' || ratingValue == 0) {
+
+                notyf.error('برای ثبت نظرات باید تمام فیلدها را پر نمایید.')
+                return
+            }
+
+            request_link = 'http://' + location.host + "/Recommendations/" + first_name + "/" + last_name + "/" + email + "/" + recommendation_text + "/" + ratingValue + "/";
+            response = await fetch(request_link).then(response => response.json());
+            notyf.success('نظر شما با موفقیت ثبت شد');
+
+            document.getElementById("firstname").value = "";
+            document.getElementById("lastname").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("recommendation_text").value = "";
+            RemoveStars();
+
+        }catch (e) {
+            console.error(e)
+            notyf.error('لطفا دوباره تلاش کنید');
+
+        }
+
+    }
+    $("#recommendation_form").submit(function() {return false;});
+
+    $(document).ready(function(){
+
+      /* 1. Visualizing things on Hover - See next part for action on click */
+      $('#stars li').on('mouseover', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function(e){
+          if (e < onStar) {
+            $(this).addClass('hover');
+          }
+          else {
+            $(this).removeClass('hover');
+          }
+        });
+
+      }).on('mouseout', function(){
+        $(this).parent().children('li.star').each(function(e){
+          $(this).removeClass('hover');
+        });
+      });
+
+      /* 2. Action to perform on click */
+      $('#stars li').on('click', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+        var stars = $(this).parent().children('li.star');
+
+        for (i = 0; i < stars.length; i++) {
+          $(stars[i]).removeClass('selected');
+        }
+
+        for (i = 0; i < onStar; i++) {
+          $(stars[i]).addClass('selected');
+        }
+
+         ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+
+
+      });
+
+
+    });
+
+    async function RemoveStars() {
+      var stars = $('#stars li').parent().children('li.star');
+
+      for (i = 0; i < stars.length; i++) {
+          $(stars[i]).removeClass('selected');
+      }
+
+      ratingValue = 0
+    }
+
+    </script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+<script src="../../static/js/UserLogSave.js"></script>
+
+<script src="../../static/js/signout_function.js"></script>
+
+</html>

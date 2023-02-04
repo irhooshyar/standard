@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <title>تحلیل موضوعی</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <!-- Intro Js -->
+    <script src="../../static/js/search/search_tour.js"></script>
+    <script src="../../static/js/tour.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#SubjectDropdown').addClass('active');
+            $('#subject').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+    <div class="row p-5 flex-row-reverse bg-light mx-0">
+        <form id="subject_analysis_form" action="" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+
+            <div class="row flex-row-reverse mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1" dir="rtl">
+                    <label for="country" class=" text-right bg-light float-right">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right searchable-select"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <!-- Subject select -->
+                <div id="selectDiv" class="col-md-6 pt-3 col-12 col-lg-3 bg-light mt-1" dir="rtl">
+                    <label for="SubjectSelect" class="text-right bg-light float-right">موضوع سند <span
+                            style="color: red">(*)</span>:</label>
+                    <select id="SubjectSelect" class="form-select text-right float-right searchable-multi-select" style="direction: rtl;">
+                    </select>
+                </div>
+
+                <!-- Show button -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mt-1 mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="result_doc" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#result_doc_subject" type="button" role="tab" aria-controls="result_doc_subject"
+                    aria-selected="true">اسناد مرتبط با موضوع</button>
+            </li>
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="without_subject" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#doc_without_subject" type="button" role="tab" aria-controls="doc_without_subject"
+                    aria-selected="false">اسناد بدون موضوع</button>
+            </li>
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="all_subject" class="nav-link" data-bs-toggle="pill" data-bs-target="#all_subject_keywords"
+                    type="button" role="tab" aria-controls="all_subject_keywords" aria-selected="false">کلمات کلیدی
+                    موضوعات</button>
+            </li>
+
+            <!-- Download Buttons -->
+            <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                class="btn export_btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadShowResultFunction()"
+                type="button">
+                <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+            </button>
+
+            <button class="btn export_btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelShowResultFunction()" type="button">
+                <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+            </button>
+
+            <!-- Result Count -->
+            <p id="SearchResultLable" class="result_count_label text-left float-left text-secondary pl-2"></p>
+            <p id="DocsWithoutSubject" class="result_count_label d-none text-left float-left text-secondary pl-2"></p>
+
+        </ul>
+
+        <div id="original_pane" class="tab-content float-right bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <div dir="rtl" id="result_doc_subject" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                aria-labelledby="result_doc_subject">
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped SubjectTable" style="min-height: 200px;" id="SubjectTable">
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="doc_without_subject" class="tab-pane w-100 fade show float-right" role="tabpanel"
+                aria-labelledby="doc_without_subject">
+
+                <div dir="rtl" class="table-responsive mt-4">
+                    <table id="WithoutSubjectTableId" style="min-height: 200px;"
+                        class="table table-striped WithoutSubjectTable">
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="all_subject_keywords" class="tab-pane w-100 fade show float-right" role="tabpanel"
+                aria-labelledby="all_subject_keywords">
+
+                <div dir="rtl" class="table-responsive mt-4">
+                    <table class="table table-striped SubjectALLTable" style="min-height: 200px;" id="SubjectALLTable">
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="detailModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title">تحلیل موضوعی</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body text-justify">
+                    <!-- Subject distribution segment -->
+                    <h6 class="subject_distribution pr-2 w-100 mt-4 text-right float-right">
+                        توزیع موضوعی سند
+                    </h6>
+                    <br>
+
+
+                    <div id="subject_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+
+                    </div>
+
+                    <!-- Keywords for each subject segment -->
+                    <h6 class="subject_keywords pr-2">
+                        <label for="doc_info" class="text-right float-right mt-5">واژه‌های کلیدی سند در هر موضوع</label>
+                    </h6>
+                    <div dir="rtl" class="table-responsive">
+                        <table class="table table-light table-striped  caption-top">
+                            <thead class="table">
+                                <tr>
+                                    <th class="text-center" scope="col">ردیف</th>
+                                    <th class="text-center" scope="col"> موضوع</th>
+                                    <th class="text-center" scope="col">واژه‌های کلیدی در متن ( تعداد تکرار )</th>
+                                    <th class="text-center" scope="col">واژه‌های کلیدی در عنوان ( تعداد تکرار )</th>
+                                    <th class="text-center" scope="col">مرجع تخصصی</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subject_table">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+        <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div dir="rtl" class="toast-header">
+                <img width="25px;" src="../../static/icons/logo/logo1.png" class="rounded mx-0" alt="...">
+                <strong dir="rtl" class="w-100 mr-2 mt-1">هوش‌یار</strong>
+                <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <i style="position: relative; top: -7px; font-size: 18px;"
+                    class="bi bi-exclamation-triangle-fill  text-warning"></i>
+                موضوعی انتخاب نشده‌است.
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+
+    <script src="../../static/js/scroll_button_handler.js"></script>
+
+    <!-- Intro Js -->
+    <script src="../../static/js/subject/subject_tour.js">
+    </script>
+    <script src="../../static/js/tour.js"></script>
+
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+
+    <script>
+        initSearchableSelects();
+
+        let SearchResultValue = [];
+        let showDocWithoutSubjectValue = [];
+        let countryId;
+        let selected_tab_id = 'result_doc'
+
+        function clearPrevResults(container_id_list) {
+
+            for (container_id of container_id_list) {
+                document.getElementById(container_id).innerHTML = "";
+            }
+        }
+
+
+        init()
+
+        async function init() {
+
+            CountryChanged()
+        }
+
+        async function CountryChanged() {
+
+            container_id_list = ['WithoutSubjectTableId', 'DocsWithoutSubject', 'SearchResultLable', 'SubjectALLTable', 'SubjectTable']
+            clearPrevResults(container_id_list);
+
+            countryId = document.getElementById("country").value
+
+            /******************* Get Subject Options **********************/
+            request_link = 'http://' + location.host + "/GetSubjectsByCountryId/" + countryId + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_subject_list"]
+            let document_result = []
+
+            let subject_list = []
+            let options = [{}];
+
+            for (let i = 0; i < response.length; i++) {
+                const subject_id = response[i]["id"]
+                const subject_name = response[i]["subject"]
+
+                options.push({value:subject_id, text: subject_name});
+
+                subject_list.push([subject_id, subject_name])
+
+            }
+            syncSelectOptions('SubjectSelect', options)
+
+            {% comment %} $('#SubjectSelect').multiSelect(); {% endcomment %}
+
+            /******************* Get Subject Keywords **********************/
+
+            startBlockUI('SubjectALLTable');
+
+            for (let i = 0; i < subject_list.length; i++) {
+                const subject_id = subject_list[i][0]
+                const subject_name = subject_list[i][1]
+                let request_link2 = 'http://' + location.host + "/GetSubjectKeywords/" + subject_id + "/";
+                let response2 = await fetch(request_link2).then(response2 => response2.json());
+                let keywords_text = response2["subject_keywords_list"]
+
+                const row = {"id": (i + 1), "name": subject_name, "keywords": keywords_text}
+                document_result.push(row)
+            }
+
+            $('.SubjectALLTable').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "سندی یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "موضوع",
+                    "style": {
+                        "width": "20%"
+                    }
+                }, {
+                    "name": "keywords",
+                    "title": "کلیدواژه‌ها",
+                    "style": {
+                        "width": "70%"
+                    }
+                }
+                ],
+                "rows": document_result
+            });
+            stopBlockUI('SubjectALLTable', 'کلمات کلیدی موضوعات');
+
+            /************ Get Documents Without Subject *********************/
+            startBlockUI('WithoutSubjectTableId');
+
+            request_link3 = 'http://' + location.host + "/GetDocumentsWithoutSubject/" + countryId + "/" + 1 + "/";
+            response3 = await fetch(request_link3).then(response3 => response3.json());
+            documents_without_subject = response3["documentsWithoutSubject"]
+            showDocWithoutSubjectValue = documents_without_subject
+
+            document_result = []
+            for (var i = 0; i < documents_without_subject.length; i++) {
+                const document_id = documents_without_subject[i]['id'];
+                const document_name = documents_without_subject[i]['document_name'];
+                const subject = documents_without_subject[i]["document_subject"]
+                const document_level = documents_without_subject[i]["document_level"]
+                const approval_reference = documents_without_subject[i]["document_approval_reference"]
+                const approval_date = documents_without_subject[i]["document_approval_date"]
+
+                const document_link = 'http://' + location.host + "/information/?id=" + document_id
+                const doc_name = '<a href="' + document_link + '">' + document_name + "</a>"
+
+                const detail_function = "DetailFunction(" + document_id + ")"
+                const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + detail_function + '" data-bs-target="#detailModal">جزئیات</button>'
+
+                const row = {
+                    "id": (i + 1), "name": doc_name,
+                    "subject": subject,
+                    "approval_reference": approval_reference,
+                    "approval_date": approval_date,
+                    "level": document_level,
+                    "detail": detail
+                }
+                document_result.push(row)
+            }
+            document.getElementById("DocsWithoutSubject").innerText = (documents_without_subject.length).toString() + " سند بدون موضوع یافت شد.";
+
+            $('.WithoutSubjectTable').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "سندی یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام سند",
+                    "style": {
+                        "width": "35%"
+                    }
+                }, {
+                    "name": "subject",
+                    "title": "موضوع سند",
+                    "style": {
+                        "width": "15%"
+                    }
+                }, {
+                    "name": "approval_reference",
+                    "title": "مرجع تصویب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "approval_date",
+                    "title": "تاریخ تصویب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "level",
+                    "title": "سطح سند",
+                    "style": {
+                        "width": "10%"
+                    },
+                    "sorted": true,
+                }, {
+                    "name": "detail",
+                    "title": "جزئیات",
+                    "style": {
+                        "width": "10%"
+                    },
+                }
+                ],
+                "rows": document_result
+            });
+
+            stopBlockUI('WithoutSubjectTableId', 'اسناد بدون موضوع');
+
+
+        }
+
+        async function GetMultiSelectSubjectValue() {
+            var e = document.getElementById("SubjectSelect");
+            var selected = [...e.options]
+                .filter(option => option.selected)
+                .map(option => option.value)
+            return selected.join("__")
+        }
+
+        function GetMultiSelectSubjectText() {
+            let e = document.getElementById("SubjectSelect");
+            let selected = [...e.options]
+                .filter(option => option.selected)
+                .map(option => option.innerText)
+            return selected.join("-")
+        }
+
+
+        function showChart(data, position) {
+
+
+            data.sort(function(x,y){ return x[0] === 'نامشخص' ? -1 : y[0] === 'نامشخص' ? 1 : 0; });
+
+
+            chart = anychart.column();
+
+            // create a column series and set the data
+            var series = chart.column(data);
+
+
+            chart.animation(true);
+            chart.background().fill('#f8f9fa');
+
+            chart.background().fill('white');
+
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("%{%value}");
+
+            // set all axis title
+            var xAxis = chart.xAxis();
+            xAxis.title("موضوع");
+            xAxis.title().fontFamily('vazir');
+xAxis.title().fontWeight("bold");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("درصد شباهت");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            yAxis.title().height(45);
+            chart.yAxis().labels().format("٪{%value}");
+            chart.xAxis().labels().height(30);
+            chart.container(position);
+            chart.draw();
+        }
+
+
+        async function DetailFunction(document_id) {
+            /******************************* Subject **********************************/
+            request_link = 'http://' + location.host + "/GetSubjectByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+
+            document_name = response['document_name']
+            document_link = 'http://' + location.host + "/information/?id=" + document_id
+            document_tag = '<a target="to_blank" href="' + document_link + '">' + document_name + "</a>"
+
+            response = response["document_subject_list"]
+
+            document.getElementById("ModalHeader").innerHTML = document_tag
+            document.getElementById("subject_table").innerHTML = ""
+
+            let chart_value_list = []
+
+            for (let i = 0; i < response.length; i++) {
+                const subject = response[i]["subject"]
+                const weight = response[i]["weight"] * 100  /* For Scale To 0-100*/
+                const keywords_text = response[i]["keywords_text"]
+                const keywords_title = response[i]["keywords_title"]
+                const special_references = response[i]["special_references"]
+
+                tag = "<tr>" +
+                    "<td class='col-1'>" + (i + 1) + "</td>" +
+                    "<td class='col-2'>" + subject + "</td>" +
+                    "<td class='col-4'>" + keywords_text + "</td>" +
+                    "<td class='col-3'>" + keywords_title + "</td>" +
+                    "<td class='col-1'>" + special_references + "</td>" +
+                    "</tr>";
+
+                document.getElementById("subject_table").innerHTML += tag;
+
+                chart_value_list.push([subject, weight])
+            }
+
+            document.getElementById("subject_chart_container").innerHTML = "";
+            showChart(chart_value_list, "subject_chart_container");
+        }
+
+
+
+        async function ShowResult() {
+
+
+            const multiselect_subject_value = await GetMultiSelectSubjectValue();
+
+            if (multiselect_subject_value === "") {
+                var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+                var toastList = toastElList.map(function (toastEl) {
+                    return new bootstrap.Toast(toastEl)
+                });
+                toastList.forEach(toast => toast.show())
+
+            }
+            else {
+                container_id_list = ['SearchResultLable', 'SubjectTable']
+                clearPrevResults(container_id_list);
+                notyf.dismissAll();
+
+                startBlockUI('SubjectTable');
+
+                await SpinnerModeFunction("Active");
+
+                countryId = document.getElementById("country").value;
+
+                const request_link4 = 'http://' + location.host + "/GetDocumentsByCountrySubject/" + countryId + "/" + multiselect_subject_value + "/"
+                var response4 = await fetch(request_link4).then(response4 => response4.json());
+                let document_result = response4["documentsList"]
+
+                SearchResultValue = document_result
+                document.getElementById("SubjectTable").innerHTML = "";
+                $('.SubjectTable').footable({
+                    "paging": {
+                        "enabled": true,
+                        strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                    },
+                    "filtering": {
+                        "enabled": false
+                    },
+                    "sorting": {
+                        "enabled": true
+                    },
+                    "empty": "سندی یافت نشد.",
+                    "columns": [{
+                        "name": "id",
+                        "title": "ردیف",
+                        "breakpoints": "xs sm",
+                        "type": "number",
+                        "style": {
+                            "width": "5%"
+                        }
+                    }, {
+                        "name": "document_tag",
+                        "title": "نام سند",
+                        "style": {
+                            "width": "35%"
+                        }
+                    }, {
+                        "name": "document_subject",
+                        "title": "موضوع سند",
+                        "style": {
+                            "width": "15%"
+                        }
+                    }, {
+                        "name": "document_approval_reference",
+                        "title": "مرجع تصویب",
+                        "style": {
+                            "width": "10%"
+                        }
+                    }, {
+                        "name": "document_approval_date",
+                        "title": "تاریخ تصویب",
+                        "style": {
+                            "width": "10%"
+                        }
+                    }, {
+                        "name": "document_level",
+                        "title": "سطح سند",
+                        "style": {
+                            "width": "10%"
+                        },
+                    }, {
+                        "name": "document_subject_weight",
+                        "title": "وزن",
+                        "sorted": true,
+                        "direction": "DESC",
+                        "style": {
+                            "width": "5%"
+                        },
+                    }, {
+                        "name": "detail",
+                        "title": "جزئیات",
+                        "style": {
+                            "width": "10%"
+                        },
+                    }
+                    ],
+                    "rows": document_result
+                });
+
+
+
+                document.getElementById("SearchResultLable").innerText = response4["document_count"] + " سند مرتبط با موضوع یافت شد.";
+
+                await SpinnerModeFunction("Disable");
+
+                stopBlockUI('SubjectTable', 'اسناد مرتبط با موضوع');
+
+
+            }
+
+        }
+
+
+        async function SpinnerModeFunction(mode) {
+            if (mode === "Active") {
+                $(".spinner-border").addClass("active");
+            } else if (mode === "Disable") {
+                $(".spinner-border").removeClass("active");
+            }
+
+        }
+
+
+        async function downloadFiles(file_name_list, save_file_name) {
+            startFullPageBlockUI()
+            let zip = new JSZip()
+
+            const request_link = 'http://' + location.host + "/GetCountryById/" + countryId + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+            let extension = ".txt"
+            if (country_name.includes("فاوا")) {
+                extension = '.docx';
+            }
+
+            for (const document of file_name_list) {
+                const document_name = document["document_name"] + extension
+                const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name, value);
+                    })
+            }
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+            stopFullPageBlockUI('دانلود اسناد');
+        }
+
+
+
+        async function DownloadShowResultFunction() {
+            const save_file_name = "نتیجه نمایش {" + GetMultiSelectSubjectText() + "}"
+
+            if (selected_tab_id == 'without_subject') {
+                downloadFiles(showDocWithoutSubjectValue, save_file_name)
+
+            } else if (selected_tab_id == 'result_doc') {
+                downloadFiles(SearchResultValue, save_file_name)
+            }
+        }
+
+
+        async function ExportExcelShowResultFunction() {
+            startFullPageBlockUI();
+
+            var csv = "";
+
+
+            sep = ","
+            let Csv = "نام سند" + sep + "موضوع سند" + sep +
+                "مرجع تصویب" + sep + "تاریخ تصویب" + sep + "سطح سند" + sep + "وزن" + "\n"
+            for (const document of SearchResultValue) {
+                Csv += document["document_name"] + sep + document["document_subject"] + sep + document["document_approval_reference"] + sep +
+                    document["document_approval_date"] + sep + document["document_level"] + sep + document["document_subject_weight"] +
+                    "\n"
+
+            }
+
+            if (selected_tab_id == 'without_subject') {
+
+                Csv = "نام سند" + sep + "موضوع سند" + sep +
+                    "مرجع تصویب" + sep + "تاریخ تصویب" + sep + "سطح سند" + "\n"
+                for (const document of showDocWithoutSubjectValue) {
+                    Csv += document["document_name"] + sep + document["document_subject"] +
+                        sep + document["document_approval_reference"] +
+                        sep +
+                        document["document_approval_date"] + sep + document["document_level"] +
+                        "\n"
+
+                }
+            }
+
+
+            let save_file_name = "موضوع سند {" + GetMultiSelectSubjectText() + "}"
+            save_file_name += " مجموعه سند {" + document.getElementById("country").innerText + "}"
+
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click();
+
+            stopFullPageBlockUI('خروجی اکسل')
+        }
+
+
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#original_tabs button.nav-link').on('click', function () {
+                // alert($(this).attr('id'));
+                selected_tab_id = $(this).attr('id');
+                $('.result_count_label').removeClass('d-none');
+                $('.export_btn').removeClass('d-none')
+
+                if (selected_tab_id == 'result_doc') {
+
+                    $('#DocsWithoutSubject').addClass('d-none')
+
+                } else if (selected_tab_id == 'without_subject') {
+
+                    $('#SearchResultLable').addClass('d-none')
+
+                } else {
+
+                    $('.result_count_label').addClass('d-none');
+                    $('.export_btn').addClass('d-none')
+                }
+
+            });
+        });
+    </script>
+
+</body>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+
+<script src="../../static/js/UserLogSave.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+
+
+
+
+</html>

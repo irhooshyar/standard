@@ -1,0 +1,70 @@
+#file_input_btn i {
+    font-size: 16px;
+    position: relative;
+    top: -5px;
+    padding: 0 4px;
+}
+
+#file_input_btn {
+    background-color: var(--menu_color);
+    color: white;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    height: 37px;
+    width: 40%;
+}
+
+#graph_show {
+    background-color: var(--menu_color);
+    color: white;
+}
+
+#file_name {
+    border: 1px solid #ccc;
+    font-size: 16px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    width: 60%;
+    height: 37px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: white;
+    line-height: 28px;
+}
+
+
+@media (min-width: 576px) {
+    #modal_dialog {
+        max-height: 100vh !important;
+    }
+}
+
+#DocumentParagraph {
+    position: relative;
+    overflow-y: scroll;
+}
+
+#DocumentCount {
+    position: relative;
+    top: 10px;
+    text-align: left;
+    direction: rtl;
+}
+
+#more_comparison {
+    background-color: var(--menu_color);
+    color: white;
+}
+
+#more_comparison a {
+    color: white;
+    text-decoration: none;
+}
+
+#DocumentCount {
+    position: relative;
+    top: 10px;
+    text-align: left;
+    direction: rtl;
+}

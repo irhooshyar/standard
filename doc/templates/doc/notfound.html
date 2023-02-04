@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+                href="../../static/library/font-awesome.min-4.7.0.css">
+
+        <!-- Option 1: Include in HTML -->
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+        <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+        <!-- Option 1: Include in HTML -->
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+
+        <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+        </script>-->
+
+        <link rel="stylesheet" href="../../static/styles/index2.css">
+        <meta charset="UTF-8">
+        <title>هوش‌یار</title>
+        {% include "doc/title_icon.html" %}
+
+        <style>
+                
+        </style>
+</head>
+
+<body>
+
+        <!-- Menu -->
+        <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+                {% include "doc/header2.html" %}
+            </nav>
+
+        <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+                <p class="welcometext">
+                        شما اجازه دسترسی به این صفحه را ندارید!
+                </p>
+        </div>
+
+
+        <script src="../../static/js/logincheck.js"></script>
+        <!-- <script src="../../static/js/topnav_handler.js"></script> -->
+        <script>
+
+                $(document).ready(function () {
+                        $('select#language').on('change', function (e) {
+
+                                let selected_language = this.value;
+                                let current_url = window.location.href;
+                                if (selected_language === 'England') {
+                                        let requested_url =  current_url + 'en/'
+                                        window.location = requested_url;
+                                }
+                                if (selected_language === 'Russia') {
+                                        let requested_url =  current_url + 'ru/'
+                                        window.location = requested_url;
+                                }
+                        })
+                });
+
+        </script>
+        <script src="../../static/js/signout_function.js"></script>
+        <script src="../../static/js/UserLogSave.js"></script>
+</body>
+<script src="../../static/js/tooltip_handler.js"></script>
+</html>

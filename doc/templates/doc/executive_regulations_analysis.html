@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- jsnetworkx -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+    <!-- Download Zip Files -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <title>تحلیل آئین‌نامه‌های اجرایی</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#SepecificDropdown').addClass('active');
+            $('#executive_regulations_analysis_panel').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0">
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mt-2 mx-auto">
+                <!-- Country Input -->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 bg-light">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right"
+                        style="direction: rtl;" onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست و جو</button>
+                </li>
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="unknown_result_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#unknown_result_pane" type="button" role="tab" aria-controls="unknown_result_pane"
+                        aria-selected="true">آئین‌نامه‌های بدون قانون</button>
+                </li>
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="probable_regulators_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#probable_regulators_pane" type="button" role="tab" aria-controls="probable_regulators_pane"
+                        aria-selected="true">آئین‌نامه‌های محتمل</button>
+                </li>
+
+                <!-- Download Buttons -->
+                <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                    class="btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                </button>
+
+                <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+                <!-- Result Count -->
+                <p id="DocumentCount" dir="rtl" class="text-left float-left text-secondary  pl-2"></p>
+
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Unknown Result Pane -->
+                <div id="unknown_result_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                    aria-labelledby="unknown_result_tab">
+
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped UnknownTable" style="min-height: 200px;" id="UnknownTable">
+                        </table>
+                    </div>
+                </div>
+
+                 <!-- Analysis Pane -->
+                <div id="probable_regulators_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                    aria-labelledby="probable_regulators_tab">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div id="modal_dialog" class="modal-dialog modal-fullscreen  modal-dialog-scrollable ">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title w-100">
+                        <div class="row w-100">
+                            <div id="document_header" class="col-6 float-right text-center my-auto"></div>
+                            <div id="draft_header" class="col-6 float-left text-center my-auto"></div>
+                        </div>
+                    </h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body bg-light text-justify">
+                    <div class="row w-100 ">
+                        <div id="DocumentParagraph" class="col-6 float-right"></div>
+                        <div id="DraftParagraphs" class="col-6 float-left"></div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <script src="../../static/js/executive_regulations_analysis/executive_regulations_analysis_tour.js">
+    </script>
+    <script src="../../static/js/tour.js"></script>
+
+</body>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+<script>
+    let SearchResultValue = []
+    let last_paragraph = null;
+    let next_paragraph = '';
+
+    container_id_list = ['SearchTable','DocumentCount', 'UnknownTable']
+
+    function clearPrevResults(container_id_list) {
+
+        for (container_id of container_id_list) {
+            document.getElementById(container_id).innerHTML = "";
+        }
+    }
+
+    CountryChanged()
+
+    async function CountryChanged() {
+        ShowResult()
+    }
+
+    async function ShowResult() {
+        clearPrevResults(container_id_list);
+        notyf.dismissAll();
+        startBlockUI('SearchTable');
+        startBlockUI('UnknownTable');
+
+        await SpinnerModeFunction("Active");
+
+        let country_id = document.getElementById("country").value;
+        let request_link = 'http://' + location.host + "/GetMandatoryRegulations/" + country_id + '/';
+        let response = await fetch(request_link).then(response => response.json());
+
+        for (let doc of response['documents_information_result']){
+            matters[doc['regulator_id'] + ',' + doc['law_id']] = doc['matter'];
+        }
+
+        {#console.log(response)#}
+        {#console.log("---------")#}
+        {#console.log(matters)#}
+
+
+
+        await showDocumentInformation(response);
+
+        await SpinnerModeFunction("Disable");
+        stopBlockUI('SearchTable', 'نتایج جست و جو');
+        stopBlockUI('UnknownTable', 'آیین‌نامه‌های بدون قانون');
+    }
+
+    let matters = {}
+
+    async function showDocumentInformation(response) {
+        let documents_information_result= response["documents_information_result"];
+        let unknown_results = response['unknown_results'];
+        SearchResultValue = documents_information_result;
+        document.getElementById("DocumentCount").innerText =
+            (documents_information_result.length).toString() + " سند یافت شد.";
+
+        $('#UnknownTable').empty();
+        $('.UnknownTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "regulator",
+                "title": "نام آئین‌نامه‌",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "law",
+                "title": "نام قانون",
+                "style": {
+                    "width": "25%"
+                }
+            }, {
+                "name": "matter",
+                "title": "بند قانونی",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "10%"
+                }
+            }
+            ],
+            "rows": unknown_results
+        });
+
+        $('#SearchTable').empty();
+        $('.SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "regulator",
+                "title": "نام آئین‌نامه‌",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "law",
+                "title": "نام قانون",
+                "style": {
+                    "width": "25%"
+                }
+            }, {
+                "name": "matter",
+                "title": "بند قانونی",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "10%"
+                }
+            }
+            ],
+            "rows": documents_information_result
+        });
+
+    }
+
+    async function DetailFunction(regulator_id) {
+        let request_link = 'http://' + location.host + "/CompareRegulatorAndLaw/" + regulator_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+
+        /*  Show detail Result */
+        await showDetailsDataExact(response);
+
+    }
+
+    async function showDetailsDataExact(response) {
+
+        let regulator_id = response["regulator_id"];
+        let regulator_name = response["regulator_name"];
+        let regulator_text = response["regulator_text"];
+        let law_id = response["law_id"];
+        let law_name = response["law_name"];
+        let law_text = response["law_text"];
+        next_paragraph = response["next_paragraph"];
+        last_paragraph = response["last_paragraph"];
+
+        /* Title Text */
+        const regulator_link = 'http://' + location.host + "/information/?id=" + regulator_id;
+        let regulator_tag = "<a href='" + regulator_link + "'>" + regulator_name + "</a>";
+        document.getElementById("document_header").innerHTML = regulator_tag;
+        const law_link = 'http://' + location.host + "/information/?id=" + law_id;
+        let law_tag = "<a href='" + law_link + "'>" + law_name + "</a>";
+        document.getElementById("draft_header").innerHTML = law_tag;
+
+        /* Body Text */
+        let regulator_paragraph_tags = '';
+
+        for (let paragraph of regulator_text) {
+            regulator_paragraph_tags += "<li class='mb-3'>" + paragraph + "</li>";
+        }
+        document.getElementById("DocumentParagraph").innerHTML = "<ul style='list-style-type: none;'>" + regulator_paragraph_tags + "</ul>";
+
+        let law_paragraph_tags = '';
+        for (let paragraph of law_text) {
+             law_paragraph_tags += "<li class='mb-3'>" + paragraph + "</li>";
+        }
+        document.getElementById("DraftParagraphs").innerHTML = "<ul id='more_para_list' style='list-style-type: none;'>" +
+            law_paragraph_tags + (next_paragraph !== ''?
+                "</ul> <button id='load_next_paragraph' style='margin-right: 2rem;' onclick='loadNextParagraph()' class='btn btn-secondary'>بارگذاری نوشتار بیشتر</button>":
+                "");
+    }
+
+    async function loadNextParagraph(){
+        {#next_paragraph = response["next_paragraph"];#}
+        {#last_paragraph = response["last_paragraph"];#}
+        {#console.log(next_paragraph)#}
+        var dv = document.createElement("li");
+        dv.innerHTML = next_paragraph;
+        dv.classList.add('mb-3')
+        document.getElementById('more_para_list').appendChild(dv)
+        let request_link = 'http://' + location.host + "/GetNextParagraph/" + (last_paragraph+1) + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        last_paragraph = last_paragraph + 1
+        next_paragraph = response['paragraph_text']
+        if(next_paragraph === '')
+            document.getElementById('load_next_paragraph').remove()
+    }
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+</script>
+
+<!-- Export results -->
+
+<script>
+
+    async function downloadFiles(file_name_list, save_file_name) {
+        startFullPageBlockUI()
+        const country_id = document.getElementById("country").value
+
+        let zip = new JSZip()
+
+        const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["country_information"][0]
+        const country_folder = response["folder"];
+        const country_name = response["name"];
+
+        save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+        let extension = ".txt"
+        if (country_name.includes("فاوا")) {
+            extension = '.docx';
+        }
+
+
+        for (const document of file_name_list) {
+            const document_name = document['regulator_name'] + extension
+
+            const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+            await fetch(path)
+                .then(res => res.arrayBuffer())
+                .then(value => {
+                    zip.file(document_name, value);
+                })
+        }
+        zip.generateAsync({
+            type: "blob"
+        })
+            .then(function (content) {
+                // see FileSaver.js
+                saveAs(content, save_file_name + ".zip");
+            });
+        stopFullPageBlockUI( 'دانلود اسناد');
+    }
+
+    async function DownloadSerachResultFunction() {
+        const save_file_name = " آئین‌نامه‌های اجباری در"
+        downloadFiles(SearchResultValue, save_file_name)
+    }
+
+    async function ExportExcelSerachResultFunction() {
+        var csv = "";
+
+        sep = ","
+
+
+        let Csv = "نام آئین‌نامه‌" + sep + "نام قانون" + sep +
+            "بند قانونی" + "\n"
+        for (const document of SearchResultValue) {
+            let temp = document['matter'].join(';');
+            console.log(temp);
+            Csv += document["regulator_name"] + sep + document["law_name"] + sep + temp + "\n"
+        }
+
+        let save_file_name = " آئین‌نامه‌های اجباری در"
+        save_file_name += " مجموعه سند {" + $('#country option:selected').text() + "}"
+
+        let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+        var link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", save_file_name + ".csv");
+        document.body.appendChild(link);
+        link.click()
+    }
+
+</script>
+
+
+<script src="../../static/js/tooltip_handler.js"></script>
+<!-- Intro Js -->
+<script src="../../static/js/UserLogSave.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+
+
+
+</html>

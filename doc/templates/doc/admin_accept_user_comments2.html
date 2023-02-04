@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="../../static/library/bootstrap.min-5.1.2npm.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.7.1.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <link rel="stylesheet" href="../../static/styles/admin_dashboard.css">
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <title>داشبورد ادمین</title>
+</head>
+
+<body>
+<!--container-->
+<div class="container-users">
+    <div class="row">
+        <div class="col">
+
+            <!--recommendation data table-->
+            <div class="row data-table" style="margin-top: 50px">
+                <div class="col">
+                </div>
+                <div class="col-10">
+
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{% url 'admin_confirm_waiting_user' %}">
+                                تایید کاربران
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'admin_confirm_user_comments' %}">
+                                نظرات تحلیلی اسناد
+                            </a>
+                        </li>                        
+                    </ul>
+                    <div class="text"><strong
+                            class="recom-list align-content-center">مشاهده نظرات کاربر:</strong></div>
+                    <hr>
+                    <div>
+                    <div class="searching">
+                        <form class="d-flex pb-2">
+                            <input class="form-control me-2" id="myInput" type="search" placeholder="جستجو......"
+                                   aria-label="Search">
+                        </form>
+                    </div>
+                        <div class="table-responsive tbl">
+                            <table class="table-striped table footable cm_table">
+
+                                <thead>
+                                <th scope="col">#</th>
+                                <th scope="col">نام</th>
+                                <th scope="col">نام خانوادگی</th>
+                                <th scope="col">نام سند</th>
+                                <th scope="col">پیشنهاد کاربر</th>
+                                <th scope="col">تایید یا عدم تایید نظر کاربر</th>
+                                <th scope="col">تعداد موافق</th>
+                                <th scope="col">تعداد مخالف</th>
+
+                                </thead>
+
+                                <tbody id="user-recom-table">
+                                    {% for i in comments %}
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td>{{ i.first_name}}</td>
+                                        <td>{{ i.last_name }}</td>
+                                        <td>{{ i.document_name }}</td>
+                                        <td>
+                                            {{ i.comment }}
+                                        </td>
+
+                                        <td>
+                                        <div class="">
+                                            {% if i.is_accept != 1 %}
+                                            <button type="button" data-change-to="accepted"
+                                                    class="btn btn-success btn-change-comment-state"
+                                                    data-comment-id="{{ i.id }}"><i class="bi bi-check"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="پذیرش"></i></button>
+                                            {% endif %}
+                                            {% if i.is_accept != -1%}
+                                            <button type="button" data-change-to="rejected"
+                                                    class="btn btn-danger btn-change-comment-state"
+                                                    data-comment-id="{{ i.id }}"><i class="bi bi-x"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="عدم پذیرش"></i></button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                   <td>{{ i.agreed_count }}</td>
+                                   <td>{{ i.disagreed_count }}</td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+        </div>
+
+        <!--end recommendation data table-->
+    </div>
+</div>
+<!--end container-->
+<!-- bootstrap5 dataTables js cdn -->
+<script src="../../static/library/notyf.min.js"></script>
+
+
+<script>
+
+     const notyf = new Notyf();
+
+
+
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#user-recom-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function listen_on_buttons(){
+        const rows = document.querySelectorAll('#user-recom-table tr');
+        let inc = 1;
+        for (const row of rows) {
+            row.querySelector('th').innerText = inc.toString()
+            inc += 1;
+
+             const buttons = row.querySelectorAll('.btn-change-comment-state');
+             for (const button of buttons) {
+                button.addEventListener('click', async function () {
+                    const state = button.getAttribute("data-change-to");
+                    const comment_id = button.getAttribute("data-comment-id");
+                    const request_link = 'http://' + location.host + "/changeCommentState/" + comment_id + "/" + state + "/";
+                    let response = await fetch(request_link);
+                    try {
+                        response = await response.json();
+                        if (state == "accepted") {
+                            notyf.success('نظر کاربر با موفقیت پذیرفته شده است');
+                        } else if (state == "rejected") {
+                            notyf.error(' نظر کاربر با موفقیت رد شده است');
+                        }
+                        button.remove()
+                    } catch (err) {
+                        notyf.error('عملیات ناموفق بوده است');
+                    }
+
+                })
+            }
+
+        }
+    }
+
+     $('.cm_table').footable({
+            "on": {"ready.ft.table":function (e, ft){listen_on_buttons()}},
+         "paging" :{
+                "enabled":true,
+                 strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+         },
+            "sorting": {
+                "enabled": true
+            }
+     });
+
+
+
+</script>
+
+</body>
+</html>

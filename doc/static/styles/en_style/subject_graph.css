@@ -1,0 +1,58 @@
+#file_input_btn i {
+    font-size: 16px;
+    position: relative;
+    top: -5px;
+    padding: 0 4px;
+}
+
+#file_input_btn {
+    background-color: var(--menu_color);
+    color: white;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    width: 40%;
+}
+
+#graph_show {
+    background-color: var(--menu_color);
+    color: white;
+}
+
+#file_name {
+    border: 1px solid var(--menu_color);
+    font-size: 16px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1); /* IE */
+  -moz-transform: scale(1); /* FF */
+  -webkit-transform: scale(1); /* Safari and Chrome */
+  -o-transform: scale(1); /* Opera */
+  transform: scale(1);
+  padding: 0px;
+}
+
+
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    ;
+    top: 5px;
+}
+
+.form-check-label {
+    font-size: 14px;
+}

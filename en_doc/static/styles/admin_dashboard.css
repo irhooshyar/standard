@@ -1,0 +1,119 @@
+@font-face {
+    font-family: vazir;
+    src: url("../fonts/Vazir-FD.ttf");
+}
+
+label,
+input,
+button,
+select,
+textarea,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+a {
+    font-family: vazir;
+    font-weight: 300;
+    margin: 0;
+}
+
+.anychart-credits {
+  display: none;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: vazir;
+}
+
+.btn-success {
+    background-color: #16803b;
+}
+
+.btn-danger {
+    background-color: #da1212;
+}
+
+.container-users {
+    margin-top: 15px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.data-table {
+    margin-top: 20px;
+}
+
+.bi-person-plus-fill {
+    font-size: 2rem;
+}
+
+.bi-person-lines-fill {
+    font-size: 2rem;
+}
+
+.table {
+    margin-left: 40px;
+}
+
+.paging-class {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.table-responsive {
+    max-height: 300px;
+    max-width: content-box;
+}
+
+.table-responsive th, td {
+    text-align: center;
+}
+
+.text {
+    margin-top: 25px;
+}
+
+.show-btn {
+    margin-top: 23px;
+    color: #1481c0;
+}
+
+.nav-link a {
+    color: #1481c0;
+}
+
+.process{
+    direction: rtl;
+}
+
+.list-table{
+    border: 1px solid #1481c0;
+    text-align: right;
+}
+#file_input_btn i {
+    font-size: 16px;
+    position: relative;
+    top: 2px;
+    padding: 0 4px;
+}
+
+#file_input_btn {
+    background-color: #1481c0;
+    color: white;
+    height: 37px;
+    width: 100%;
+}
+
+.btn-color, .btn-color:hover{
+    background-color: #1481c0;
+    color: white;
+}
+

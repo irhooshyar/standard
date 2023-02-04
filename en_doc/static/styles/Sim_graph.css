@@ -1,0 +1,42 @@
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+  margin:100px;
+}
+
+path.link {
+  stroke:black;
+  stroke: #666;
+  stroke-width: 1.5px;
+  margin:100px;
+}
+
+circle {
+  fill: black;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+.node.fixed {
+  fill: #f00;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+div.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: #001;
+  color: #F00;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.d3-tip span {
+  color: #b3d4fc;
+}

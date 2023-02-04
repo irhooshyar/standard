@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/admin_dashboard.css">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>مشاهده پیشنهادات کاربران</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+<body>
+<!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#AdminDropdown').addClass('active');
+            $('#admin_user_recommendation').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+<!--container-->
+<div class="container-users">
+    <div class="row">
+        <div class="col">
+
+            <!--recommendation data table-->
+            <div class="row data-table">
+                <div class="col">
+                </div>
+                <div class="col-10">
+                <br>
+                    <div class="text"><p
+                            class="recom-list align-content-center">
+                    <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                    </button>
+                        مشاهده نظرات کاربر:</p></div>
+                    <hr style="color:darkblue">
+                    <div>
+                    <div class="searching">
+                        <form class="d-flex pb-2">
+                            <input class="form-control me-2" id="myInput" type="search" placeholder="جستجو......"
+                                   aria-label="Search">
+                        </form>
+                    </div>
+                        <div class="tbl">
+                            <table class="table-striped table footable recom_table">
+
+                                <thead>
+                                <th scope="col">#</th>
+                                <th scope="col">نام</th>
+                                <th scope="col">نام خانوادگی</th>
+                                <th scope="col">آدرس ایمیل</th>
+                                <th scope="col">امتیاز کاربر به سامانه </th>
+                                <th scope="col">پیشنهاد کاربر</th>
+                                </thead>
+
+                                <tbody id="user-recom-table">
+                                    {% for i in recommendation %}
+                                    <tr>
+                                        <td></td>
+                                        <td class="text-center">{{ i.first_name}}</td>
+                                        <td class="text-center">{{ i.last_name }}</td>
+                                        <td class="text-center">{{ i.email }}</td>
+                                        <td class="text-center">
+                                            <div class='rating-stars text-center' data-value={{ i.rating_value }}>
+                                                <ul>
+                                                  <li class='star' data-value='1'>
+                                                    <i class='fa fa-star fa-fw'></i>
+                                                  </li>
+                                                  <li class='star' data-value='2'>
+                                                    <i class='fa fa-star fa-fw'></i>
+                                                  </li>
+                                                  <li class='star' data-value='3'>
+                                                    <i class='fa fa-star fa-fw'></i>
+                                                  </li>
+                                                  <li class='star' data-value='4'>
+                                                    <i class='fa fa-star fa-fw'></i>
+                                                  </li>
+                                                  <li class='star' data-value='5'>
+                                                    <i class='fa fa-star fa-fw'></i>
+                                                  </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ i.recommendation_text |safe }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+        </div>
+
+        <!--end recommendation data table-->
+    </div>
+</div>
+<!--end container-->
+<script src="../../static/library/notyf.min.js"></script>
+
+<script src="../../static/js/logincheck.js"></script>
+
+<script>
+
+    $('.recom_table').footable({
+            "on": {"ready.ft.table":function (e, ft){listen_on_buttons()}},
+            "sorting": {
+                "enabled": true
+            },
+            "paging": {
+                    "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                    "enabled": false
+            },
+            "empty": "پیشنهادی ثبت نشده است.",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }    }],
+     });
+
+
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#user-recom-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+    const rows = document.querySelectorAll('#user-recom-table tr');
+    let inc = 1;
+    for (const row of rows) {
+        row.querySelector('td').innerText = inc.toString()
+        inc += 1;
+    }
+
+    const ratings = document.querySelectorAll('div.rating-stars')
+     for(const rating of ratings){
+         const rating_value = rating.getAttribute('data-value')
+         const stars = rating.querySelectorAll('li.star')
+
+          for (i = 0; i < parseInt(rating_value); i++) {
+              $(stars[i]).addClass('selected');
+          }
+     }
+
+</script>
+
+</body>
+</html>

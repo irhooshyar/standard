@@ -1,0 +1,72 @@
+@import url("fontiran.css");
+
+label,
+input,
+button,
+select,
+textarea,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+a {
+    font-family: IRANSans !important;
+    font-weight: 300;
+    margin: 0;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.btn-primary {
+    background-color: #1481c0;
+}
+
+.btn-primary:hover {
+    background-color: rgba(20, 162, 245, 1);
+}
+
+input {
+    direction: ltr;
+}
+
+#brand_logo {
+    color: #1481c0;
+}
+
+.fa-input {
+    direction: rtl;
+}
+
+.card{
+    width: 100%;
+    height: 70%;
+    direction: rtl;
+    position: fixed;
+    display: none;
+    padding-top: 15px;
+    padding-bottom: 2px;
+    background-color: #F0FFFF;
+}
+
+.closeIcon{
+    display: none;
+}
+
+.btn-cookie{
+    background-color: #1481c0;
+    margin-bottom: 2px;
+}
+
+.btn-cookie:hover {
+    background-color: rgba(20, 162, 245, 1);
+}
+
+.content-wrap{
+    margin-top: 15px;
+}

@@ -1,0 +1,10 @@
+آيين‌نامه	Red
+قانون	Blue
+مصوبه	Green
+مقررات	Yellow
+طرح	Brown
+لایحه	Magenta
+اصلاحیه	Purple
+اساسنامه	Pink
+ابلاغیه	Teal
+رأی	Orange

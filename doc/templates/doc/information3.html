@@ -1,0 +1,4400 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <style>
+        .checked {
+            color: orange;
+        }
+
+        #zoomInButton,
+        #zoomOutButton,
+        #fitButton {
+        background-color: var(--menu_color);
+        color: white;
+        }
+    </style>
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-core.min-8.10.0.js"></script>
+    <script src="../../static/library/anychart-graph.min-8.10.0.js"></script>
+    <script src="../../static/library/anychart-exports.min-8.10.0.js"></script>
+    <script src="../../static/library/anychart-8.10.0-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/anychart-font.min-8.10.0.css"/>
+
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <!--<script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+    <script src="../../static/library/html2pdf.bundle.min-0.9.3.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/information_chart.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+    {% comment %}<script src="../../static/library/jquery.min-2.2.2.js"></script>
+    <script src="../../static/library/jquery-ui.min-1.11.4.js"></script>{% endcomment %}
+
+    <meta charset="UTF-8">
+
+    <title> نمایش مصوبات</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#ApprovalsDropdown').addClass('active');
+            $('#information').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0">
+
+        <!-- Form Inputs -->
+        <form autocomplete="on" action="" id="information_form" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+            <div class="row flex-row-reverse mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+                    <label for="country" class=" text-right bg-light float-right">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+
+                        <option value="{{ k }}">{{ v }}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- selected document -->
+                <div id="document_div" class="col-md-6 pt-3 col-12 col-lg-6 mt-1">
+                    <label for="document" class="text-right bg-light float-right">سند:</label>
+                    <select id="document" dir="rtl" name="document"
+                        class="form-select d-none text-right float-right document_select_box" onchange="ShowResult()"
+                        disabled>
+                    </select>
+                    <button dir="rtl" id="document_select" type="button"
+                        class="btn d-inline-block text-truncate w-100 text-right text-black float-right mx-0 bg-white border"
+                        data-bs-toggle="modal" data-bs-target="#SelectDocumentModal">
+                        <i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>
+                        انتخاب نمایید
+                    </button>
+                </div>
+
+                <!-- Download button -->
+                <div class="col-lg-4 col-md-2 pt-5 col-12 mt-1 px-0">
+                    <button type="button" id="copy_document" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="کپی نام سند" class="float-right text-right p-0 d-none" onclick="copyDocumentName()">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+
+                    <button type="button" id="document_search" onclick="ShowDocumentContent()"
+                        class="btn d-flex float-right  mr-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+
+
+                    <div dir="rtl" class="dropdown float-right mr-2">
+                        <button id="document_download" class="btn dropdown-toggle float-right text-right" type="button"
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            دانلود سند
+                        </button>
+                        <ul dir="rtl" class="dropdown-menu px-0 mx-0" aria-labelledby="dropdownMenuButton1">
+                            <li class="text-left" id="pdf_download" onclick="generatePDF()"><a class="dropdown-item"
+                                    href="#">PDF</a></li>
+                            <li class="text-left"><a class="dropdown-item" id="txt_download" download href="#">TXT</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div dir="rtl" class="doc_info_table mt-5" style="border: 1px solid #006666">
+                    <table class="table table-light">
+                        <thead class="table" style="background: #1e56a0;">
+                            <tr>
+                                <th class="text-center" scope="col">مرجع تصویب</th>
+                                <th class="text-center" scope="col">تاریخ تصویب</th>
+                                <th class="text-center" scope="col">سطح سند</th>
+                                <th class="text-center" scope="col">موضوع سند</th>
+                                <th class="text-center" scope="col">نوع سند</th>
+                                <th class="text-center" scope="col">اعتبار سند</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" id="approval_reference">-</td>
+                                <td class="text-center" id="approval_date">-</td>
+                                <td class="text-center" id="document_level">-</td>
+                                <td class="text-center" id="document_subject">-</td>
+                                <td class="text-center" id="document_type">-</td>
+                                <td class="text-center" id="document_validation">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+
+        </form>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+            <li class="nav-item float-right" role="presentation">
+                <button id="def_keywords_tab" class="nav-link active" data-bs-toggle="pill" data-bs-target="#def_keywords_pane"
+                    type="button" role="tab" aria-controls="def_keywords_pane" aria-selected="false">تحلیل بخش تعاریف</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="reference_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#reference_pane"
+                    type="button" role="tab" aria-controls="reference_pane" aria-selected="false">ارجاعات</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="subject_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#subject_analysis_pane" type="button" role="tab"
+                    aria-controls="subject_analysis_pane" aria-selected="false">تحلیل موضوعی</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="actor_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#actor_analysis_pane" type="button" role="tab" aria-controls="actor_analysis_pane"
+                    aria-selected="false">تحلیل کنش‌گران</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="frequency_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#frequency_pane" type="button" role="tab" aria-controls="frequency_pane"
+                    aria-selected="false">تحلیل تواتر محور</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="advisory_opinions_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#advisory_opinions_pane" type="button" role="tab" aria-controls="advisory_opinions_pane"
+                    aria-selected="false">تحلیل نظرات مشورتی</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="find_similarity_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#find_similarity_pane" type="button" role="tab"
+                    aria-controls="find_similarity_pane" aria-selected="false">مشابهت یابی</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="user_comments" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#user_comments_pane" type="button" role="tab" aria-controls="user_comments_pane"
+                    aria-selected="false">نظرات کاربری</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="user_notes" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#user_notes_pane" type="button" role="tab" aria-controls="user_notes_pane"
+                    aria-selected="false">یادداشت‌های شخصی</button>
+            </li>
+        </ul>
+
+        <div id="original_pane" class="tab-content float-right bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <!-- Definition and keywords Pane -->
+            <div id="def_keywords_pane" class="tab-pane w-100 fade show active float-right  px-0 border-0" role="tabpanel"
+                aria-labelledby="def_keywords_tab">
+
+                <!-- Definition Segment -->
+                <h6 id="Definition_header" class="header mt-4  text-white d-block w-100 pt-2 px-2 float-right">
+                    <label for="definition_container" class="text-right float-right d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        بخش تعاریف و اصطلاحات</label>
+                </h6>
+                <div id="definition_container" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+                <!-- General definition Segment -->
+                <h6 id="general_definition_header" class="header mt-4 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label for="general_definition_container" class="text-right float-right d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        بخش تعاریف کلی</label>
+                </h6>
+                <div id="general_definition_container" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+                <!-- General definition Segment -->
+                <h6 id="abbreviation_header" class="header mt-0 border text-white d-block w-100 pt-2 px-2 float-right">
+                    <label for="abbreviation_container" class="text-right float-right d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        بخش اختصارات </label>
+                </h6>
+                <div id="abbreviation_container" dir="rtl" class="text-right bg-light border p-4 mt-0">
+                </div>
+
+                <!-- Final Keywords Segment -->
+                <h6 id="Final_Keywords_header"
+                    class="header mt-4 text-white d-block w-100 pt-2 px-2 float-right">
+                    <label class="text-right float-right"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        کلید واژه‌های نهایی</label>
+                </h6>
+                <div id="final_Keywords_container" dir="rtl" class="text-right bg-light border p-4 mt-5">
+                </div>
+
+            </div>
+
+            <!-- Reference Pane -->
+
+            <div class="tab-pane fade float-right w-100" id="reference_pane" role="tabpanel"
+                aria-labelledby="reference_tab">
+                <div class="row mt-4 w-100 flex-row-reverse  mx-auto pb-5 px-4">
+                    <!-- doc colors -->
+                    <div id="constraints_container" class="collapse show constraints_container row flex-row-reverse pt-0 mb-0 mt-0 mx-auto">
+
+                        <div id="DegreeDiv" class="col-md-3 p-1 col-12 col-lg-6 mt-1">
+                            <div class="source_header bg-white row mx-auto p-1">
+                                <label class="text-center my-0" style="direction: rtl;">فیلتر درجه</label>
+                            </div>
+                            <div class="source_container pb-2 row mx-auto">
+                                <div dir="rtl" class="wrapper mt-5 mb-1" id="RangeSlider" style="visibility: hidden;">
+                                  <div class="container" style="display: flex; justify-content: center;">
+                                    <div class="slider-wrapper">
+                                      <div dir="ltr" id="slider-range"></div>
+                                      <div dir="rtl" style="display:flex; width: 300px; justify-content: center" class="range-wrapper">
+                                        <div dir="ltr" class="range mt-1"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="WeightDiv" class="col-md-3 p-1 col-12 col-lg-6 mt-1">
+                            <div class="source_header bg-white row mx-auto p-1">
+                                <label class="text-center my-0" style="direction: rtl;">فیلتر وزن</label>
+                            </div>
+                            <div class="source_container pb-2 row mx-auto">
+                                <div dir="rtl" class="wrapper mt-5 mb-1" id="WeightSlider" style="visibility: hidden;">
+                                  <div class="container" style="display: flex; justify-content: center;">
+                                    <div class="slider-wrapper">
+                                        <div dir="ltr" id="slider-range"></div>
+                                          <div dir="rtl" style="display:flex; width: 300px; justify-content: center" class="range-wrapper">
+                                            <div dir="ltr" class="range mt-1"></div>
+                                          </div>
+                                    </div>
+                                    </div>
+                                  </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div dir="ltr">
+                        <img style="width: 4%; cursor: pointer" src="../../static/image/neighbourhood.png" onclick="SelectNeighbourhood()">
+                        <img style="width: 3%; cursor: pointer" id="ShowHideImg" src="../../static/image/hide_nodes.png" onclick="ShowHideNode()">
+                    </div>
+                    <select id="ChangeLayout" name="ChangeLayout" onchange="ChangeLayout()" class="form-select text-right float-right" style="direction: rtl;">
+                        <option value="grid">مربعی</option>
+                        <option value="circular"> دایره ای </option>
+                        <option value="force">ساده</option>
+                        <option value="dagre">بالا به پایین</option>
+                        <option value="radial">شعاعی</option>
+                        <option value="concentric">متحدالمرکز</option>
+                        <option value="comboForce">خوشه ای</option>
+                    </select>
+                    <div id="advanced_graph_container" class="w-100 border mt-1" style="height:500px; width:700px ; overflow: hidden;">
+                    </div>
+                </div>
+
+                <div dir="rtl" style="display: flex; margin-bottom: 50px;">
+                    <div class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            گره های انتخاب شده
+                        </h6>
+                        <table id="selected_node_table" class="table table-striped PopUpTable" style="width: 95%;margin: auto;">
+
+                        </table>
+                    </div>
+
+                    <div class="col-md-6 px-0 col-12 col-lg-7 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            یال های انتخاب شده
+                        </h6>
+                        <table id="selected_edge_table" class="table table-striped PopUpTable" style="width: 95%;margin: auto;">
+
+                        </table>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+            <!-- Frequency Pane -->
+            <div class="tab-pane fade float-right w-100 " id="frequency_pane" role="tabpanel"
+                aria-labelledby="frequency_tab">
+
+                <!-- statistical doc info segment -->
+                <h6 class="Term_count_header pr-2">
+                    <label class="text-right float-right mt-5">داشبورد آماری:</label>
+                </h6>
+                <div dir="rtl" class="doc_info_table mb-3" >
+                    <table class="table table-light">
+                        <thead class="table bg-secondary">
+                            <tr>
+                                <th class="text-center" scope="col">کل واژه‌ها</th>
+                                <th class="text-center" scope="col">ایست‌واژه‌ها</th>
+                                <th class="text-center" scope="col">واژه‌های متمایز</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" id="total_words">-</td>
+                                <td class="text-center" id="stop_words">-</td>
+                                <td class="text-center" id="distinct_words">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row mt-4 w-100 flex-row-reverse mx-auto">
+                    <!-- container for 1-gram words whit (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-2 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم تک-کلمه‌ای
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-success">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="1gram_frequency_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- container for 2-gram words whit (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم 2-کلمه‌ای
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">امتیاز</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                        <th class="text-center" scope="col"> تایید</th>
+                                        <th class="text-center" scope="col">حذف</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="2gram_frequency_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 2Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-right ngram-textbox"
+                                placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required=""
+                                name="2gram_TextBox" id="2gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('2gram')"
+                                class="btn float-right mx-0">
+                                ذخیره
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- container for 3-gram words with (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم 3-کلمه‌ای
+                        </h6>
+                        <div class="mt-0 pr-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-secondary">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">امتیاز</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                        <th class="text-center" scope="col"> تایید</th>
+                                        <th class="text-center" scope="col">حذف</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="3gram_frequency_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 3Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-right ngram-textbox"
+                                placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required=""
+                                name="3gram_TextBox" id="3gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('3gram')"
+                                class="btn float-right mx-0">
+                                ذخیره
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <!-- Advisory opinions to this doc Pane -->
+            <div class="tab-pane fade float-right w-100" id="advisory_opinions_pane" role="tabpanel"
+                aria-labelledby="advisory_opinions_tab">
+                <div>
+                    <!-- Download Buttons -->
+                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                    class="btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-archive text-primary m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                    </button>
+
+                    <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                        type="button">
+                        <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                    </button>
+
+                    <!-- Result Count -->
+                    <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+                    <h6 class="header bg-secondary mt-0 border text-white d-block w-100 pt-2 px-2 float-right">
+                        <label class="text-right float-right"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            نظرات مشورتی ارجاع داده به سند</label>
+                    </h6>
+                    <div class="text-right bg-light border px-4">
+                        <table class="table table-striped AdvisoryOpinionsReferencedToThisDocTable" style="min-height: 200px;" id="AdvisoryOpinionsReferencedToThisDocTable" dir="rtl">
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- user comments pane -->
+            <div class="tab-pane w-100 fade float-right" id="user_comments_pane" role="tabpanel"
+                aria-labelledby="user_comments_tab">
+                    <div class="row flex-row-reverse px-0 m-0 mt-5">
+                    <div class="col-9">
+
+                        <div dir="rtl" class="doc_info_table">
+                            <table class="table table-light table-striped cm_table footable">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام کاربر</th>
+                                        <th class="text-center" scope="col">وضعیت</th>
+                                        <th class="text-center" scope="col">نظر</th>
+                                        <th class="text-center" scope="col">موافقت یا مخالفت با نظر کاربر</th>
+                                        <th class="text-center" scope="col">تعداد موافق</th>
+                                        <th class="text-center" scope="col">تعداد مخالف</th>
+                                        <th class="text-center" scope="col">تاریخ</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="comments_table_body">
+                                    <tr>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="col-3">
+                     <form class="shadow p-4 bg-white" id="comment_form" dir="rtl" method="POST">
+                        <div class="row text">
+                            <div class="mb-3">
+                                  <label for="exampleFormControlTextarea1" class="form-label">لطفا نظر خود را در مورد سند انتخابی در کادر زیر وارد نمایید <span style="color: red">*</span>:</label>
+                                  <textarea class="form-control" id="form_comment_text" rows="10"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                 <input class="form-check-input p-1" style=" margin:5px " type="checkbox" value="true" id="form_comment_show_info" checked>
+                                 <label class="form-check-label" style="margin-right: 28px" for="form_comment_show_info">
+                                    نمایش اطلاعات شخصی
+                                 </label>
+                            </div>
+                            <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" value="submit">ثبت نظر</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- user notes Pane -->
+            <div class="tab-pane w-100 fade float-right" id="user_notes_pane" role="tabpanel"
+                aria-labelledby="user_notes_tab">
+                    <div class="row flex-row-reverse px-0 m-0 mt-5">
+                    <div class="col-7">
+
+                        <div dir="rtl" class="doc_info_table">
+                            <table class="table table-light table-striped note_table footable">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">متن یادداشت </th>
+                                        <th class="text-center" scope="col"> تاریخ</th>
+                                        <th class="text-center" scope="col"> برچسب</th>
+                                        <th class="text-center" scope="col"> ستاره دار</th>
+                                        <th class="text-center" scope="col"> دانلود </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notes_table_body">
+                                    <tr>
+                                        <td class="text-center" id="note_number">-</td>
+                                        <td class="text-center" id="note_text">-</td>
+                                        <td class="text-center" id="note_time">-</td>
+                                        <td class="text-center" id="note_label">-</td>
+                                        <td class="text-center" id="note_starred">-</td>
+                                        <td class="text-center" id="note_download">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                     <form class="shadow p-4 bg-white" id="note_form" dir="rtl" method="POST">
+                        <div class="row text">
+                            <div class="mb-3">
+                                  <label for="exampleFormControlTextarea1" class="form-label">لطفا یادداشت خود را در مورد سند انتخابی در کادر زیر وارد نمایید <span style="color: red">*</span>:</label>
+                                  <textarea class="form-control" id="form_note_text" rows="10"></textarea>
+                            </div>
+
+                            <div class="ngram-div">
+                                <input class="float-left form-control text-right ngram-textbox mr-3"
+                                    placeholder="برچسب یادداشت" type="text"
+                                    name="form_note_label" id="form_note_label" value="">
+                            </div>
+
+                            <div class="mt-3 d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" value="submit">ثبت یادداشت</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Pane -->
+            <div class="tab-pane fade float-right w-100" id="subject_analysis_pane" role="tabpanel"
+                aria-labelledby="subject_analysis_tab">
+                <!-- Subject distribution segment -->
+                <h6 class="subject_distribution pr-2 w-100 mt-4 text-right float-right">
+                    توزیع موضوعی سند
+                </h6>
+                <br>
+
+
+                <div id="subject_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+
+                </div>
+
+                <!-- Keywords for each subject segment -->
+                <h6 class="subject_keywords pr-2">
+                    <label for="doc_info" class="text-right float-right mt-5">واژه‌های کلیدی سند در هر موضوع</label>
+                </h6>
+                <div dir="rtl" class="table-responsive">
+                    <table class="table table-light table-striped  caption-top">
+                        <thead class="table">
+                            <tr>
+                                <th class="text-center" scope="col">ردیف</th>
+                                <th class="text-center" scope="col"> موضوع</th>
+                                <th class="text-center" scope="col">واژه‌های کلیدی در متن ( تعداد تکرار )</th>
+                                <th class="text-center" scope="col">واژه‌های کلیدی در عنوان ( تعداد تکرار )</th>
+                                <th class="text-center" scope="col">مرجع تخصصی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject_table">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Actors Pane -->
+            <div class="tab-pane fade float-right w-100" id="actor_analysis_pane" role="tabpanel"
+                aria-labelledby="actor_analysis_tab">
+
+                <!-- Acotrs distribution segment -->
+                <h6 class="actors_distribution pr-2 w-100 mt-4 text-right float-right">
+                    توزیع کنش‌گران سند
+                </h6>
+                <br>
+
+                <div id="actors_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                </div>
+
+                <!-- Actors paragraphs-->
+
+                <div class="accordion" id="actors_paragraph_container">
+
+                    <!-- Motevalian paragraphs -->
+                    <div class="accordion-item float-right w-100">
+
+                        <h2 class="accordion-header d-block w-100 float-right" id="motevalian_hader">
+                            <button
+                                class="accordion-button accordin_header text-right float-right d-inline-block w-100 pr-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#motevalian_collapse"
+                                aria-expanded="true" aria-controls="motevalian_collapse">
+                                متولیان اجرا
+                                <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            </button>
+                        </h2>
+
+                        <div id="motevalian_collapse" class="accordion-collapse w-100 collapse show float-right"
+                            aria-labelledby="motevalian_hader">
+
+                            <div class="accordion-body bg-light text-right">
+
+                                <ul dir="rtl" class="" id="motevalian_list">
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hamkaran paragraphs -->
+                    <div class="accordion-item float-right w-100">
+                        <h2 class="accordion-header d-block w-100 float-right" id="hamkaran_header">
+                            <button
+                                class="accordion-button accordin_header text-right float-right d-inline-block w-100 collapsed pr-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#hamkaran_collapse"
+                                aria-expanded="true" aria-controls="hamkaran_collapse">
+                                همکاران
+                                <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            </button>
+                        </h2>
+                        <div id="hamkaran_collapse" class="accordion-collapse collapse  w-100 float-right"
+                            aria-labelledby="hamkaran_header">
+                            <div class="accordion-body bg-light text-right">
+                                <ul dir="rtl" class="" id="hamkaran_list">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salahiat paragraphs -->
+                    <div class="accordion-item float-right w-100">
+                        <h2 class="accordion-header d-block w-100 float-right" id="salahiat_header">
+                            <button
+                                class="accordion-button accordin_header text-right float-right d-inline-block w-100 collapsed pr-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#salahiat_collapse"
+                                aria-expanded="true" aria-controls="salahiat_collapse">
+                                دارای صلاحیت اختیاری
+                                <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                            </button>
+                        </h2>
+                        <div id="salahiat_collapse" class="accordion-collapse collapse w-100 float-right"
+                            aria-labelledby="salahiat_header">
+                            <div class="accordion-body bg-light text-right">
+
+                                <ul dir="rtl" class="" id="salahiat_list">
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+            <!-- Similarity Pane -->
+            <div class="tab-pane fade float-right w-100" id="find_similarity_pane" role="tabpanel"
+                aria-labelledby="find_similarity_tab">
+
+                {% comment %} <!-- statistical doc info segment -->
+                <h6 class="Term_count_header pr-2">
+                    <label class="text-right float-right mt-5">داشبورد آماری:</label>
+                </h6> {% endcomment %}
+
+                <!-- Search Result Pane -->
+                <div dir="rtl" id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- show document content modal -->
+        <!-- Modal Container for detail  -->
+        <div class="modal fade" id="documentContent">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="documentContentHeader" class="modal-title">نام سند</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="DocumentContentBody">
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Container -->
+        <div class="modal fade" id="SelectDocumentModal">
+            <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="ModalHeader" class="modal-title">انتخاب سند</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+
+                    <!-- Modal body -->
+                    <div id="ModalBody" class="modal-body text-justify">
+                        <div class="container">
+
+
+                            <div class="d-flex col-12 mb-2">
+                                <input
+                                    style="direction: rtl;width: 90%; border-bottom-left-radius: 0;border-top-left-radius: 0;"
+                                    class="form-control text-right" placeholder="جستجو سند ..." type="text" required=""
+                                    name="SearchBox" id="SearchBox" value="">
+
+                                <button class="btn mr-0"
+                                    style="border-bottom-right-radius: 0;border-top-right-radius: 0;" type="button"
+                                    id="document_search" onclick="Search_Document_ByName()"
+                                    class="btn d-flex float-right mr-4">
+                                    <i class="bi bi-search" style="font-size: 16px;position: relative; top: -5px;"></i>
+                                </button>
+
+                                <div class="col-md-6  pt-3 col-12 col-lg-2" style="padding-top: 0px!important;">
+                                    <select name="load_count" id="LoadCount" class="form-select text-right float-right"
+                                        onchange="pagingchange()">
+                                        <option value="10">۱۰</option>
+                                        <option value="20">۲۰</option>
+                                        <option value="30">۳۰</option>
+                                        <option value="40">۴۰</option>
+                                        <option value="50">۵۰</option>
+                                    </select>
+                                </div>
+
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="تازه‌سازی"
+                                    style="font-size: 25px; text-align: center; cursor: pointer;color: var(--menu_color);"
+                                    class="fa fa-refresh mr-3 mt-2" onclick="CountryChanged()"></span>
+                            </div>
+
+                            <table id="PopUpTable" class="table table-striped PopUpTable">
+                            </table>
+
+                            <p>
+                                <span>از میان </span>
+                                <span style="color: #1A01CC" id="all_doc_count"></span>
+                                <span> سند، </span>
+                                <span style="color: #3e8f3e" id="load_doc_count"></span>
+                                <span> سند بازیابی شده است </span>
+                            </p>
+
+                            <span class="add-row"></span>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ChartModal Container -->
+        <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#actors_modal"></button>
+        <div class="modal fade" id="actors_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="actor_paragraphs" class="modal-body text-justify">
+                        <div id="actor_modal_body">
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ReferencesModal Container -->
+        <button type="button" id="references_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#references_modal"></button>
+        <div class="modal fade" id="references_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="references_modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="references_modal_paragraphs" class="modal-body text-justify">
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="refrences_modal_footer" class="modal-footer">
+                        <button class="btn btn-secondary" id="references_modal_footer_btn" data-bs-dismiss="modal">بستن
+                        </button>
+                    </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ReferencesGraphModal Container -->
+        <button type="button" id="references_graph_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#references_graph_modal"></button>
+        <div class="modal fade" id="references_graph_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="references_graph_modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="references_graph_modal_paragraphs" class="modal-body text-justify">
+                    </div>
+                    <!-- Modal footer -->
+                    <div id="references_graph_modal_footer" class="modal-footer">
+                        <button class="btn btn-secondary" id="references_graph_modal_footer_btn" data-bs-dismiss="modal">بستن
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+
+    <!-- Toast -->
+    <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+        <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+                <i style="position: relative; top: -4px; font-size: 18px;"
+                    class="bi bi-info-circle-fill  text-info"></i>
+                <span id="toast_message">
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Vote Details Modal Container -->
+    <div class="modal fade" id="VoteDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="VoteModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <div id="VoterDetailText" class="bg-light text-justify">
+                          <div dir="rtl" class="voter_info_table">
+                            <table class="table table-light table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام کاربر</th>
+                                        <th class="text-center" scope="col">تاریخ اولین ثبت رأی</th>
+                                        <th class="text-center" scope="col">تاریخ آخرین تغییر رأی</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vote_table_body">
+                                    <tr>
+                                        <td class="text-center" id="voter_number">-</td>
+                                        <td class="text-center" id="voter_name">-</td>
+                                        <td class="text-center" id="voter_date">-</td>
+                                        <td class="text-center" id="voter_modify_date">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <!-- bootstrap5 dataTables js cdn -->
+    <!-- <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
+
+
+    <!-- Blocking UI Script -->
+    <script>
+        function startBlockUI() {
+            $.blockUI({
+
+                // BlockUI code for element blocking
+                message: ("<div class='lds-ellipsis'><div></div><div></div><div></div><div></div></div><h6 style = 'font-family:vazir;'>...در حال دریافت اطلاعات<h6>"),
+
+                css: { color: 'var(--menu_color)', border: 'none', borderRadius: '5px', borderColor: 'var(--menu_color)', paddingTop: '5px' }
+            });
+
+            startTimer();
+        }
+        function stopBlockUI() {
+
+            $.unblockUI();
+            elapsed_time = endTimer();
+            toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+
+            {#if (elapsed_time > 0)#}
+            {#    showToastMessage(toast_message);#}
+
+        }
+
+
+        function showToastMessage(message_text) {
+            document.getElementById('toast_message').innerHTML = message_text
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl)
+            });
+            toastList.forEach(toast => toast.show())
+        }
+
+    </script>
+
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <script>
+
+        advisory_document_result = []
+
+        let graph_object;
+        var startTime, endTime;
+
+        function startTimer() {
+            startTime = new Date();
+        };
+
+        function endTimer() {
+            endTime = new Date();
+            var timeDiff = endTime - startTime; //in ms
+            // strip the ms
+            timeDiff /= 1000;
+
+            // get seconds
+            var seconds = Math.round(timeDiff);
+            console.log(seconds + " seconds");
+            return seconds;
+        }
+    </script>
+
+    <script>
+
+        /* Footable */
+        var paging_size = document.getElementById("LoadCount").value
+        var counter = 0;
+
+        var load_size = 250;
+
+        var loaded_doc = 0;
+        var ft = FooTable.init('#PopUpTable', {
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "در حال بازیابی اسناد (لطفا صبر نمایید)",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }
+            }, {
+                "name": "document_name",
+                "title": "نام سند"
+            }, {
+                "name": "subject",
+                "title": "موضوع سند"
+            }, {
+                "name": "approval_reference",
+                "title": "مرجع تصویب"
+            }, {
+                "name": "approval_date",
+                "title": "تاریخ تصویب"
+            }, {
+                "name": "tag",
+                "title": "انتخاب"
+            }],
+        });
+        var first_loading = true
+
+        /* Gloabal Constants */
+        const motevalian_punctuations = ['.', '،', 'ـ', '-', ':'];
+        const hamkaran_punctuations = ['،', ')', ':']
+
+        const motevali_keywords = ['موظف است', 'مکلف است', 'مکلف‌اند', 'موظف‌اند', 'موظفند', 'مکلفند', 'موظف به', 'مکلف به'];
+        const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+        const salahiat_keywords = ['مختار است', 'اختیار دارد', 'می‌تواند', 'می تواند', 'میتواند', 'می­تواند', 'می‏تواند', 'مجاز است', 'اجازه داده می‌شود', 'اجازه داده می شود', 'اجازه داده  میشود'];
+
+
+        let actors_list = []
+
+        init()
+
+        async function init() {
+
+            /* Get Actors List */
+            const request_link = 'http://' + location.host + "/GetActorsList/";
+            const response = await fetch(request_link).then(response => response.json());
+            actors_list = response["actorsList"]
+
+            const url = new URL(window.location.href);
+            var document_id = url.searchParams.get("id");
+
+            if (document_id) {
+                const request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+                let response = await fetch(request_link).then(response => response.json());
+                response = response["document_information"][0]
+
+                document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+                document.getElementById("country").value = response["country_id"]
+
+                document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>' + response['name']
+                document.getElementById('document_select').innerHTML = document_select_tag;
+                document.getElementById('document_select').title = response['name'];
+
+                /* disable country , document */
+                document.getElementById("document_select").disabled = true;
+                document.getElementById("country").disabled = true;
+
+                await ShowResult();
+
+            } else {
+                const text = "انتخاب نمایید"
+                document.getElementById("document").innerHTML = "<option value=" + 0 + " disabled>" + text + "</option>";
+                document.getElementById("document_download").disabled = true;
+                document.getElementById("pdf_download").disabled = true;
+                document.getElementById("document_search").disabled = true;
+                CountryChanged();
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+
+        }
+
+        $("#document_select").click(function () {
+            if ($('.add-row-1').length === 0) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        });
+
+
+        async function CountryChanged() {
+
+            startBlockUI();
+            document.getElementById("document_select").disabled = true;
+
+            const country_name = $("#country option:selected").text();
+
+            document.getElementById('ModalHeader').innerText = 'مجموعه سند: ' + country_name;
+
+            document.getElementById("document_select").disabled = false;
+
+            counter = 0;
+            loaded_doc = 0
+            first_loading = true
+
+            $(".add-row-1").css('visibility', 'visible');
+
+            document.getElementById("document_select").disabled = true;
+            await setTimeout(loaddata, 1000)
+            document.getElementById("document_select").disabled = false;
+            // new
+            if ($('.add-row-1').length === 0) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+            stopBlockUI()
+        }
+
+        async function pagingchange() {
+            paging_size = $('#LoadCount option:selected').val()
+            FooTable.get('#PopUpTable').pageSize(paging_size);
+            window.setTimeout(function () {
+                $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+            }, 1000);
+        }
+
+
+        function loaddata() {
+            $('.add-row').trigger('click');
+            stopBlockUI();
+        }
+
+        async function loadMoreDoc() {
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count) {
+                $(".add-row-1").css('visibility', 'hidden');
+            }
+            else {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+
+
+        $(".add-row").click(async function (e) {
+            e.preventDefault()
+
+
+
+            console.log(counter)
+
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count)
+                $(".add-row").css('visibility', 'hidden');
+        })
+
+
+        async function SelectDocumentFunction(document_id) {
+            const request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+            document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+
+            document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>' + response['name']
+            document.getElementById('document_select').innerHTML = document_select_tag;
+            document.getElementById('document_select').title = response['name'];
+            ShowResult();
+        }
+
+        async function DownloadLinkSet() {
+            var country_id = document.getElementById("country").value;
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            var document_name = document.getElementById("document").innerText;
+
+            if (document_name !== "انتخاب نمایید ...") {
+                var file_path = "";
+
+                if (country_name.includes("فاوا")) {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.docx';
+                } else {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.txt';
+                }
+                document.getElementById("txt_download").href = file_path;
+
+                const document_id = document.getElementById("document").value;
+
+            } else {
+                document.getElementById("txt_download").href = "#";
+                return false;
+            }
+        }
+
+
+        async function ShowResult() {
+
+            var select = $("#ChangeLayout");
+            select.val(select.children(":first").val());
+
+
+            await DownloadLinkSet();
+            await ShowDocumentComment();
+            await ShowDocumentNote();
+
+            const document_id = document.getElementById("document").value
+            document.getElementById("document_download").disabled = false;
+            document.getElementById("pdf_download").disabled = false;
+            document.getElementById("document_search").disabled = false;
+
+            /******************************* Features **********************************/
+
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+
+            document.getElementById("total_words").innerText = response["word_count"];
+            document.getElementById("stop_words").innerText = response["stopword_count"];
+            document.getElementById("distinct_words").innerText = response["distinct_word_count"];
+            document.getElementById("approval_reference").innerText = response["approval_reference"];
+            document.getElementById("approval_date").innerText = response["approval_date"];
+            document.getElementById("document_level").innerText = response["level"];
+            document.getElementById("document_subject").innerText = response["subject"];
+            document.getElementById("document_type").innerText = response["type"];
+            validation_type = response["validation_type"]
+            revoked_size = response["revoked_size"]
+
+            text_color = "text-danger"
+
+            if (validation_type == 'معتبر'){
+                text_color = "text-success"
+            }
+            else if (validation_type == 'منسوخ' && revoked_size == 'کلی'){
+                text_color = "text-danger"
+            }
+            else if (validation_type == 'منسوخ' && revoked_size == 'جزئی'){
+                text_color = "text-warning"
+            }
+
+            validation_type_tag = '<strong class="' + text_color + '"> ' + validation_type + '</strong>'
+
+            validation_type_msg = validation_type_tag + (response["revoked_clauses"] != "" ? (" (" +response["revoked_clauses"] + ")") : '')
+            document.getElementById("document_validation").innerHTML = validation_type_msg;
+
+
+            document_chart_data = response["actors_chart_data"];
+
+            showActorsChart('actors_chart_container', document_chart_data);
+
+            /******************************* Definition **********************************/  ////////////////////////////////////////////
+            request_link = 'http://' + location.host + "/GetPersianDefinitionByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_definition"][0]
+
+            document.getElementById("definition_container").innerText = response["text"];
+            let final_keywords = response["keywords"];
+
+            /******************************* General definition **********************************/
+            request_link = 'http://' + location.host + "/GetGeneralDefinition/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response['result']
+            // alert(request_link)
+            let general_defintion_data = ''
+            let general_defintion_index = 1
+            let abbreviation_data = ''
+            let abbreviation_index = 1
+            const definition_keywords = []
+
+            // if (response.length == 0)
+                // data = "بخش تعاریف کلی برای این سند توسط سامانه پیدا نشد.";
+
+            for (let i = 0; i < response.length; i++) {
+                const word = response[i]["word"]
+                const definition = response[i]["definition"]
+                definition_keywords.push(word)
+                if (response[i]["is_abbreviation"] == true) {
+                    abbreviation_data += `<p>${abbreviation_index}- ${word}: ${definition}</p>`
+                    abbreviation_index++
+                }
+                else {
+                    general_defintion_data += `<p>${general_defintion_index}- ${word}: ${definition}</p>`
+                    general_defintion_index++
+                }
+
+            }
+            if (general_defintion_data == '')
+                general_defintion_data = "بخش تعاریف کلی برای این سند توسط سامانه پیدا نشد.";
+            if (abbreviation_data == '')
+                abbreviation_data = "بخش اختصارات برای این سند توسط سامانه پیدا نشد.";
+
+            document.getElementById("general_definition_container").innerHTML = general_defintion_data;
+            document.getElementById("abbreviation_container").innerHTML = abbreviation_data;
+
+            /******************************* final_keywords **********************************/
+            if (final_keywords == 'هیچ کلمه کلیدی برای این سند توسط سامانه پیدا نشد.' && definition_keywords.length>0){
+                final_keywords = '';
+            }
+            if (final_keywords.length>0){
+                final_keywords += ' - '
+            }
+            final_keywords += definition_keywords.filter(function (k){return !final_keywords.includes(k)}).join(' - ')
+            document.getElementById("final_Keywords_container").innerText = final_keywords;
+
+            /******************************* 1-Gram **********************************/
+            request_link = 'http://' + location.host + "/GetTFIDFByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_tfidf_list"]
+            document.getElementById("1gram_frequency_table").innerHTML = "";
+            let show_count = 10;
+            for (var i = 0; i < show_count; i++) {
+                const index = i + 1;
+                const word = response[i]["word"]
+                const count = response[i]["count"]
+                const weight = response[i]["weight"]
+
+
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-3'>" + word + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                "</tr>";
+
+                document.getElementById("1gram_frequency_table").innerHTML += tag;
+            }
+
+            /******************************* 2-Gram **********************************/
+
+            request_link = 'http://' + location.host + "/GetNGramByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+
+            document.getElementById("2gram_frequency_table").innerHTML = "";
+            for (let i = 0; i < show_count && i < response.length; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-3'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+                document.getElementById("2gram_frequency_table").innerHTML += tag;
+            }
+
+
+            /******************************* 3-Gram **********************************/
+
+            request_link = 'http://' + location.host + "/GetNGramByDocumentId/" + document_id + "/" + 3 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("3gram_frequency_table").innerHTML = "";
+
+            for (let i = 0; i < show_count && i < response.length; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-5'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+
+                document.getElementById("3gram_frequency_table").innerHTML += tag;
+
+            }
+
+            let references_documents_id_list = [parseInt(document_id)]
+            /******************************* References List **********************************/
+            request_link = 'http://' + location.host + "/GetReferencesByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+            response.sort(function (x, y) { return x["doc_level"] == 'قانون' ? -1 : y["doc_level"] == 'قانون' ? 1 : x["doc_level"] == "رأی" ? 1 : y["doc_level"] == "رأی" ? -1 : 0; })
+
+            /******************************* References in doc Table **********************************/
+            let document_result = []
+            for (var i = 0; i < response.length; i++) {
+                const doc_id = response[i]["doc_id"]
+                const doc_name = response[i]["doc_name"]
+                let doc_level = response[i]["doc_level"]
+                let doc_approval_date = response[i]["doc_approval_date"]
+                let doc_approval_reference_name = response[i]["doc_approval_reference_name"]
+                if (doc_level == null){
+                    doc_level = "نا‌مشخص"
+                }
+                let tag = "<p onclick='References_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></p>"
+                // document.getElementById("references_list").innerHTML += tag;
+                const row = {
+                    "id": i + 1,
+                    "doc_name": tag,
+                    'doc_level': doc_level,
+                    "doc_approval_date": doc_approval_date,
+                    "doc_approval_reference_name": doc_approval_reference_name
+                }
+                document_result.push(row)
+            }
+            $('#ReferencesInDocTable').empty();
+            $('.ReferencesInDocTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "ارجاعی یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "doc_name",
+                    "title": "نام سند",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "doc_level",
+                    "title": "سطح سند",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "doc_approval_date",
+                    "title": "تاریخ تصویب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "doc_approval_reference_name",
+                    "title": "مرجع تصویب",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": document_result
+            });
+
+            /******************************* Citation List **********************************/
+            request_link = 'http://' + location.host + "/GetReferencesByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+            response.sort(function (x, y) { return x["doc_level"] == 'قانون' ? -1 : y["doc_level"] == 'قانون' ? 1 : x["doc_level"] == "رأی" ? 1 : y["doc_level"] == "رأی" ? -1 : 0; })
+
+            /******************************* DocsReferencedToThisDocTable **********************************/
+            document_result = []
+            for (var i = 0; i < response.length; i++) {
+                const doc_id = response[i]["doc_id"]
+                const doc_name = response[i]["doc_name"]
+                let doc_level= response[i]["doc_level"]
+                let doc_approval_date = response[i]["doc_approval_date"]
+                let doc_approval_reference_name = response[i]["doc_approval_reference_name"]
+                if (doc_level == null){
+                    doc_level = "نا‌مشخص"
+                }
+                let tag = "<p onclick='Citation_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></p>"
+                // document.getElementById("citation_list").innerHTML += tag;
+                const row = {
+                    "id": i + 1,
+                    "doc_name": tag,
+                    'doc_level': doc_level,
+                    "doc_approval_date": doc_approval_date,
+                    "doc_approval_reference_name": doc_approval_reference_name
+                }
+                document_result.push(row)
+            }
+            $('#DocsReferencedToThisDocTable').empty();
+            $('.DocsReferencedToThisDocTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "ارجاعی یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "doc_name",
+                    "title": "نام سند",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "doc_level",
+                    "title": "سطح سند",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "doc_approval_date",
+                    "title": "تاریخ تصویب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "doc_approval_reference_name",
+                    "title": "مرجع تصویب",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": document_result
+            });
+
+            /******************************* AdvisoryOpinionsReferencedToThisDocTable **********************************/
+            document_result = []
+            ad_index = 1
+            for (var i = 0; i < response.length; i++) {
+                const doc_id = response[i]["doc_id"]
+                const doc_name = response[i]["doc_name"]
+                let doc_level= response[i]["doc_level"]
+                let doc_type_name = response[i]["doc_type_name"]
+                let doc_approval_date = response[i]["doc_approval_date"]
+                let doc_approval_reference_name = response[i]["doc_approval_reference_name"]
+                if (doc_level == null){
+                    doc_level = "نا‌مشخص"
+                }
+                let tag = "<p onclick='Citation_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></p>"
+                // document.getElementById("citation_list").innerHTML += tag;
+                const row = {
+                    "id": ad_index,
+                    "doc_name": tag,
+                    'doc_level': doc_level,
+                    "doc_approval_date": doc_approval_date,
+                    "doc_approval_reference_name": doc_approval_reference_name
+                }
+
+                const ex_row = {
+                    "doc_name": doc_name,
+                    'doc_level': doc_level,
+                    "doc_approval_date": doc_approval_date,
+                    "doc_approval_reference_name": doc_approval_reference_name
+                }
+
+                if (doc_name.includes("نظر مشورتی")) {
+                    ad_index += 1
+                    document_result.push(row)
+                    advisory_document_result.push(ex_row)
+                }
+            }
+            ad_index -= 1
+            document.getElementById("SearchResultLable").innerText = "تعداد کل نتایج: " + ad_index  + " سند"
+            $('#AdvisoryOpinionsReferencedToThisDocTable').empty();
+            $('.AdvisoryOpinionsReferencedToThisDocTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "نظری یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "doc_name",
+                    "title": "نام سند",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "doc_level",
+                    "title": "سطح سند",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "doc_approval_date",
+                    "title": "تاریخ تصویب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "doc_approval_reference_name",
+                    "title": "مرجع تصویب",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": document_result
+            });
+
+            /******************************* Show References Graph **********************************/
+
+            await showReferencesGraph(references_documents_id_list,'advanced_graph_container',document_id)
+
+            /******************************* Subject **********************************/
+            request_link = 'http://' + location.host + "/GetSubjectByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_subject_list"]
+
+            document.getElementById("subject_table").innerHTML = ""
+
+            let chart_value_list = []
+
+            for (let i = 0; i < response.length; i++) {
+                const subject = response[i]["subject"]
+                const weight = response[i]["weight"] * 100  /* For Scale To 0-100*/
+                const keywords_text = response[i]["keywords_text"]
+                const keywords_title = response[i]["keywords_title"]
+                const special_references = response[i]["special_references"]
+
+                tag = "<tr>" +
+                    "<td class='col-1'>" + (i + 1) + "</td>" +
+                    "<td class='col-2'>" + subject + "</td>" +
+                    "<td class='col-4'>" + keywords_text + "</td>" +
+                    "<td class='col-3'>" + keywords_title + "</td>" +
+                    "<td class='col-1'>" + special_references + "</td>" +
+                    "</tr>";
+
+                document.getElementById("subject_table").innerHTML += tag;
+
+                chart_value_list.push([subject, weight])
+            }
+
+            document.getElementById("subject_chart_container").innerHTML = "";
+            showChart(chart_value_list, "subject_chart_container");
+
+            /******************************* Actor Paragraphs **********************************/
+
+            request_link = 'http://' + location.host + "/GetActorsPararaphsByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            actors_paragraphs = response["actors_paragraphs"]
+            console.log(actors_paragraphs)
+
+            doc_motevali_paragraphs = actors_paragraphs['document_motevali_ejra_paragraphs']
+            doc_salahiat_paragraphs = actors_paragraphs['document_salahiat_ekhtiar_paragraphs']
+            doc_hamkar_paragraphs = actors_paragraphs['document_hamkaran_paragraphs']
+
+
+            showActor_Paragraphs('motevalian_list', doc_motevali_paragraphs);
+            showActor_Paragraphs('hamkaran_list', doc_hamkar_paragraphs);
+            showActor_Paragraphs('salahiat_list', doc_salahiat_paragraphs);
+
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نتایج جست و جو"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+
+            /******************************* Similarity **********************************/
+
+            request_link = 'http://' + location.host + "/GetBM25Similarity/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["docs"]
+            similrity_result = []
+
+            document.getElementById("SearchTable").innerHTML = "";
+            for (let i = 0; i < response.length; i++) {
+                const index = i + 1;
+
+                const curr_document_id = response[i]['_source']["document_id"]
+                const document_name = response[i]['_source']["name"]
+                const BM25_similarity = Math.round(response[i]["_score"] * 100) / 100
+
+                const book_link = 'http://' + location.host + "/information3?id=" + curr_document_id
+                name =  "<a href=" + book_link + ">" + document_name + "</a>"
+
+                const row = {
+                    "index": index,
+                    "document_name": name,
+                    "BM25_similarity": BM25_similarity
+                }
+
+                similrity_result.push(row)
+            }
+
+            $('#SearchTable').empty();
+            $('.SearchTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "سندی یافت نشد.",
+                "columns": [{
+                    "name": "index",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "document_name",
+                    "title": "نام سند",
+                    "style": {
+                        "width": "30%"
+                    }
+                }, {
+                    "name": "BM25_similarity",
+                    "title": "مشابهت بر اساس BM25",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": similrity_result
+            });
+
+        }
+
+        async function DownloadSerachResultFunction() {
+
+            const save_file_name = "اسناد نظر مشورتی ارجاع داده به  {" + document.getElementById("document").value + "}"
+            downloadFiles(advisory_document_result, save_file_name)
+        }
+
+        async function downloadFiles(file_name_list, save_file_name) {
+            startBlockUI()
+            const country_id = document.getElementById('country').value
+            let zip = new JSZip()
+
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+            let extension = ".txt"
+            if (country_name.includes("فاوا")) {
+                extension = '.docx';
+            }
+
+            for (const document of file_name_list) {
+                const document_name = document["doc_name"] + extension
+                const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name, value);
+                    })
+            }
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+            stopBlockUI('دانلود اسناد');
+        }
+
+
+        async function ExportExcelSerachResultFunction() {
+            var csv = "";
+
+            sep = ","
+            let Csv = "نام سند" + sep + "سطح سند" + sep + "تاریخ تصویب" + sep + "مرجع تصویب" + "\n"
+
+            console.log(advisory_document_result)
+            for (const document of advisory_document_result) {
+                Csv += document["doc_name"] + sep + document["doc_level"] + sep + document["doc_approval_date"] +
+                sep + document["doc_approval_reference_name"] +  "\n"
+            }
+
+            let save_file_name = " مجموعه سند {" + document.getElementById("document").innerText + "}"
+
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click()
+        }
+        async function showActor_Paragraphs(para_container, para_info_dict, actor_role) {
+
+            document.getElementById(para_container).innerHTML = "";
+
+
+            if (Object.keys(para_info_dict).length == 0) {
+
+                if (para_container == 'motevalian_list') {
+                    document.getElementById(para_container).innerHTML = "هیچ متولی اجرایی در این سند یافت نشد.";
+                }
+                else if (para_container == 'hamkaran_list') {
+                    document.getElementById(para_container).innerHTML = "هیچ همکاری در این سند یافت نشد.";
+                }
+
+                else if (para_container == 'salahiat_list') {
+                    document.getElementById(para_container).innerHTML = "هیچ ذی‌صلاحی در این سند یافت نشد.";
+                }
+
+            }
+
+
+            for (const [para_id, para_info] of Object.entries(para_info_dict)) {
+                paragraph_text = para_info['text']
+                actor_role = para_info['actor_role']
+                actor_form = para_info['actor_form']
+
+                is_ref_actor = para_info['is_ref_actor']
+                ref_text = para_info['ref_text']
+
+                highlighted_paragraph = await highlightParagraph(paragraph_text, actor_role, actor_form, true, is_ref_actor, ref_text);
+
+                paragraph_tag = '<li class="px-1 lh-lg">' + highlighted_paragraph + '</li>'
+                document.getElementById(para_container).innerHTML += paragraph_tag;
+
+                var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+                var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl)
+                });
+
+            }
+        }
+
+        async function References_Show_Paragraphs(tag) {
+            const main_doc_id = document.getElementById("document").value
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/information3?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "ارجاع داده شده به:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const references = response["references_from_doc1"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of references) {
+                const tag = "<span class='text-primary'>" + document_name + "</span>"
+                const text = paragraph.replaceAll(document_name, tag)
+                result_tag += "<li class='mb-3' >" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+        async function Citation_Show_Paragraphs(tag) {
+            const main_doc_id = document.getElementById("document").value
+
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/information3?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "ارجاع شده توسط:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const citations = response["references_from_doc2"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of citations) {
+                const tag = "<span class='text-primary'>" + main_document_name + "</span>"
+                const text = paragraph.replaceAll(main_document_name, tag)
+                // console.log(text)
+                result_tag += "<li class='mb-3'>" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+
+
+        async function highlightParagraph(paragraph, actor_role, paragraph_actor_form, all_hamkar, is_ref_actor, ref_paragraph_text) {
+
+            paragraph_text = '';
+
+            if (actor_role.includes('متولی اجرا')) {
+
+                paragraph_text = await highlightMotevalian(paragraph, paragraph_actor_form, motevali_keywords, 'bg-primary', is_ref_actor, ref_paragraph_text)
+
+            } else if (actor_role.includes('همکار')) {
+                paragraph_text = await highlightHamkaran(paragraph, paragraph_actor_form, hamkaran_keywords, 'bg-success', all_hamkar);
+
+            } else {
+                paragraph_text = await highlightSalahiat(paragraph, paragraph_actor_form, salahiat_keywords, 'bg-warning', is_ref_actor, ref_paragraph_text)
+
+            }
+
+
+            return paragraph_text
+        }
+
+
+
+        async function highlightMotevalian(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+
+                        if (is_ref_actor) {
+
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        } else {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+                }).join('.')
+
+            }
+
+
+
+            /* Highlight with actors list */
+            eghdam_keywords = ['اقدام کند', 'اقدام‌کند', 'اقدام نماید', 'اقدام‌نماید']
+            non_eghdam_keywords = pattern_keywords.filter(x => !eghdam_keywords.includes(x));
+
+            paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+                for (e_kw of eghdam_keywords) {
+
+                    pattern_keyword_tag1 = "<span class='bg-secondary text-white rounded px-1'>" + e_kw + "</span>"
+
+                    if (sentence.includes(e_kw) && !check_non_eghdam_kw_exists(sentence, non_eghdam_keywords)) {
+
+                        actor_tag1 = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                        sentence = sentence.replaceAll(actor_form + ' ', actor_tag1 + ' ');
+
+                        sentence = sentence.replaceAll(e_kw, pattern_keyword_tag1);
+
+
+                    }
+
+                }
+
+                return sentence
+            }).join('.')
+
+
+
+
+            return paragraph_text;
+
+
+        }
+
+
+
+        function check_non_eghdam_kw_exists(sentence, pattern_keywords) {
+            for (p_kw of pattern_keywords) {
+                pattern = p_kw
+                if (sentence.includes(pattern)) {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+
+
+        async function highlightHamkaran(paragraph_text, actor_form, pattern_keywords, bg_color, all_hamkar) {
+            let all_actors = actors_list
+
+            const window_length = 100;
+
+            let space_counter = 0;
+
+            /* Highlight pattern keywords and references */
+            for (pattern_keyword of pattern_keywords) {
+
+
+                /* Highlight more with actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'با همکاری') {
+                    regex = /با همکاری/gi;
+                } else {
+                    regex = /باهمکاری/gi;
+                }
+
+                while ((result = regex.exec(paragraph_text))) {
+                    indices.push(result.index);
+                }
+
+                for (const index of indices) {
+
+                    let start_index = (index + pattern_keyword.length);
+                    let substring = paragraph_text.substring(start_index, start_index + window_length);
+                    let current_substring = substring;
+
+                    if (!all_hamkar) {
+                        all_actors = [actor_form]
+                    }
+                    for (actor of all_actors) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                        substring = substring.replaceAll(' ' + actor + ' ', ' ' + actor_tag + ' ');
+                        substring = substring.replaceAll(' ' + actor + '،', ' ' + actor_tag + '،');
+                        substring = substring.replaceAll('(' + actor + ')', '(' + actor_tag + ')');
+
+                        for (symbol of hamkaran_punctuations) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor + symbol, ' ' + actor_tag + symbol);
+
+                        }
+
+                        actor_without_prefix = actor.replaceAll('وزارت ', '').replaceAll('سازمان ', '')
+
+                        if (actor_without_prefix != 'اطلاعات' && actor_without_prefix != 'کشور' && !substring.includes(actor)) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+                            substring = substring.replaceAll(' ' + actor_without_prefix + '،', ' ' + actor_tag + '،');
+                            substring = substring.replaceAll('(' + actor_without_prefix + ')', '(' + actor_tag + ')');
+
+                            for (symbol of hamkaran_punctuations) {
+
+                                actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                                substring = substring.replaceAll(' ' + actor_without_prefix + symbol, ' ' + actor_tag + symbol);
+
+                            }
+
+                        } else if (actor_without_prefix == 'کشور' && substring.includes('وزارتخانه')) {
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_without_prefix + "</span>"
+
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+
+                        }
+
+                    }
+
+                    paragraph_text = paragraph_text.replaceAll(current_substring, substring);
+
+                }
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                paragraph_text = paragraph_text.replaceAll(pattern_keyword, pattern_keyword_tag);
+
+            }
+
+
+
+            return paragraph_text;
+
+
+
+        }
+
+        async function highlightSalahiat(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+
+                        if (is_ref_actor) {
+
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+
+                        } else {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+                }).join('.')
+
+            }
+
+
+
+            return paragraph_text;
+
+        }
+
+
+
+        async function showActorsChart(chart_container, chart_data) {
+
+
+            document.getElementById(chart_container).innerHTML = ""
+            // create a data set
+            var data = anychart.data.set(chart_data);
+
+            // map the data
+            var salahiat_series_data = data.mapAs({ x: 0, value: 3 });
+            var hamkaran_series_data = data.mapAs({ x: 0, value: 2 });
+            var motevalian_series_data = data.mapAs({ x: 0, value: 1 });
+
+
+            // create a chart
+            var chart = anychart.column();
+
+            chart
+                .animation(true)
+                .padding([10, 60, 10, 0])
+
+            chart.background().fill('#ffffff');
+
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("تعداد سند");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            yAxis.title().height(40);
+
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+
+            // set the container id
+            chart.container(chart_container);
+
+            // create the second series, set the data and name
+            var salahiat_series = chart.column(salahiat_series_data);
+            salahiat_series.normal().stroke("#28a745", 0);
+            salahiat_series.normal().fill("#ffc107");
+            salahiat_series.name("دارای صلاحیت اختیاری");
+
+
+            // create the second series, set the data and name
+            var hamkaran_series = chart.column(hamkaran_series_data);
+            hamkaran_series.normal().stroke("#28a745", 0);
+            hamkaran_series.normal().fill("#28a745");
+            hamkaran_series.name("همکار");
+
+
+            // create the first series, set the data and name
+            var motevalian_series = chart.column(motevalian_series_data);
+            // configure the visual settings of the first series
+            motevalian_series.normal().fill("#007bff");
+            motevalian_series.normal().stroke("#28a745", 0);
+            motevalian_series.name("متولی اجرا");
+
+            // enable the legend
+            chart.legend(true);
+
+            var legend = chart.legend();
+            legend.fontFamily('vazir')
+
+            // set position mode
+            legend.positionMode("inside");
+            // set position and alignement
+            legend.position("top");
+            legend.align("center");
+            legend.itemsLayout("horizontalExpandable");
+            // initiate drawing the chart
+            chart.draw();
+
+            // motevalian columns
+            motevalian_series.listen('click', async function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'متولی اجرا';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+            // hamkaran columns
+            hamkaran_series.listen('click', function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'همکار';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+            // salahiat columns
+            salahiat_series.listen('click', function (e) {
+                /* Modal Headers */
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'دارای صلاحیت اختیاری';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+        }
+
+        async function showActorParagraphs_Modal(actor_name, actor_role_name) {
+            doc_id = document.getElementById('document').value
+
+            request_link = 'http://' + location.host + "/GetDocActorParagraphs_Column_Modal/" + doc_id + "/" + actor_name + "/" + actor_role_name + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const actor_paragraphs = response["actor_paragraphs"]
+            modal_title = actor_role_name + ": " + actor_name
+            $('#actors_modal #modal_header').text(modal_title)
+            $('#actors_modal_btn').click();
+
+            paragraph_list = "";
+            for (const [para_id, para_info] of Object.entries(actor_paragraphs)) {
+                paragraph_text = para_info['text']
+                actor_role = para_info['actor_role']
+                actor_form = para_info['actor_form']
+                is_ref_actor = para_info['is_ref_actor']
+                ref_text = para_info['ref_text']
+
+
+                highlighted_paragraph = await highlightParagraph(paragraph_text, actor_role, actor_form, false, is_ref_actor, ref_text);
+
+                paragraph_tag = '<li class="mb-1 px-1 lh-lg">' + highlighted_paragraph + '</li>'
+
+                paragraph_list += paragraph_tag
+            }
+            document.getElementById("actor_modal_body").innerHTML = "<ol start='1'>" + paragraph_list + "</ol>";
+
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            });
+
+
+        }
+
+        function showChart(data, position) {
+
+            data.sort(function (x, y) { return x[0] === 'نامشخص' ? -1 : y[0] === 'نامشخص' ? 1 : 0; });
+
+
+            chart = anychart.column();
+
+            // create a column series and set the data
+            var series = chart.column(data);
+
+
+            chart.animation(true);
+            chart.background().fill('#f8f9fa');
+
+            chart.background().fill('white');
+
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("%{%value}");
+
+            // set all axis title
+            var xAxis = chart.xAxis();
+            xAxis.title("موضوع");
+            xAxis.title().fontFamily('vazir');
+xAxis.title().fontWeight("bold");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("درصد شباهت");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            chart.yAxis().labels().format("٪{%value}");
+
+            chart.xAxis().labels().height(30);
+
+            chart.container(position);
+            chart.draw();
+        }
+
+        async function SaveGram_function(name) {
+            const document_id = document.getElementById("document").value
+            const gram = parseInt(name.charAt(0))
+
+            const table_id = name + "_table";
+
+            const checkedBoxesId = $("#" + table_id).find("input[type=checkbox]:checked").map(function () {
+                return this.id;
+            }).get();
+
+            let checkedBoxesConcatedId = "-1"
+            if (checkedBoxesId.length > 0) {
+                checkedBoxesConcatedId = checkedBoxesId.join("__")
+            }
+            const request_link = 'http://' + location.host + "/UpdateNgramScore/" + document_id + "/" + gram + "/" + checkedBoxesConcatedId + "/";
+            await fetch(request_link).then(response => response.json());
+
+
+            const textbox_id = name + "_TextBox"
+            const textbox_value = document.getElementById(textbox_id).value.replaceAll("/", "__")
+
+            if (textbox_value.trim() !== "") {
+                const request_link = 'http://' + location.host + "/InsertNgram/" + document_id + "/" + gram + "/" + textbox_value + "/";
+
+                await fetch(request_link).then(response => response.json());
+
+                document.getElementById(textbox_id).value = ""
+            }
+
+            ShowResult();
+
+        }
+
+
+        async function DeleteNGramWords(id) {
+            const request_link = 'http://' + location.host + "/DeleteNgram/" + id + "/";
+            await fetch(request_link).then(response => response.json());
+            ShowResult();
+        }
+
+
+        // show document content
+        async function ShowDocumentContent() {
+
+            document.getElementById('DocumentContentBody').innerHTML = ""
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک سند را انتخاب نمایید.')
+                return
+            }
+            $('#documentContent').modal('show');
+
+            const request_link = 'http://' + location.host + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"]
+
+            for (var i = 0; i < response.length; i++) {
+                const document_name = response[i]["document_name"]
+                const paragraph_text = response[i]["paragraph_text"]
+                let subject_tag = ""
+                if (response[i]["subject_name"] !== "")
+                    subject_tag = "<span style='color: red;'>(" + response[i]["subject_name"] + ")</span>"
+
+                const paragraph_tag = '<p>' + paragraph_text + '&ensp;' + subject_tag + '</p>'
+                document.getElementById('documentContentHeader').innerText = document_name
+                document.getElementById('DocumentContentBody').innerHTML += paragraph_tag
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش سند"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+
+        // search document by name document content
+        async function Search_Document_ByName() {
+            const country_id = document.getElementById("country").value
+            let text = document.getElementById("SearchBox").value
+            let level_id = 0
+            let subject_id = 0
+            let type_id = 0
+            let approval_reference_id = 0
+            let from_year = 0
+            let to_year = 0
+            let place = 'عنوان'
+            let search_type = 'exact'
+
+
+
+            const from_advisory_opinion_count = 0
+            const from_interpretation_rules_count = 0
+            request_link = 'http://' + location.host + "/SearchDocument_ES/" + country_id + "/" + level_id + "/" + subject_id + "/" + type_id + "/" +
+                approval_reference_id + "/" + from_year + "/" + to_year + "/" + from_advisory_opinion_count + "/" + from_interpretation_rules_count + "/" + "0" + "/" + place + "/" + text + "/" + search_type + "/"
+
+
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["result"]
+            let document_count = response["total_hits"]
+
+            document.getElementById("all_doc_count").innerText = document_count.toString()
+
+            result_documentsList = []
+            for (doc of documentsList){
+                let id = doc['_id']
+                let approval_reference = doc['_source']['approval_reference_name']
+                let approval_date = doc['_source']['approval_date']
+                let subject = doc['_source']['subject_name']
+                let document_name = doc['_source']['name']
+                let tag = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="SelectDocumentFunction('+ id +')"/>انتخاب</button>'
+                const row = { "id": id, "document_name": document_name, "subject": subject, "approval_reference": approval_reference, "approval_date": approval_date, "tag":tag }
+                result_documentsList.push(row)
+            }
+
+
+            ft.rows.load(result_documentsList);
+
+            loaded_doc = document_count;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+
+            if (loaded_doc === document_count)
+                $(".add-row-1").css('visibility', 'hidden');
+            else {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+        /* Search after press Enter */
+        $("#SearchBox").keyup(function (event) {
+            if (event.keyCode === 13) {
+                Search_Document_ByName();
+            }
+        });
+
+
+
+    </script>
+
+    <script>
+        async function generatePDF() {
+            startBlockUI();
+
+            const approval_reference = document.getElementById("approval_reference").innerText
+            const approval_date = document.getElementById("approval_date").innerText
+
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک سند را انتخاب نمایید.');
+                return;
+            }
+            const request_link = 'http://' + location.host + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"];
+            const document_name = response[0]["document_name"];
+            let element = "<div class='container-fluid' style='direction: rtl'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> <div > <p>سامانه هوشیاران</p> </div> " +
+                "<div> <span>www.virtualjuristic.datakaveh.com</span> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>"+document_name+"</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span> تاریخ تصویب  </span> <span> "+approval_date+" </span> </div> " +
+                "<div class='d-flex'> <span>مرجع تصویب:   </span> <span> "+approval_reference+" </span> </div> </div> </div> </div>"
+
+            for (let i = 0; i < response.length; i++) {
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p>' + paragraph_text + '</p>';
+                element += paragraph_tag;
+            }
+            element += '</div>';
+            console.log(element);
+
+            let opt = {
+                margin: 1,
+                filename: document_name + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "دانلود سند"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+    </script>
+
+</body>
+
+<script>
+
+    function copyDocumentName() {
+        /* Get the text field */
+        var copyText = document.getElementById("document_select");
+
+        /* Copy the text to clipboard */
+        navigator.clipboard.writeText(copyText.innerText);
+
+        // Update js
+        $('.tooltip-inner').html('کپی شد!');
+
+    }
+
+</script>
+
+<script src="../../static/library/notyf.min.js"></script>
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = "127.0.0.0"
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+    }
+
+    const notyf = new Notyf({position:{x:'left', y:'bottom'}});
+    document.getElementById("comment_form").addEventListener('submit', SubmitDocumentComment)
+    document.getElementById("note_form").addEventListener('submit', SubmitDocumentNote)
+
+    async function SubmitDocumentComment(e){
+        let date = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        let comment_time = new Date().toLocaleDateString('fa-IR-u-nu-latn',date);
+        comment_time = comment_time.replace("/","-")
+        comment_time = comment_time.replace("/","-")
+        console.log(comment_time);
+
+        e.preventDefault()
+        try {
+            const document_id = document.getElementById("document").value
+            const comment_text = document.getElementById("form_comment_text").value
+            const comment_show_info = document.getElementById("form_comment_show_info").checked
+            const username = getCookie("username")
+
+            if (comment_text == '' || document_id == '') {
+                notyf.error('لطفا تمامی فیلد ها را پر نمایید.');
+                return
+            }
+
+            /* Post Comment */
+            const request_link = 'http://' + location.host + "/CreateDocumentComment/" + document_id + "/" + encodeURIComponent(comment_text) + "/" + username + "/" + comment_show_info + "/" + comment_time + "/";
+            const response = await fetch(request_link).then(response => response.json());
+            const comment_id = response["comment_id"]
+
+            let hash_tags_in_document_comment_text = comment_text.match(/#(\S+)/g); // returns an array with the matches. returns null if no match is found.
+            if(hash_tags_in_document_comment_text != null)
+            {
+                for(let i=0; i<hash_tags_in_document_comment_text.length; i++)
+                {
+                    let hash_tag = hash_tags_in_document_comment_text[i];
+                    let hash_tag_name = hash_tag.slice(1);
+                    let hash_tag_link = 'http://' + location.host + "/CreateHashTagForDocumentComment/" + comment_id + "/" + encodeURIComponent(hash_tag) + "/";
+                    const hash_tag_response = await fetch(hash_tag_link).then(response => response.json());
+                }
+            }
+
+
+            notyf.success('نظر شما با موفقیت ثبت شد');
+            document.getElementById("form_comment_text").value = "";
+            await ShowDocumentComment();
+
+        } catch (e){
+            notyf.error('لطفا دوباره تلاش کنید.');
+        }
+
+    }
+
+    async function SubmitDocumentNote(e){
+
+        // var todayFa = new Date().toLocaleDateString('fa-IR');
+        let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        let todayFa = new Date().toLocaleDateString('fa-IR-u-nu-latn',options);
+        todayFa = todayFa.replace("/","-")
+        todayFa = todayFa.replace("/","-")
+        // console.log(todayFa);
+
+        // var todayEn = new Date();
+        // var dd = todayEn.getDate();
+        // var mm = todayEn.getMonth()+1;
+        // var yyyy = todayEn.getFullYear();
+        // if(dd<10)
+        // {
+        //     dd='0'+dd;
+        // }
+        // if(mm<10)
+        // {
+        //     mm='0'+mm;
+        // }
+        // todayEn = dd+'-'+mm+'-'+yyyy;
+        // console.log(todayEn);
+
+        e.preventDefault()
+        try {
+            const document_id = document.getElementById("document").value
+            const note_text = document.getElementById("form_note_text").value
+            let note_label = document.getElementById("form_note_label").value
+            const username = getCookie("username")
+
+            if (note_label == '') {
+                note_label = "بدون برچسب"
+            }
+            if (note_text == '' || document_id == '') {
+                notyf.error('لطفا تمامی فیلد ها را پر نمایید');
+                return
+            }
+            /* Post Note */
+            let request_link = 'http://' + location.host + "/CreateDocumentNote/" + document_id + "/" + encodeURIComponent(note_text) + "/" + username + "/" + todayFa + "/" + encodeURIComponent(note_label) + "/";
+            // request_link = encodeURIComponent(request_link)
+            const response = await fetch(request_link).then(response => response.json());
+            const n_id = response['note_id']
+            // console.log(n_id);
+
+            let hash_tags_in_text = note_text.match(/#(\S+)/g); // returns an array with the matches. returns null if no match is found.
+            console.log(hash_tags_in_text);
+            if(hash_tags_in_text != null)
+            {
+                for(let i=0; i<hash_tags_in_text.length; i++)
+                {
+                    let hash_tag = hash_tags_in_text[i];
+                    let hash_tag_name = hash_tag.slice(1);
+                    // let hash_tag_link = 'http://' + location.host + "/CreateHashTagForNote/" + n_id + "/" + hash_tag_name + "/";
+                    let hash_tag_link = 'http://' + location.host + "/CreateHashTagForNote/" + n_id + "/" + encodeURIComponent(hash_tag) + "/";
+                    console.log(hash_tag_link);
+                    const hash_tag_response = await fetch(hash_tag_link).then(response => response.json());
+                    console.log(hash_tag_response['hash_tags']);
+                }
+            }
+
+            notyf.success('یادداشت شما با موفقیت ثبت شد.');
+            document.getElementById("form_note_text").value = "";
+            document.getElementById("form_note_label").value = "";
+            await ShowDocumentNote();
+
+        } catch (e){
+            notyf.error('لطفا دوباره تلاش کنید.');
+        }
+
+    }
+
+    async function ShowDocumentComment(){
+        const document_id = document.getElementById("document").value
+        const username = getCookie("username")
+
+        const request_link = 'http://' + location.host + "/GetDocumentComments/" + document_id + "/" + username + "/";
+        const response = await fetch(request_link).then(response => response.json());
+        const comments = response['comments']
+
+        let table_data = ''
+        for (let i=0;i<comments.length;i++){
+            let color = 'text-success'
+            let commentStatus = 'تایید شده'
+            if (comments[i].accepted === 0) {
+                color = 'text-warning'
+                commentStatus = 'در انتظار تایید'
+            }
+            if (comments[i].accepted === -1) {
+                color = 'text-danger'
+                commentStatus = 'رد شده'
+            }
+            let link = "#"
+            if (comments[i].user_id) {
+                link = 'http://' + location.host + "/ShowUserProfile/?u=" + comments[i].user_id;
+            }
+            table_data+=`<tr>
+                                <td class="text-center">${i+1}</td>
+                                <td class="text-center">
+                                    <a href="${link}">${comments[i].first_name} ${comments[i].last_name}</a></td>
+                                <td class="text-center"><span class="${color}">${commentStatus}</span></td>
+
+                                <td class="text-center">${comments[i].comment}</td>
+                                <td class="text-center">
+                                <div class="">
+                                    <button type="button" onclick="OnVoteClick('agree', ${comments[i].id})"
+                                            class="btn btn-success btn-agree-state">
+                                            <i class="bi bi-hand-thumbs-up-fill" style="position:relative;top:-3px;"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="موافق"></i></button>
+                                    <button type="button" onclick="OnVoteClick('disagree', ${comments[i].id})"
+                                            class="btn btn-danger btn-agree-state">
+                                           <i class="bi bi-hand-thumbs-down-fill" style="position:relative;top:-3px;"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="مخالف"></i></button>
+                                </div>
+                            </td>
+                            <td class="text-center cursor-pointer" id="comment_agree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, true)">${comments[i].agreed_count}</td>
+                            <td class="text-center cursor-pointer" id="comment_disagree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, false)">${comments[i].disagreed_count}</td>
+                            <td class="text-center" id="comment_date" >${comments[i].time}</td>
+                         </tr>`
+        }
+        if (comments.length==0){
+            table_data=` <tr>
+                            <td class="text-center" id="comment_number">-</td>
+                            <td class="text-center" id="comment_first_name">-</td>
+                            <td class="text-center" id="follow">-</td>
+                            <td class="text-center" id="comment_text">-</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center" id="comment_agree">-</td>
+                            <td class="text-center" id="comment_disagree">-</td>
+                            <td class="text-center" id="comment_date">-</td>
+                         </tr>`
+        }
+        document.getElementById('comments_table_body').innerHTML=table_data;
+        $('.cm_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            }
+        });
+    }
+
+    async function ShowDocumentNote(){
+        const document_id = document.getElementById("document").value
+        const username = getCookie("username")
+
+        const request_link = 'http://' + location.host + "/GetDocumentNotes/" + document_id + "/" + username + "/";
+        const response = await fetch(request_link).then(response => response.json());
+        // const notes = response['notes']
+        let notes = response['notes'].sort(function(a, b){
+                    if (a.starred == b.starred) {
+                        return 0;
+                    }
+                    else if (a.starred == true) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+
+        let table_data = ''
+        for (let i=0;i<notes.length;i++){
+            if (notes[i].label === null) {
+                notes[i].label = "بدون برچسب"
+            }
+            if (notes[i].starred) {
+                table_data+=`<tr>
+                                    <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                    <td class="text-center" id="note_text_${i+1}">${notes[i].note}</td>
+                                    <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                    <td class="text-center" id="note_label_${i+1}">${notes[i].label}</td>
+                                    <td class="text-center" >
+                                        <button value="0" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')" id="note_starred_${i+1}">
+                                            <span class="fa fa-star checked"></span>
+                                        </button>
+                                    </td>
+                                    <td class="text-center " id="note_download_${i+1}">
+                                        <div class="text-center">
+                                            <button type="button" id="document_download" onclick="generatePDFNote('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')"
+                                                class="btn d-flex float-center  mr-2 ">
+                                                PDF
+                                            </button>
+                                        </div>
+                                    </td>
+                            </tr>`
+            }
+            else{
+                table_data+=`<tr>
+                                    <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                    <td class="text-center" id="note_text_${i+1}">${notes[i].note}</td>
+                                    <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                    <td class="text-center" id="note_label_${i+1}">${notes[i].label}</td>
+                                    <td class="text-center" >
+                                        <button value="1" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')"  id="note_starred_${i+1}">
+                                            <span class="fa fa-star"></span>
+                                        </button>
+                                    </td>
+                                    <td class="text-center " id="note_download_${i+1}">
+                                        <div class="text-center">
+                                            <button type="button" id="document_download" onclick="generatePDFNote('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')"
+                                                class="btn d-flex float-center  mr-2 ">
+                                                PDF
+                                            </button>
+                                        </div>
+                                    </td>
+                            </tr>`
+            }
+        }
+        if (notes.length==0){
+            table_data=`<tr>
+                                <td class="text-center" id="note_number">-</td>
+                                <td class="text-center" id="note_text">-</td>
+                                <td class="text-center" id="note_time">-</td>
+                                <td class="text-center" id="note_label">-</td>
+                                <td class="text-center" id="note_starred">-</td>
+                                <td class="text-center" id="note_download">-</td>
+                        </tr>`
+        }
+        document.getElementById('notes_table_body').innerHTML=table_data;
+        $('.note_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            }
+        });
+    }
+
+    async function ToggleStar(note_id,star_id) {
+        const request_link = 'http://' + location.host + "/ToggleNoteStar/" + note_id + "/";
+        console.log(request_link)
+        fetch(request_link).then(response => response.json()).then(response => {
+            if (response['starred']){
+                document.getElementById(star_id).innerHTML=`<span class="fa fa-star checked"></span>`
+            }
+            else{
+                document.getElementById(star_id).innerHTML=`<span class="fa fa-star"></span>`
+            }
+        }).catch(error => {
+            console.log(error)
+        }
+    ,)
+    }
+
+
+
+</script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+{#<script src="../../static/js/UserLogSave.js"></script>#}
+
+<!-- Intro Js -->
+<script src="../../static/js/information/information_tour.js">
+</script>
+<script src="../../static/js/tour.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+
+
+<script>
+    let show_hide_state = "show"
+    let min_selected_degree;
+    let max_selected_degree;
+    let min_selected_weight;
+    let max_selected_weight;
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    });
+
+    async function OnVoteClick(state, document_comment){
+            try {
+                const username = getCookie("username")
+                const request_link = 'http://' + location.host + "/changeVoteState/" + username + "/" + document_comment + "/" + state + "/";
+                let response = await fetch(request_link);
+                if (state == "agree") {
+                    notyf.success('شما با این نظر موافقت کردید');
+
+                } else if (state == "disagree") {
+                    notyf.error('شما با این نظر مخالفت کردید');
+                }
+            } catch (err) {
+                notyf.error('عملیات ناموفق بوده است');
+            }
+    ShowDocumentComment()
+    }
+
+    async function VoteDetailFunction(document_comment_id, agreed) {
+        let request_link = 'http://' + location.host + "/GetDocumentCommentVoters/" + document_comment_id + "/" + agreed + "/"
+        let response = await fetch(request_link).then(response => response.json());
+        /*  Show detail Result */
+        let result = response["result"]
+        await showVoteDetailModal(result)
+    }
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+    }
+
+    async function showVoteDetailModal(voters) {
+        /* Title Text */
+        document.getElementById("VoteModalHeader").innerHTML = "اطلاعات نظر دهندگان"
+
+        /* Body Text */
+        let modal_body = voters.map(function(voter, i){
+            return`<tr>
+                        <td class="text-center" id="voter_number">${i+1}</td>
+                        <td class="text-center" id="voter_name">${voter.first_name} ${voter.last_name}</td>
+                        <td class="text-center" id="voter_date">${voter.created_at}</td>
+                        <td class="text-center" id="voter_modify_date">${voter.modified_at}</td>
+                    </tr>`
+        }).join(' ')
+
+        document.getElementById("vote_table_body").innerHTML = modal_body
+        popup_handler();
+    }
+
+
+    async function generatePDFNote(docName,docDate,docNote) {
+            startBlockUI();
+
+            let element = "<div class='container-fluid' style='direction: rtl'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>"+docName+"</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span style='direction: rtl'>  تاریخ تصویب </span> <span> "+docDate+" </span> </div> " +
+                "</div> </div> </div>"
+
+            element += "<p style='direction: rtl'>" + 'متن یادداشت' + '</p>' + "<p style='direction: rtl'>" + docNote + '</p>'
+
+            element += '</div>';
+            // console.log(element);
+
+            let opt = {
+                margin: 1,
+                filename: docName + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+        }
+
+    async function OnFollowClick(following_user_id){
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/follow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "already followed!") {
+                notyf.success('شما قبلا این کاربر را دنبال کرده‌اید.');
+
+            } else if (response.status == "followed!") {
+                notyf.success('شما با موفقیت کاربر را دنبال کردید.');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده است');
+        }
+        ShowDocumentComment()
+    }
+
+    async function OnUnFollowClick(following_user_id){
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/unfollow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "successfully unfollowed!") {
+                notyf.success('شما با موفقیت کاربر را آنفالو کردید.');
+
+            } else if (response.status == "already unfollowed!") {
+                notyf.success('-');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده است');
+        }
+        ShowDocumentComment()
+    }
+    let data_graph;
+    async function showReferencesGraph(documents_id_list, container_name, main_doc_id) {
+
+        $('#selected_node_table').empty();
+        $('#selected_edge_table').empty();
+
+
+        document.getElementById(container_name).innerHTML = ""
+
+        const measure_id = 2;
+        let graphEdgeList = [];
+        let graphType = '';
+
+        if (documents_id_list.length > 0) {
+            const request_link = 'http://' + location.host + "/GetGraphEdgesForDocument/" + measure_id + "/" + main_doc_id + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            graphEdgeList = response["graph_edge_list"]
+
+
+            let nodeList = []
+            let edgeList = []
+            let added_node = []
+
+            for (let i = 0; i < graphEdgeList.length; i++) {
+
+                const edge = graphEdgeList[i]
+                const src_id = edge["src_id"].toString()
+                const src_name = edge["src_name"]
+                const src_color = edge["src_color"]
+                const dest_id = edge["dest_id"].toString()
+                const dest_name = edge["dest_name"]
+                const dest_color = edge["dest_color"]
+                const weight = edge["weight"]
+
+                if (!added_node.includes(src_id))
+                {
+                    if (src_id === main_doc_id)
+                    {
+                        const source_node = {id: src_id, name: src_name, type: "rect", style: {fill: src_color}}
+                        nodeList.push(source_node)
+                        added_node.push(src_id)
+                    }
+                    else
+                    {
+                        const source_node = {id: src_id, name: src_name, style: {fill: src_color}}
+                        nodeList.push(source_node)
+                        added_node.push(src_id)
+                    }
+                }
+
+                if (!added_node.includes(dest_id))
+                {
+                    if (dest_id === main_doc_id)
+                    {
+                        const destination_node = {id: dest_id, name: dest_name, type: "rect", style: {fill: dest_color}}
+                        nodeList.push(destination_node)
+                        added_node.push(dest_id)
+                    }
+                    else
+                    {
+                        const destination_node = {id: dest_id, name: dest_name, style: {fill: dest_color}}
+                        nodeList.push(destination_node)
+                        added_node.push(dest_id)
+                    }
+                }
+
+                let edge_data = {
+                    source: src_id,
+                    target: dest_id,
+                    source_name: src_name,
+                    target_name: dest_name,
+                    weight: weight
+                };
+                edgeList.push(edge_data)
+            }
+
+            /*********************** Show Graph ****************************/
+
+            const data = {
+              nodes: nodeList,
+              edges: edgeList
+            };
+
+            data_graph = data;
+
+            const container = document.getElementById(container_name);
+            const width = container.scrollWidth;
+            const height = container.scrollHeight  || 500;
+            const tooltip = new G6.Tooltip({
+              offsetX: 10,
+              offsetY: 10,
+              itemTypes: ['node', 'edge'],
+              getContent: (e) => {
+                const outDiv = document.createElement('div');
+                outDiv.style.width = 'fit-content';
+                let a = e.item.getType()
+                if ( a === "node")
+                {
+                    outDiv.innerHTML = `<div>
+                                            <p>${e.item.getModel().name}</p>
+                                        </div>`;
+                }
+                else if ( a === "edge")
+                {
+                    outDiv.innerHTML = `<div style="direction: rtl">
+                        <p>از: ${e.item.getModel().source_name}</p>
+                        <p>به: ${e.item.getModel().target_name}</p>
+                        <p style="font-weight: bold">تعداد ارجاع: ${e.item.getModel().weight}</p>
+                    </div>`;
+                }
+                return outDiv;
+              }
+            });
+            graph_object = new G6.Graph({
+              container: container_name,
+              width,
+              height,
+              modes: {
+                default: ['zoom-canvas',
+                    'drag-node',
+                    'drag-canvas',
+                    {type:"brush-select", trigger: 'ctrl'},
+                ], //"activate-relations"
+              },
+                plugins: [tooltip],
+              layout:  "grid",
+              animate: true,
+              defaultEdge: {
+                style: {
+                  stroke: '#404040',
+                  endArrow: {
+                    path: 'M 0,0 L 8,4 L 8,-4 Z',
+                    fill: '#404040',
+                  },
+                },
+              },
+                nodeStateStyles: {
+                selected: {
+                  stroke: 'Yellow',
+                  fill: 'Yellow'
+               },
+              cursor: "pointer"
+              },
+            });
+
+            graph_object.data(data);
+            graph_object.render();
+
+            graph_object.on('nodeselectchange', e => {
+                const selected_nodes = e.selectedItems.nodes
+                const selected_edges = e.selectedItems.edges
+
+                let nodes_data = []
+                let id = 1
+                for (const node of selected_nodes)
+                {
+                    const node_object = node._cfg.model
+                    const node_id = node_object.id
+                    const node_name = node_object.name
+                    const type_name = node_object.type_name
+
+                    const degree = graph_object.getNodeDegree(node_object.id, 'total');
+
+                    const nodeSelection = "NodeSelection('" + node_id + "')"
+                    const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+                    nodes_data.push({id:id, name: node_name, type_name: type_name, degree: degree, node_selection: detail})
+                    id = id + 1
+                }
+                $('#selected_node_table').empty();
+                $('#selected_node_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گره ای انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام گره",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "degree",
+                    "title": "درجه",
+                    "style": {
+                        "width": "10%"
+                    }
+                },{
+                    "name": "type_name",
+                    "title": "نوع گره",
+                    "style": {
+                        "width": "15%"
+                    }
+                },{
+                    "name": "node_selection",
+                    "title": "انتخاب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": nodes_data
+            });
+
+
+                let edges_data = []
+                id = 1
+                for (const edge of selected_edges)
+                {
+                    const edge_object = edge._cfg.model
+
+                    const src_node_id = edge_object.source
+                    const src_node_name = edge_object.source_name
+                    const source_doc_link = 'http://' + location.host +'/information3/?id=' + src_node_id.toString()
+                    const source_doc_tag = '<a class="document_link" target="blank" href="' + source_doc_link + '">' + src_node_name +"</a>"
+
+                    const target_node_id = edge_object.target
+                    const target_node_name = edge_object.target_name
+                    const target_doc_link = 'http://' + location.host +'/information3/?id=' + target_node_id.toString()
+                    const target_doc_tag = '<a class="document_link" target="blank" href="' + target_doc_link + '">' + target_node_name +"</a>"
+
+                    const weight = edge_object.weight
+
+                    edges_data.push({id:id, src_name: src_node_name, target_name:target_node_name, weight:weight})
+                    id = id + 1
+                }
+                $('#selected_edge_table').empty();
+                $('#selected_edge_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "یالی انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "src_name",
+                    "title": "مبدا",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "target_name",
+                    "title": "مقصد",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "weight",
+                    "title": "وزن",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": edges_data
+            });
+
+            })
+
+
+            function handleNodeClick(event) {
+              const item = event.item._cfg.model;
+              window.open('http://' + location.host + "/information3?id=" + item["id"]);
+            }
+            graph_object.on('node:click', handleNodeClick);
+
+            function handleEdgeClick(event) {
+              const item = event.item._cfg.model;
+              const edge_id = item["source"] + "__" + item["target"]
+              window.open('http://' + location.host + "/comparison?id=" + edge_id);
+            }
+            graph_object.on('edge:click', handleEdgeClick);
+
+            if (typeof window !== 'undefined')
+              window.onresize = () => {
+                if (!graph_object || graph_object.get('destroyed')) return;
+                if (!container || !container.scrollWidth || !container.scrollHeight) return;
+                graph_object.changeSize(container.scrollWidth, 500);
+              };
+let min_degree = 1.797693134862315E+308
+            let max_degree = 0
+            data_graph.nodes.forEach((node) => {
+                const degree = graph_object.getNodeDegree(node["id"], 'total');
+                if(degree < min_degree)
+                {
+                    min_degree = degree
+                }
+                if(degree > max_degree)
+                {
+                    max_degree = degree
+                }
+            })
+
+            if (min_degree === 1.797693134862315E+308)
+                min_degree = 0
+
+            let min_weight = 1.797693134862315E+308
+            let max_weight = 0
+            data_graph.edges.forEach((edge) => {
+                const weight = edge["weight"];
+                if(weight < min_weight)
+                {
+                    min_weight = weight
+                }
+                if(weight > max_weight)
+                {
+                    max_weight = weight
+                }
+            })
+
+            if (min_weight === 1.797693134862315E+308)
+                min_weight = 0
+
+
+            await ShowRangeSlider(min_degree, max_degree)
+            await ShowWeightSlider(min_weight, max_weight)
+
+        }
+
+    }
+        function NodeSelection(node_id)
+        {
+            data_graph.nodes.forEach((node) => {
+                let item = graph_object.findById(node["id"])
+                if(node["id"] === node_id)
+                {
+                    graph_object.setItemState(item, 'selected', true);
+                }
+                else
+                {
+                    graph_object.setItemState(item, 'selected', false);
+                }
+            })
+
+           graph_object.getEdges().forEach((edge) => {
+               graph_object.setItemState(edge, 'selected', false);
+
+           });
+
+            let item = graph_object.findById(node_id)._cfg.model
+            const degree = graph_object.getNodeDegree(node_id, 'total');
+            const nodeSelection = "NodeSelection('" + node_id + "')"
+            const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+            nodes_data = [{id:1, name: item["name"], degree:degree, type_name:item.type_name, node_selection: detail}]
+            $('#selected_node_table').empty();
+            $('#selected_node_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گره ای انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام گره",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "degree",
+                    "title": "درجه",
+                    "style": {
+                        "width": "10%"
+                    }
+                },{
+                    "name": "type_name",
+                    "title": "نوع گره",
+                    "style": {
+                        "width": "15%"
+                    }
+                },{
+                    "name": "node_selection",
+                    "title": "انتخاب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": nodes_data
+            });
+
+            $('#selected_edge_table').empty();
+            $('#selected_edge_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "یالی انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "src_name",
+                    "title": "مبدا",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "target_name",
+                    "title": "مقصد",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "weight",
+                    "title": "وزن",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": []
+            });
+
+        }
+
+        function ShowRangeSlider(min, max)
+        {
+            document.getElementById("RangeSlider").style.visibility = "visible"
+
+            $('#RangeSlider #slider-range').slider({
+              range: true,
+              min: min,
+              max: max,
+              step: 1,
+              values: [min, max]
+            });
+
+            // Move the range wrapper into the generated divs
+            $('#RangeSlider .ui-slider-range').append($('#RangeSlider .range-wrapper'));
+
+            console.log($('#RangeSlider #slider-range'))
+            // Apply initial values to the range container
+            $('#RangeSlider .range').html(
+                '<span class="range-value"><sup></sup>' +
+                $('#RangeSlider #slider-range').slider("values", 0).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                $("#RangeSlider #slider-range").slider("values", 1).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+            // Show the gears on press of the handles
+            $('#RangeSlider .ui-slider-handle, #RangeSlider .ui-slider-range').on('mousedown', function() {
+              $('.gear-large').addClass('active');
+            });
+
+
+            $('#RangeSlider #slider-range').slider({
+              slide: function(event, ui) {
+                $('#RangeSlider .range').html(
+                    '<span class="range-value"><sup></sup>' +
+                    ui.values[0].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                    '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                    ui.values[1].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+                // Get old value
+                var previousVal = parseInt($(this).data('value'));
+
+                min_selected_degree = ui.values[0]
+                max_selected_degree = ui.values[1]
+
+                FilterGraphDegreeWeight()
+
+                // Save new value
+                $(this).data({
+                  'value': parseInt(ui.value)
+                });
+              }
+            });
+
+            $("#RangeSlider .ui-slider-handle").parent().css('z-index', 0);
+
+        }
+
+        function ShowWeightSlider(min, max)
+        {
+
+            document.getElementById("WeightSlider").style.visibility = "visible"
+
+            $('#WeightSlider #slider-range').slider({
+              range: true,
+              min: min,
+              max: max,
+              step: 1,
+              values: [min, max]
+            });
+
+            // Move the range wrapper into the generated divs
+            $('#WeightSlider .ui-slider-range').append($('#WeightSlider .range-wrapper'));
+
+            // Apply initial values to the range container
+            $('#WeightSlider .range').html(
+                '<span class="range-value"><sup></sup>' +
+                $('#WeightSlider #slider-range').slider("values", 0).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                $("#WeightSlider #slider-range").slider("values", 1).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+            // Show the gears on press of the handles
+            $('#WeightSlider .ui-slider-handle, #WeightSlider .ui-slider-range').on('mousedown', function() {
+              $('.gear-large').addClass('active');
+            });
+
+            $('#WeightSlider #slider-range').slider({
+              slide: function(event, ui) {
+                $('#WeightSlider .range').html(
+                    '<span class="range-value"><sup></sup>' +
+                    ui.values[0].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                    '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                    ui.values[1].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+                // Get old value
+                var previousVal = parseInt($(this).data('value'));
+
+                min_selected_weight = ui.values[0]
+                max_selected_weight = ui.values[1]
+
+                FilterGraphDegreeWeight()
+
+                // Save new value
+                $(this).data({
+                  'value': parseInt(ui.value)
+                });
+              }
+            });
+
+            $("#WeightSlider .ui-slider-handle").parent().css('z-index', 0);
+
+        }
+
+        function FilterGraphDegreeWeight()
+        {
+            graph_object.getEdges().forEach((edge) => {edge.show()})
+            graph_object.getNodes().forEach((node) => {node.show()})
+
+            const min_degree = min_selected_degree
+            const max_degree = max_selected_degree
+
+            const min_weight = min_selected_weight
+            const max_weight = max_selected_weight
+
+            graph_object.getEdges().forEach((edge) => {
+                const edge_item = edge._cfg.model
+                const edge_weight = edge_item.weight
+                if (edge_weight < min_weight || edge_weight > max_weight)
+                {
+                     edge.hide()
+                }
+                else
+                {
+                    const source_node_degree = graph_object.getNodeDegree(edge_item.source, 'total');
+                    const target_node_degree = graph_object.getNodeDegree(edge_item.target, 'total');
+
+                    if (source_node_degree < min_degree || source_node_degree > max_degree)
+                    {
+                        graph_object.findById(edge_item.source).hide();
+                        graph_object.getEdges().forEach((edge_temp) => {
+                            if (edge_temp._cfg.model.source === edge_item.source || edge_temp._cfg.model.target === edge_item.source)
+                            {
+                                edge_temp.hide()
+                            }
+                        })
+                    }
+                    if (target_node_degree < min_degree || target_node_degree > max_degree)
+                    {
+                        graph_object.findById(edge_item.target).hide();
+                        graph_object.getEdges().forEach((edge_temp) => {
+                            if (edge_temp._cfg.model.source === edge_item.target || edge_temp._cfg.model.target === edge_item.target)
+                            {
+                                edge_temp.hide()
+                            }
+                        })
+                    }
+                }
+            })
+
+            graph_object.getNodes().forEach((node) => {
+                const node_degree = graph_object.getNodeDegree(node._cfg.model.id, 'total');
+                if (node_degree < min_degree || node_degree > max_degree)
+                {
+                    graph_object.findById(node._cfg.model.id).hide();
+                }
+            });
+
+        }
+
+        function onlyUnique(value, index, self) {
+          return self.indexOf(value) === index;
+        }
+
+
+        function SelectNeighbourhood()
+        {
+            const selected_node_list = []
+            let selected_nodes = []
+            let selected_edges = []
+
+            graph_object.cfg.states.selected.forEach((item) => {
+                const item_cfg = item._cfg
+                if (item_cfg.type === "node")
+                {
+                    selected_node_list.push(item_cfg.model.id)
+                    selected_nodes.push(item)
+                }
+                else
+                {
+                    selected_edges.push(item)
+                }
+
+            })
+
+            graph_object.getEdges().forEach((edge) => {
+
+                if (edge.get('visible') === true)
+                {
+                    const source_id = edge._cfg.model.source
+                    const target_id = edge._cfg.model.target
+
+                    if (selected_node_list.includes(source_id))
+                    {
+                        graph_object.setItemState(edge, 'selected', true);
+                        graph_object.setItemState(graph_object.findById(target_id), 'selected', true);
+                        selected_nodes.push(graph_object.findById(target_id))
+                        selected_edges.push(edge)
+                    }
+                    else if (selected_node_list.includes(target_id))
+                    {
+                        graph_object.setItemState(edge, 'selected', true);
+                        graph_object.setItemState(graph_object.findById(source_id), 'selected', true);
+                        selected_nodes.push(graph_object.findById(source_id))
+                        selected_edges.push(edge)
+                    }
+                }
+           });
+
+
+            let nodes_data = []
+            let id = 1
+            for (const node of selected_nodes.filter(onlyUnique))
+            {
+                const node_object = node._cfg.model
+                const node_id = node_object.id
+                const node_name = node_object.name
+
+                const degree = graph_object.getNodeDegree(node_object.id, 'total');
+
+                const doc_link = 'http://' + location.host +'/information3/?id=' + node_id.toString()
+                const doc_tag = '<a class="document_link" target="blank" href="' + doc_link + '">' + node_name +"</a>"
+
+                const nodeSelection = "NodeSelection('" + node_id + "')"
+                const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+
+                nodes_data.push({id:id, name: node_name, degree:degree, type_name:node_object.type_name, node_selection: detail})
+                id = id + 1
+            }
+            $('#selected_node_table').empty();
+            $('#selected_node_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گره ای انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام گره",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "degree",
+                    "title": "درجه",
+                    "style": {
+                        "width": "10%"
+                    }
+                },{
+                    "name": "type_name",
+                    "title": "نوع گره",
+                    "style": {
+                        "width": "15%"
+                    }
+                },{
+                    "name": "node_selection",
+                    "title": "انتخاب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": nodes_data
+            });
+
+
+            let edges_data = []
+            id = 1
+            for (const edge of selected_edges.filter(onlyUnique))
+            {
+                const edge_object = edge._cfg.model
+
+                const src_node_id = edge_object.source
+                const src_node_name = edge_object.source_name
+                const source_doc_link = 'http://' + location.host +'/information3/?id=' + src_node_id.toString()
+                const source_doc_tag = '<a class="document_link" target="blank" href="' + source_doc_link + '">' + src_node_name +"</a>"
+
+                const target_node_id = edge_object.target
+                const target_node_name = edge_object.target_name
+                const target_doc_link = 'http://' + location.host +'/information3/?id=' + target_node_id.toString()
+                const target_doc_tag = '<a class="document_link" target="blank" href="' + target_doc_link + '">' + target_node_name +"</a>"
+
+                const weight = edge_object.weight
+
+                edges_data.push({id:id, src_name: src_node_name, target_name:target_node_name, weight:weight})
+                id = id + 1
+            }
+            $('#selected_edge_table').empty();
+            $('#selected_edge_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "یالی انتخاب نشده است",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "src_name",
+                "title": "مبدا",
+                "style": {
+                    "width": "40%"
+                }
+            },{
+                "name": "target_name",
+                "title": "مقصد",
+                "style": {
+                    "width": "40%"
+                }
+            },{
+                "name": "weight",
+                "title": "وزن",
+                "style": {
+                    "width": "15%"
+                }
+            },
+            ],
+            "rows": edges_data
+        });
+
+        }
+
+        function ShowHideNode()
+        {
+            const img_tag_id = "ShowHideImg"
+
+            if (show_hide_state === "show")
+            {
+                document.getElementById(img_tag_id).src = "../../static/image/show_nodes.png"
+                show_hide_state = "hide"
+
+                graph_object.getEdges().forEach((edge) => {
+                    const edge_object = edge._cfg.model
+                    const source_object = graph_object.findById(edge_object.source)
+                    const target_object = graph_object.findById(edge_object.target)
+                    if (source_object._cfg.states.includes('selected') === false)
+                    {
+                        source_object.hide()
+                    }
+                    if (target_object._cfg.states.includes('selected') === false)
+                    {
+                        target_object.hide()
+                    }
+                    if (edge._cfg.states.includes('selected') === false)
+                    {
+                        console.log(2)
+                        edge.hide()
+                    }
+                });
+            }
+            else if (show_hide_state === "hide")
+            {
+                document.getElementById(img_tag_id).src = "../../static/image/hide_nodes.png"
+                show_hide_state = "show"
+
+                FilterGraphDegreeWeight()
+
+            }
+
+        }
+
+
+
+    function ChangeLayout()
+    {
+
+        layout = document.getElementById("ChangeLayout").value
+        if (layout === "comboForce")
+        {
+
+            const clusteredData = louvain(data_graph, false);
+
+            clusteredData.clusters.forEach((cluster, i) => {
+                cluster.nodes.forEach((node) => {
+
+                  clusterId = node["clusterId"]
+                    graph_object.findById(node.id)._cfg.model["comboId"] = clusterId
+                    console.log(graph_object.findById(node.id))
+                });
+              });
+
+                layout= {type: 'comboForce'}
+                graph_object.updateLayout(layout);
+        }
+        else {
+            la = {type: layout}
+            graph_object.updateLayout(la);
+        }
+    }
+
+
+    async function References_Graph_Show_Paragraphs(src_id, des_id, src_name, des_name) {
+            const src_link = 'http://' + location.host + "/information3?id=" + src_id
+            const des_link = 'http://' + location.host + "/information3?id=" + des_id
+            document.getElementById("references_graph_modal_header").innerHTML = "<a href=" + src_link + ">" + src_name + "</a>" +
+            "ارجاع داده است به:" +
+            "<a href=" + des_link + ">" + des_name + "</a>";
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/GetReferences2Doc/" + src_id + "/" + des_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const references = response["references_from_doc1"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of references) {
+                const tag = "<span class='text-primary'>" + des_name + "</span>"
+                const text = paragraph.replaceAll(des_name, tag)
+                result_tag += "<li class='mb-3' >" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_graph_modal_paragraphs").innerHTML = result_tag;
+            $("#references_graph_modal_btn").click();
+        }
+
+</script>
+
+
+
+</html>

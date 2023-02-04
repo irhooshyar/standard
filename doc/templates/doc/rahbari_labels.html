@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css" />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-radar.min.js"></script>
+
+    <script src="../../static/library/anychart-base.min-8.10.0.js"></script>
+    <!-- <script src="../../static/library/anychart-8.10.0-exports.min.js"></script> -->
+    <script src="../../static/library/anychart-ui.min-8.10.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/anychart-ui.min-8.10.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/anychart-font.min-8.10.0.css">
+
+    <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <!-- Download Zip Files -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../static/library/notyf.min.js"></script>
+
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+    <script src="../../static/js/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>تحلیل برچسب‌ها</title>
+    {% include "doc/title_icon.html" %}
+
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#RahbariDropdown').addClass('active');
+            $('#rahbari_labels').addClass('active');
+
+
+
+            // chart controller
+
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+
+        });
+    </script>
+
+</head>
+
+<body>
+    {% load static %}
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+        <div class="d-flex align-items-center rtl flex-row-reverse mx-auto p-1" style="background: linear-gradient(#8693AB, #cbd3da, #e9ecef); box-shadow: 0 0 2px 2px #f8f9fa inset; border: 4px solid #f8f9fa; border-radius: 24px">
+            <img style="width: 120px;" id="prefix_ShowHideImg" src="../../static/image/rahbar_profile.png">
+            <div class="d-flex flex-column gap-2 rtl mr-2" dir="rtl">
+                <span class="font-weight-bolder">تحلیل اسناد رهبری</span>
+                <span>صفحه تحلیل برچسب‌ها</span>
+            </div>
+        </div>
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mt-2 mx-auto">
+
+                <!-- Country Input مجموعه سند-->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 mt-1 bg-light" dir="rtl">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country"
+                        class="form-select text-right float-right searchable-select" style="direction: rtl;">
+                        {% for k,v in countries.items %}
+                        {% if v == 'اسناد رهبری' %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+                <!-- label -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light LabelSelect" dir="rtl" id="multipleSelectDiv"
+                    style="direction: rtl;">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">برچسب:</label>
+                    <select id="LabelSelect" class="form-select text-right float-right searchable-select">
+                    </select>
+
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-2 col-md-6 pt-5 mt-1 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+
+            </div>
+
+
+
+        </form>
+
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="statistical_info_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#statistical_info_pane" type="button" role="tab"
+                        aria-controls="statistical_info_pane" aria-selected="false">اطلاعات
+                        آماری</button>
+                </li>
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="label_trend_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#label_trend_pane" type="button" role="tab" aria-controls="label_trend_pane"
+                        aria-selected="false">تحلیل
+                        روند</button>
+                </li>
+
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="correlation_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#correlation_pane" type="button" role="tab" aria-controls="correlation_pane"
+                        aria-selected="false">تحلیل
+                        هم‌بستگی زمانی</button>
+                </li>
+
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="affinity_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#affinity_pane"
+                        type="button" role="tab" aria-controls="affinity_pane" aria-selected="false">تحلیل
+                        با‌هم‌آیی</button>
+                </li>
+
+                <!-- Result Count -->
+                <p id="DocumentCount" dir="rtl" class="text-left float-left text-secondary  pl-2"></p>
+
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+
+                <!-- Bar chart Info Pane -->
+                <div dir="rtl" style="min-height: 200px;" class="tab-pane fade show active float-right w-100"
+                    id="statistical_info_pane" role="tabpanel" aria-labelledby="statistical_info_tab">
+
+                    <div class="row mt-4 w-100 flex-row-reverse justify-content-around mx-0 px-0"
+                        style="min-height: 350px">
+
+                        <div id="affinity_container" chart-height="350px" class="half">
+                        </div>
+                        <div id="correlation_container" chart-height="350px" class="half">
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <!-- Time Series Chart  Pane -->
+                <div id="label_trend_pane" class="tab-pane w-100 fade float-right p-3 border border-2 m-3"
+                    role="tabpanel" aria-labelledby="label_trend_tab">
+                    <div id="trend_charts" class="row mt-4 w-100 flex-row mx-0 px-4 pb-5">
+                        <div dir="ltr" id="time_series_analysis_chart_container" style="height: 450px"
+                            class="bg-white w-100 p-1">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Affinity Pane -->
+                <div id="affinity_pane" class="tab-pane w-100 fade float-right p-3 m-3" role="tabpanel"
+                    aria-labelledby="affinity_tab">
+
+                    <!--  Result table -->
+                    <div class="table-responsive  mt-4">
+                        <table class="table table-striped AffinityTable" style="min-height: 200px;" id="AffinityTable">
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Correlation Pane -->
+                <div id="correlation_pane" class="tab-pane w-100 fade float-right p-3 m-3" role="tabpanel"
+                    aria-labelledby="correlation_tab">
+                    <!--  Result table -->
+                    <div class="table-responsive  mt-4">
+                        <table class="table table-striped CorrelationTable" style="min-height: 200px;"
+                            id="CorrelationTable">
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Details Modal Container -->
+    <div class="modal fade" id="detailModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="text-secondary modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <h6 id="DocsCount" class='text-secondary'></h6>
+                    <div id="DetailText">
+                    </div>
+
+                    <button id="LoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left" style="color: #0e3f8b"><i
+                            class="fa fa-plus pl-2" style="position:relative;top:3px;"></i>نمایش بیش‌تر</button>
+
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ChartModal Container -->
+    <button type="button" id="correlation_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+        data-bs-target="#Correlation_Comparison_Modal"></button>
+    <div class="modal fade" id="Correlation_Comparison_Modal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="correlation_modal_header" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->
+
+                <div class="bg-light modal-body text-justify">
+                    <div id="comparison_trend_charts" class="row mt-4 w-100 flex-row mx-0 px-4 pb-5">
+                        <div dir="ltr" id="comparison_chart_container" style="height: 450px" class="bg-white w-100 p-1">
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js"></script>
+
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+    <script src="../../static/js/column.js"></script>
+    <script src="../../static/js/ChartColumnInteractivity.js"></script>
+    </script>
+
+</body>
+
+
+<script>
+    MAX_RESULT_WINDOW = 5000
+    SEARCH_RESULT_SIZE = 200
+    initSearchableSelects();
+    init()
+
+    container_id_list = ['AffinityTable', 'CorrelationTable', 'affinity_container',
+        'correlation_container', 'time_series_analysis_chart_container']
+
+    function clearPrevResults(container_id_list) {
+
+        for (container_id of container_id_list) {
+            document.getElementById(container_id).innerHTML = "";
+        }
+    }
+
+    async function init() {
+        const country_id = document.getElementById("country").value
+        startFullPageBlockUI();
+
+        let request_link = 'http://' + location.host + "/GetRahbariSearchParameters/" + country_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["parameters_result"]
+
+        /****************** Categories List ****************************/
+
+        document.getElementById("LabelSelect").innerHTML =
+            response['Labels'];
+
+        syncAllSelectsWithResetExceptions(["country"])
+
+        stopFullPageBlockUI('مقداردهی اولیه')
+    }
+
+
+    async function ShowResult() {
+        selected_label = document.getElementById("LabelSelect").value
+
+        clearPrevResults(container_id_list)
+        /************ BarChart Data *********************/
+
+        startBlockUI('affinity_container');
+        startBlockUI('correlation_container');
+
+        /************ Affinity Data *********************/
+        startBlockUI('AffinityTable');
+
+        request_link = 'http://' + location.host + "/GetAffinityLabels_ByLabelName/"
+            + selected_label + "/"
+
+        response = await fetch(request_link).then(response => response.json());
+
+        let table_data = response["table_data"];
+        console.log(table_data)
+        await showAffinityInformation(table_data);
+        await createAffinityChartData(table_data, 'affinity_container')
+
+        stopBlockUI('AffinityTable', 'تحلیل باهم‌‌آیی');
+
+        /************ Correlation Data *********************/
+        startBlockUI('CorrelationTable');
+
+        request_link = 'http://' + location.host + "/GetCorrelatedLabels_ByLabelName/"
+            + selected_label + "/"
+
+        response = await fetch(request_link).then(response => response.json());
+
+        table_data = response["table_data"];
+        console.log(table_data)
+        await showCorrelationInformation(table_data);
+        await createCorrelationChartData(table_data, 'correlation_container')
+
+        stopBlockUI('CorrelationTable', 'تحلیل هم‌بستگی');
+        stopBlockUI('affinity_container', 'تحلیل آماری');
+        stopBlockUI('correlation_container', 'تحلیل آماری');
+        /************ TimeSeries Data *********************/
+
+        startBlockUI('time_series_analysis_chart_container');
+
+        request_link = 'http://' + location.host + "/GetLabelTimeSeries_ChartData/" + selected_label + "/";
+        response = await fetch(request_link).then(response => response.json());
+        chart_data = response["chart_data"]
+        console.log(chart_data)
+        await showTimeSeriesChart("time_series_analysis_chart_container", selected_label, chart_data)
+
+        stopBlockUI('time_series_analysis_chart_container', 'تحلیل روند');
+
+
+
+    }
+
+
+
+    async function TimeSeriesClicked_Documents(doc_year) {
+
+        // clear prev results
+        document.getElementById("DetailText").innerHTML = ""
+        document.getElementById("DocsCount").innerHTML = ""
+        document.getElementById("ModalHeader").innerHTML = ""
+
+
+
+        selected_label = document.getElementById("LabelSelect").value
+        country_id = document.getElementById("country").value
+
+        label_list = selected_label
+
+        const rahbari_type = 0
+
+        request_link = 'http://' + location.host + "/SearchRahbari_ES/" + country_id + "/" + "0" + "/" +
+            label_list + "/" + doc_year + "/" + doc_year + "/" + rahbari_type + "/" + "عنوان یا متن" + "/" + "empty" + "/" + "exact" + "/";
+
+        // set modal header
+        modal_header = "اسناد دارای برچسب " + "<span class='bold text-primary'>" + selected_label + "</span>" + " در سال " + "<span class='bold text-primary'>" + doc_year + "</span>"
+        document.getElementById("ModalHeader").innerHTML = modal_header
+
+
+        startFullPageBlockUI();
+
+        // define request link without curr_page & search_result_size
+
+        request_configs = {
+            "link": request_link,
+            "search_result_size": SEARCH_RESULT_SIZE,
+            "max_result_window": MAX_RESULT_WINDOW,
+            "data_type": "url_parameters",
+            "form_data": null
+        }
+
+        export_configs = {
+            "link": null,
+            "btn_id": null
+        }
+
+        highlight_configs = {
+            "parameters": null,
+            "highlight_enabled": false,
+            "custom_function": null
+        }
+
+        modal_configs = {
+            "body_id": "DetailText",
+            "modal_load_more_btn_id": "LoadMoreDocuments",
+            "result_size_container_id": "DocsCount",
+            "result_size_message": "حکم",
+            "list_type": "ordered",
+            "custom_body_function": null,
+            "body_parameters": null
+
+        }
+
+        segmentation_config = {
+            "parameters": null,
+            "keyword": null,
+            "enable": false,
+            "aggregation_keyword": null
+        }
+
+
+        column_interactivity_obj = new ColumnInteractivity("documents",
+            request_configs, export_configs, modal_configs, highlight_configs, segmentation_config)
+
+        result = await column_interactivity_obj.load_content();
+        console.log(result)
+        stopFullPageBlockUI('کلیک روی نمودار');
+
+        // $('#ExportExcel_2').on('click', async function () {
+        //     await column_interactivity_obj.download_content();
+        // })
+
+
+    }
+
+    async function AffinityFunction(label_name) {
+
+        // clear prev results
+        document.getElementById("DetailText").innerHTML = ""
+        document.getElementById("DocsCount").innerHTML = ""
+        document.getElementById("ModalHeader").innerHTML = ""
+
+
+        selected_label = document.getElementById("LabelSelect").value
+        country_id = document.getElementById("country").value
+
+        label_list = selected_label + "_" + label_name
+
+        request_link = 'http://' + location.host + "/SearchRahbari_ES/" + country_id + "/" + "0" + "/" +
+            label_list + "/" + "0" + "/" + "0" + "/" + "0" + "/" +  "عنوان یا متن" + "/" + "empty" + "/" + "exact" + "/";
+
+
+        // set modal header
+        modal_header = "اسناد دارای برچسب " + "<span class='bold text-primary'>" + label_name + "</span>" + " و برچسب " + "<span class='bold text-primary'>" + selected_label + "</span>"
+        document.getElementById("ModalHeader").innerHTML = modal_header
+
+
+        startFullPageBlockUI();
+
+        // define request link without curr_page & search_result_size
+
+        request_configs = {
+            "link": request_link,
+            "search_result_size": SEARCH_RESULT_SIZE,
+            "max_result_window": MAX_RESULT_WINDOW,
+            "data_type": "url_parameters",
+            "form_data": null
+        }
+
+        export_configs = {
+            "link": null,
+            "btn_id": null
+        }
+
+        highlight_configs = {
+            "parameters": null,
+            "highlight_enabled": false,
+            "custom_function": null
+        }
+
+        modal_configs = {
+            "body_id": "DetailText",
+            "modal_load_more_btn_id": "LoadMoreDocuments",
+            "result_size_container_id": "DocsCount",
+            "result_size_message": "حکم",
+            "list_type": "ordered",
+            "custom_body_function": null,
+            "body_parameters": null
+
+        }
+
+        segmentation_config = {
+            "parameters": null,
+            "keyword": null,
+            "enable": false,
+            "aggregation_keyword": null
+        }
+
+
+        column_interactivity_obj = new ColumnInteractivity("documents",
+            request_configs, export_configs, modal_configs, highlight_configs, segmentation_config)
+
+        result = await column_interactivity_obj.load_content();
+        console.log(result)
+        stopFullPageBlockUI('کلیک روی نمودار');
+
+        // $('#ExportExcel_2').on('click', async function () {
+        //     await column_interactivity_obj.download_content();
+        // })
+    }
+
+
+
+    async function ComparisonFunction(label_name) {
+        startFullPageBlockUI();
+
+        selected_label = document.getElementById("LabelSelect").value
+
+        document.getElementById("correlation_modal_header").innerHTML = "مقایسه روند برچسب‌ها"
+
+        let request_link = 'http://' + location.host + "/GetCorrelatedLabels_TimeSeries_ChartData/" + selected_label + "/" + label_name + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        comaparison_chart_data = response["comaparison_chart_data"]
+        console.log(comaparison_chart_data)
+        correlation_value = response["correlation_value"]
+        await showComparisonTrendChart("comparison_chart_container", comaparison_chart_data, selected_label, label_name, correlation_value)
+        stopFullPageBlockUI('کلیک روی نمودار');
+    }
+
+
+    async function showComparisonTrendChart(chart_container, chart_data, source_lable_name, dest_label_name, correlation_value) {
+
+
+
+        document.getElementById(chart_container).innerHTML = ""
+
+        // create a chart
+        var chart = anychart.line();
+
+        chart
+            .animation(true)
+            .padding([10, 60, 10, 0])
+
+
+        // tooltip content font setting
+        var tooltip = chart.tooltip();
+        tooltip.fontFamily("vazir");
+
+        // tooltip title font setting
+        var title = chart.tooltip().title();
+        title.fontFamily("vazir");
+
+        // set the chart title
+        chart_title = "میزان همبستگی: " + correlation_value + '\n'
+        chart.title(chart_title);
+        chart.title().fontFamily("vazir").textDirection('rtl');;
+
+        // set the interactivity mode
+        // chart.interactivity().hoverMode("single");
+
+
+        var data = anychart.data.set(chart_data)
+
+
+        var dest_label_series_data = data.mapAs({ x: 0, value: 2 });
+        // create the second series, set the data and name  
+        var dest_label_series = chart.line(dest_label_series_data);
+        dest_label_series.name(dest_label_name);
+
+        // configure the visual settings of the second series
+        dest_label_series.normal().stroke("#ffc107", 2, "10 5", "round");
+        dest_label_series.hovered().stroke("#ffc107", 4, "10 5", "round");
+        dest_label_series.selected().stroke("#ffc107", 6, "10 5", "round");
+
+
+        var source_label_series_data = data.mapAs({ x: 0, value: 1 });
+        // create the second series, set the data and name  
+        var source_label_series = chart.line(source_label_series_data);
+        source_label_series.name(source_lable_name);
+
+        // configure the visual settings of the second series
+        source_label_series.normal().stroke("#007bff", 2, "10 5", "round");
+        source_label_series.hovered().stroke("#007bff", 4, "10 5", "round");
+        source_label_series.selected().stroke("#007bff", 6, "10 5", "round");
+
+        // set the titles of the axes
+        chart.xAxis().title("سال");
+        chart.yAxis().title("تعداد سند");
+
+
+        // x axix labels font setting
+        var xAxisLabels = chart.xAxis().labels();
+        xAxisLabels.fontFamily("vazir");
+
+        var yAxisLabels = chart.yAxis().labels();
+        yAxisLabels.fontFamily("vazir");
+
+        // Not allow labels overlapping
+        var xAxis = chart.xAxis();
+        xAxis.overlapMode("noOverlap");
+        xAxis.title().fontFamily('vazir');
+        xAxis.title().fontWeight("bold");
+
+        // xAxis.staggerMode(false);
+
+        var yAxis = chart.yAxis();
+        yAxis.title().fontFamily('vazir');
+        yAxis.title().fontWeight("bold");
+        yAxis.title().height(40);
+
+        // chart.xScale().mode('continuous');
+        chart.yScale().ticks().allowFractional(false)
+
+        // set the container id
+        chart.container(chart_container);
+
+
+        // enable the legend
+        chart.legend(true);
+
+        var legend = chart.legend();
+        legend.fontFamily('vazir')
+
+        // set position mode
+        legend.positionMode("inside");
+        // set position and alignement
+        legend.position("top");
+        legend.align("center");
+        legend.itemsLayout("horizontalExpandable");
+
+        // initiate drawing the chart
+        chart.draw();
+
+
+    }
+
+
+
+    async function createAffinityChartData(table_data, container_id) {
+        chart_data = []
+        for (row of table_data.slice(0, 5)) {
+            label_name = row['label_name']
+            common_document_count = row['common_document_count']
+
+            chart_data.push([label_name, common_document_count])
+        }
+
+        showChart(chart_data, container_id, true, 'تعداد سند', '5 برچسب برتر براساس باهم‌آیی در اسناد')
+    }
+
+
+    async function createCorrelationChartData(table_data, container_id) {
+        chart_data = []
+        for (row of table_data.slice(0, 5)) {
+            label_name = row['label_name']
+            correlation_score = row['correlation_score']
+
+            chart_data.push([label_name, correlation_score])
+        }
+
+        showChart(chart_data, container_id, true, 'تعداد سند', '5 برچسب برتر براساس همبستگی زمانی')
+    }
+
+
+    function showChart(data, container, sortKeys, xAxisTitle, title) {
+        const options = {
+            data,
+            sortKeys,
+            xAxisTitle,
+            title,
+            yAxisTitle: "تعداد سند",
+            onClick: async function (event, data) {
+                const click_tag = event.domTarget.tag;
+                const index = click_tag["index"]
+                const lable_name = data.row(index)[0];
+
+                if (container == "affinity_container"){
+                    await AffinityFunction(lable_name)
+                    $('#detailModal').modal("show");
+                }
+                else {
+                    await ComparisonFunction(lable_name);
+                    $('#correlation_modal_btn').click();
+                }
+
+            }
+
+
+        };
+
+       
+            newBarChart(container, options)
+        
+    }
+
+    async function GetChartColumnDocuments(){
+
+    }
+    async function showTimeSeriesChart(chart_container, label_name, chart_data) {
+
+
+        document.getElementById(chart_container).innerHTML = ""
+
+        // create a chart
+        var chart = anychart.line();
+
+        chart
+            .animation(true)
+            .padding([10, 60, 10, 0])
+
+
+        // tooltip content font setting
+        var tooltip = chart.tooltip();
+        tooltip.fontFamily("vazir");
+
+        // tooltip title font setting
+        var title = chart.tooltip().title();
+        title.fontFamily("vazir");
+
+        // set the chart title
+        chart_title = "سری زمانی برچسب:\n" + label_name
+        chart.title(chart_title);
+        chart.title().fontFamily("vazir").textDirection('rtl');;
+
+
+        // set the interactivity mode
+        // chart.interactivity().hoverMode("single");
+        trend_started = false
+        edited_chart_data = []
+
+        for (column of chart_data) {
+            total_count = column[4]
+            if (total_count == 0 && !trend_started) {
+
+            } else {
+                edited_chart_data.push(column);
+                trend_started = true
+            }
+        }
+
+        var data = anychart.data.set(edited_chart_data)
+
+        var time_series_data = data.mapAs({ x: 0, value: 1 });
+        // create the second series, set the data and name  
+        var total_series = chart.line(time_series_data);
+
+        // configure the visual settings of the second series
+        total_series.normal().stroke("#6a0dad", 2, "10 5", "round");
+        total_series.hovered().stroke("#6a0dad", 4, "10 5", "round");
+        total_series.selected().stroke("#6a0dad", 6, "10 5", "round");
+
+
+
+        // set the chart title
+
+        // set the titles of the axes
+        chart.xAxis().title("سال");
+        chart.yAxis().title("تعداد سند");
+
+
+        // x axix labels font setting
+        var xAxisLabels = chart.xAxis().labels();
+        xAxisLabels.fontFamily("vazir");
+        xAxisLabels.rotation(315);
+
+        var yAxisLabels = chart.yAxis().labels();
+        yAxisLabels.fontFamily("vazir");
+
+        // Not allow labels overlapping
+        var xAxis = chart.xAxis();
+        xAxis.overlapMode("noOverlap");
+        xAxis.title().fontFamily('vazir');
+        xAxis.title().fontWeight("bold");
+
+        // xAxis.staggerMode(false);
+
+        var yAxis = chart.yAxis();
+        yAxis.title().fontFamily('vazir');
+        yAxis.title().fontWeight("bold");
+        yAxis.title().height(40);
+
+        // chart.xScale().mode('continuous');
+        chart.yScale().ticks().allowFractional(false)
+
+        // set the container id
+        chart.container(chart_container);
+
+
+        // enable the legend
+        // chart.legend(true);
+
+        // var legend = chart.legend();
+        // legend.fontFamily('vazir')
+
+        // // set position mode
+        // legend.positionMode("inside");
+        // // set position and alignement
+        // legend.position("top");
+        // legend.align("center");
+        // legend.itemsLayout("horizontalExpandable");
+
+        // initiate drawing the chart
+        chart.draw();
+
+        total_series.listen("mouseOver", function (e) {
+            document.body.style.cursor = "pointer";
+        });
+        total_series.listen("mouseOut", function (e) {
+            document.body.style.cursor = "auto";
+        });
+        // motevalian columns
+        total_series.listen('click', async function (event) {
+            const click_tag_index = event.domTarget.tag;
+            const doc_year = edited_chart_data[click_tag_index][0];
+            await TimeSeriesClicked_Documents(doc_year);
+            $('#detailModal').modal("show");
+
+        });
+
+
+
+    }
+    async function showAffinityInformation(table_result) {
+
+        $('#AffinityTable').empty();
+        $('.AffinityTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                    first: '»',
+                    prev: '›',
+                    next: '‹',
+                    last: '«'
+                }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "برچسبی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "label_name",
+                "title": "برچسب",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "common_document_count",
+                "title": "تعداد سند مشترک",
+                "style": {
+                    "width": "15%"
+                },
+                "sorted": true,
+                "direction": "DESC"
+            },
+            {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "5%"
+                }
+            },
+            ],
+            "rows": table_result
+        });
+
+
+    }
+
+
+    async function showCorrelationInformation(table_result) {
+
+        $('#CorrelationTable').empty();
+        $('.CorrelationTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                    first: '»',
+                    prev: '›',
+                    next: '‹',
+                    last: '«'
+                }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "برچسبی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "label_name",
+                "title": "برچسب",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "correlation_score",
+                "title": "میزان همبستگی",
+                "style": {
+                    "width": "15%"
+                },
+                "sorted": true,
+                "direction": "DESC"
+            },
+            {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "5%"
+                }
+            },
+            ],
+            "rows": table_result
+        });
+
+
+    }
+
+
+
+</script>
+
+</html>

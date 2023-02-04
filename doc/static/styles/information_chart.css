@@ -1,0 +1,9 @@
+#barchart_container,
+#barchart_container1 {
+    height: 300px;
+}
+
+.apexcharts-data-labels text {
+    font-size: 8px;
+    overflow: hidden;
+}

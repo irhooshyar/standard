@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/graph.css">
+    <meta charset="UTF-8">
+
+    <!-- simple graph  -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="../../static/library/d3.tip.v0.6.3.js"></script>
+    <link rel="stylesheet" href="../../static/styles/sim_graph.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <title>دیپلوی روی سرور</title>
+</head>
+<body>
+
+    <div class="container-users" style="margin-top: 30px" lang="fa" dir="rtl">
+        <div class="row">
+            <div class="col">
+                <div class="col-10">
+                    <form class="row" name="user-log" id="user-log-form">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-6 mb-3 t-start">
+                                <label for="time-start"><small>شرح دیپلوی روی سرور:</small></label>
+                                <input type="text" id="deploy_detail" class="form-control" placeholder="شرح ...">
+                            </div>
+
+                            <div class="col-1 show-btn" style="margin-top: 30px">
+                                <button type="button" id="save_log" class="btn btn-primary d-flex float-right mr-4" onclick="SaveLog()">
+                                    ثبت
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="table-responsive tbl">
+                    <table class="table-striped table">
+                        <thead>
+                        <th scope="col">ردیف</th>
+                        <th scope="col">تاریخ</th>
+                        <th scope="col">ساعت</th>
+                        <th scope="col">نام کاربر</th>
+                        <th scope="col">توضیحات</th>
+                        </thead>
+                        <tbody id="user-log-table">
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../../static/js/logincheck.js"></script>
+    <script>
+        async function init(){
+            const request_link = 'http://' + location.host + "/getUserDeployLogs/";
+            let response = await fetch(request_link);
+            response = await response.json();
+
+            log_response = response['user_logs']
+            const table = document.getElementById('user-log-table')
+            table.innerHTML =
+            log_response.map((log,i) => ` <tr>
+                         <td>${i+1}</td>
+                         <td>${log.date}</td>
+                         <td>${log.time}</td>
+                         <td>${log.name}</td>
+                         <td>${log.detail}</td>
+                    </tr>`).join('')
+        }
+
+        init()
+        async function SaveLog(){
+            startBlockUI('save_deploy_server_log');
+
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+
+                if (document.getElementById("deploy_detail").value === "") {
+                    window.alert('شرح دیپلوی روی سرور وارد نشده است.')
+                }else {
+                    const detail = document.getElementById("deploy_detail").value
+
+
+                    let link_request = 'http://' + location.host + "/UserDeployLogSaved/" + user_name + "/" + detail + "/";
+                    let response = await fetch(link_request);
+                    response = await response.json();
+                    console.log(response['status'])
+
+                    init()
+
+                    window.setTimeout(function () {
+                        stopBlockUI('save_deploy_server_log', 'لاگ ذخیره شد.');
+                    }, 1000);
+                }
+            }
+        }
+
+    </script>
+</body>
+
+<!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+</html>

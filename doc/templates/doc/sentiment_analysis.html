@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>پروفایل احکام</title>
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="../../static/library/fonts/font-awesome-4.7.0.min.css">
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <style>
+        .checked {
+            color: orange;
+        }
+
+        #zoomInButton,
+        #zoomOutButton,
+        #fitButton {
+            background-color: var(--menu_color);
+            color: white;
+        }
+    </style>
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+
+    <script src="../../static/library/gaugeChart/gauge.min.js"></script>
+    <script src="../../static/library/gaugeChart/chart.js"></script>
+    {#    <script#}
+    {#        src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js?hcode=a0c21fc77e1449cc86299c5faa067dc4"></script>#}
+    {#    <script#}
+    {#        src="https://cdn.anychart.com/releases/8.10.0/js/anychart-graph.min.js?hcode=a0c21fc77e1449cc86299c5faa067dc4"></script>#}
+    {#    <script#}
+    {#        src="https://cdn.anychart.com/releases/8.10.0/js/anychart-exports.min.js?hcode=a0c21fc77e1449cc86299c5faa067dc4"></script>#}
+    {#    <script#}
+    {#        src="https://cdn.anychart.com/releases/8.10.0/js/anychart-ui.min.js?hcode=a0c21fc77e1449cc86299c5faa067dc4"></script>#}
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/anychart-font.min-8.10.0.css">
+
+
+
+    <!----->
+    <script src="../../static/library/jquery.min-2.2.2.js"></script>
+    <script src="../../static/library/jquery-ui.min-1.11.4.js"></script>
+    <!---->
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="../../static/library/jquery.min-1.11.3.js"></script>
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <link rel="stylesheet" type="text/css" href="../../static/styles/sentiment_analysis/sentiment_analysis.css">
+
+
+    <!--<script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+    <script src="../../static/library/html2pdf.bundle.min-0.9.3.js"
+            integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/information_chart.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+    <script src="../../static/library/jquery-ui.min-1.11.4.js"></script>
+
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css"
+          href="https://cdn.anychart.com/releases/8.10.0/fonts/css/anychart-font.min.css"/> -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../static/js/GraphClass.js"></script>
+
+
+    <script src="../../static/js/sentiment_analysis/sentiment_analysis.js"></script>
+    <script src="../../static/js/chart.js"></script>
+
+    {% include "doc/title_icon.html" %}
+</head>
+<body>
+
+<nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+    {% include "doc/header2.html" %}
+</nav>
+
+<script>
+    $(document).ready(function () {
+
+        // Active panel
+        $('#AIDropdown').addClass('active');
+        $('#sentimentAnalysis').addClass('active');
+
+        $('select#language').on('change', function (e) {
+
+            let selected_language = this.value;
+            let current_url = window.location.href;
+            if (selected_language === 'England') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'en')
+                window.location = requested_url;
+            } else if (selected_language === 'Russia') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'ru')
+                window.location = requested_url;
+            }
+
+        });
+    });
+</script>
+
+
+<!-- Input Box -->
+<div class="wrapper">
+    <div>
+        <div class="form-group">
+            <textarea class="form-control text-area" dir="rtl" id="InputText" placeholder="متن مورد نظر را وارد کنید"
+                      type="text"
+                      value="" rows="7"></textarea>
+        </div>
+        <button id="btn" class="btn btn-primary col-2" onclick="showResult()">مشاهده نتیجه</button>
+
+        <h1 id="result" dir="rtl" class="col-md-12 text-center my-3"></h1>
+    </div>
+
+    <ul id="original_tabs" class="nav nav-pills mt-3 mx-auto pr-3 pr-sm-0" id="pills-tab"
+        role="tablist">
+
+
+
+        <li class="nav-item" role="presentation">
+            <button id="subject_keyword_tab" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#subject_keyword_pane" type="button" role="tab" aria-controls="subject_keyword_pane"
+                    aria-selected="true"> موضوع براساس کلیدواژگان
+            </button>
+        </li>
+
+
+        <li class="nav-item" role="presentation">
+            <button id="classification_result_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#classification" type="button" role="tab" aria-controls="classification"
+                    aria-selected="true">نمودار موضوعی
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button id="tag_result_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#tag_analyser" type="button" role="tab" aria-controls="tag_analyser"
+                    aria-selected="true">برچسب‌گذاری
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button id="sentiment_result_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#sentiment_analyser" type="button" role="tab" aria-controls="sentiment_analyser"
+                    aria-selected="true">تحلیل احساسات
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button id="similarity_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#similarity_pane" type="button" role="tab" aria-controls="subject_keyword_pane"
+                    aria-selected="true">  مشابهت‌یابی (نسخه‌ آزمایشی)
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button id="summary_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#summary_pane" type="button" role="tab" aria-controls="summary_pane"
+                    aria-selected="true"> خلاصه متن (نسخه آزمایشی)
+            </button>
+        </li>
+
+    </ul>
+
+    <div id="original_pane" class="tab-content px-1 bg-white" id="pills-tabContent">
+
+        {# sentiment tab #}
+
+        <div id="similarity_pane" class="tab-pane bg-white w-100 fade" role="tabpanel"
+             aria-labelledby="similarity_tab">
+
+            <div id="SimilarParagraphsContainer" dir="rtl"  class="text-justify pt-5" >
+            </div>
+        </div>
+
+        <div id="subject_keyword_pane" class="tab-pane bg-white w-100 fade show active" role="tabpanel"
+             aria-labelledby="subject_keyword_tab">
+            <div dir="rtl" class="text-right pt-4" id="subjectContentHeader">
+
+            </div>
+            <div dir="rtl" id="subjectContentBody">
+
+            </div>
+        </div>
+
+        <div id="sentiment_analyser" class="tab-pane w-100 fade show" role="tabpanel"
+             aria-labelledby="sentiment_result_tab">
+
+            <div id="sentiment_tab_container" class="sentiment_tab_container">
+                <div class="canvas_wrapper">
+                    <canvas id="score_emoji"></canvas>
+                </div>
+                <p id="no_info">اطلاعاتی موجود نیست</p>
+                <p id="result_label"></p>
+            </div>
+
+        </div>
+
+        <div id="classification" class="tab-pane w-100 fade show" role="tabpanel"
+             aria-labelledby="classification_result_tab">
+            <h6 id="classification_box_title" class="subject_distribution pr-2 w-100 mt-4 text-center float-right">
+            </h6>
+            <div id="class_error_text_wrapper" class="tag-text-wrapper">
+                بدلیل طولانی بودن متن، در روند محاسبه مشکل ایجاد شد.
+            </div>
+            <div class="charts-list-container">
+                <div id="subject_chart_container" class="full"></div>
+            </div>
+        </div>
+        
+        <div id="tag_analyser" class="tab-pane w-100 fade show" role="tabpanel"
+             aria-labelledby="tag_result_tab">
+            <div class="tag-text-wrapper">
+                <p class="label-p tag-text" dir="rtl" id="result_text"></p>
+            </div>
+        </div>
+
+        <div id="summary_pane" class="tab-pane w-100 fade show" role="tabpanel"
+             aria-labelledby="summary_tab">
+            <div class="tag-text-wrapper">
+                <p class="label-p tag-text" style="min-height: 200px;" dir="rtl" id="summary_text">
+                درحال دریافت اطلاعات ...
+                </p>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<!-- -------------------------------------- -->
+
+</body>
+
+<script src="../../static/js/logincheck.js"></script>
+
+<!-- <script src="../../static/js/UserLogSave.js"></script>-->
+<script src="../../static/js/signout_function.js"></script>
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = "127.0.0.0"
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+        }
+</script>
+
+<script>
+    init()
+    //user log
+    let form_data = new FormData()
+    detail_type = "نمایش پنل"
+    form_data.append('detail_type', detail_type);
+    UserLog(form_data)
+</script>
+
+
+</html>

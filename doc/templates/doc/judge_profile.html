@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    
+        <!-- commented for dromdown menu hover bug -->
+        <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+        <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+    
+        <!--BS Icons -->
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+        <!-- Fontawesome Icons -->
+    
+        <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+             />
+        <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+    
+        <script src="../../static/library/g6.min-4.3.11.js"></script>
+
+    
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Footable  -->
+        <script src="../../static/js/footable/demo-rows.js"></script>
+        <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+        <script src="../../static/js/footable/footable.js"></script>
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+        <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    
+    
+        <!-- Intro Js -->
+        <script src="../../static/library/intro.min-4.3.0.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    
+        <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    
+
+        <!-- apexcharts -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+        <!-- Blocking UI -->
+        <script src="../../static/js/blockUI.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+            integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+            </script> -->
+        <script src="../../static/library/html2pdf.bundle.min-0.9.3.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="../../static/styles/loader.css">
+    
+        <link rel="stylesheet" href="../../static/styles/index2.css">
+        <link rel="stylesheet" href="../../static/styles/information_chart.css">
+        <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    
+        <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+        </script>-->
+    
+        <meta charset="UTF-8">
+    
+        <title> پروفایل جامع قضات</title>
+        {% include "doc/title_icon.html" %}
+    
+        <script>
+            $(document).ready(function () {
+                $('#SepecificDropdown').addClass('active'); // header buttons
+                $('#judge_behavior_analysis').addClass('active');
+                $('select#language').on('change', function (e) {
+                    let selected_language = this.value;
+                    let current_url = window.location.href;
+                    if (selected_language === 'England') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'en')
+                        window.location = requested_url;
+                    } else if (selected_language === 'Russia') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'ru')
+                        window.location = requested_url;
+                    }
+                });
+                $("#search_input_judge_name").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#row_judge .card").filter(function () {
+                        if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                            $(this).show()
+                        } else {
+                            $(this).hide()
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    
+
+    <body>
+        <!-- Menu -->
+        <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+            {% include "doc/header2.html" %}
+        </nav>
+
+        <div class="container">
+            <div class="text-right" style="margin-top: 100px; direction: rtl">
+              <ul class="nav nav-tabs">
+                  <li class="nav-item"><a class="nav-link" href="{% url 'judge_dashboard' %}">داشبورد قضات</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="{% url 'judge_profile' %}">پروفایل جامع قضات</a></li>
+              </ul>
+            </div>
+
+        </div>
+
+
+        <!-- Scrollbar -->
+        <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+            <i class="far fa-caret-square-up"></i>
+        </button>
+    </body>
+
+    <script>
+      init()
+
+
+    </script>
+
+    <script src="../../static/library/notyf.min.js"></script>
+    <!-- BS Tooltips handler -->
+    <script src="../../static/js/tooltip_handler.js"></script>
+    {#<script src="../../static/js/UserLogSave.js"></script>#}
+
+    <!-- Intro Js -->
+    <script src="../../static/js/information/information_tour.js">
+    </script>
+    <script src="../../static/js/signout_function.js"></script>
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js"></script>
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <!-- zip file  -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <!-- graph  g6.antv -->
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+    
+
+</html>

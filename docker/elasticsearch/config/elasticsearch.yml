@@ -1,0 +1,4 @@
+cluster.name: docker-cluster
+network.host: 0.0.0.0
+
+reindex.remote.whitelist: 37.156.144.109:9602

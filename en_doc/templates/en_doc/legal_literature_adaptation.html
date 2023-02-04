@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index2.css">
+    <link rel="stylesheet" href="../../static/styles/vote_analysis.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+    <meta charset="UTF-8">
+    <title>Legal Literature Adaptation</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="ltr" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "en_doc/header.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#SepecificDropdown').addClass('active');
+            $('#legal_literature_adaptation_panel').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'Iran') {
+                    let page_name = current_url.split('/')[3]
+                    console.log(page_name)
+                    let requested_url = current_url.replace('/en', '')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row mx-auto">
+
+                <!-- Country Input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Country:</label>
+                    <select dir="ltr" id="country" name="country" class="form-select text-left float-left"
+                        style="direction: ltr;" onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+
+                <!-- Search Box inputs -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 bg-light">
+                    <label class="float-left" style="direction: ltr;">first statement <span style="color: red">(*)</span>:</label>
+                    <input style="direction: ltr;" class="float-left form-control text-left"
+                        placeholder="search text ..." type="text" required="" name="SearchBox1" id="SearchBox1" value="">
+                </div>
+                <div class="col-md-6 pt-3 col-12 col-lg-3 bg-light">
+                    <label class="float-left" style="direction: ltr;">second statement <span style="color: red">(*)</span>:</label>
+                    <input style="direction: ltr;" class="float-left form-control text-left"
+                        placeholder="search text ..." type="text" required="" name="SearchBox2" id="SearchBox2" value="">
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-3 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-left mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">searching ...</span>
+                        </div>
+                        search
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div dir="ltr" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-left" role="presentation">
+                    <button id="multiple_terms_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#multiple_terms_pane" type="button" role="tab" aria-controls="multiple_terms_pane"
+                        aria-selected="false">
+                        Document Analysis
+                    </button>
+                </li>
+
+                <li class="nav-item float-left" role="presentation">
+                    <button id="bar_chart_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#bar_chart_info_pane" type="button" role="tab"
+                        aria-controls="bar_chart_info_pane" aria-selected="false">Chart Information</button>
+                </li>
+
+                <!-- Download Buttons -->
+                <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Documents"
+                    class="btn float-right p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadSearchResultFunction()"
+                    type="button">
+                    <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                </button>
+
+                <button class="btn float-right p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Excel Output" onclick="ExportExcelSearchResultFunction()" type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+
+                <!-- Result Count -->
+                <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-left px-1 bg-white" id="pills-tabContent">
+
+                <!-- Multiple Terms Pane -->
+                <div dir="ltr" class="tab-pane fade float-left w-100 show active" id="multiple_terms_pane" role="tabpanel"
+                aria-labelledby="multiple_terms_tab">
+
+                    <div dir="ltr" class="row mt-4 w-100 flex-row mx-auto">
+                    <div dir="ltr" class="col-md-6 px-0 col-12 col-lg-6 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0" id="second_words">
+
+                        </h6>
+                        <div class="mt-0 pr-2">
+                            <table id="keywords2_table" style="min-height: 200px;" class="table table-striped table-bordered border-secondary keywords2_table">
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div dir="ltr" class="col-md-6 px-0 col-12 col-lg-6 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0" id="first_words">
+
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table id="keywords1_table" style="min-height: 200px;" class="table table-striped table-bordered border-secondary keywords1_table">
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Bar chart Info Pane -->
+                <div dir="ltr" class="tab-pane fade float-left w-100" id="bar_chart_info_pane" role="tabpanel"
+                    aria-labelledby="bar_chart_info_tab">
+
+                    <div class="row mt-4 w-100 flex-row mx-0 px-0">
+
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Document Subject  segment -->
+                            <h5 class="document_subject w-100 mt-4 text-center float-left pt-3 pb-3">
+                                Document Subject
+                            </h5>
+                            <br>
+                            <div style="margin-left: 1px !important;" id="subject_container" dir="ltr"
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                                <span class='d-block text-center' style='color: dodgerblue'>
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    No document founded.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Document Level segment -->
+                            <h5 class="document_level w-100 mt-4 text-center float-left pt-3 pb-3">
+                                Approval Year
+                            </h5>
+                            <br>
+                            <div id="year_container" dir="ltr"
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                                <span class='d-block text-center' style='color: dodgerblue'>
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    No document founded.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Extracted References segment -->
+                            <h5 class="extractected_references w-100 mt-4 text-center float-left pt-3 pb-3">
+                                Approval References
+                            </h5>
+                            <br>
+                            <div id="reference_container" dir='ltr'
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                                <span class='d-block text-center' style='color: dodgerblue'>
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    No document founded.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Extracted References segment -->
+                            <h5 class="extractected_references w-100 mt-4 text-center float-left pt-3 pb-3">
+                                Motevalian
+                            </h5>
+                            <br>
+                            <div id="motevalian_container" dir="ltr"
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                                <span class='d-block text-center' style='color: dodgerblue'>
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    No document founded
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Extracted References segment -->
+                            <h5 class="extractected_references w-100 mt-4 text-center float-left pt-3 pb-3">
+                                Hamkaran
+                            </h5>
+                            <br>
+                            <div id="hamkaran_container" dir="ltr"
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                                <span class='d-block text-center' style='color: dodgerblue'>
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    No document founded
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                            <!-- Extracted References segment -->
+                            <h5 class="extractected_references w-100 mt-4 text-center float-left pt-3 pb-3">
+                                Salahiat
+                            </h5>
+                            <br>
+                            <div id="salahiat_container" dir="ltr"
+                                class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                                <span class='d-block text-center' style='color: dodgerblue'>
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    No document founded
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="Go To Top" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+    <script>
+
+        async function downloadFiles(file_name_list, save_file_name) {
+            const country_id = file_name_list[0]["country_id"]
+
+            let zip = new JSZip()
+
+            const request_link = 'http://' + location.host + "/en" + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            save_file_name += " Country {" + country_name + "}"
+
+
+            let extension = ".txt"
+            if (country_name.includes("فاوا")) {
+                extension = '.docx';
+            }
+
+            for (const document of file_name_list) {
+                const document_name = document["name"] + extension
+                const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name, value);
+                    })
+            }
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+        }
+
+
+        async function DownloadSerachResultFunction() {
+            save_file_name = "search result {" + document.getElementById("SearchBox").value + "}"
+            downloadFiles(SearchResultValue, save_file_name)
+        }
+
+        async function ExportExcelSerachResultFunction() {
+            console.log(SearchResultValue)
+            var csv = "";
+
+            sep = "\t"
+            let Csv = "Document Name" + sep + "Document Level" + sep + "Document Subject" + sep +
+                "Document Type" + sep + "Approval Reference" + sep + "Approval Date" + sep +
+                " ‌Notification Date" + sep + "Count" + "\n"
+            for (const document of SearchResultValue) {
+                Csv += document["name"] + sep + document["level"] + sep + document["subject"] + sep +
+                    document["type"] + sep + document["approval_reference"] + sep + document["approval_date"] + sep +
+                    document["communicated_date"] + sep + document["count"] + "\n"
+
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/en_js/footable/demo-rows.js"></script>
+    <script src="../../static/js/en_js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/en_js/footable/footable.js"></script>
+    <link href="../../static/styles/en_style/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+    <link rel="stylesheet" href="../../static/styles/graph.css">
+    <link rel="stylesheet" href="../../static/styles/en_style/subject_graph.css">
+    <meta charset="UTF-8">
+
+    <title>Субъективный график</title>
+
+
+</head>
+
+<body>
+
+    <!-- Menu -->
+    <div class="topnav fixed-top" id="myTopnav">
+        <a href="javascript:void(0);" id="menu_icon">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a href="{% url 'ru_index' %}" id="brand_name"><i id="brand_logo" class="bi bi-x-diamond-fill px-1 pl-0"
+                style="position: relative; top:-1px;"></i>
+            Кибер карта </a>
+        <a href="{% url 'ru_information' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/docs.png" alt="">
+            Одобрения
+        </a>
+        <a href="{% url 'ru_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph4.png" alt="">
+            График утверждений
+        </a>
+        <a href="{% url 'ru_search' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/search2.png" alt="">
+            Поиск разрешений
+        </a>
+        <a href="{% url 'ru_subject' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/subject2.png" alt="">
+            Субъективный анализ
+        </a>
+        <a href="{% url 'ru_subject_statistics' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/amar_subject.png" alt="">
+            Статистический анализ
+        </a>
+        <a href="{% url 'ru_adaptation' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/adaptation2.png" alt="">
+            Субъективная адаптация
+        </a>
+        <a href="{% url 'ru_votes_analysis' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/ara13.png" alt="">
+            Анализ голосов
+        </a>
+        <a href="{% url 'ru_subject_graph' %}" style="font-size: 12px;" class="active">
+            <img width="18px;" src="../../static/icons/graph2.png" alt="">
+            Субъективный график
+        </a>
+
+        <select dir="ltr" id="language" name="language" class="d-inline-block p-1 text-left mr-2 rounded float-right">
+            <option value="Iran">Iran</option>
+            <option value="England">England</option>
+            <option selected value="Russia">Russia</option>
+        </select>
+        <!-- <a href="#logout" id="logout">
+            Exit
+            <i id="logout_icon" class="fa fa-sign-out" aria-hidden="true"></i>
+        </a> -->
+
+    </div>
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Language selection -->
+    <script>
+        $(document).ready(function () {
+            $('select#language').on('change', function (e) {
+
+                selected_language = this.value;
+                current_url = window.location.href;
+                if (selected_language == 'Iran') {
+                    window.location = "{% url 'index' %}";
+                } else if (selected_language == 'England') {
+                    window.location = "{% url 'en_index' %}";
+                }
+
+            })
+        });
+    </script>
+
+    <div class="row p-5 pb-0 flex-row mx-auto bg-light">
+        <form enctype="multipart/form-data" class="custom-control mx-auto needs-validation" id="graph_form">
+
+            <div class="row mb-0 flex-row mx-auto mt-3">
+
+                <div class="col-12 col-lg-3 mt-2 px-0">
+
+                    <label class="text-left d-block w-100 bg-light float-left" style="direction: ltr;;">Файл
+                        темы:</label>
+                    <button type="button" id="file_input_btn" class="btn p-2 d-block float-left"><i
+                            class="bi bi-folder mr-2"></i>Select File</button>
+                    <span id="file_name" dir="ltr" class="p-2 float-left text-center text-secondary">No File
+                        chosen</span>
+                    <input type="file" name="SubjectFile" id="SubjectFile" class="d-none">
+                </div>
+
+                <div class="col-12 col-lg-3 mt-2 pb-0 px-0 ml-2">
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Тип графика:</label>
+
+                    <select id="graph_type" name="graph_type" class="form-select py-2 ml-0 text-left float-left"
+                        style="direction: ltr;">
+                        <option value="all">Все</option>
+                        <option value="common_duplicated">Общие/повторяющиеся ключевые слова</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-lg-3 mr-1 mt-3 pb-0">
+                    <!-- Show result btn -->
+                    <button type="button" id="graph_show" class="btn d-block mt-4 p-2 float-left"
+                        onclick="showResult()"> Показать график
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <!--Original Tabs -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="advanced_view_tab" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#advanced_view_pane" type="button" role="tab" aria-controls="advanced_view_pane"
+                    aria-selected="true">График предметов</button>
+            </li>
+        </ul>
+
+        <!-- Original Panes -->
+        <div id="original_pane" class="tab-content float-left px-1 bg-white" id="pills-tabContent">
+
+            <!--  Graph Pane -->
+            <div class="tab-pane fade show active float-left w-100" id="advanced_view_pane" role="tabpanel"
+                aria-labelledby="advanced_view_tab">
+                <div class="row mt-4 w-100 flex-row  mx-auto pb-5 px-4">
+                    <div class="col-12 subjects_container">
+                        <div class="form-check form-check-inline d-none float-left"><input id="all_subjects"
+                                class="form-check-input" checked type="checkbox" value="all">
+                            <label class="form-check-label">Все</label>
+                        </div>
+                    </div>
+                    <div id="advanced_graph_container" class="col-12 w-100 mx-auto border mt-2" style="height:500px;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+</body>
+
+
+<script>
+    let all_subjects = [];
+    let text = [];
+    let common_keywords = []
+    let duplicated_keywords = []
+    let subject_keywords_count = {} // {key: subject, value: {key:keyword, value: count} }
+
+    $(document).ready(function () {
+
+        $('#file_input_btn').on('click', function () {
+            $('#SubjectFile').trigger('click');
+
+        });
+
+        $('#SubjectFile').change(function (e) {
+            var fileName = e.target.files[0].name;
+            $('span#file_name').text(fileName);
+            readData();
+
+        });
+
+        $('#all_subjects').change(function (e) {
+            if (this.checked) {
+                // select all subjects
+                subjects = document.getElementsByClassName('subject');
+                for (subject of subjects) {
+                    if (!subject.checked) {
+                        subject.checked = true;
+                    }
+                }
+                $('.subject').attr('disabled', true);
+
+
+            } else {
+                $('.subject').attr('disabled', false);
+                subjects = document.getElementsByClassName('subject');
+                for (subject of subjects) {
+                    if (subject.checked) {
+                        subject.checked = false;
+                    }
+                }
+            }
+        })
+
+    });
+</script>
+
+<script>
+    function readData() {
+        let SubjectFile = document.getElementById('SubjectFile')
+        let text = ''
+        var file_reader = new FileReader();
+
+        if (SubjectFile.files.length == 0) {
+            $('span#file_name').text('.فایلی انتخاب نشده‌است');
+
+        } else {
+            file_reader.onload = function () {
+                text = file_reader.result;
+                showSubjects(text);
+                makeGraphData(text)
+            }
+
+            file_reader.readAsText(SubjectFile.files[0]);
+        }
+
+
+    }
+
+    function showSubjects(text) {
+        all_subjects = []
+        let lines = text.split('\n');
+        $('#all_subjects').parent().removeClass('d-none');
+        document.getElementById('all_subjects').checked = true;
+        $('.subjects_container').children().not(':first').remove();
+        for (line of lines) {
+            line = line.trim();
+            if (line.includes('*')) {
+                let subject = line.replace('*', '');
+                subject = subject.trim();
+                all_subjects.push(subject);
+                tag = '<div class="form-check form-check-inline float-left"><input class="subject form-check-input" disabled checked="true" type="checkbox" value="' + subject + '">' +
+                    '<label class="form-check-label">' + subject + '</label></div>'
+                $('.subjects_container').append(tag)
+
+            }
+        }
+    }
+
+    function makeGraphData(text) {
+        let nodes = []
+        let temp_edges = []
+        let edges = []
+        let chart_data = {}
+
+        let lines = text.split('\n');
+        let current_subject = ''
+        let keywords_list = []
+        let subjects_list = []
+        common_keywords = []
+        duplicated_keywords = []
+        subject_keywords_count = {} // {key: subject, value: {key:keyword, value: count} }
+
+        /* Fill Data */
+        for (i = 0; i < lines.length; i++) {
+
+            line = lines[i];
+            line = line.trim();
+
+            if (line.includes('*')) {
+                let subject = line.replace('*', '');
+                subject = subject.trim();
+                current_subject = subject;
+                subject_keywords_count[subject] = {}
+
+            } else {
+
+                let keyword = line;
+                let current_subject_keywords = subject_keywords_count[current_subject];
+
+                // if keyword exist
+                if (keywords_list.includes(keyword)) {
+
+                    // if in current subject --> duplicated
+                    if (Object.keys(current_subject_keywords).includes(keyword)) {
+                        subject_keywords_count[current_subject][keyword] += 1;
+                        if (!duplicated_keywords.includes(keyword)) {
+                            duplicated_keywords.push(keyword);
+                        }
+                    } else {
+                        // if in another subject --> common 
+                        subject_keywords_count[current_subject][keyword] = 1;
+                        if (!common_keywords.includes(keyword)) {
+                            common_keywords.push(keyword);
+                        }
+                    }
+
+                } else {
+                    subject_keywords_count[current_subject][keyword] = 1;
+                    keywords_list.push(keyword)
+                }
+
+            }
+        }
+
+        /* Filter subjects */
+
+    }
+
+    function showResult() {
+        // get selected subjects
+        subjects = document.getElementsByClassName('subject');
+        selected_subjects = []
+
+        for (subject of subjects) {
+            if (subject.checked) {
+                selected_subjects.push(subject.value);
+            }
+        }
+
+        if (selected_subjects.length == 0) {
+            alert('موضوعی انتخاب نشده‌است.')
+        } else {
+
+            let graph_type = $('#graph_type').val()
+            filterGraphData(selected_subjects, graph_type)
+
+        }
+
+    }
+
+    function filterGraphData(selected_subjects, graph_type) {
+        let nodes = []
+        let edges = []
+        let duplicated_keywords_count = 0;
+        let commmon_keywords_count = 0;
+        for (subject of selected_subjects) {
+
+            let subject_node = {
+                id: subject,
+                group: 'subjects',
+                normal: {
+                    height: 30,
+                    shape: "diamond",
+                    fill: "#ffa000",
+                    stroke: null
+                },
+                hovered: {
+                    height: 35,
+                    shape: "diamond",
+                    fill: "white",
+                    stroke: "3 #ffa000"
+                },
+                selected: {
+                    height: 35,
+                    shape: "diamond",
+                    fill: "#ffa000",
+                    stroke: "3 #333333"
+                }
+            };
+
+            nodes.push(subject_node);
+
+            subject_keywords = Object.keys(subject_keywords_count[subject])
+            for (keyword of subject_keywords) {
+                let keyword_node = {}
+
+                if (common_keywords.includes(keyword)) {
+                    keyword_node = {
+                        id: keyword,
+                        group: 'common_keywords',
+                        normal: {
+                            height: 20,
+                            shape: "diagonal-cross",
+                            fill: "#ff3300",
+                            stroke: null
+                        },
+                        hovered: {
+                            height: 27,
+                            shape: "diagonal-cross",
+                            fill: "white",
+                            stroke: "3 #ff3300"
+                        },
+                        selected: {
+                            height: 27,
+                            shape: "diagonal-cross",
+                            fill: "#ff3300",
+                            stroke: "3 #333333"
+                        }
+                    }
+                    commmon_keywords_count += 1;
+                } else if (duplicated_keywords.includes(keyword)) {
+                    keyword_node = {
+                        id: keyword,
+                        group: 'duplicated_keywords',
+                        normal: {
+                            height: 20,
+                            shape: "cross",
+                            fill: "#5cd926",
+                            stroke: null
+                        },
+                        hovered: {
+                            height: 27,
+                            shape: "cross",
+                            fill: "white",
+                            stroke: "3 #5cd926"
+                        },
+                        selected: {
+                            height: 27,
+                            shape: "cross",
+                            fill: "#5cd926",
+                            stroke: "3 #333333"
+                        }
+                    }
+                    duplicated_keywords_count += 1;
+                } else if (graph_type == 'all') {
+                    keyword_node = {
+                        id: keyword,
+                        group: 'unique_keywords'
+                    }
+                }
+                nodes.push(keyword_node);
+
+                edge = {
+                    from: subject,
+                    to: keyword
+                }
+                edges.push(edge);
+            }
+
+        }
+
+        chart_data = {
+            nodes,
+            edges
+        };
+        $("html, body").animate({
+            scrollTop: $(document).height()
+        }, 500);
+        showChart(chart_data, duplicated_keywords_count, commmon_keywords_count)
+
+    }
+
+    function showChart(chart_data, duplicated_keywords_count, commmon_keywords_count) {
+
+
+        // create a chart and set the data
+        var chart = anychart.graph(chart_data);
+
+        // set the container id
+        document.getElementById('advanced_graph_container').innerHTML = ""
+        chart.container("advanced_graph_container");
+
+
+        if (duplicated_keywords_count != 0) {
+            // configure labels of duplicate keywords in one subject
+            let duplicated_keywords = chart.group("duplicated_keywords");
+
+            duplicated_keywords.labels().enabled(true);
+            duplicated_keywords.labels().format("{%id}").fontFamily('vazir');
+            duplicated_keywords.labels().fontSize(14);
+            duplicated_keywords.labels().fontWeight(600);
+        }
+
+        if (commmon_keywords_count != 0) {
+            // configure labels of common keywords
+            let common_keywords = chart.group("common_keywords");
+
+            common_keywords.labels().enabled(true);
+            common_keywords.labels().format("{%id}").fontFamily('vazir');
+            common_keywords.labels().fontSize(14);
+            common_keywords.labels().fontWeight(600);
+        }
+
+
+        // configure labels of subjects
+        let subjects = chart.group("subjects");
+
+        subjects.labels().enabled(true);
+        subjects.labels().format("{%id}").fontFamily('vazir');
+        subjects.labels().fontSize(14);
+        subjects.labels().fontWeight(600);
+
+
+        chart.nodes().tooltip().format("{%id}");
+        chart.edges().tooltip().format(" from: {%from} \n to: {%to}");
+        chart.edges().tooltip().fontFamily('vazir');
+        chart.nodes().tooltip().fontFamily('vazir');
+
+
+
+        // initiate drawing the chart
+        chart.draw();
+
+
+
+    }
+</script>
+
+</html>
+
+</html>

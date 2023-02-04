@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/en_js/footable/demo-rows.js"></script>
+    <script src="../../static/js/en_js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/en_js/footable/footable.js"></script>
+    <link href="../../static/styles/en_style/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+    <meta charset="UTF-8">
+    <title>Субъективный анализ</title>
+
+</head>
+
+<body>
+
+    <!-- Menu -->
+    <div class="topnav fixed-top" id="myTopnav">
+        <a href="javascript:void(0);" id="menu_icon">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a href="{% url 'ru_index' %}" id="brand_name"><i id="brand_logo" class="bi bi-x-diamond-fill px-1 pl-0"
+                style="position: relative; top:-1px;"></i>
+            Кибер карта </a>
+        <a href="{% url 'ru_information' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/docs.png" alt="">
+            Одобрения
+        </a>
+        <a href="{% url 'ru_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph4.png" alt="">
+            График утверждений
+        </a>
+        <a href="{% url 'ru_search' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/search2.png" alt="">
+            Поиск разрешений
+        </a>
+        <a href="{% url 'ru_subject' %}" style="font-size: 12px;" class="active">
+            <img width="18px;" src="../../static/icons/subject2.png" alt="">
+            Субъективный анализ
+        </a>
+        <a href="{% url 'ru_subject_statistics' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/amar_subject.png" alt="">
+            Статистический анализ
+        </a>
+        <a href="{% url 'ru_adaptation' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/adaptation2.png" alt="">
+            Субъективная адаптация
+        </a>
+        <a href="{% url 'ru_votes_analysis' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/ara13.png" alt="">
+            Анализ голосов
+        </a>
+        <a href="{% url 'ru_subject_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph2.png" alt="">
+            Субъективный график
+        </a>
+
+        <select dir="ltr" id="language" name="language" class="d-inline-block p-1 text-left mr-2 rounded float-right">
+            <option value="Iran">Iran</option>
+            <option value="England">England</option>
+            <option selected value="Russia">Russia</option>
+        </select>
+        <!-- <a href="#logout" id="logout">
+            Exit
+            <i id="logout_icon" class="fa fa-sign-out" aria-hidden="true"></i>
+        </a> -->
+
+    </div>
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Language selection -->
+    <script>
+        $(document).ready(function () {
+            $('select#language').on('change', function (e) {
+
+                selected_language = this.value;
+                current_url = window.location.href;
+                if (selected_language == 'Iran') {
+                    window.location = "{% url 'index' %}";
+                } else if (selected_language == 'England') {
+                    window.location = "{% url 'en_index' %}";
+                }
+
+            })
+        });
+    </script>
+
+    <div class="row p-5 flex-row bg-light mx-0">
+        <form id="subject_analysis_form" action="" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+
+            <div class="row flex-row mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+                    <label for="country" class=" text-left bg-light float-left">страна:</label>
+                    <select dir="ltr" id="country" name="country" class="form-select text-left float-left"
+                        onchange="CountryChanged()">
+
+                        {# <option value="C1">England- C1</option>#}
+                        {# <option value="C2">England- C2</option>#}
+
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <!-- Subject select -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 bg-light mt-1">
+                    <label for="subject" class="text-left bg-light float-left">Тема документа:</label>
+                    <select id="SubjectSelect" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- Show button -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-left mt-1 ml-4">
+                        показывать
+                        <div class="spinner-border text-light ml-2" role="status">
+                            <span class="sr-only"><span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="result_doc" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#result_doc_subject" type="button" role="tab" aria-controls="result_doc_subject"
+                    aria-selected="true">Документы</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="all_subject" class="nav-link" data-bs-toggle="pill" data-bs-target="#all_subject_keywords"
+                    type="button" role="tab" aria-controls="all_subject_keywords" aria-selected="false">Ключевые слова
+                    темы</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="without_subject" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#doc_without_subject" type="button" role="tab" aria-controls="doc_without_subject"
+                    aria-selected="false">Документы без темы</button>
+            </li>
+
+            <!-- Result Count -->
+            <p id="SearchResultLable" class="text-left float-right text-secondary pr-2"></p>
+        </ul>
+
+        <div id="original_pane" class="tab-content float-left bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <div dir=ltr id="result_doc_subject" class="tab-pane w-100 fade show active float-left" role="tabpanel"
+                aria-labelledby="result_doc_subject">
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped SubjectTable">
+                    </table>
+                </div>
+            </div>
+
+            <div id="all_subject_keywords" class="tab-pane w-100 fade show float-left" role="tabpanel"
+                aria-labelledby="all_subject_keywords">
+
+                <div dir=ltr class="table-responsive mt-4">
+                    <table class="table table-striped SubjectALLTable">
+                    </table>
+                </div>
+            </div>
+
+            <div id="doc_without_subject" class="tab-pane w-100 fade show float-left" role="tabpanel"
+                aria-labelledby="all_subject_keywords">
+
+                <div dir=ltr class="table-responsive mt-4">
+                    <table class="table table-striped WithoutSubjectTable">
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="Go To Top" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+
+    {#
+    <script>#}
+        {#        init()# }
+        {## }
+        {#        async function init() {# }
+            {## }
+            {#            CountryChanged()# }
+            {# }#
+        }
+        {## }
+        {#        async function CountryChanged() {# }
+            {## }
+            {#            const country_id = document.getElementById("country").value# }
+            {#            document.getElementById("SubjectSelect").innerHTML = ""# }
+            {## }
+            {#            /******************* Get Subject Options **********************/# }
+            {#            request_link = 'http://' + location.host + "/GetSubjectsByCountryId/" + country_id + "/";# }
+            {#            response = await fetch(request_link).then(response => response.json());# }
+            {#            response = response["documents_subject_list"]# }
+            {#            let document_result = []# }
+            {#            for (var i = 0; i < response.length; i++) {# }
+                {#                const subject_id = response[i]["id"]# }
+                {#                const subject_name = response[i]["subject"]# }
+                {## }
+                {#                const tag = "<option value=" + subject_id + " >" + subject_name + "</option>";# }
+                {## }
+                {#                document.getElementById("SubjectSelect").innerHTML += tag# }
+                {## }
+                {#                /******************* Get Subject Keywords **********************/# }
+                {#                let request_link2 = 'http://' + location.host + "/GetSubjectKeywords/" + subject_id + "/";# }
+                {#                let response2 = await fetch(request_link2).then(response2 => response2.json());# }
+                {#                let keywords_text = response2["subject_keywords_list"]# }
+                {## }
+                {#                const row = { "id": (i + 1), "name": subject_name, "keywords": keywords_text }# }
+                {#                document_result.push(row)# }
+                {# }#
+            }
+            {## }
+            {#            $('.SubjectALLTable').footable({#}
+{#                "paging": {#}
+{#                    "enabled": true,
+        strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }# }
+{#                },#}
+            {#                "filtering": {# }
+                {#                    "enabled": false# }
+                {# },#
+            }
+            {#                "sorting": {# }
+                {#                    "enabled": true# }
+                {# },#
+            }
+            {#                "empty": "Not Found.",# }
+            {#                "columns": [{#}
+{#                    "name": "id",#}
+{#                    "title": "#",#}
+{#                    "breakpoints": "xs sm",#}
+{#                    "type": "number",#}
+{#                    "style": {#}
+{#                        "width": "10%"# }
+{#                    }#}
+            {# }, {# }
+            {#                    "name": "name",# }
+            {#                    "title": "Subject",# }
+            {#                    "style": {# }
+                {#                        "width": "20%"# }
+                {# }#
+            }
+            {# }, {# }
+            {#                    "name": "keywords",# }
+            {#                    "title": "Subject Keywords",# }
+            {#                    "style": {# }
+                {#                        "width": "70%"# }
+                {# }#
+            }
+            {# }#
+        }
+        {#                ],# }
+        {#                "rows": document_result# }
+        {# });#}
+        {## }
+        {#            /************ Get Documents Without Subject *********************/# }
+        {#            request_link3 = 'http://' + location.host + "/GetDocumentsWithoutSubject/" + country_id + "/" + 1 + "/";# }
+        {#            response3 = await fetch(request_link3).then(response3 => response3.json());# }
+        {#            documents_without_subject = response3["documentsWithoutSubject"]# }
+        {## }
+        {#            document_result = []# }
+        {#            for (var i = 0; i < documents_without_subject.length; i++) {# }
+            {#                const document_id = documents_without_subject[i]['id'];# }
+            {#                const document_name = documents_without_subject[i]['document_name'];# }
+            {#                const document_link = 'http://' + location.host + "/information/?id=" + document_id# }
+            {#                const doc_name = '<a href="' + document_link + '">' + document_name + "</a>"# }
+            {## }
+            {#                const row = { "id": (i + 1), "name": doc_name }# }
+            {#                document_result.push(row)# }
+            {# }#
+        }
+        {## }
+        {#            $('.WithoutSubjectTable').footable({#}
+{#                "paging": {#}
+{#                    "enabled": true , strings
+    :
+    {
+        {#
+        first: '»',
+            {#                         prev
+    :
+        '›',
+            {#                         next
+    :
+        '‹',
+            {#                         last
+    :
+        '«'
+        {#
+    }# }
+{#                },#}
+        {#                "filtering": {# }
+            {#                    "enabled": false# }
+            {# },#
+        }
+        {#                "sorting": {# }
+            {#                    "enabled": true# }
+            {# },#
+        }
+        {#                "empty": "Not Found.",# }
+        {#                "columns": [{#}
+{#                    "name": "id",#}
+{#                    "title": "#",#}
+{#                    "breakpoints": "xs sm",#}
+{#                    "type": "number",#}
+{#                    "style": {#}
+{#                        "width": "10%"# }
+{#                    }#}
+        {# }, {# }
+        {#                    "name": "name",# }
+        {#                    "title": "Document Name",# }
+        {#                    "style": {# }
+            {#                        "width": "90%"# }
+            {# }#
+        }
+        {# }#}
+        {#                ],# }
+        {#                "rows": document_result# }
+        {# });#}
+        {# }#}
+        {## }
+        {## }
+        {#        async function ShowResult() {# }
+            {## }
+            {#            await SpinnerModeFunction("Active");# }
+            {## }
+            {#            const country_id = document.getElementById("country").value# }
+            {#            const subject_id = document.getElementById("SubjectSelect").value;# }
+            {## }
+            {#            const request_link4 = 'http://' + location.host + "/GetDocumentsByCountrySubject/" + country_id + "/" + subject_id + "/"# }
+            {#            var response4 = await fetch(request_link4).then(response4 => response4.json());# }
+            {#            let documentsList = response4["documentsList"]# }
+            {## }
+            {#            let document_result = [];# }
+            {#            for (var i = 0; i < documentsList.length; i++) {# }
+                {#                const weight = documentsList[i]["weight"]# }
+                {#                const subject = documentsList[i]["subject"]# }
+                {#                const document_id = documentsList[i]["document_id"]# }
+                {#                const document_name = documentsList[i]["document_name"]# }
+                {#                const keywords_text = documentsList[i]["keywords_text"]# }
+                {#                const keywords_title = documentsList[i]["keywords_title"]# }
+                {#                const special_references = documentsList[i]["special_references"]# }
+                {#                const document_link = 'http://' + location.host + "/information/?id=" + document_id# }
+                {#                const doc_name = '<a href="' + document_link + '">' + document_name + "</a>"# }
+                {#                const row = {#}
+                    {#                    "id": (i + 1), "name": doc_name, "keywords_text": keywords_text, "keywords_title": keywords_title,# }
+                    {#                    "special_references": special_references, "weight": weight# }
+                    {# }#
+                }
+                {#                document_result.push(row)# }
+                {# }#
+            }
+            {## }
+            {#            $('.SubjectTable').footable({#}
+{#                "paging": {#}
+{#                    "enabled": true,
+        strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }# }
+{#                },#}
+            {#                "filtering": {# }
+                {#                    "enabled": false# }
+                {# },#
+            }
+            {#                "sorting": {# }
+                {#                    "enabled": true# }
+                {# },#
+            }
+            {#                "empty": "Not Found.",# }
+            {#                "columns": [{#}
+{#                    "name": "id",#}
+{#                    "title": "#",#}
+{#                    "breakpoints": "xs sm",#}
+{#                    "type": "number",#}
+{#                    "style": {#}
+{#                        "width": "5%"# }
+{#                    }#}
+            {# }, {# }
+            {#                    "name": "name",# }
+            {#                    "title": "Document Name",# }
+            {#                    "style": {# }
+                {#                        "width": "25%"# }
+                {# }#
+            }
+            {# }, {# }
+            {#                    "name": "keywords_text",# }
+            {#                    "title": "Keywords In Body",# }
+            {#                    "style": {# }
+                {#                        "width": "35%"# }
+                {# }#
+            }
+            {# }, {# }
+            {#                    "name": "keywords_title",# }
+            {#                    "title": "Keywords In Title",# }
+            {#                    "style": {# }
+                {#                        "width": "20%"# }
+                {# }#
+            }
+            {# }, {# }
+            {#                    "name": "special_references",# }
+            {#                    "title": "Special References",# }
+            {#                    "style": {# }
+                {#                        "width": "10%"# }
+                {# }#
+            }
+            {# }, {# }
+            {#                    "name": "weight",# }
+            {#                    "title": "Weight",# }
+            {#                    "style": {# }
+                {#                        "width": "5%"# }
+                {# },#
+            }
+            {#                    "sorted": true,# }
+            {#                    "direction": "DESC"# }
+            {# },#
+        }
+        {#                ],# }
+        {#                "rows": document_result# }
+        {# });#}
+        {## }
+        {#            document.getElementById("SearchResultLable").innerText = (documentsList.length).toString() + " documents found.";# }
+        {## }
+        {#            await SpinnerModeFunction("Disable");# }
+        {# }#}
+        {## }
+        {## }
+        {#        async function SpinnerModeFunction(mode) {# }
+            {#            if (mode === "Active") {# }
+                {#                $(".spinner-border").addClass("active");# }
+                {# } else if (mode === "Disable") {# }
+                {#                $(".spinner-border").removeClass("active");# }
+                {# }#
+            }
+            {## }
+            {# }#
+        }
+        {#    </script>#}
+
+
+
+</body>
+
+</html>

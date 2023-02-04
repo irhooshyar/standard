@@ -1,0 +1,4 @@
+K-Means
+Agglomerative
+FCM
+LDA

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fa">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+        <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+             />
+        <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+        <!-- commented for dromdown menu hover bug -->
+        <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+        <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+
+        <!-- apexcharts -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+        <link rel="stylesheet" href="../../static/styles/judge.css">
+
+        <!--BS Icons -->
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+
+        <script src="../../static/library/g6.min-4.3.11.js"></script>
+
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+        <!-- Footable  -->
+        <script src="../../static/js/footable/demo-rows.js"></script>
+        <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+        <script src="../../static/js/footable/footable.js"></script>
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+        <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+        <!-- Intro Js -->
+        <script src="../../static/library/intro.min-4.3.0.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+
+        <script src="../../static/library/notyf.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+        <!-- Blocking UI -->
+        <!-- <script src="../../static/js/blockUI.js"></script> -->
+        <script src="../../static/library/html2pdf.bundle.min-0.9.3.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- <link rel="stylesheet" href="../../static/styles/loader.css"> -->
+
+        <link rel="stylesheet" href="../../static/styles/index2.css">
+        <link rel="stylesheet" href="../../static/styles/information_chart.css">
+        <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->t>
+
+        <meta charset="UTF-8">
+
+        <title> داشبورد قضات</title>
+        {% include "doc/title_icon.html" %}
+
+        <script>
+            $(document).ready(function () {
+                $('#SepecificDropdown').addClass('active'); // header buttons
+                $('#judge_behavior_analysis').addClass('active');
+                $('select#language').on('change', function (e) {
+                    let selected_language = this.value;
+                    let current_url = window.location.href;
+                    if (selected_language === 'England') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'en')
+                        window.location = requested_url;
+                    } else if (selected_language === 'Russia') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'ru')
+                        window.location = requested_url;
+                    }
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <!-- Menu -->
+        <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+            {% include "doc/header2.html" %}
+        </nav>
+
+        <div class="container">
+
+            <div class="text-right" style="margin-top: 100px; direction: rtl">
+              <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                  <li class="nav-item float-right" role="presentation">
+                      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#judge_dash_pan"
+                        type="button" role="tab" aria-controls="judge_dash_pan" aria-selected="false">داشبورد قضات</button>
+                  </li>
+                  <li class="nav-item float-right" role="presentation">
+                      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#judge_profile_pan"
+                        type="button" role="tab" aria-controls="judge_profile_pan" aria-selected="false">پروفایل جامع قضات</button>
+                  </li>
+              </ul>
+            </div>
+
+            <div class="tab-content float-right bg-white px-1" style="position: relative; width: 100%">
+                <div class="tab-pane fade float-right w-100 show active" id="judge_dash_pan" role="tabpanel"
+                    aria-labelledby="judge_dash_pan">
+                    <div class="row" style="margin-top:50px">
+                        <div class="col-sm">
+
+                                <div class="card text-center" style="background:#1e56a0">
+                                  <div>
+                                    <i class="fa fa-solid fa-gavel" style="font-size: 30px; color: white; margin-top: 9px"></i>
+                                  </div>
+                                  <div class="card-body" style="color: #F0FFFF">
+                                    <p class="card-title" style="font-size: 25px">فعال‌ترین قاضی</p>
+                                    <p class="card-text" style="margin-top: 23px" dir="rtl" id="judge_with_max_judgments_paragraph">
+                                      قاضی ... بیش‌ترین فعالیت در دادنامه‌های قضایی با ... دادنامه بیش‌ترین فعالیت را در دادنامه‌های قضایی را داشته است.
+                                    </p>
+                                    <a href="#" class="btn" id="judge_with_max_judgments_link" style="background-color: #e2eefa; margin-top: 24px">اطلاعات بیش‌تر</a>
+                                  </div>
+
+                                </div>
+
+                        </div>
+                        <div class="col-sm">
+                                <div class="card text-center" style="background:#1e56a0">
+                                  <div>
+                                    <i class="fa fa-solid fa-gavel" style="font-size: 30px; color: white; margin-top: 9px"></i>
+                                  </div>
+                                  <div class="card-body" style="color: #F0FFFF">
+                                    <p class="card-title" style="font-size: 25px">بیش‌ترین ابطال رای</p>
+                                    <p class="card-text" style="margin-top: 23px" dir="rtl" id="judge_with_max_cancellation_paragraph">
+                                      قاضی ... با ... درخواست ابطال بیش‌ترین فعالیت را در ابطال رای داشته است.
+                                  </p>
+                                    <br>
+                                    <a href="#" class="btn" id="judge_with_max_cancellation_link" style="background-color: #e2eefa">اطلاعات بیش‌تر</a>
+                                  </div>
+
+                                </div>
+                        </div>
+                        <div class="col-sm">
+
+                                <div class="card text-center" style="background:#1e56a0">
+                                  <div>
+                                    <i class="fa fa-solid fa-gavel" style="font-size: 30px; color: white; margin-top: 9px"></i>
+                                  </div>
+                                  <div class="card-body" style="color: #F0FFFF">
+                                    <h5 class="card-title" style="font-size: 25px">بیش‌ترین درخواست اعمال ماده 92</h5>
+                                    <p class="card-text" style="margin-top: 23px" dir="rtl" id="judge_with_max_92_paragraph">
+                                      قاضی ... با ... درخواست اعمال ماده 92 بیش‌ترین فعالیت را در اعمال ماده 92 داشته است.
+                                    </p>
+                                    <br>
+                                    <a href="#" class="btn" id="judge_with_max_92_link" style="background-color: #e2eefa; margin-top: 8px">اطلاعات بیش‌تر</a>
+                                  </div>
+
+                                </div>
+
+                        </div>
+                      </div>
+                    <div class="row" style="margin-top:50px">
+                      <div class="col">
+
+                          <div class="card">
+                          <div class="card-body">
+                            <p class="card-text text-right" style="font-size: 20px">نمودار فعالیت قضات بر حسب سال: (مثلا: در سال 91 قاضی شماره 1 در 20 دادنامه و قاضی شماره 3 در 50 دادنامه مشارکت داشتند.) </p>
+                            <div id="years_stack_chart">
+                            </div>
+                          </div>
+                          </div>
+
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top:50px">
+                      <div class="col">
+
+                        <div class="card" style="height: 422px">
+                          <div class="card-body">
+                            <p class="card-text text-right" style="font-size: 20px">درخت پراکندگی دسته‌بندی موضوعات: (فعال‌ترین قاضی در هر موضوع)</p>
+                            <div id="categories_chart">
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade float-right w-100" id="judge_profile_pan" role="tabpanel"
+                    aria-labelledby="judge_profile_pan">
+                    <div class="row" style="margin-top: 50px">
+                      <div class="col-2">
+                      </div>
+                      <div class="col-8">
+                          <!-- Search Box input -->
+                              <label class="float-right" style="direction: rtl;"> نام قاضی مورد نظر را وارد نمایید:
+                               <!-- <span style="color: red">(*)</span>: -->
+                              </label>
+                              <input style="direction: rtl;" class="float-left form-control text-right"
+                                  placeholder="نام قاضی..." type="search" name="search_input_judge_name"
+                                  id="search_input_judge_name" value="" >
+                      </div>
+                      <div class="col-2">
+                      </div>
+                    </div>
+                    <div class="row flex-row-reverse judge" id="row_judge" style="margin-top: 20px; justify-content: center">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollbar -->
+        <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+            <i class="far fa-caret-square-up"></i>
+        </button>
+    </body>
+
+    <!-- Blocking UI  -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+    <!-- save log user -->
+    <script>
+        async function UserLog(form_data){
+                if (getCookie("username") !== "") {
+                    const user_name = getCookie("username")
+                    let page_url = window.location.pathname
+                    const user_ip = "127.0.0.0"
+
+                    page_url = page_url.slice(0, -1);
+                    if(page_url==="")
+                    {
+                        page_url = "/0";
+                    }
+
+
+                    let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip + "/";
+
+                    $.ajax({
+                        url: link_request,
+                        data: form_data,
+                        type: 'POST',
+                        contentType: false,
+                        processData: false,
+                        async: true,
+
+
+                    }).done(function (res) {
+                        console.log("done")
+
+                    }).fail(function (res) {
+                        console.log("fail")
+                    });
+
+                }
+            }
+    </script>
+    <script>
+      init()
+
+      async function init() {
+          startFullPageBlockUI();
+          // startBlockUI('judge_dash_pan') // row_judge
+          // startBlockUI('judge_profile_pan') // row_judge
+          await initDashboard();
+          
+          // stopBlockUI('judge_dash_pan', 'داشبورد قضات');
+          // startBlockUI('judge_dash_pan') // row_judge
+          await initProfiles();
+          // stopBlockUI('judge_profile_pan', 'پروفایل جامع قضات');
+          stopFullPageBlockUI("داشبورد قضات")
+          
+      }
+
+      $(document).ready(function () {
+        $("#search_input_judge_name").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#row_judge .judge-card").filter(function () {
+                console.log($(".judge-name",this).first().text())
+                $(this).toggle($(".judge-name",this).first().text().indexOf(value) > -1)
+            });
+        });
+        //user log
+        let form_data = new FormData()
+        detail_type = "نمایش پنل"
+        form_data.append('detail_type', detail_type);
+        UserLog(form_data)
+    });
+
+      async function initProfiles() {
+        const request_link = "http://" + window.location.host + "/get_all_judges/";
+        let response = await fetch(request_link).then(response => response.json());
+        LoadJudges(response["result"]);
+        
+      }
+
+      async function initDashboard() {
+        const request_link = 'http://' + location.host + "/get_judge_dashboard_data/";
+        let response = await fetch(request_link).then(response => response.json());
+        let judge_with_max_judgments = response["judge_with_max_judgments"]
+        await set_judge_with_max_judgments(judge_with_max_judgments);
+
+        let judge_with_max_judgments_in_subject_types = response["judge_with_max_judgments_in_subject_types"]
+        if (judge_with_max_judgments_in_subject_types["درخواست ابطال"] != undefined) {
+          await set_judge_with_max_judgments_in_cancellation(judge_with_max_judgments_in_subject_types["درخواست ابطال"]);
+        }
+        if (judge_with_max_judgments_in_subject_types["درخواست اعمال ماده 92"] != undefined) {
+          await set_judge_with_max_judgments_in_92(judge_with_max_judgments_in_subject_types["درخواست اعمال ماده 92"]);
+        }
+
+        // judge_with_max_judgments_in_years = response["judge_with_max_judgments_in_years"]
+        // await drawChart()
+
+        let judge_with_max_judgments_in_categories = response["judge_with_max_judgments_in_categories"]
+        await drawCategoriesChart(judge_with_max_judgments_in_categories)
+
+        let judges_judgements_per_year = response["judges_judgements_per_year"]
+        let years = response["years"]
+        await drawYearsStackChart(judges_judgements_per_year, years)
+        
+      }
+
+      function LoadJudges(judges_tuples) {
+        let i = 0;
+        for(let judges_index in judges_tuples) {
+          judges_tuple = judges_tuples[judges_index]
+          judge_id = judges_tuple[0]
+          judges_data = judges_tuple[1]
+          let judge_name = judges_data["name"];
+          let judgments_count = judges_data["judgments_count"];
+          let judge_most_subject_type_name = judges_data["most_subject_type_name"];
+          let judge_most_subject_type_count = judges_data["most_subject_type_count"];
+          let judge_profile_link = "http://" + window.location.host + "/specific_judge_profile/?id=" + judge_id;
+          //   margin_top = Math.floor(i / 3)*5;
+          let margin_top = 5;
+          let judge_html_tag = `<div class="card text-right col-3 m-2 judge-card"  style="margin-top: ${margin_top}px">
+                      <div class="card-header align-center" style="background-color: #e2eefa">
+                        <img src="/static/image/judges/${judge_name}.jpg" class="rounded-circle" width="60px" height="60px"
+                          alt="Avatar" style="object-fit:cover"/>
+                        <p class="judge-name" style="margin-top: 8px; font-size: 20px">${judge_name}</p>
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">تعداد دادنامه‌های قاضی: ${judgments_count}</h5>
+                        <hr>
+                        <h5 class="card-title">:پر تکرارترین نوع دادنامه<p> </p> ${judge_most_subject_type_name}</h5>
+                        {#<h5 class="card-title"> تعداد تکرار نوع پرونده: ${judge_most_subject_type_count}</h5>#}
+                        <br>
+                        <div class="text-left"><a href="${judge_profile_link}" class="btn" style="background-color: #e2eefa">پروفایل</a></div>
+                        </div>
+                        </div>`
+          // <h5 class="card-title">:موضوعات پرتکرار از پرونده‌ها</h5>
+          // <p class="card-text" style="margin-right: 1px"><li>موضوع1</li><li>موضوع2</li></p>
+          {#column_id = "column" + String(i % 3 + 1);#}
+          document.getElementById('row_judge').innerHTML += judge_html_tag;
+          i++;
+        }
+      }
+
+      async function set_judge_with_max_judgments(judge_with_max_judgments) {
+        const judge_id = judge_with_max_judgments["judge_id"]
+        const judge_name = judge_with_max_judgments["judge_name"]
+        const judgements_count = judge_with_max_judgments["judgments_count"]
+        document.getElementById("judge_with_max_judgments_paragraph").innerText =
+        `قاضی ${judge_name} با ${judgements_count} دادنامه بیش‌ترین فعالیت را در دادنامه‌های قضایی داشته است` + "."
+        document.getElementById("judge_with_max_judgments_link").href = `/specific_judge_profile/?id=${judge_id}`
+      }
+
+      async function set_judge_with_max_judgments_in_cancellation(judge_with_max_cancellation) {
+        const judge_id = judge_with_max_cancellation["judge_id"]
+        const judge_name = judge_with_max_cancellation["judge_name"]
+        const judgements_count = judge_with_max_cancellation["judgments_count"]
+        document.getElementById("judge_with_max_cancellation_paragraph").innerText =
+        `قاضی ${judge_name} با ${judgements_count} درخواست ابطال بیش‌ترین فعالیت را در ابطال رای داشته است` +"."
+        document.getElementById("judge_with_max_cancellation_link").href = `/specific_judge_profile/?id=${judge_id}`
+      }
+
+      async function set_judge_with_max_judgments_in_92(judge_with_max_92) {
+        const judge_id = judge_with_max_92["judge_id"]
+        const judge_name = judge_with_max_92["judge_name"]
+        const judgements_count = judge_with_max_92["judgments_count"]
+        document.getElementById("judge_with_max_92_paragraph").innerText =
+        `قاضی ${judge_name} با ${judgements_count} درخواست اعمال ماده 92 بیش‌ترین فعالیت را در اعمال ماده 92 داشته است` +"."
+        document.getElementById("judge_with_max_92_link").href = `/specific_judge_profile/?id=${judge_id}`
+      }
+
+      async function drawCategoriesChart(judge_with_max_judgments_in_categories) {
+        cahrt_data = []
+        for (var category in judge_with_max_judgments_in_categories) {
+          if (judge_with_max_judgments_in_categories.hasOwnProperty(category)) {
+          var value = judge_with_max_judgments_in_categories[category];
+          judge_id = value["judge_id"]
+          judge_name = value["judge_name"]
+          judgements_count = value["judgments_count"]
+          const judge_link = 'http://' + location.host + "/specific_judge_profile/?id=" + judge_id
+          const judge_tag = '<a target="blank" href="' + judge_link + '">' + judge_name + "</a>"
+          cahrt_data.push({
+              x: category + ": " + judge_name,
+              y: judgements_count
+            })
+          }
+        }
+
+        var options_categories_max_judges = {
+          series: [
+          {
+            name: 'تعداد دادنامه',
+            data: cahrt_data
+          }
+        ],
+          legend: {
+          show: false
+        },
+        chart: {
+          height: 350,
+          type: 'treemap',
+          fontFamily: 'vazir',
+          fontSize: "80px",
+            toolbar:{
+            export: {
+              csv: {
+                headerCategory: 'موضوع: نام فعالترین قاضی',
+                headerValue: 'value',
+              }
+            }
+            }
+        },
+        title: {
+          text: ''
+        },
+         dataLabels: {
+          enabled: false
+        },
+         theme: {
+          mode: 'light',
+          palette: 'palette1',
+          monochrome: {
+              enabled: false,
+              color: '#255aee',
+              shadeTo: 'light',
+              shadeIntensity: 0.65
+          },
+              }
+        };
+        var categories_chart = new ApexCharts(document.querySelector("#categories_chart"), options_categories_max_judges);
+        categories_chart.render();
+      }
+
+      async function drawYearsStackChart(judges_judgements_per_year, years) {
+        judge_data = []
+        data_series = []
+        for (var judge_name in judges_judgements_per_year) {
+          judge_data = []
+          for (var year in years) {
+            year = years[year]
+            var years_value = judges_judgements_per_year[judge_name];
+            if (year in years_value) {
+              judge_data.push( (years_value[year]).length )
+            }
+            else {
+              judge_data.push(0)
+            }
+          }
+          data_series.push({
+            name: judge_name,
+            data: judge_data
+          })
+        }
+        var options_judgements_per_year = {
+          series: data_series,
+          chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+              fontFamily: 'vazir',
+              stackType: '100%'
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ['#fff']
+        },
+        title: {
+          text:''
+        },
+        xaxis: {
+          categories: years,
+        title: {
+              text: 'سال'
+            }
+        },
+            yaxis: {
+              title: {
+                  text: 'تعداد دادنامه'
+              }
+            },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val // + "K"
+            }
+          }
+        },
+        fill: {
+          opacity: 1,
+          colors: ['#63b6ad', '#ebd895', '#eab9dc',
+                   'rgba(252,173,163,0.79)', '#5e8888', '#9acb9a',
+                   '#abc3ee', '#b6b6ea', '#e78ad3',
+                   '#9494dc', '#90deed', 'rgb(99,149,75)',
+                   '#b5997d', '#f58769', '#b1eea1',
+                   'rgba(254,242,108,0.72)', '#66baf5', '#d9a383']
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40,
+          markers:{
+              fillColors: ['#63b6ad', '#ebd895', '#eab9dc',
+                           'rgba(252,173,163,0.79)', '#5e8888', '#9acb9a',
+                           '#abc3ee', '#b6b6ea', '#e78ad3',
+                           '#9494dc', '#90deed', 'rgb(99,149,75)',
+                           '#b5997d', '#f58769', '#b1eea1',
+                           'rgba(254,242,108,0.72)', '#66baf5', '#d9a383']
+                  },
+        }
+        };
+        var years_stack_chart = new ApexCharts(document.querySelector("#years_stack_chart"), options_judgements_per_year);
+        years_stack_chart.render();
+      }
+
+    </script>
+  
+
+    <!-- <script src="../../static/library/notyf.min.js"></script> -->
+    <!-- BS Tooltips handler -->
+    <script src="../../static/js/tooltip_handler.js"></script>
+
+    <!-- Intro Js -->
+    <script src="../../static/js/information/information_tour.js">
+    </script>
+    <script src="../../static/js/signout_function.js"></script>
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js"></script>
+
+    <!-- zip file  -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <!-- graph  g6.antv -->
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+
+
+</html>

@@ -1,0 +1,20 @@
+.title{
+    font-size: 20px;
+    text-align: center;
+}
+
+.fa-input {
+    direction: rtl;
+}
+
+input {
+    direction: ltr;
+}
+
+.text {
+    direction: rtl;
+}
+
+.form_title {
+    background-color: #dff0d8;
+}

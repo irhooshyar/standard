@@ -1,0 +1,2981 @@
+<!DOCTYPE html>
+<html lang="fa">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    
+        <!-- commented for dromdown menu hover bug -->
+        <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+        <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+    
+        <!--BS Icons -->
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+        <!-- Fontawesome Icons -->
+    
+        <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+             />
+        <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+    
+        <script src="../../static/library/g6.min-4.3.11.js"></script>
+    
+        <!-- <style>
+            .checked {
+                color: orange;
+            }
+            #zoomInButton,
+            #zoomOutButton,
+            #fitButton {
+            background-color: var(--menu_color);
+            color: white;
+            }
+        </style> -->
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+        <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+        <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+        <!-- anychart modules -->
+        <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+        <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+        <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+        <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+        <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+        <script src="../../static/library/anychart-core.min-8.10.0.js"></script>
+        <script src="../../static/library/anychart-graph.min-8.10.0.js"></script>
+        <script src="../../static/library/anychart-exports.min-8.10.0.js"></script>
+        <script src="../../static/library/anychart-8.10.0-ui.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/anychart-font.min-8.10.0.css"/>
+    
+    
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Footable  -->
+        <script src="../../static/js/footable/demo-rows.js"></script>
+        <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+        <script src="../../static/js/footable/footable.js"></script>
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+        <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    
+    
+        <!-- Intro Js -->
+        <script src="../../static/library/intro.min-4.3.0.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    
+        <script src="../../static/library/notyf.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+            integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+            </script> -->
+        <script src="../../static/library/html2pdf.bundle.min-0.9.3.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="../../static/styles/loader.css">
+    
+        <link rel="stylesheet" href="../../static/styles/index2.css">
+        <link rel="stylesheet" href="../../static/styles/information_chart.css">
+        <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+        <script src="../../static/js/chart.js"></script>
+
+        <meta charset="UTF-8">
+        <title> ترمینولوژی مصوبات</title>
+        {% include "doc/title_icon.html" %}
+    
+        <script>
+            $(document).ready(function () {
+                $('#TangihDropdown').addClass('active'); // header buttons
+                $('#keywords_terminology').addClass('active');
+                $('select#language').on('change', function (e) {
+                    let selected_language = this.value;
+                    let current_url = window.location.href;
+                    if (selected_language === 'England') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'en')
+                        window.location = requested_url;
+                    } else if (selected_language === 'Russia') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'ru')
+                        window.location = requested_url;
+                    }
+                });
+            });
+        </script>
+    </head>
+    
+
+    <body>
+        <!-- Menu -->
+        <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+            {% include "doc/header2.html" %}
+        </nav>
+
+        <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+        <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+            <!-- Form Fields -->
+            <form autocomplete="on" action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data" method="post" novalidate>
+
+                <!-- Primary Fields in First Row -->
+                <div class="row flex-row-reverse mt-2 mx-auto">
+
+                    <!-- Country Input مجموعه سند-->
+                    <div class="col-md-6  pt-3 col-12 col-lg-2 mt-1 bg-light" dir="rtl">
+                        <label for="country" class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                        <select dir="rtl" id="country" name="country" class="form-select text-right float-right searchable-select"
+                            style="direction: rtl;" onchange="CountryChanged()">
+                            {% for k,v in countries.items %}
+                            <option value="{{ k }}">{{ v }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Keyword Type تعریف یا اختصار-->
+                    <div class="col-md-6  pt-3 col-12 col-lg-2 mt-1 bg-light" dir="rtl">
+                        <label class="text-right bg-light float-right" style="direction: rtl;;">نوع کلیدواژه:</label>
+                        <select name="KeyWordTypeSelect" id="KeyWordTypeSelect" class="form-select text-right float-right searchable-select"
+                            style="direction: rtl;" onchange="KeywordTypeChanged()">
+                            <option value="all">هر دو</option>
+                            <option value="definition">تعریف</option>
+                            <option value="abbreviation">اختصار</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Box input -->
+                    <div class="col-md-6 pt-3 col-12 col-lg-4 mt-1 bg-light">
+                        <label class="float-right" style="direction: rtl;">کلیدواژه مورد نظر <span style="color: red">(*)</span>:</label>
+                        <input style="direction: rtl;" class="float-left form-control text-right"
+                            placeholder="متن جست‌وجو ..." type="text" required="" name="SearchBox" id="SearchBox" value="">
+                    </div>
+
+                    <!--  Buttons -->
+                    <div class="col-lg-2 col-md-6 pt-5 mt-1 col-12">
+                        <button type="button" id="document_search" onclick="ShowResult()"
+                            class="btn d-flex float-right mr-2">
+                            <div class="spinner-border text-light" role="status">
+                                <span class="sr-only">درحال جست‌وجو ...</span>
+                            </div>
+                            جست‌وجو
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Advanced Fields in Second Row -->
+                <div id="advanced_fields" class="collapse show row flex-row-reverse mx-auto mt-4">
+                </div>
+
+            </form>
+
+            <!-- Tabs and Panes  -->
+            <div dir="rtl" class="row w-100 p-0">
+
+                <!--Original Tabs -->
+                <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab" role="tablist">
+                    
+                    <li class="nav-item float-right" role="presentation">
+                        <button id="keywords_related_docs_tab" class="nav-link active" data-bs-toggle="pill"
+                            data-bs-target="#keywords_related_docs_table_pane" type="button" role="tab" aria-controls="keywords_related_docs_table_pane"
+                            aria-selected="false" > اسناد متناظر کلیدواژگان
+                        </button>
+                    </li>
+
+                    <li class="nav-item float-right" role="presentation">
+                        <button id="doc_keywords_def_tab" class="nav-link" data-bs-toggle="pill"
+                            data-bs-target="#doc_keywords_def_table_pane" type="button" role="tab" aria-controls="doc_keywords_def_table_pane"
+                            aria-selected="false" > کلیدواژگان و تعاریف
+                        </button>
+                    </li>
+                    
+                    <li class="nav-item float-right" role="presentation">
+                        <button id="keywords_information_tab" class="nav-link" data-bs-toggle="pill"
+                            data-bs-target="#keywords_information_pane" type="button" role="tab" aria-controls="keywords_information_pane"
+                            aria-selected="false" > داشبورد آماری کلیدواژگان
+                        </button>
+                    </li>
+
+                    <li class="nav-item float-right" role="presentation">
+                        <button id="keywords_actors_graph_tab" class="nav-link" data-bs-toggle="pill"
+                            data-bs-target="#keywords_actors_graph_pane" type="button" role="tab" aria-controls="keywords_actors_graph_pane"
+                            aria-selected="false" >
+                            <!-- onclick="ShowGraph(Nodes_data, Edges_data)"  -->
+                            گراف کنشگران
+                        </button>
+                    </li>
+
+                    <!-- Result Count -->
+                    <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+                </ul>
+
+                <!-- Original Panes -->
+                <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+                    <!-- Related Documents Pane -->
+                    <div id="keywords_related_docs_table_pane" class="tab-pane w-100 fade show active float-right"
+                         role="tabpanel"
+                         aria-labelledby="keywords_related_docs_tab">
+                        <div class="accordion">
+                            <div class="accordion-item float-right w-100 mt-4">
+                                <h2 class="accordion-header d-block w-100 float-right">
+                                    <button
+                                            class="accordion-button accordin_header text-right float-right d-inline-block w-100 pr-1"
+                                            type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#keywords_related_docs_collapse"
+                                            aria-expanded="true" aria-controls="keywords_related_docs_collapse">
+                                        <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                        جدول کلیدواژگان و اسناد متناظر
+                                    </button>
+                                </h2>
+                                <div id="keywords_related_docs_collapse"
+                                     class="accordion-collapse collapse show w-100 float-right">
+                                    <div class="accordion-body bg-light text-right">
+                                        <div class="mt-3">
+
+                                            <p id="RelatedDocsTableCount" dir="rtl"
+                                               class="text-left float-left text-secondary  pl-2 mt-2"></p>
+                                            <!-- Page select -->
+                                            <div class="col-md-6 col-12 col-lg-2 float-left">
+                                                <input type="number" disabled="true"
+                                                       onchange="TablePaginationChanged(event)"
+                                                       id="RelatedDocsTablePaginationInput" min="1" max="1" value="1"
+                                                       class="form-select text-right float-right"
+                                                       style="direction: rtl;">
+                                            </div>
+
+                                            <!-- Result Pagination -->
+                                            <p id="RelatedDocsResultPagination"
+                                               class="text-left text-secondary float-left mt-2">صفحه:
+                                                <span id="related_docs_from_page">1</span>
+                                                /
+                                                <span id="related_docs_total_page">1</span>
+                                            </p>
+                                        </div>
+
+                                        <!-- Keywords and Related Docs table -->
+                                        <div class="table-responsive search_result_table mt-4">
+                                            <table class="table table-striped keywords_related_docs_table"
+                                                   style="min-height: 200px;" id="keywords_related_docs_table">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Definitions Pane -->
+                    <div id="doc_keywords_def_table_pane" class="tab-pane w-100 fade show float-right" role="tabpanel"
+                         aria-labelledby="doc_keywords_def_tab">
+                        <div class="accordion">
+                            <div class="accordion-item float-right w-100 mt-4">
+                                <h2 class="accordion-header d-block w-100 float-right">
+                                    <button
+                                            class="accordion-button accordin_header text-right float-right d-inline-block w-100 pr-1"
+                                            type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#doc_keywords_def_table_collapse"
+                                            aria-expanded="true" aria-controls="doc_keywords_def_table_collapse">
+                                        <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                        جدول کلیدواژگان و تعاریف در اسناد
+                                    </button>
+                                </h2>
+                                <div id="doc_keywords_def_table_collapse"
+                                     class="accordion-collapse collapse show w-100 float-right">
+                                    <div class="accordion-body bg-light text-right">
+                                        <div class="mt-3">
+                                            <!-- Download Buttons -->
+                                            <button class="btn float-left p-0 px-1 mt-1" id="ExportExcel"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="خروجی اکسل"
+                                                    onclick="KeywordsDefExportExcelFunction()"
+                                                    type="button">
+                                                <i class="far fa-file-excel text-success m-0"
+                                                   style="font-size: 25px;margin: 0px;"></i>
+                                            </button>
+
+                                            <!-- Result Count -->
+                                            <p id="GeneralDefTableCount" dir="rtl"
+                                               class="text-left float-left text-secondary  pl-2 mt-2"></p>
+
+                                            <!-- Page select -->
+                                            <div class="col-md-6 col-12 col-lg-2 float-left">
+                                                <input type="number" disabled="true"
+                                                       onchange="TablePaginationChanged(event)"
+                                                       id="GeneralDefTablePaginationInput" min="1" max="1" value="1"
+                                                       class="form-select text-right float-right"
+                                                       style="direction: rtl;">
+                                            </div>
+
+                                            <!-- Result Pagination -->
+                                            <p id="GeneralDefResultPagination"
+                                               class="text-left text-secondary float-left mt-2">صفحه:
+                                                <span id="def_from_page">1</span>
+                                                /
+                                                <span id="def_total_page">1</span>
+                                            </p>
+                                        </div>
+                                        <!-- Keywords and General Definitions table -->
+                                        <div class="table-responsive search_result_table mt-4">
+                                            <table class="table table-striped doc_keywords_def_table"
+                                                   style="min-height: 200px;" id="doc_keywords_def_table">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Keywords Information Pane -->
+                    <div id="keywords_information_pane" class="tab-pane w-100 fade show float-right" role="tabpanel"
+                         aria-labelledby="keywords_information_tab">
+                        <div class="accordion">
+                            <div class="accordion-item float-right w-100 mt-4">
+                                <h2 class="accordion-header d-block w-100 float-right">
+                                    <button
+                                            class="accordion-button accordin_header text-right float-right d-inline-block w-100 pr-1"
+                                            type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#keywords_information_collapse"
+                                            aria-expanded="true" aria-controls="keywords_information_collapse">
+                                        <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                        جدول اطلاعات کلیدواژگان
+                                    </button>
+                                </h2>
+                                <div id="keywords_information_collapse"
+                                     class="accordion-collapse collapse show w-100 float-right">
+                                    <div class="accordion-body bg-light text-right">
+                                        <div class="mt-3">
+                                            <!-- Result Count -->
+                                            <p id="KeywordsInfoTableCount" dir="rtl"
+                                               class="text-left float-left text-secondary  pl-2 mt-2"></p>
+
+                                            <!-- Page select -->
+                                            <div class="col-md-6 col-12 col-lg-2 float-left">
+                                                <input type="number" disabled="true"
+                                                       onchange="TablePaginationChanged(event)"
+                                                       id="KeywordsInfoTablePaginationInput" min="1" max="1" value="1"
+                                                       class="form-select text-right float-right"
+                                                       style="direction: rtl;">
+                                            </div>
+
+                                            <!-- Result Pagination -->
+                                            <p id="KeywordsInfoResultPagination"
+                                               class="text-left text-secondary float-left mt-2">صفحه:
+                                                <span id="info_from_page">1</span>
+                                                /
+                                                <span id="info_total_page">1</span>
+                                            </p>
+                                        </div>
+
+                                        <!-- Keywords Information table -->
+                                        <div class="table-responsive search_result_table mt-4">
+                                            <table class="table table-striped keywords_info_table"
+                                                   style="min-height: 200px;" id="keywords_info_table">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <!-- Keywords Actors Graph Pane -->
+                    <div id="keywords_actors_graph_pane" class="tab-pane w-100 fade show float-right" role="tabpanel"
+                         aria-labelledby="keywords_actors_graph_tab">
+
+                        <div class="accordion">
+                            <div class="accordion-item float-right w-100 mt-4">
+                                <h2 class="accordion-header d-block w-100 float-right">
+                                    <button
+                                            class="accordion-button accordin_header text-right float-right d-inline-block w-100 pr-1"
+                                            type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#actors_keyword_graph_collapse"
+                                            aria-expanded="true" aria-controls="actors_keyword_graph_collapse">
+                                        <i class="header_icon bi bi-pin-angle-fill p-1"></i>
+
+                                        <!-- گراف کنشگران - کلیدواژگان -->
+                                        گراف <span class="bold" style="color: red">کنشگران</span> - <span class="bold" style="color: blue">کلیدواژگان</span>
+                                    </button>
+                                </h2>
+                                <div id="actors_keyword_graph_collapse"
+                                     class="accordion-collapse collapse show w-100 float-right">
+                                    <div class="accordion-body bg-light text-right">
+                                        <p>                                        (
+                                        صفحه:
+                                        <span id="actors_graph_from_page">1</span>
+                                        /
+                                        <span id="actors_graph_total_page">1</span> )
+                                        </p>
+                                        <div class="row mt-4 w-100 flex-row-reverse  mx-auto pb-5 px-4" dir="rtl">
+
+                                            <div dir="ltr">
+                                                <img style="width: 4%; cursor: pointer"
+                                                     src="../../static/image/neighbourhood.png"
+                                                     onclick="SelectNeighbourhood(graph_object)">
+                                                <img style="width: 3%; cursor: pointer" id="ShowHideImg"
+                                                     src="../../static/image/hide_nodes.png"
+                                                     onclick="ShowHideNode('ShowHideImg')">
+                                            </div>
+
+                                            <select id="ChangeLayout" name="ChangeLayout"
+                                                    onchange="ChangeLayout(graph_object, data_graph, 'ChangeLayout')"
+                                                    class="form-select text-right float-right searchable-select"
+                                                    style="direction: rtl;">
+                                                <option value="grid">مربعی</option>
+                                                <option value="circular"> دایره ای</option>
+                                                <option value="force">ساده</option>
+                                                <option value="dagre">بالا به پایین</option>
+                                                <option value="radial">شعاعی</option>
+                                                <option value="concentric">متحدالمرکز</option>
+                                                <option value="comboForce">خوشه ای</option>
+                                            </select>
+
+                                            <script src="../../static/js/graph/color_picker_handler.js">
+                                            </script>
+
+                                            <div id="actors_keyword_graph_container" class="border mt-1"
+                                                 style="height:500px;">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Modal Container for Definitions Detail  -->
+        <div class="modal fade" id="DefinitionsDetail">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="DefinitionsDetailHeader" class="modal-title"> جزئیات </h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="DefinitionsDetailBody" >
+                        </div>
+                        <div class="table-responsive search_result_table mt-4">
+                            <table class="table table-striped related_docs_modal_table" style="min-height: 200px;" id="related_docs_modal_table">
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Container for Keywords Information  -->
+        <div class="modal fade" id="KewyordsInfo">
+            <div class="modal-dialog modal-fullscreen" >
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="KeywordsInfoHeader" class="modal-title"> جزئیات </h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <!-- <div class="table-responsive search_result_table mt-4">
+                            <table class="table table-striped keywords_info_modal_table" style="min-height: 200px;" id="keywords_info_modal_table">
+                            </table>
+                        </div> -->
+                        <div class="row mt-4 w-100 flex-row-reverse justify-content-around mx-0 px-0">
+
+                            <div id="info_modal_subject_container" chart-height="350px" class="half">
+                            </div>
+
+                            <div id="info_modal_level_container" chart-height="350px" class="half">
+                            </div>
+
+                            <div id="info_modal_year_container" chart-height="350px" class="half">
+                            </div>
+
+                            <div id="info_modal_approval_ref_container" chart-height="350px" class="half">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ChartModal Container -->
+        <!-- <button type="button" id="ChartModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+        data-bs-target="#ChartModal"></button> -->
+        <div class="modal fade" id="ChartModal">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="ChartModalHeader" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div id="ChartModalText" class="modal-body text-justify">
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer flex-row-reverse">
+                        <button id="InfoModalDownloadDocuments" class="btn btn-primary"><i class="fa fa-download"></i> دانلود
+                        اسناد</button>
+                            
+                        <button id="InfoModalExportExcel" class="btn btn-primary"><i class="fa fa-download"></i> خروجی اکسل
+                        </button>
+
+                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button> -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ActorChartModal Container -->
+        <div class="modal fade" id="actors_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="actor_modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+
+                    <div class="bg-light modal-body text-justify">
+                        <div class="highlight_options mt-0 p-0 float-left" style="z-index: 13;">
+                            <button onclick="showOtherActors()" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title="نمایش سایر کنشگران" class="btn border float-left m-0  px-1"><i
+                                    style="font-size: 24px;" class="bi text-primary bi-people-fill"></i></button>
+                            <!-- <button class="btn float-left m-0  px-1"><i style="font-size: 24px;" class="bi text-success bi-hourglass-split"></i></button> -->
+                        </div>
+                        <br>
+                        <div id="actor_modal_body" class="bg-light text-justify">
+
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div id="actor_modal_footer" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Container for Keyword Actors Graph  -->
+        <div class="modal fade" id="KeywordActorsGraph">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="KeywordActorsGraphHeader" class="modal-title"> </h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="KeywordActorsGraphBody" >
+                            <div class="row mt-4 w-100 flex-row-reverse  mx-auto pb-5 px-4" dir="rtl">
+
+                                <div dir="ltr">
+                                    <img style="width: 4%; cursor: pointer" src="../../static/image/neighbourhood.png" onclick="SelectNeighbourhood(modal_graph_object)">
+                                    <img style="width: 3%; cursor: pointer" id="ModalShowHideImg" src="../../static/image/hide_nodes.png" onclick="ShowHideNode('ModalShowHideImg')">
+                                </div>
+            
+                                <select id="ChangeModalGraphLayout" name="ChangeModalGraphLayout" onchange="ChangeLayout(modal_graph_object, modal_data_graph, 'ChangeModalGraphLayout')" class="form-select text-right float-right searchable-select" style="direction: rtl;">
+                                    <option value="grid">مربعی</option>
+                                    <option value="circular"> دایره ای </option>
+                                    <option value="force">ساده</option>
+                                    <option value="dagre">بالا به پایین</option>
+                                    <option value="radial">شعاعی</option>
+                                    <option value="concentric">متحدالمرکز</option>
+                                    <option value="comboForce">خوشه ای</option>
+                                </select>
+            
+                                <!-- <script src="../../static/js/graph/color_picker_handler.js">
+                                </script> -->
+            
+                                <div id="KeywordActorsGraphContainer" class="border mt-1" style="height:500px;">
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+            <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div dir="rtl" class="toast-header">
+                    <img width="25px;" src="../../static/icons/logo/logo1.png" class="rounded mx-0" alt="...">
+                    <strong dir="rtl" class="w-100 mr-2 mt-1">هوش‌یار</strong>
+                    <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    <i style="position: relative; top: -7px; font-size: 18px;"
+                        class="bi bi-exclamation-triangle-fill  text-warning"></i>
+                    <span id="toast_message">
+                        موضوعی انتخاب نشده‌است.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollbar -->
+        <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+            <i class="far fa-caret-square-up"></i>
+        </button>
+    </body>
+
+    
+    <!-- Blocking UI  -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+    <script>
+        initSearchableSelects();
+
+        // init()
+        let SearchResultValue = []
+        let RelatedDocs = {}
+        let words_dics = []
+        let info_dics = []
+        // let ActorsChartDic = {}
+        let actors_dict = {}
+        let actors_list = []
+        let graph_object;
+        let data_graph;
+        let show_hide_state = "show"
+        let modal_data_graph;
+        let modal_graph_object;
+        let modal_show_hide_state = "show"
+        MAX_RESULT_WINDOW = 5000;
+        SEARCH_RESULT_SIZE = 500;
+        related_dox_table_idx = 1;
+        info_table_idx = 1;
+        let pagination_input_ids = ["RelatedDocsTablePaginationInput", "GeneralDefTablePaginationInput", "KeywordsInfoTablePaginationInput"]
+
+        /* Optianal keywords need to be highlighted */
+        // const optional_keywords = ['به‌منظور', 'نسبت به']
+        // let optional_after_terms_count = {}
+        // optional_after_terms_count['به‌منظور'] = 2
+        // optional_after_terms_count['نسبت به'] = 2
+
+        /* Global Constants for highlighting*/ 
+        // const motevalian_punctuations = ['.', '،', 'ـ', '-', ':'];
+        // const hamkaran_punctuations = ['،', ')', ':']
+        // const motevali_keywords = ['موظف است', 'مکلف است', 'مکلف‌اند', 'موظف‌اند', 'موظفند', 'مکلفند', 'موظف به', 'مکلف به'];
+        // const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+        // const salahiat_keywords = ['مختار است', 'اختیار دارد', 'می‌تواند', 'می تواند', 'میتواند', 'می­تواند', 'می‏تواند', 'مجاز است'];
+        // const deadline_pattern_keywords = ['ظرف', 'ظرف مدت', 'ظرف مهلت', 'طی', 'طی مدت', 'طی مهلت', 'حداکثر', 'فواصل زمانی', 'هر']
+        // const time_categories = ['روز', 'هفته', 'ماه', 'سال']
+        // const numbers_dict = {
+        //     "یک": {
+        //         'value': 1,
+        //     },
+        //     "دو": {
+        //         'value': 2,
+        //     },
+        //     "سه": {
+        //         'value': 3,
+        //     },
+        //     "چهار": {
+        //         'value': 4,
+        //     },
+        //     "پنج": {
+        //         'value': 5,
+        //     },
+        //     "شش": {
+        //         'value': 6,
+        //     },
+        //     "هفت": {
+        //         'value': 7,
+        //     },
+        //     "هشت": {
+        //         'value': 8,
+        //     },
+        //     "نه": {
+        //         'value': 9,
+        //     },
+        //     "ده": {
+        //         'value': 10,
+        //     }
+        // }
+
+        
+        async function init() {
+            // await get_data()
+            // await create_chart()
+            // await create_table()
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+            
+        }
+
+        
+        function TablePaginationChanged(event) {
+
+            input_id = event.target.id
+            curr_page_number = parseInt(event.target.value);
+            max_page_number = parseInt(document.getElementById(input_id).max);
+            min_page_number = parseInt(document.getElementById(input_id).min);
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const in_id = pagination_input_ids[i];
+                console.log("************")
+                console.log(curr_page_number)
+                document.getElementById(in_id).value = curr_page_number;
+                console.log(document.getElementById(in_id).value)
+                // max_page_number = parseInt(document.getElementById(in_id).max);
+                // min_page_number = parseInt(document.getElementById(in_id).min);
+            }
+
+
+            if (curr_page_number > max_page_number) {
+                // document.getElementById(input_id).value = max_page_number
+                for (let i = 0; i < pagination_input_ids.length; i++) {
+                    const in_id = pagination_input_ids[i];
+                    document.getElementById(in_id).value = max_page_number
+                }
+            }
+
+            else if (curr_page_number < min_page_number) {
+                // document.getElementById(input_id).value = min_page_number
+                for (let i = 0; i < pagination_input_ids.length; i++) {
+                    const in_id = pagination_input_ids[i];
+                    document.getElementById(in_id).value = min_page_number
+                }
+            }
+
+            
+
+            ShowResultPagination();
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+
+        }
+
+
+        // async function RelatedDocsTablePaginationChanged(event) {
+        //     input_id = event.target.id
+
+        //     curr_page_number = parseInt(event.target.value);
+        //     max_page_number = parseInt(document.getElementById(input_id).max);
+        //     min_page_number = parseInt(document.getElementById(input_id).min);
+
+        //     if (curr_page_number > max_page_number) {
+        //         document.getElementById(input_id).value = max_page_number
+        //     }
+
+        //     else if (curr_page_number < min_page_number) {
+        //         document.getElementById(input_id).value = min_page_number
+        //     }
+
+        //     // ShowResult();
+
+        //     const country_id = document.getElementById('country').value;
+        //     const type = document.getElementById('KeyWordTypeSelect').value;
+        //     let search_text = document.getElementById("SearchBox").value.trim(); // if len < 0 then search_text = "empty"
+        //     curr_page = curr_page_number // 1
+        //     request_link = 'http://' + location.host + "/GetGeneralDefinitionsByCountry/" + country_id + "/" + type + "/" + curr_page + "/" + text + "/";
+        //     response = await fetch(request_link).then(response => response.json());
+        //     RelatedDocs = response["related_docs"]
+        //     startBlockUI('keywords_related_docs_table')
+        //     await LoadKeywordsRelatedDocsTable(RelatedDocs);
+        //     stopBlockUI('keywords_related_docs_table', 'جدول اسناد متناظر');
+        // }
+
+        async function ShowResult() {
+            clearPrevResults(container_id_list);
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const input_id = pagination_input_ids[i];
+                document.getElementById(input_id).max = 1;
+                document.getElementById(input_id).value = 1;
+            }
+            related_dox_table_idx = 1;
+            info_table_idx = 1;
+            let search_text = document.getElementById("SearchBox").value;
+            if(! (search_text.trim().length>0)){
+                alert("لطفا کلیدواژه مورد نظر را وارد کنید!");
+                return -1;
+            }
+            const country_id = document.getElementById('country').value;
+            const type = document.getElementById('KeyWordTypeSelect').value;
+            let curr_page = document.getElementById(pagination_input_ids[0]).value
+            if (search_text.trim().length > 0) {
+                search_text = search_text.trim();
+                await GetData(country_id, type, search_text, curr_page);
+            } else {
+                await GetData(country_id, type, "empty", curr_page);
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نتایج جست و جو"
+            let country_name = $("#country option:selected").text();
+            let keyword_type = $("#KeyWordTypeSelect option:selected").text();
+            let searchText = $("#SearchBox option:selected").text();
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('keyword_type', keyword_type);
+            form_data.append('searchText', searchText);
+            UserLog(form_data)
+
+           
+        
+        }
+
+        async function ShowResultPagination() {
+            clearPrevResults(container_id_list);
+            let search_text = document.getElementById("SearchBox").value;
+            if(! (search_text.trim().length>0)){
+                alert("لطفا کلیدواژه مورد نظر را وارد کنید!");
+                return -1;
+            }
+            const country_id = document.getElementById('country').value;
+            const type = document.getElementById('KeyWordTypeSelect').value;
+            let curr_page = document.getElementById(pagination_input_ids[0]).value
+            console.log("------")
+            console.log(curr_page)
+            if (search_text.trim().length > 0) {
+                search_text = search_text.trim();
+                await GetData(country_id, type, search_text, curr_page);
+            } else {
+                await GetData(country_id, type, "empty", curr_page);
+            }
+
+            
+        }
+
+        function CountryChanged() {
+            clearPrevResults(container_id_list);
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const input_id = pagination_input_ids[i];
+                document.getElementById(input_id).max = 1;
+                document.getElementById(input_id).value = 1;
+            }
+
+             //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+        }
+
+        function KeywordTypeChanged() {
+            clearPrevResults(container_id_list);
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const input_id = pagination_input_ids[i];
+                document.getElementById(input_id).max = 1;
+                document.getElementById(input_id).value = 1;
+            }
+        }
+
+        container_id_list = ['doc_keywords_def_table', 'GeneralDefTableCount', 'keywords_related_docs_table', 
+            'RelatedDocsTableCount', 'related_docs_modal_table', 'keywords_info_table', 'KeywordsInfoTableCount', 'KeywordActorsGraphContainer',
+            'SearchResultLable', 'actors_keyword_graph_container'] // tables and chart containers
+
+        function clearPrevResults(container_id_list) {
+            for (let container_id of container_id_list) {
+                document.getElementById(container_id).innerHTML = "";
+            }
+            words_dics = []
+            info_dics = []
+            RelatedDocs = {}
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const input_id = pagination_input_ids[i];
+                document.getElementById(input_id).disabled = true;
+            }
+        }
+        
+        async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = "127.0.0.0"
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+        }
+
+        async function GetData(country_id, type, text, curr_page) {
+            // startFullPageBlockUI();
+            startBlockUI('doc_keywords_def_table')
+            startBlockUI('keywords_related_docs_table')
+            startBlockUI('keywords_info_table')
+            startBlockUI('actors_keyword_graph_container')
+            request_link = 'http://' + location.host + "/GetGeneralDefinitionsByCountry/" + country_id + "/" + type + "/" + curr_page + "/" + text + "/";
+            response = await fetch(request_link).then(response => response.json());
+            GeneralDefs = response["result"]
+            RelatedDocs = response["related_docs"]
+            let Nodes_data = response["Nodes_data"]
+            let Edges_data = response["Edges_data"]
+            curr_page = response["curr_page"] 
+            let total_hits = response["total_hits"]
+            update_table_pagination_input(curr_page, total_hits)
+            document.getElementById("SearchResultLable").innerText = "تعداد کل نتایج: " + total_hits + " کلیدواژه"
+            // ActorsChartDic = response["actors_chart_dic"]
+            await LoadDocKeywordsDefTable(GeneralDefs, curr_page);
+            stopBlockUI('doc_keywords_def_table', 'جدول کلیدواژگان و تعاریف');
+            await LoadKeywordsRelatedDocsTable(RelatedDocs);
+            stopBlockUI('keywords_related_docs_table', 'جدول اسناد متناظر');
+            await LoadKeywordsInfoTable(RelatedDocs, country_id, type);
+            stopBlockUI('keywords_info_table', 'جدول اطلاعات کلیدواژگان');
+            await ShowGraph(Nodes_data, Edges_data);
+            stopBlockUI('actors_keyword_graph_container', 'گراف کنشگران');
+            // stopFullPageBlockUI('نتایج جست‌وجو');
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const input_id = pagination_input_ids[i];
+                document.getElementById(input_id).disabled = false;
+            }
+            
+        }
+
+        async function update_table_pagination_input(curr_page, total_hits) {
+
+            page_count = 0;
+
+            if (total_hits < SEARCH_RESULT_SIZE) {
+                page_count = 1
+
+            } else if (total_hits < MAX_RESULT_WINDOW) {
+                page_count = Math.ceil(total_hits / SEARCH_RESULT_SIZE)
+
+            } else if (total_hits >= MAX_RESULT_WINDOW) {
+                page_count = MAX_RESULT_WINDOW / SEARCH_RESULT_SIZE
+            }
+
+            for (let i = 0; i < pagination_input_ids.length; i++) {
+                const input_id = pagination_input_ids[i];
+                document.getElementById(input_id).min = 1;
+                document.getElementById(input_id).max = page_count;
+                document.getElementById(input_id).value = curr_page;
+            }
+
+            document.getElementById("related_docs_from_page").innerText = curr_page;
+            document.getElementById("related_docs_total_page").innerText = page_count;
+            document.getElementById("def_from_page").innerText = curr_page;
+            document.getElementById("def_total_page").innerText = page_count;
+            document.getElementById("info_from_page").innerText = curr_page;
+            document.getElementById("info_total_page").innerText = page_count;
+            document.getElementById("actors_graph_from_page").innerText = curr_page;
+            document.getElementById("actors_graph_total_page").innerText = page_count;
+
+        }
+
+        async function LoadDocKeywordsDefTable(document_general_definitions, curr_page) {
+            // document.getElementById("GeneralDefTableCount").innerText = (document_general_definitions.length).toString() + " واژه یافت شد.";
+            let document_result = []
+            let i = (curr_page - 1) * SEARCH_RESULT_SIZE + 1;
+            for (let index = 0; index < document_general_definitions.length; index++) {
+                const element = document_general_definitions[index];
+                const document_link = 'http://' + location.host + "/information/?id=" + element["document_id"]
+                const doc_name = '<a target="blank" href="' + document_link + '">' + element["document_name"] + "</a>"
+                const row = {
+                    "id": i, 
+                    "word": element["word"],
+                    'definition': element["definition"],
+                    // 'definition': element["definition"].substring(0,200)+"...",
+                    "type": element["is_abbreviation"] ? "اختصار" : "تعریف",
+                    'document': doc_name,
+                }
+                document_result.push(row)
+                i += 1
+            }
+
+            $('#doc_keywords_def_table').empty();
+            $('.doc_keywords_def_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "واژه‌ای یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "7%"
+                    }
+                }, {
+                    "name": "word",
+                    "title": "کلیدواژه",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "definition",
+                    "title": "تعریف",
+                    "style": {
+                        "width": "47%"
+                    }
+                },{
+                    "name": "type",
+                    "title": "نوع",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "document",
+                    "title": "سند متناظر",
+                    "style": {
+                        "width": "26%"
+                    }
+                }
+                ],
+                "rows": document_result
+            });
+        
+        }
+
+        async function KeywordsDefExportExcelFunction() {
+            var csv = "";
+            sep = ","
+            let Csv = "ردیف" + sep + "واژه" + sep + "تعریف" + sep + "نوع" + sep + "سند متناظر" + "\n";
+            for (let i = 0; i < SearchResultValue.length; i++) {
+                const row = SearchResultValue[i];
+                Csv += ( (i + 1) + sep + row["word"] + sep + encodeURIComponent(row["definition"]) + sep + 
+                (row["is_abbreviation"] ? "اختصار" : "تعریف") + sep + encodeURIComponent(row["document_name"]) + "\n")
+            }
+
+            let save_file_name = "واژگان"
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + decodeURI(Csv);
+            // let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click()
+        }
+
+        async function LoadKeywordsRelatedDocsTable(keywords_related_documents) {
+            // document.getElementById("RelatedDocsTableCount").innerText = (Object.keys(keywords_related_documents).length).toString() + " واژه یافت شد.";
+            let document_result = []
+            // let words_dics = []
+            // let index = related_dox_table_idx; // = 1
+            for (var word in keywords_related_documents) {
+                var info_array = keywords_related_documents[word];
+                let docs = ""
+                let detail_dic = {}
+                for (let i = 0; i < info_array.length; i++) {
+                    const json_element = info_array[i];
+                    const document_link = 'http://' + location.host + "/information/?id=" + json_element["document_id"]
+                    const doc_name = '<a target="blank" href="' + document_link + '">' + (i + 1) + ". " + json_element["document_name"] + " (" + (json_element["is_abbreviation"] ? "اختصار" : "تعریف") + ")" + "</a>"
+                    const def_in_doc = json_element["definition"]
+                    docs += doc_name // + "<br>"
+                    detail_dic['<a target="blank" href="' + document_link + '">' + json_element["document_name"] + "</a>"] = {
+                        "definition": def_in_doc,
+                        // "definition": def_in_doc.substring(0,200)+"...",
+                        "type": json_element["is_abbreviation"] ? "اختصار" : "تعریف"
+                    }
+                }
+                words_dics.push(detail_dic)
+                let details_btn =  '<button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" ' + `onclick="ShowDefinitionsDetail('${words_dics.length - 1}','${word}')"` + '>مشاهده</button>'
+                const row = {
+                    "id": related_dox_table_idx , 
+                    "word": word ,
+                    "related_documents" : docs,
+                    "details" : details_btn,
+                }
+                document_result.push(row)
+                related_dox_table_idx++;
+            }
+            $('#keywords_related_docs_table').empty();
+            $('.keywords_related_docs_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "واژه‌ای یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "7%"
+                    }
+                }, {
+                    "name": "word",
+                    "title": "کلیدواژه",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "related_documents",
+                    "title": "اسناد متناظر",
+                    "style": {
+                        "width": "75%"
+                    }
+                } , {
+                    "name": "details",
+                    "title": "جزئیات",
+                    "style": {
+                        "width": "8%"
+                    }
+                }
+                ],
+                "rows": document_result
+            });
+        }
+
+        async function ShowDefinitionsDetail(dic_index, keyword) {
+            let detail_dic = words_dics[dic_index]
+            document.getElementById('DefinitionsDetailHeader').innerHTML = "";
+            document.getElementById('DefinitionsDetailBody').innerHTML = "";
+            $('#DefinitionsDetail').modal('show');
+
+            const header = 'تعریف کلیدواژه ' + `<span class="bold" style="color: red">${keyword}</span>` + ' در اسناد متناظر'
+            // let text = ''
+            // for (var doc_name in detail_dic) {
+            //     text += `<p style="direction: rtl" class="float-right"> ${doc_name} : ${detail_dic[doc_name]}</p>`
+            // }
+            // document.getElementById('DefinitionsDetailHeader').innerText += header
+            document.getElementById('DefinitionsDetailHeader').innerHTML += header
+            // document.getElementById('DefinitionsDetailBody').innerHTML += text
+            // document.getElementById('DefinitionsDetailBody').style = {
+            //     "direction": "rtl",
+            //     "text-align": "right",
+            // }
+            let document_result = []
+            for (var doc_name in detail_dic) {
+                const definition = detail_dic[doc_name]["definition"]
+                const type = detail_dic[doc_name]["type"]
+                const row = {
+                    "id": document_result.length + 1, 
+                    'definition': definition,
+                    // 'definition': definition.substring(0,200)+"...",
+                    "type": type,
+                    'document': doc_name,
+                }
+                document_result.push(row)
+            }
+            $('#related_docs_modal_table').empty();
+            $('.related_docs_modal_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "واژه‌ای یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "7%"
+                    }
+                }, {
+                    "name": "definition",
+                    "title": "تعریف",
+                    "style": {
+                        "width": "52%"
+                    }
+                },{
+                    "name": "type",
+                    "title": "نوع",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "document",
+                    "title": "سند متناظر",
+                    "style": {
+                        "width": "31%"
+                    }
+                }
+                ],
+                "rows": document_result
+            });
+        }
+
+        async function LoadKeywordsInfoTable(keywords_related_documents,  country_id, type) {
+            // document.getElementById("KeywordsInfoTableCount").innerText = (Object.keys(keywords_related_documents).length).toString() + " واژه یافت شد.";
+            let document_result = []
+            // let index = info_table_idx; // = 1
+            for (var word in keywords_related_documents) {
+                var info_array = keywords_related_documents[word];
+                let approval_year_data = {}
+                let subject_data = {}
+                let approval_references_data = {}
+                let level_data = {}
+                for (let i = 0; i < info_array.length; i++) {
+                    const json_element = info_array[i];
+                    const doc_approval_year = json_element["document_year"]
+                    const doc_subject = json_element["document_subject"]
+                    const doc_approval_ref = json_element["document_approval_reference"]
+                    const doc_level = json_element["document_level"]
+                    if (!(doc_approval_year in approval_year_data)) {
+                        approval_year_data[doc_approval_year] = {
+                            "name": doc_approval_year, "count": 1
+                        }
+                    }
+                    else {
+                        approval_year_data[doc_approval_year]["count"] += 1
+                    }
+
+                    if (!(doc_subject in subject_data)) {
+                        subject_data[doc_subject] = { "name": doc_subject, "count": 1 }
+                    }
+                    else {
+                        subject_data[doc_subject]["count"] += 1
+                    }
+
+                    if (!(doc_approval_ref in approval_references_data)) {
+                        approval_references_data[doc_approval_ref] = {
+                            "name": doc_approval_ref, "count": 1
+                        }
+                    }
+                    else {
+                        approval_references_data[doc_approval_ref]["count"] += 1
+                    }
+
+                    if (!(doc_level in level_data)) {
+                        level_data[doc_level] = { "name": doc_level, "count": 1 }
+                    }
+                    else {
+                        level_data[doc_level]["count"] += 1
+                    }
+
+                }
+                info_dics.push({
+                    "word": word,
+                    "approval_year": approval_year_data,
+                    "subject": subject_data,
+                    "approval_references": approval_references_data,
+                    "level": level_data
+                })
+                let info_btn =  '<button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" ' + `onclick="ShowKeywordsInformation('${info_dics.length - 1}')"` + '>مشاهده</button>'
+                let actors_graph_btn =  '<button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" ' + `onclick="ShowKeywordActorsGraph('${word}','${country_id}','${type}')"` + '>باز شدن</button>'
+                const row = {
+                    "id": info_table_idx , 
+                    "word": word ,
+                    "information" : info_btn,
+                    "actors_graph" : actors_graph_btn
+                }
+                document_result.push(row)
+                info_table_idx++;
+            }
+            
+
+            $('#keywords_info_table').empty();
+            $('.keywords_info_table').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "واژه‌ای یافت نشد.",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "10%"
+                    }
+                }, {
+                    "name": "word",
+                    "title": "کلیدواژه",
+                    "style": {
+                        "width": "50%"
+                    }
+                }, {
+                    "name": "information",
+                    "title": "داشبورد آماری",
+                    "style": {
+                        "width": "20%"
+                    }
+                }, {
+                    "name": "actors_graph",
+                    "title": "گراف کنشگران",
+                    "style": {
+                        "width": "20%"
+                    }
+                }
+                ],
+                "rows": document_result
+            });
+        }
+
+        async function ShowKeywordsInformation(info_dics_index) {
+            let info_dic = info_dics[info_dics_index]
+            const word = info_dic["word"]
+            const approval_years_dic = info_dic["approval_year"]
+            const subject_dic = info_dic["subject"]
+            const approval_references_dic = info_dic["approval_references"]
+            const level_dic = info_dic["level"]
+            
+            document.getElementById('KeywordsInfoHeader').innerHTML = "";
+            // document.getElementById('KeywordsInfoBody').innerHTML = "";
+            $('#KewyordsInfo').modal('show');
+
+            const header = 'داشبورد آماری کلیدواژه ' + `<span class="bold" style="color: red">${word}</span>` + ' در اسناد متناظر'
+            document.getElementById('KeywordsInfoHeader').innerHTML += header
+            // document.getElementById('KeywordsInfoHeader').innerText += header
+            documents_information_result = RelatedDocs[word]
+            showChartData(approval_years_dic, "info_modal_year_container", documents_information_result, true, word, "سال تصویب", "توزیع اسناد براساس سال تصویب")
+            showChartData(subject_dic, "info_modal_subject_container", documents_information_result, false, word, "موضوع", "توزیع موضوعی اسناد")
+            showChartData(level_dic, "info_modal_level_container", documents_information_result, false, word, "سطح", "توزیع اسناد براساس سطح اسناد")
+            showChartData(approval_references_dic, "info_modal_approval_ref_container", documents_information_result, false, word, "مرجع تصویب", "توزیع اسناد براساس مرجع تصویب")
+            
+            // actors_chart_data = ActorsChartDic[word]
+
+            // let entropy_dict = actors_chart_data['entropy_dict'];
+            // let normal_entropy_dict = actors_chart_data['normal_entropy_dict'];
+            // let mean_dict = actors_chart_data['mean_dict'];
+            // let std_dict = actors_chart_data['std_dict'];
+            // let parallelism_dict = actors_chart_data['parallelism_dict'];
+            // document.getElementById('info_modal_chart_parallelism').innerHTML = '<span class="text-secondary bold">' + "احتمال موازی کاری: " + '</span>'
+            //     + '<span class="bold" style="color: purple">' + parallelism_dict["sum_columns"] + ' </span>'
+            //     + '(<span  style="color: rgb(0, 123, 255)">' + parallelism_dict["column_1"] + '، </span>'
+            //     + '<span  style="color: rgb(40, 167, 69)">' + parallelism_dict["column_2"] + '، </span>'
+            //     + '<span  style="color: rgb(255, 193, 7)">' + parallelism_dict["column_3"] + '</span>)'
+
+            // document.getElementById('info_modal_chart_entropy').innerHTML = '<span class="text-secondary">' + "آنتروپی: " + '</span>'
+            //     + '<span style="color: purple">' + entropy_dict["sum_columns"] + ' </span>'
+            //     + '(<span  style="color: rgb(0, 123, 255)">' + entropy_dict["column_1"] + '، </span>'
+            //     + '<span  style="color: rgb(40, 167, 69)">' + entropy_dict["column_2"] + '، </span>'
+            //     + '<span  style="color: rgb(255, 193, 7)">' + entropy_dict["column_3"] + '</span>)'
+            //     + '<span class="text-secondary">' + "، آنتروپی نرمال: " + '</span>'
+            //     + '<span style="color: purple">' + normal_entropy_dict["sum_columns"] + ' </span>'
+            //     + '(<span  style="color: rgb(0, 123, 255)">' + normal_entropy_dict['column_1'] + '، </span>'
+            //     + '<span  style="color: rgb(40, 167, 69)">' + normal_entropy_dict['column_2'] + '، </span>'
+            //     + '<span  style="color:rgb(255, 193, 7)">' + normal_entropy_dict['column_3'] + '</span>)';
+            
+            // document.getElementById('info_modal_chart_stats').innerHTML = '<span class="text-secondary">' + "میانگین: " + '</span>'
+            //     + '<span style="color: purple">' + mean_dict["sum_columns"] + ' </span>'
+            //     + '(<span  style="color: rgb(0, 123, 255)">' + mean_dict["column_1"] + '، </span>'
+            //     + '<span  style="color: rgb(40, 167, 69)">' + mean_dict["column_2"] + '، </span>'
+            //     + '<span  style="color: rgb(255, 193, 7)">' + mean_dict["column_3"] + '</span>)'
+            //     + '<span class="text-secondary">' + "، انحراف معیار: " + '</span>'
+            //     + '<span style="color: purple">' + std_dict["sum_columns"] + ' </span>'
+            //     + '(<span  style="color: rgb(0, 123, 255)">' + std_dict['column_1'] + '، </span>'
+            //     + '<span  style="color: rgb(40, 167, 69)">' + std_dict['column_2'] + '، </span>'
+            //     + '<span  style="color:rgb(255, 193, 7)">' + std_dict['column_3'] + '</span>)';
+
+            // await showActorsChart('info_modal_actors_chart_container', actors_chart_data['actors_chart_data'], document.getElementById('country').value, word)
+            
+            
+            // let text = ''
+            // document.getElementById('KeywordsInfoBody').innerHTML += text
+            // document.getElementById('KeywordsInfoBody').style = {
+            //     "direction": "rtl",
+            //     "text-align": "right",
+            // }
+        }
+
+        function showChartData(data, container, documents_information_result, keySort, word, xAxisTitle, title) {
+            let chart_data = []
+            for (const [key, value] of Object.entries(data)) {
+                chart_data.push([value["name"], value["count"]])
+            }
+            showChart(chart_data, container, documents_information_result, keySort, word, xAxisTitle, title)
+        }
+
+        function showChart(data, container, documents_information_result, sortKeys, word, xAxisTitle, title) {
+
+            const options = {
+                data,
+                sortKeys,
+                xAxisTitle,
+                title,
+                yAxisTitle: "تعداد سند",
+                onClick: async function (event, data) {
+            const click_tag = event.domTarget.tag;
+            const index = click_tag["index"]
+            const text = data[index][0];
+            let filtered_result = []
+            let header = ""
+
+            let save_file_name = "کلیدواژه" + " " + document.getElementById("SearchBox").value;
+            let country_list = document.querySelector('#country');
+            let country_name = country_list.options[country_list.selectedIndex].text
+
+            if (container === "info_modal_subject_container") {
+                filtered_result = documents_information_result.filter(function (row) {
+                    if (row['document_subject'] === text)
+                        return row
+                });
+                // header = "موضوع: " + text
+                header = 'موضوع اسناد کلیدواژه ' + `<span class="bold" style="color: red">${word}</span>` + ': ' + text
+                save_file_name += " (مجموعه سند {1} و موضوع {2})".replace("1", country_name).replace("2", text)
+            }
+
+            else if (container === "info_modal_approval_ref_container") {
+                filtered_result = documents_information_result.filter(function (row) {
+                    if (row["document_approval_reference"] === text)
+                        return row
+                });
+                header = 'مرجع تصویب اسناد کلیدواژه ' + `<span class="bold" style="color: red">${word}</span>` + ': ' + text
+                save_file_name += " (مجموعه سند {1} و مرجع تصویب {2})".replace("1", country_name).replace("2", text)
+            }
+
+            else if (container === "info_modal_level_container") {
+                filtered_result = documents_information_result.filter(function (row) {
+                    if (row["document_level"] === text)
+                        return row
+                });
+                header = 'سطح سند اسناد کلیدواژه ' + `<span class="bold" style="color: red">${word}</span>` + ': ' + text
+                save_file_name += " (مجموعه سند {1} و سطح سند {2})".replace("1", country_name).replace("2", text)
+            }
+
+            else if (container === "info_modal_year_container") {
+                filtered_result = documents_information_result.filter(function (row) {
+                    if (row["document_year"] === text.toString() || (text.toString() === row['document_year']))
+                        return row
+                });
+                header = 'سال تصویب اسناد کلیدواژه ' + `<span class="bold" style="color: red">${word}</span>` + ': ' + text
+                persian_text = text
+                if (text != "نامشخص") {
+                    persian_text = new Number(text).toLocaleString('fa-ir')
+                }
+                save_file_name += " (مجموعه سند {1} و سال تصویب {2})".replace("1", country_name).replace("2",persian_text )
+            }
+
+            // document.getElementById("ChartModalHeader").innerText = header
+            document.getElementById("ChartModalHeader").innerHTML = header
+            let filtered_result_tag = ""
+            let list_of_docId = ""
+            for (const doc of filtered_result) {
+                const link = 'http://' + location.host + "/information/?id=" + doc["document_id"]
+                let tag = "<li class='mt-3' id=" + doc["document_id"] + "><a href='" + link + "'>" + doc["document_name"] + "</a></li>"
+                filtered_result_tag += tag
+                list_of_docId += doc["document_id"] + "_"
+            }
+            $('#ChartModal').modal('show');
+
+            filtered_result_tag = "<ol start='1'>" + filtered_result_tag + "</ol>"
+            document.getElementById("ChartModalText").innerHTML = filtered_result_tag
+
+            /* download file creation */
+            document.getElementById("InfoModalDownloadDocuments").onclick = function () {
+                downloadFiles(filtered_result, save_file_name);
+            };
+
+            /* export into excel files */
+            document.getElementById("InfoModalExportExcel").onclick = function ExportExcelFunction() {
+                var csv = "";
+
+                sep = ","
+                let Csv = "نام سند" + sep + "سطح سند" + sep +
+                    "موضوع سند" + sep + "مرجع تصویب" + sep + "سال تصویب" + "\n"
+                for (const document of filtered_result) {
+                    Csv += document["document_name"] + sep + document["document_level"] + sep + document["document_subject"] + sep +
+                        + document["document_approval_reference"] + sep + document["document_year"] + "\n"
+                }
+
+                let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+                var link = document.createElement("a");
+                link.setAttribute("href", csvContent);
+                link.setAttribute("download", save_file_name + ".csv");
+                document.body.appendChild(link);
+                link.click()
+            };
+            // $("#ChartModalBtn").click();
+            // $('#KewyordsInfo').modal('show');
+
+        }
+            };
+            if (container === "info_modal_subject_container") {
+                newDoughnutChart(container, options);
+            }
+            else {
+                newBarChart(container, options)
+            }
+        }
+        
+        async function showActorsChart(chart_container, chart_data, country_id, preprocessed_keywords_text) {
+
+            /* Get Actors Dict */
+            let request_link = 'http://' + location.host + "/GetActorsDict/";
+            let response = await fetch(request_link).then(response => response.json());
+            actors_dict = response['actorsDict']
+
+            /* Get Actors List */
+            request_link = 'http://' + location.host + "/GetActorsList/";
+            response = await fetch(request_link).then(response => response.json());
+            actors_list = response["actorsList"];
+
+            if (!preprocessed_keywords_text || preprocessed_keywords_text == '') {
+                preprocessed_keywords_text = 'empty'
+            } else {
+                // preprocessed_keywords_text = preprocessed_keywords_text.replace(' ', ',')
+                // preprocessed_keywords_text = preprocessed_keywords_text + ":"
+                // preprocessed_keywords_text = ":" + preprocessed_keywords_text
+                // preprocessed_keywords_text = ":"
+            }
+            document.getElementById(chart_container).innerHTML = ""
+            // create a data set
+            var data = anychart.data.set(chart_data);
+
+            // map the data
+            var salahiat_series_data = data.mapAs({ x: 0, value: 3 });
+            var hamkaran_series_data = data.mapAs({ x: 0, value: 2 });
+            var motevalian_series_data = data.mapAs({ x: 0, value: 1 });
+
+            // create a chart
+            let chart = anychart.column();
+
+            chart
+                .animation(true)
+                .padding([10, 60, 10, 0])
+
+            // x axix labels font setting
+            let xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            let yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            let xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            let yAxis = chart.yAxis();
+            yAxis.title("تعداد پاراگراف");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            yAxis.title().height(40);
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+            // tooltip content font setting
+            let tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            let title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            // set the container id
+            chart.container(chart_container);
+
+            // create the second series, set the data and name
+            let salahiat_series = chart.column(salahiat_series_data);
+            salahiat_series.normal().stroke("#28a745", 0);
+            salahiat_series.normal().fill("#ffc107");
+            salahiat_series.name("دارای صلاحیت اختیاری");
+
+            // create the second series, set the data and name
+            let hamkaran_series = chart.column(hamkaran_series_data);
+            hamkaran_series.normal().stroke("#28a745", 0);
+            hamkaran_series.normal().fill("#28a745");
+            hamkaran_series.name("همکار");
+
+            // create the first series, set the data and name
+            let motevalian_series = chart.column(motevalian_series_data);
+            // configure the visual settings of the first series
+            motevalian_series.normal().fill("#007bff");
+            motevalian_series.normal().stroke("#28a745", 0);
+            motevalian_series.name("متولی اجرا");
+
+            // enable the legend
+            chart.legend(true);
+
+            var legend = chart.legend();
+            legend.fontFamily('vazir')
+
+            // set position mode
+            legend.positionMode("outside");
+            // set the position of the legend
+            legend.position("top");
+            // set the alignment of the legend
+            legend.align("center");
+
+            legend.itemsLayout("horizontalExpandable");
+            // initiate drawing the chart
+            chart.draw();
+
+            chart.listen("mouseOver", function(e){
+              document.body.style.cursor = "pointer";
+            });
+            chart.listen("mouseOut", function(e){
+              document.body.style.cursor = "auto";
+            });
+
+            // motevalian columns
+            // ###########??????????????? preprocessed_keywords_text += ":"
+            motevalian_series.listen('click', async function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'متولی اجرا';
+                showColumnParagraphs_Modal(country_id, actor_name, actor_role_name, preprocessed_keywords_text)
+            });
+
+            // hamkaran columns
+            hamkaran_series.listen('click', function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'همکار';
+                showColumnParagraphs_Modal(country_id, actor_name, actor_role_name, preprocessed_keywords_text)
+            });
+
+            // salahiat columns
+            salahiat_series.listen('click', function (e) {
+                /* Modal Headers */
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'دارای صلاحیت اختیاری';
+                showColumnParagraphs_Modal(country_id, actor_name, actor_role_name, preprocessed_keywords_text)
+            });
+        }
+
+        async function showColumnParagraphs_Modal(country_id, actor_name, actor_role_name, preprocessed_keywords_text) {
+            startFullPageBlockUI();
+            /* Title Body */
+            const title_tag = actor_name + ' (' + actor_role_name + ')'
+            $('#actor_modal_header').text(title_tag);
+
+            /* Modal Body */
+            document.getElementById('actor_modal_body').innerHTML = "";
+            // console.log(preprocessed_keywords_text)
+            let request_link = 'http://' + location.host + "/GetColumnParagraphsByActorRoleName_Modal/" + country_id + "/" + actor_name + "/" + actor_role_name + "/" + preprocessed_keywords_text + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let actor_paragraphs_result = response["actor_paragraphs_result"]
+
+            paragraph_tag = '';
+            let keywords_list = preprocessed_keywords_text.split(",")
+
+            for (const [paragraph_id, paragraph_info] of Object.entries(actor_paragraphs_result)) {
+                document_id = paragraph_info['document_id']
+                document_name = paragraph_info['document_name']
+
+                document_link = 'http://' + location.host + "/information/?id=" + document_id
+                doc_name = '<a class="bold text-secondary" target="to_blank" href="' + document_link + '">' + document_name + "</a>"
+
+                paragraph_text = paragraph_info['text']
+                actor_form = paragraph_info['actor_form']
+                is_ref_actor = paragraph_info['is_ref_actor']
+                ref_text = paragraph_info['ref_text']
+
+                highlighted_paragraph = await highlightParagraphs(paragraph_text, actor_name, actor_role_name, actor_form, keywords_list, false, is_ref_actor, ref_text)
+
+                paragraph_tag += "<li class='mb-3 lh-lg'>" + doc_name + highlighted_paragraph + "</li>";
+            }
+
+            document.getElementById('actor_modal_body').innerHTML = '<ol start="1">' + paragraph_tag + '</ol>'
+            // popup_handler();
+            stopFullPageBlockUI('کلیک روی نمودار')
+            // $("#actors_modal_btn").click();
+            $('#actors_modal').modal('show');
+        }
+
+        async function downloadFiles(file_name_list, save_file_name) {
+            startFullPageBlockUI()
+            const country_id = document.getElementById('country').value
+            let zip = new JSZip()
+
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+            // save_file_name += " مجموعه سند {" + country_name + "}"
+
+            let extension = ".txt"
+            if (country_name.includes("فاوا")) {
+                extension = '.docx';
+            }
+
+            for (const document of file_name_list) {
+                const document_name = document["document_name"] + extension
+                const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name, value);
+                    })
+            }
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+            stopFullPageBlockUI('دانلود اسناد');
+        }
+
+        async function ShowKeywordActorsGraph(word,country_id,type) {
+            startBlockUI('KeywordActorsGraphContainer');
+            curr_page = 1
+            request_link = 'http://' + location.host + "/GetKeywordActorsGraphData/" + country_id + "/" + type + "/" + word + "/" + curr_page + "/";
+            response = await fetch(request_link).then(response => response.json());
+            let Nodes_data = response["Nodes_data"]
+            let Edges_data = response["Edges_data"]
+            document.getElementById('KeywordActorsGraphHeader').innerHTML = "";
+            // document.getElementById('KeywordActorsGraphBody').innerHTML = "";
+            $('#KeywordActorsGraph').modal('show');
+            const header = 'گراف ' 
+                + `<span class="bold" style="color: blue">کلیدواژه ${word}</span>` + ' و '
+                + `<span class="bold" style="color: red">کنشگران </span>`
+                + 'اسناد متناظر'
+            // document.getElementById('DefinitionsDetailHeader').innerText += header
+            document.getElementById('KeywordActorsGraphHeader').innerHTML += header
+            await ShowKeywordGraph(Nodes_data, Edges_data, 'KeywordActorsGraphContainer');
+            stopBlockUI('KeywordActorsGraphContainer', 'گراف کلیدواژه');
+        }
+
+        function SelectNeighbourhood(object)
+        {
+            const selected_node_list = []
+            let selected_nodes = []
+            let selected_edges = []
+
+            object.cfg.states.selected.forEach((item) => {
+                const item_cfg = item._cfg
+                if (item_cfg.type === "node")
+                {
+                    selected_node_list.push(item_cfg.model.id)
+                    selected_nodes.push(item)
+                }
+                else
+                {
+                    selected_edges.push(item)
+                }
+            })
+
+            object.getEdges().forEach((edge) => {
+
+                const source_id = edge._cfg.model.source
+                const target_id = edge._cfg.model.target
+
+                if (selected_node_list.includes(source_id))
+                {
+                    object.setItemState(edge, 'selected', true);
+                    object.setItemState(object.findById(target_id), 'selected', true);
+                    selected_nodes.push(object.findById(target_id))
+                    selected_edges.push(edge)
+                }
+                else if (selected_node_list.includes(target_id))
+                {
+                    object.setItemState(edge, 'selected', true);
+                    object.setItemState(object.findById(source_id), 'selected', true);
+                    selected_nodes.push(object.findById(source_id))
+                    selected_edges.push(edge)
+                }
+            });
+
+        //     let nodes_data = []
+        //     let id = 1
+        //     for (const node of selected_nodes.filter(onlyUnique))
+        //     {
+        //         const node_object = node._cfg.model
+        //         const node_id = node_object.id
+        //         const node_name = node_object.name
+
+        //         const in_degree = graph_object.getNodeDegree(node_object.id, 'in');
+        //         const out_degree = graph_object.getNodeDegree(node_object.id, 'out');
+
+        //         const doc_link = 'http://' + location.host +'/information/?id=' + node_id.toString()
+        //         const doc_tag = '<a class="document_link" target="blank" href="' + doc_link + '">' + node_name +"</a>"
+
+        //         const nodeSelection = "NodeSelection(" + node_id + ")"
+        //         const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+
+        //         nodes_data.push({id:id, name: doc_tag, in_degree:in_degree, out_degree:out_degree, node_selection: detail})
+        //         id = id + 1
+        //     }
+        //     $('#selected_node_table').empty();
+        //     $('#selected_node_table').footable({
+        //     "paging": {
+        //         "enabled": true
+        //     },
+        //     "filtering": {
+        //         "enabled": false
+        //     },
+        //     "sorting": {
+        //         "enabled": true
+        //     },
+        //     "empty": "گره ای انتخاب نشده است",
+        //     "columns": [{
+        //         "name": "id",
+        //         "title": "ردیف",
+        //         "breakpoints": "xs sm",
+        //         "type": "number",
+        //         "style": {
+        //             "width": "10%"
+        //         }
+        //     }, {
+        //         "name": "name",
+        //         "title": "نام سند",
+        //         "style": {
+        //             "width": "60%"
+        //         }
+        //     }, {
+        //         "name": "in_degree",
+        //         "title": "درجه ورودی",
+        //         "style": {
+        //             "width": "10%"
+        //         }
+        //     }, {
+        //         "name": "out_degree",
+        //         "title": "درجه خروجی",
+        //         "style": {
+        //             "width": "10%"
+        //         }
+        //     },{
+        //         "name": "node_selection",
+        //         "title": "انتخاب",
+        //         "style": {
+        //             "width": "10%"
+        //         }
+        //     }
+        //     ],
+        //     "rows": nodes_data
+        // });
+
+        //     let edges_data = []
+        //     id = 1
+        //     for (const edge of selected_edges.filter(onlyUnique))
+        //     {
+        //         const edge_object = edge._cfg.model
+
+        //         const src_node_id = edge_object.source
+        //         const src_node_name = edge_object.source_name
+        //         const source_doc_link = 'http://' + location.host +'/information/?id=' + src_node_id.toString()
+        //         const source_doc_tag = '<a class="document_link" target="blank" href="' + source_doc_link + '">' + src_node_name +"</a>"
+
+        //         const target_node_id = edge_object.target
+        //         const target_node_name = edge_object.target_name
+        //         const target_doc_link = 'http://' + location.host +'/information/?id=' + target_node_id.toString()
+        //         const target_doc_tag = '<a class="document_link" target="blank" href="' + target_doc_link + '">' + target_node_name +"</a>"
+
+        //         const weight = edge_object.weight
+
+        //         edges_data.push({id:id, src_name: source_doc_tag, target_name:target_doc_tag, weight:weight})
+        //         id = id + 1
+        //     }
+        //     $('#selected_edge_table').empty();
+        //     $('#selected_edge_table').footable({
+        //     "paging": {
+        //         "enabled": true
+        //     },
+        //     "filtering": {
+        //         "enabled": false
+        //     },
+        //     "sorting": {
+        //         "enabled": true
+        //     },
+        //     "empty": "یالی انتخاب نشده است",
+        //     "columns": [{
+        //         "name": "id",
+        //         "title": "ردیف",
+        //         "breakpoints": "xs sm",
+        //         "type": "number",
+        //         "style": {
+        //             "width": "5%"
+        //         }
+        //     }, {
+        //         "name": "src_name",
+        //         "title": "مبدا",
+        //         "style": {
+        //             "width": "40%"
+        //         }
+        //     },{
+        //         "name": "target_name",
+        //         "title": "مقصد",
+        //         "style": {
+        //             "width": "40%"
+        //         }
+        //     },{
+        //         "name": "weight",
+        //         "title": "وزن",
+        //         "style": {
+        //             "width": "15%"
+        //         }
+        //     },
+        //     ],
+        //     "rows": edges_data
+        // });
+
+        }
+
+        function ShowHideNode(img_tag_id)
+        {
+            if (img_tag_id == "ShowHideImg")
+            {
+                if (show_hide_state === "show")
+                {
+                    document.getElementById(img_tag_id).src = "../../static/image/show_nodes.png"
+                    show_hide_state = "hide"
+
+                    graph_object.getEdges().forEach((edge) => {
+                        const edge_object = edge._cfg.model
+                        const source_object = graph_object.findById(edge_object.source)
+                        const target_object = graph_object.findById(edge_object.target)
+                        if (source_object._cfg.states.includes('selected') === false)
+                        {
+                            source_object.hide()
+                        }
+                        if (target_object._cfg.states.includes('selected') === false)
+                        {
+                            target_object.hide()
+                        }
+                        if (edge._cfg.states.includes('selected') === false)
+                        {
+                            // console.log(2)
+                            edge.hide()
+                        }
+                        
+                        nodes = data_graph.nodes;
+                        nodes.forEach((node) => {
+                            const node_object = graph_object.findById(node["id"])
+                            if (node_object._cfg.states.includes('selected') === false)
+                            {
+                                node_object.hide()
+                            }
+                        })
+                    });
+                }
+                else if (show_hide_state === "hide")
+                {
+                    document.getElementById(img_tag_id).src = "../../static/image/hide_nodes.png"
+                    show_hide_state = "show"
+                    // FilterGraphDegree(min_selected_degree, max_selected_degree)
+                    nodes = data_graph.nodes;
+
+                    nodes.forEach((node) => {
+                        graph_object.findById(node["id"]).show();
+                        const edges_list = graph_object.findById(node["id"]).getEdges();
+                        for (const e of edges_list)
+                        {
+                            e.show()
+                        }
+                    })
+                }
+            }
+            else if (img_tag_id == "ModalShowHideImg")
+            {
+                if (modal_show_hide_state === "show")
+                {
+                    document.getElementById(img_tag_id).src = "../../static/image/show_nodes.png"
+                    modal_show_hide_state = "hide"
+                    modal_graph_object.getEdges().forEach((edge) => {
+                        const edge_object = edge._cfg.model
+                        const source_object = modal_graph_object.findById(edge_object.source)
+                        const target_object = modal_graph_object.findById(edge_object.target)
+                        if (source_object._cfg.states.includes('selected') === false)
+                        {
+                            source_object.hide()
+                        }
+                        if (target_object._cfg.states.includes('selected') === false)
+                        {
+                            target_object.hide()
+                        }
+                        if (edge._cfg.states.includes('selected') === false)
+                        {
+                            // console.log(2)
+                            edge.hide()
+                        }
+                        nodes = modal_data_graph.nodes;
+                        nodes.forEach((node) => {
+                            const node_object = graph_object.findById(node["id"])
+                            if (node_object._cfg.states.includes('selected') === false)
+                            {
+                                node_object.hide()
+                            }
+                        })
+                    });
+                }
+                else if (modal_show_hide_state === "hide")
+                {
+                    document.getElementById(img_tag_id).src = "../../static/image/hide_nodes.png"
+                    modal_show_hide_state = "show"
+                    // FilterGraphDegree(min_selected_degree, max_selected_degree)
+                    nodes = modal_data_graph.nodes;
+                    nodes.forEach((node) => {
+                        modal_graph_object.findById(node["id"]).show();
+                        const edges_list = modal_graph_object.findById(node["id"]).getEdges();
+                        for (const e of edges_list)
+                        {
+                            e.show()
+                        }
+                    })
+                }
+            
+            }
+        }
+
+        const { louvain } = G6.Algorithm;
+        function ChangeLayout(object, data, layout_id)
+        {
+            layout = document.getElementById(layout_id).value
+            if (layout === "comboForce")
+            {
+                const clusteredData = louvain(data, false);
+
+                clusteredData.clusters.forEach((cluster, i) => {
+                    cluster.nodes.forEach((node) => {
+                        clusterId = node["clusterId"]
+                        object.findById(node.id)._cfg.model["comboId"] = clusterId
+                    });
+                });
+
+                layout = {type: 'comboForce'}
+                object.updateLayout(layout);
+            }
+            else {
+                la = {type: layout}
+                object.updateLayout(la);
+            }
+        }
+
+        async function ShowGraph(Nodes_data, Edges_data) {
+            notyf.dismissAll();
+
+            data_graph = {
+                nodes: Nodes_data,
+                edges: Edges_data
+            };
+
+            // FilterGraphTypeSubject()
+
+            const container = document.getElementById('actors_keyword_graph_container');
+            const width = Math.min(screen.width, 0.88 * screen.width)
+            const height = container.offsetHeight  || 500;
+
+            const tooltip = new G6.Tooltip({
+                offsetX: 0,
+                offsetY: 0,
+                itemTypes: ['node', 'edge'],
+                getContent: (e) => {
+                    const outDiv = document.createElement('div');
+                    outDiv.style.width = 'fit-content';
+                    let a = e.item.getType()
+                    if ( a === "node")
+                    {
+                        if (e.item.getModel().type_name == "actor") {
+                            outDiv.innerHTML = `<ul>
+                                                    <li>${e.item.getModel().name}</li>
+                                                    <li style="color: red;">کنشگر</li>
+                                                </ul>`;
+                        }
+                        else {
+                            outDiv.innerHTML = `<ul>
+                                                    <li>${e.item.getModel().name}</li>
+                                                    <li style="color: blue;">کلیدواژه</li>
+                                                </ul>`;
+                        }
+                    }
+                    else if ( a === "edge")
+                    {
+                        outDiv.innerHTML = `<ul style="direction: rtl">
+                            <li style="color: blue;">کلیدواژه: ${e.item.getModel().source_name}</li>
+                            <li style="color: red;">کنشگر: ${e.item.getModel().target_name}</li>
+                            <li>نام سند: ${e.item.getModel().document_name} </li>
+                            <li>نوع کنشگر: ${e.item.getModel().type} </li>
+                            </ul>`;
+                        // <li style="font-weight: bold">تعداد ارجاع: ${e.item.getModel().weight}</li>
+                    }
+                    return outDiv;
+                }
+            });
+
+            graph_object = new G6.Graph({
+                container: 'actors_keyword_graph_container',
+                width,
+                height,
+                modes: {
+                    default: ['zoom-canvas',
+                        'drag-canvas',
+                        {type: 'click-select', trigger: 'ctrl'},
+                        {type:"brush-select", trigger: 'ctrl'},
+                        'drag-node',
+                    ], //"activate-relations"
+                },
+                plugins: [tooltip],
+                layout:  "circular", // دایره ای
+                animate: true,
+                defaultEdge: {
+                    style: {
+                    stroke: '#404040',
+                    endArrow: {
+                        path: 'M 0,0 L 8,4 L 8,-4 Z',
+                        fill: '#404040',
+                    },
+                    },
+                },
+                nodeStateStyles: {
+                    selected: {
+                    stroke: 'Yellow',
+                    lineWidth: 2,
+                    fill: 'Yellow'
+                }
+                },
+            });
+
+            graph_object.data(data_graph);
+            graph_object.render();
+
+            // graph_object.on('nodeselectchange', e => {
+            //     const selected_nodes = e.selectedItems.nodes
+            //     const selected_edges = e.selectedItems.edges
+
+            //     let nodes_data = []
+            //     let id = 1
+            //     for (const node of selected_nodes)
+            //     {
+            //         const node_object = node._cfg.model
+            //         const node_id = node_object.id
+            //         const node_name = node_object.name
+
+            //         const in_degree = graph_object.getNodeDegree(node_object.id, 'in');
+            //         const out_degree = graph_object.getNodeDegree(node_object.id, 'out');
+
+            //         const doc_link = 'http://' + location.host +'/information/?id=' + node_id.toString()
+            //         const doc_tag = '<a class="document_link" target="blank" href="' + doc_link + '">' + node_name +"</a>"
+
+            //         const nodeSelection = "NodeSelection(" + node_id + ")"
+            //         const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+
+            //         nodes_data.push({id:id, name: doc_tag, in_degree:in_degree, out_degree:out_degree, node_selection: detail})
+            //         id = id + 1
+            //     }
+            //     $('#selected_node_table').empty();
+            //     $('#selected_node_table').footable({
+            //     "paging": {
+            //         "enabled": true
+            //     },
+            //     "filtering": {
+            //         "enabled": false
+            //     },
+            //     "sorting": {
+            //         "enabled": true
+            //     },
+            //     "empty": "گره ای انتخاب نشده است",
+            //     "columns": [{
+            //         "name": "id",
+            //         "title": "ردیف",
+            //         "breakpoints": "xs sm",
+            //         "type": "number",
+            //         "style": {
+            //             "width": "10%"
+            //         }
+            //     }, {
+            //         "name": "name",
+            //         "title": "نام سند",
+            //         "style": {
+            //             "width": "60%"
+            //         }
+            //     }, {
+            //         "name": "in_degree",
+            //         "title": "درجه ورودی",
+            //         "style": {
+            //             "width": "10%"
+            //         }
+            //     }, {
+            //         "name": "out_degree",
+            //         "title": "درجه خروجی",
+            //         "style": {
+            //             "width": "10%"
+            //         }
+            //     },{
+            //         "name": "node_selection",
+            //         "title": "انتخاب",
+            //         "style": {
+            //             "width": "10%"
+            //         }
+            //     }
+            //     ],
+            //     "rows": nodes_data
+            // });
+
+
+            //     let edges_data = []
+            //     id = 1
+            //     for (const edge of selected_edges)
+            //     {
+            //         const edge_object = edge._cfg.model
+
+            //         const src_node_id = edge_object.source
+            //         const src_node_name = edge_object.source_name
+            //         const source_doc_link = 'http://' + location.host +'/information/?id=' + src_node_id.toString()
+            //         const source_doc_tag = '<a class="document_link" target="blank" href="' + source_doc_link + '">' + src_node_name +"</a>"
+
+            //         const target_node_id = edge_object.target
+            //         const target_node_name = edge_object.target_name
+            //         const target_doc_link = 'http://' + location.host +'/information/?id=' + target_node_id.toString()
+            //         const target_doc_tag = '<a class="document_link" target="blank" href="' + target_doc_link + '">' + target_node_name +"</a>"
+
+            //         const weight = edge_object.weight
+
+            //         edges_data.push({id:id, src_name: source_doc_tag, target_name:target_doc_tag, weight:weight})
+            //         id = id + 1
+            //     }
+            //     $('#selected_edge_table').empty();
+            //     $('#selected_edge_table').footable({
+            //     "paging": {
+            //         "enabled": true
+            //     },
+            //     "filtering": {
+            //         "enabled": false
+            //     },
+            //     "sorting": {
+            //         "enabled": true
+            //     },
+            //     "empty": "یالی انتخاب نشده است",
+            //     "columns": [{
+            //         "name": "id",
+            //         "title": "ردیف",
+            //         "breakpoints": "xs sm",
+            //         "type": "number",
+            //         "style": {
+            //             "width": "5%"
+            //         }
+            //     }, {
+            //         "name": "src_name",
+            //         "title": "مبدا",
+            //         "style": {
+            //             "width": "40%"
+            //         }
+            //     },{
+            //         "name": "target_name",
+            //         "title": "مقصد",
+            //         "style": {
+            //             "width": "40%"
+            //         }
+            //     },{
+            //         "name": "weight",
+            //         "title": "وزن",
+            //         "style": {
+            //             "width": "15%"
+            //         }
+            //     },
+            //     ],
+            //     "rows": edges_data
+            // });
+
+            // })
+
+            function handleNodeClick(event) {
+                const item = event.item._cfg.model;
+                if (item["type_name"] == "actor") {
+                    let country_id = document.getElementById('country').value
+                    window.open('http://' + location.host + "/actors_information/?country_id=" + country_id + "/?actor_id=" + item["id"]);
+                }
+            }
+            graph_object.on('node:dblclick', handleNodeClick);
+
+            function handleEdgeClick(event) {
+                const item = event.item._cfg.model;
+                // window.open('http://' + location.host + "/comparison?id=" + edge_id);
+                window.open('http://' + location.host + "/information?id=" + item["document_id"]);
+            }
+            graph_object.on('edge:dblclick', handleEdgeClick);
+
+            if (typeof window !== 'undefined')
+                window.onresize = () => {
+                    if (!graph_object || graph_object.get('destroyed')) return;
+                    if (!container || !container.scrollWidth || !container.scrollHeight) return;
+                    graph_object.changeSize(container.scrollWidth, container.scrollHeight);
+                };
+
+            var select = $("#ChangeLayout");
+            select.val(select.children(":first").val());
+
+            // let min_degree = 1.797693134862315E+308
+            // let max_degree = 0
+            // data_graph.nodes.forEach((node) => {
+            //     const degree = graph_object.getNodeDegree(node["id"], 'total');
+            //     if(degree < min_degree)
+            //     {
+            //         min_degree = degree
+            //     }
+            //     if(degree > max_degree)
+            //     {
+            //         max_degree = degree
+            //     }
+            // })
+
+            // min_degree = Math.max(1, min_degree)
+
+            // ShowRangeSlider(min_degree, max_degree)
+        }
+        
+        async function ShowKeywordGraph(Nodes_data, Edges_data, container_name) {
+            notyf.dismissAll();
+
+            modal_data_graph = {
+                nodes: Nodes_data,
+                edges: Edges_data
+            };
+
+            const container = document.getElementById(container_name);
+            container.innerHTML = "";
+            const width = 0.9 * container.scrollWidth || 1000;
+            const height = 0.9 * container.scrollHeight  || 450;
+
+            const tooltip = new G6.Tooltip({
+                offsetX: 0,
+                offsetY: 0,
+                itemTypes: ['node', 'edge'],
+                getContent: (e) => {
+                    const outDiv = document.createElement('div');
+                    outDiv.style.width = 'fit-content';
+                    let a = e.item.getType()
+                    if ( a === "node")
+                    {
+                        if (e.item.getModel().type_name == "actor") {
+                            outDiv.innerHTML = `<ul>
+                                                    <li>${e.item.getModel().name}</li>
+                                                    <li style="color: red;">کنشگر</li>
+                                                </ul>`;
+                        }
+                        else {
+                            outDiv.innerHTML = `<ul>
+                                                    <li>${e.item.getModel().name}</li>
+                                                    <li style="color: blue;">کلیدواژه</li>
+                                                </ul>`;
+                        }
+                    }
+                    else if ( a === "edge")
+                    {
+                        outDiv.innerHTML = `<ul style="direction: rtl">
+                            <li style="color: blue;">کلیدواژه: ${e.item.getModel().source_name}</li>
+                            <li style="color: red;">کنشگر: ${e.item.getModel().target_name}</li>
+                            <li>نام سند: ${e.item.getModel().document_name} </li>
+                            <li>نوع کنشگر: ${e.item.getModel().type} </li>
+                            </ul>`;
+                        // <li style="font-weight: bold">تعداد ارجاع: ${e.item.getModel().weight}</li>
+                    }
+                    return outDiv;
+                }
+            });
+
+            modal_graph_object = new G6.Graph({
+                container: container_name,
+                width,
+                height,
+                modes: {
+                    default: ['zoom-canvas',
+                        'drag-canvas',
+                        {type: 'click-select', trigger: 'ctrl'},
+                        {type:"brush-select", trigger: 'ctrl'},
+                        'drag-node',
+                    ], //"activate-relations"
+                },
+                plugins: [tooltip],
+                layout:  "circular", // دایره ای
+                animate: true,
+                defaultEdge: {
+                    style: {
+                    stroke: '#404040',
+                    endArrow: {
+                        path: 'M 0,0 L 8,4 L 8,-4 Z',
+                        fill: '#404040',
+                    },
+                    },
+                },
+                nodeStateStyles: {
+                    selected: {
+                    stroke: 'Yellow',
+                    lineWidth: 2,
+                    fill: 'Yellow'
+                }
+                },
+            });
+
+            modal_graph_object.data(modal_data_graph);
+            modal_graph_object.render();
+
+            function handleNodeClick(event) {
+                const item = event.item._cfg.model;
+                if (item["type_name"] == "actor") {
+                    let country_id = document.getElementById('country').value
+                    window.open('http://' + location.host + "/actors_information/?country_id=" + country_id + "/?actor_id=" + item["id"]);
+                }
+            }
+            modal_graph_object.on('node:dblclick', handleNodeClick);
+
+            function handleEdgeClick(event) {
+                const item = event.item._cfg.model;
+                // window.open('http://' + location.host + "/comparison?id=" + edge_id);
+                window.open('http://' + location.host + "/information?id=" + item["document_id"]);
+            }
+            modal_graph_object.on('edge:dblclick', handleEdgeClick);
+
+            if (typeof window !== 'undefined')
+                window.onresize = () => {
+                    if (!modal_graph_object || modal_graph_object.get('destroyed')) return;
+                    if (!container || !container.scrollWidth || !container.scrollHeight) return;
+                    modal_graph_object.changeSize(container.scrollWidth, container.scrollHeight);
+                };
+
+            // var select = $("#ChangeModalGraphLayout");
+            // select.val(select.children(":first").val());
+        }
+
+        /****************** Highlight algorithms ********************************** */
+
+        async function highlightParagraphs(paragraph, actor_name, actor_role, paragraph_actor_form, keywords_list, all_hamkar, is_ref_actor, ref_paragraph_text) {
+            paragraph_text = paragraph;
+
+            // Highlight keywords
+            if (!keywords_list.includes('empty')) {
+                for (keyword of keywords_list) {
+                    keyword_tag = "<span class= 'bg-info text-white  rounded px-1'>" + keyword + "</span>"
+                    paragraph_text = paragraph_text.replaceAll(keyword, keyword_tag);
+                }
+            }
+
+            // highlight other actors
+            paragraph_text = await highlightOtherActors(paragraph_text, paragraph_actor_form, actor_name)
+
+            if (actor_role.includes('متولی اجرا')) {
+                paragraph_text = await highlightMotevalian(paragraph_text, paragraph_actor_form, motevali_keywords, 'bg-primary', is_ref_actor, ref_paragraph_text)
+                paragraph_text = await highlightLegalDeadline(paragraph_text, motevali_keywords)
+            } else if (actor_role.includes('همکار')) {
+                paragraph_text = await highlightHamkaran(paragraph_text, paragraph_actor_form, hamkaran_keywords, 'bg-success');
+            } else {
+                paragraph_text = await highlightSalahiat(paragraph_text, paragraph_actor_form, salahiat_keywords, 'bg-warning', is_ref_actor, ref_paragraph_text)
+            }
+
+            /********************* Highlight optional keywords  **************************/
+            for (pattern_keyword of optional_keywords) {
+                if (optional_after_terms_count[pattern_keyword] > 0)
+                    paragraph_text = await highlightSomeTermsAfterKeyword(paragraph_text, optional_after_terms_count[pattern_keyword], pattern_keyword)
+
+                pattern_keyword_tag = "<span class='border border-secondary border-2  px-1 rounded'>" + pattern_keyword + "</span>"
+                paragraph_text = paragraph_text.replaceAll(pattern_keyword, pattern_keyword_tag)
+            }
+
+            return paragraph_text
+        }
+
+        async function highlightMotevalian(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+
+                        if (is_ref_actor) {
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                        } else {
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+
+                }).join('.')
+
+            }
+
+            /* Highlight with actors list */
+            eghdam_keywords = ['اقدام کند', 'اقدام‌کند', 'اقدام نماید', 'اقدام‌نماید']
+            non_eghdam_keywords = pattern_keywords.filter(x => !eghdam_keywords.includes(x));
+
+            paragraph_text = paragraph_text.split('.').map((sentence) => {
+                for (e_kw of eghdam_keywords) {
+                    pattern_keyword_tag1 = "<span class='bg-secondary text-white rounded px-1'>" + e_kw + "</span>"
+
+                    if (sentence.includes(e_kw) && !check_non_eghdam_kw_exists(sentence, non_eghdam_keywords)) {
+
+                        actor_tag1 = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                        sentence = sentence.replaceAll(actor_form + ' ', actor_tag1 + ' ');
+
+                        sentence = sentence.replaceAll(e_kw, pattern_keyword_tag1);
+                    }
+                }
+
+                return sentence
+
+            }).join('.')
+
+            return paragraph_text;
+        }
+
+        function check_non_eghdam_kw_exists(sentence, pattern_keywords) {
+            for (p_kw of pattern_keywords) {
+                pattern = p_kw
+                if (sentence.includes(pattern)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        async function highlightHamkaran(paragraph_text, actor_form, pattern_keywords, bg_color) {
+            const window_length = 100;
+
+            let space_counter = 0;
+            detected_hamkaran_list = []
+
+            /* Highlight pattern keywords and references */
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight more with actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'با همکاری') {
+                    regex = /با همکاری/gi;
+                } else {
+                    regex = /باهمکاری/gi;
+                }
+
+                while ((result = regex.exec(paragraph_text))) {
+                    indices.push(result.index);
+                }
+
+                for (const index of indices) {
+
+                    let start_index = (index + pattern_keyword.length);
+                    let substring = paragraph_text.substring(start_index, start_index + window_length);
+                    let current_substring = substring;
+
+
+                    actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                    // substring = substring.replaceAll(' ' + actor_form + ' ', ' ' + actor_tag + ' ');
+                    substring = substring.replaceAll(' ' + actor_form, ' ' + actor_tag);
+                    substring = substring.replaceAll('(' + actor_form + ')', '(' + actor_tag + ')');
+
+                    for (symbol of hamkaran_punctuations) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                        substring = substring.replaceAll(' ' + actor_form + symbol, ' ' + actor_tag + symbol);
+
+                    }
+
+                    actor_without_affix = actor_form.replaceAll('وزارت ', '').replaceAll('سازمان ', '').replaceAll(' جمهوری اسلامی ایران', '')
+
+                    if (actor_without_affix != 'اطلاعات' && actor_without_affix != 'کشور' && !substring.includes(actor_form)) {
+
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                        substring = substring.replaceAll(' ' + actor_without_affix + ' ', ' ' + actor_tag + ' ');
+                        substring = substring.replaceAll('(' + actor_without_affix + ')', '(' + actor_tag + ')');
+
+                        for (symbol of hamkaran_punctuations) {
+
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            substring = substring.replaceAll(' ' + actor_without_affix + symbol, ' ' + actor_tag + symbol);
+
+                        }
+
+                    }
+
+                    paragraph_text = paragraph_text.replaceAll(current_substring, substring);
+
+                }
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                paragraph_text = paragraph_text.replaceAll(pattern_keyword, pattern_keyword_tag);
+
+            }
+
+            return paragraph_text;
+
+        }
+
+        async function highlightSalahiat(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+                        if (is_ref_actor) {
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                        } else {
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+                
+                }).join('.')
+
+                }
+
+            return paragraph_text;
+
+        }
+
+        /* Highlight N terms after one keyword */
+        async function highlightSomeTermsAfterKeyword(paragraph_text, terms_count, keyword) {
+            paragraph_selected_terms = '';
+            selected_terms_list = []
+            let indices = await getIndicesOf(keyword, paragraph_text);
+
+            for (index of indices) {
+
+                let pattern_keyword_index = index;
+                let start_index = pattern_keyword_index + keyword.length + 1
+                let end_index = paragraph_text.length;
+                let selected_terms_size = 0
+
+                if (pattern_keyword_index != -1) {
+                    sub_string = paragraph_text.substring(start_index, end_index)
+
+                    selected_terms = sub_string.split(' ').slice(0, terms_count)
+
+                    for (term of selected_terms) {
+                        selected_terms_size += term.length
+                    }
+                    selected_terms_size += (terms_count - 1)
+
+                    selected_terms_text = paragraph_text.substring(start_index, start_index + selected_terms_size);
+
+                    if (!selected_terms_text.includes('span')) {
+                        if (!selected_terms_list.includes(selected_terms_text)) {
+                            selected_terms_list.push(selected_terms_text)
+                        }
+                    }
+                }
+            }
+
+            for (selected_terms_text of selected_terms_list) {
+                if (selected_terms_text != "") {
+                    selected_terms_tag = "<span class='blue_dotted_border selected_terms px-1 mx-1'>" + selected_terms_text + "</span>"
+                    paragraph_text = paragraph_text.replaceAll(selected_terms_text, selected_terms_tag)
+                }
+            }
+
+            return paragraph_text;
+        }
+
+        async function highlightLegalDeadline(paragraph_text, actor_pattern_keywords) {
+            for (pattern_keyword of actor_pattern_keywords) {
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                let indices = await getIndicesOf(pattern_keyword_tag, paragraph_text);
+
+                for (index of indices) {
+                    start_index = index + pattern_keyword_tag.length;
+
+                    sub_string = paragraph_text.substring(start_index, paragraph_text.length);
+
+                    for (deadline_keyword of deadline_pattern_keywords) {
+                        for (const [nubmer_text, value] of Object.entries(numbers_dict)) {
+                            for (time_category of time_categories) {
+
+                                // ظرف شش ماه
+                                pattern1 = deadline_keyword + ' ' + nubmer_text + ' ' + time_category;
+                                pattern2 = deadline_keyword + ' ' + nubmer_text + ' ' + '(' + value + ')' + ' ' + time_category;
+
+                                // ظرف شش‌ماه
+                                pattern3 = deadline_keyword + ' ' + nubmer_text + '‌' + time_category;
+                                pattern4 = deadline_keyword + ' ' + nubmer_text + ' ' + '(' + value + ')' + '‌' + time_category;
+
+                                // ظرف یکسال
+                                pattern5 = deadline_keyword + ' ' + nubmer_text + time_category;
+                                pattern6 = deadline_keyword + ' ' + nubmer_text + ' ' + '(' + value + ')' + time_category;
+
+                                patterns = [pattern1, pattern2, pattern3,
+                                    pattern4, pattern5, pattern6];
+
+                                for (pattern of patterns) {
+                                    deadline_keyword_tag = "<span class='deadlines gray_dotted_border px-1 rounded'>" + deadline_keyword + "</span>"
+                                    pattern_without_deadline_keyword = pattern.replace(deadline_keyword + ' ', '');
+                                    pattern_without_keyword_tag = "<span class='deadlines border border-warning border-2 px-1 rounded'>" + pattern_without_deadline_keyword + "</span>"
+                                    new_sub_string = sub_string.replaceAll(pattern, deadline_keyword_tag + ' ' + pattern_without_keyword_tag)
+
+                                    // closest deadline..not all deadlines. => replace()
+                                    paragraph_text = paragraph_text.replace(sub_string, new_sub_string);
+
+                                }
+
+                                /* *********************************** */
+
+                            }
+                        }
+                    }
+
+
+                }
+
+            }
+            return paragraph_text;
+        }
+
+        async function getIndicesOf(searchStr, str) {
+            var searchStrLen = searchStr.length;
+            if (searchStrLen == 0) {
+                return [];
+            }
+            var startIndex = 0, index, indices = [];
+            while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+                indices.push(index);
+                startIndex = index + searchStrLen;
+            }
+            return indices;
+        }
+
+        async function highlightOtherActors(paragraph_text, paragraph_actor_form, paragraph_actor_name) {
+            para_actor_forms = []
+            for (const [actor_id, actor_info] of Object.entries(actors_dict)) {
+                if (actor_info['name'] == paragraph_actor_name) {
+                    para_actor_forms = actor_info['forms'];
+                    break;
+                }
+            }
+
+            for (actor_form of actors_list) {
+                if (!para_actor_forms.includes(actor_form)) {
+                    actor_form_tag = "<span class='other_actors'>" + actor_form + "</span>"
+                    paragraph_text = paragraph_text.replaceAll(' ' + actor_form + ' ', ' ' + actor_form_tag + ' ');
+                    paragraph_text = paragraph_text.replaceAll(' ' + actor_form + '،', ' ' + actor_form_tag + '،');
+                    paragraph_text = paragraph_text.replaceAll('(' + actor_form + ')', '(' + actor_form_tag + ')');
+                }
+            }
+
+            return paragraph_text;
+        }
+
+        async function showOtherActors() {
+            if ($('.highlighted').length) {
+                $('.highlighted').attr('class', 'other_actors')
+            } else {
+                $('.other_actors').attr('class', 'other_actors highlighted bold text-primary px-1 rounded')
+            }
+        }
+
+        /* *********************************************************************** */
+
+        /* Search after press Enter */
+        $("#info_form").submit(function () { return false; });
+        $("#SearchBox").keyup(function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                $("#document_search").click();
+            }
+        });
+    
+    </script>
+
+
+    <!-- BS Tooltips handler -->
+    <script src="../../static/js/tooltip_handler.js"></script>
+    {#<script src="../../static/js/UserLogSave.js"></script>#}
+
+    <!-- Intro Js -->
+    <script src="../../static/js/information/information_tour.js">
+    </script>
+    <script src="../../static/js/tour.js"></script>
+    <script src="../../static/js/signout_function.js"></script>
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js"></script>
+
+    <!-- zip file  -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <!-- graph  g6.antv -->
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+
+</html>

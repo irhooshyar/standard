@@ -1,0 +1,111 @@
+version: '3.7'
+services:
+
+    django:
+        build:
+            context: .
+            dockerfile: ./docker/django/prod/Dockerfile
+        ports:
+            - "7081:8000"
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - django_static_volume:/app/static
+            - django_media_cdn_volume:/app/media_cdn
+        depends_on:
+            - mysql
+            - elasticsearch
+        environment:
+            ES_URL: 'elasticsearch:9200'
+            DB_FA_NAME: 'prod_fa'
+            DB_EN_NAME: 'prod_en'
+            DB_URL: 'mysql'
+            DOCKER_BUILDKIT: 1
+
+
+    mysql:
+        image: mysql/mysql-server:5.7.40
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root_pass'
+        volumes:
+            - mysql_volume:/var/lib/mysql
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+            - ./docker/mysql/backup:/etc/mysql/backup
+            - ./docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+
+    mysql_dev:
+        image: mysql/mysql-server:5.7.40
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root_pass'
+            MYSQL_ROOT_HOST: '%'
+        ports:
+            - "7084:3306"
+        volumes:
+            - mysql_dev_volume:/var/lib/mysql
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+            - ./docker/mysql/backup:/etc/mysql/backup
+            - ./docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+
+    phpmyadmin:
+        image: phpmyadmin:5.2.0
+        ports:
+            - "7082:80"
+        environment:
+            PMA_ARBITRARY: 1
+
+
+    elasticsearch:
+        build:
+            context: .
+            dockerfile: ./docker/elasticsearch/Dockerfile
+        environment:
+            - bootstrap.memory_lock=true
+            - discovery.type=single-node
+            - "ES_JAVA_OPTS=-Xms4096m -Xmx4096m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        ports:
+            - "7085:9200"
+        volumes:
+            - elasticsearch_volume:/usr/share/elasticsearch/data
+            - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - ./docker/elasticsearch/config/all_stopwords.txt:/usr/share/elasticsearch/config/all_stopwords.txt
+            - ./docker/elasticsearch/config/cybermap_stopwords.txt:/usr/share/elasticsearch/config/cybermap_stopwords.txt
+            - ./docker/elasticsearch/config/persian_stopwords.txt:/usr/share/elasticsearch/config/persian_stopwords.txt
+            - ./docker/elasticsearch/config/char_filter/zero_width_spaces_filter.txt:/usr/share/elasticsearch/config/char_filter/zero_width_spaces_filter.txt
+
+
+    kibana:
+        image: kibana:7.13.1
+        ports:
+            - "7083:5601"
+        depends_on:
+            - elasticsearch
+        mem_limit: 1g
+
+
+#    jenkins:
+#        image: jenkins/jenkins:latest
+##        restart: always
+#        ports:
+#            - "7082:8080"
+#            - "50000:50000"
+#        volumes:
+#            - jenkins_home_volume:/var/jenkins_home
+
+
+volumes:
+    django_static_volume:
+    django_media_cdn_volume:
+    mysql_volume:
+    mysql_dev_volume:
+    elasticsearch_volume:
+#    jenkins_home_volume:
+
+
+

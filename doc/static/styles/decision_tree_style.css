@@ -1,0 +1,45 @@
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke:#6ff800;
+}
+
+
+.legends{
+  position: fixed;
+  top: 1px;
+  z-index: -1;
+  left:5px;
+}
+
+.main{
+    position: relative;
+    top: 99px;
+    z-index: 5
+}
+
+@font-face {
+  font-family: vazir;
+  src: url("../fonts/Vazir-FD.ttf");
+}
+
+.tlink{
+  stroke: rgb(158, 156, 156);
+font-family: vazir;
+font-size: 12px;
+stroke-width: 0.04em;
+}
+

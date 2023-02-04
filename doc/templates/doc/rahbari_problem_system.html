@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"/>
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+    <script src="../../static/js/chart.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>نظام مسائل رهبری</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+<!-- Menu -->
+<nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+    {% include "doc/header2.html" %}
+</nav>
+
+<script>
+    $(document).ready(function () {
+
+        // Active panel
+        $('#RahbariDropdown').addClass('active');
+        $('#rahbari_problem_system').addClass('active');
+
+        $('select#language').on('change', function (e) {
+
+            let selected_language = this.value;
+            let current_url = window.location.href;
+            if (selected_language === 'England') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'en')
+                window.location = requested_url;
+            } else if (selected_language === 'Russia') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'ru')
+                window.location = requested_url;
+            }
+
+        });
+    });
+</script>
+
+<!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+<div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+    <div class="d-flex align-items-center rtl flex-row-reverse mx-auto p-1" style="background: linear-gradient(#8693AB, #cbd3da, #e9ecef); box-shadow: 0 0 2px 2px #f8f9fa inset; border: 4px solid #f8f9fa; border-radius: 24px">
+        <img style="width: 120px;" id="prefix_ShowHideImg" src="../../static/image/rahbar_profile.png">
+        <div class="d-flex flex-column gap-2 rtl mr-2" dir="rtl">
+            <span class="font-weight-bolder">تحلیل اسناد رهبری</span>
+            <span>صفحه مسائل رهبری</span>
+        </div>
+    </div>
+    <!-- Form Fields -->
+    <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+          method="post" autocomplete="off" novalidate>
+
+        <!-- Primary Fields in First Row -->
+        <div class="row flex-row-reverse mx-auto">
+
+            <!-- Country Input -->
+            <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+
+                <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                <select dir="rtl" id="country" name="country"
+                        class="form-select text-right float-right searchable-select" style="direction: rtl;"
+                        onchange="">
+                    {% for k,v in countries.items %}
+                        {% if "رهبری" in v %}
+                            <option value="{{ k }}">{{ v }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Search Box input -->
+            <div class="col-md-6 pt-3 col-12 col-lg-4 bg-light">
+                <label class="float-right" style="direction: rtl;">عبارت مورد نظر:</label>
+                <input style="direction: rtl;" class="float-left form-control text-right"
+                       placeholder="متن جست‌وجو ..." type="text" required="" name="SearchBox" id="SearchBox" value="">
+            </div>
+
+            <!--  Buttons -->
+            <div class="col-lg-4 col-md-6 pt-5 col-12">
+                <button id="advanced_search" type="button" class="btn float-right" data-bs-toggle="collapse"
+                        data-bs-target="#advanced_fields" aria-expanded="true" aria-controls="advanced_fields">تنظیمات
+                    پیشرفته
+                </button>
+                <button type="button" id="document_search" onclick="NewSearch()"
+                        class="btn d-flex float-right mr-4">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">درحال جستجو ...</span>
+                    </div>
+                    جست‌وجو
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Advanced Fields in Second Row -->
+        <div id="advanced_fields" class="collapse show row flex-row-reverse mx-auto mt-4">
+            <!-- Match Type -->
+            <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light" dir="rtl">
+                <label class=" text-right bg-light float-right" style="direction: rtl;;"> نوع کلیدواژه:</label>
+                <select id="SearchTypeSelect" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;">
+                    <option selected value="0">همه</option>
+
+                    <option value="1">مساله</option>
+                    <option value="2">مسئله</option>
+                    <option value="3">محور</option>
+                    <option value="4">مهم</option>
+                    <option value="5">سیاست</option>
+                    <option value="6">نیاز</option>
+                </select>
+            </div>
+
+        </div>
+
+    </form>
+    <div dir="rtl" class="row w-100 p-0">
+        <!--Original Tabs -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست‌وجو
+                </button>
+            </li>
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="bar_chart_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#bar_chart_info_pane" type="button" role="tab"
+                        aria-controls="bar_chart_info_pane" aria-selected="false"> داشبورد آماری احکام
+                </button>
+            </li>
+
+            <!-- <li class="nav-item float-right" role="presentation">
+                <button id="paragraph_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#paragraph_info_pane" type="button" role="tab"
+                        aria-controls="paragraph_info_pane" aria-selected="false">تحلیل گرافی
+                </button>
+            </li> -->
+
+            <!-- <li class="nav-item float-right" role="presentation">
+                <button id="paragraph_person_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#paragraph_person_info_pane" type="button" role="tab"
+                        aria-controls="paragraph_person_info_pane" aria-selected="false">افراد حقیقی
+                </button>
+            </li> -->
+
+            <!-- <li class="nav-item float-right" role="presentation">
+                <button id="paragraph_rule_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#paragraph_rule_info_pane" type="button" role="tab"
+                        aria-controls="paragraph_rule_info_pane" aria-selected="false">اوامر رهبری
+                </button>
+            </li> -->
+
+            <!-- Result Count -->
+            <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+        </ul>
+
+        <!-- Original Panes -->
+        <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+
+            <!-- Search Result Pane -->
+            <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                 aria-labelledby="search_result_tab">
+
+                <!-- Table Headers -->
+                <div class="mt-4">
+                    <!-- Column Selection -->
+                    <p id="ColumnSelection" class="text-left text-secondary float-right">فهرست براساس:</p>
+
+
+                    <!-- Column select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-right" dir="rtl">
+
+                        <select id="ColumnSelect" onchange="show_table_result();"
+                                class="form-select text-right float-right searchable-multi-select"
+                                style="direction: rtl;">
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="float-left">
+                        <!-- Download Buttons -->
+                        <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                                class="btn float-left p-0 px-1 mt-2" id="DownloadBtn"
+                                onclick="DownloadSerachResultFunction()" type="button">
+                            <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                        </button>
+
+                        <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                                type="button">
+                            <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button>
+                    </div>
+
+                    <!-- Page select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-left">
+
+                        <input type="number" disabled="true" onchange="TablePaginationChanged(event)"
+                               id="TablePaginationInput" min="1" max="1" value="1"
+                               class="form-select text-right float-right" style="direction: rtl;">
+
+                    </div>
+
+
+                    <!-- Result Pagination -->
+                    <p id="ResultPagination" class="text-left text-secondary float-left">صفحه:
+                        <span id="from_page">1</span>
+                        /
+                        <span id="total_page">1</span>
+                    </p>
+
+                </div>
+
+                <!-- Search Result table -->
+                <div class="table-responsive search_result_table mt-4">
+                    <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bar chart Info Pane -->
+            <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                 id="bar_chart_info_pane" role="tabpanel" aria-labelledby="bar_chart_info_tab">
+
+                <!--new charts added-->
+                <div class="row mt-4 w-100 flex-row-reverse justify-content-around mx-0 px-0">
+
+                    <div id="type_container" class="half" chart-height="750px">
+                    </div>
+
+                    <div id="year_container" class="half" chart-height="750px">
+                    </div>
+
+                    <div id="labels_container" class="full" chart-height="2000px">
+                    </div>
+
+                </div>
+            </div>
+
+            <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                 id="paragraph_info_pane" role="tabpanel" aria-labelledby="paragraph_info_tab">
+
+                <div class="charts-list-container">
+
+                    <div id="sentiment_container" class="half">
+                    </div>
+
+                    <div id="subject_container" class="half">
+                    </div>
+
+                    <div id="location_container" class="half">
+                    </div>
+
+                    <div id="organization_container" class="half">
+                    </div>
+
+                    <div id="person_container" class="full">
+                    </div>
+                </div>
+
+            </div>
+            <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                 id="paragraph_person_info_pane" role="tabpanel" aria-labelledby="paragraph_person_info_tab">
+                <div class="mt-4">
+                    <p id="PersonColumnSelection" class="text-left text-secondary float-right">فهرست براساس:</p>
+                    <!-- Column select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-right" dir="rtl">
+
+                        <select id="PersonColumnSelect" onchange="table_show_result()"
+                                class="form-select text-right float-right searchable-multi-select"
+                                style="direction: rtl;">
+
+                        </select>
+
+                    </div>
+
+                    <button class="btn float-left p-0 px-1" id="ExportExcel" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="خروجی اکسل" onclick="tableExportExcel()" type="button">
+                        <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                    </button>
+                </div>
+
+                <table id="PersonsTable" class="table table-striped PopUpTable">
+                </table>
+            </div>
+
+            <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                 id="paragraph_rule_info_pane" role="tabpanel" aria-labelledby="paragraph_rule_info_tab">
+
+                <div class="mt-4">
+                    <!-- Column Selection -->
+                    <p id="RuleColumnSelection" class="text-left text-secondary float-right">فهرست براساس:</p>
+
+
+                    <!-- Column select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-right" dir="rtl">
+
+                        <select id="RuleColumnSelect" onchange="show_rule_table_results()"
+                                class="form-select text-right float-right searchable-multi-select"
+                                style="direction: rtl;">
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="float-left">
+                        <!-- Download Buttons -->
+                        <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                                class="btn float-left p-0 px-1 mt-2" id="RuleDownloadBtn"
+                                onclick="DownloadSerachResultFunction()" type="button">
+                            <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                        </button>
+
+                        <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                                type="button">
+                            <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button>
+                    </div>
+
+                    <!-- Page select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-left">
+
+                        <input type="number" disabled="true" onchange="TablePaginationChanged(event)"
+                               id="RuleTablePaginationInput" min="1" max="1" value="1"
+                               class="form-select text-right float-right" style="direction: rtl;">
+
+                    </div>
+
+
+                    <!-- Result Pagination -->
+                    <p id="RuleResultPagination" class="text-left text-secondary float-left">صفحه:
+                        <span id="rule_from_page">1</span>
+                        /
+                        <span id="rule_total_page">1</span>
+                    </p>
+
+                </div>
+
+                <!-- Search Result table -->
+                <div class="table-responsive search_result_table mt-4">
+                    <table class="table table-striped SearchTable" style="min-height: 200px;" id="RuleSearchTable">
+                    </table>
+                </div>
+            </div>
+
+            <!-- EdgeModal Container -->
+            <button type="button" id="EdgeModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#EdgeModal"></button>
+            <div class="modal fade" id="EdgeModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="EdgeModalHeader" class="modal-title"></h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="EdgeModalText" class="modal-body text-justify">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" class="modal-footer">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal Container -->
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="DetailHeader" class="modal-title"></h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="DetailText" class="modal-body bg-light text-justify">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ChartModal Container -->
+            <button type="button" id="ChartModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#ChartModal"></button>
+            <div class="modal fade" id="ChartModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="ChartModalHeader" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="ChartModalText" class="modal-body text-justify">
+                            <h6 id="DocsCount" class='text-secondary'></h6>
+                            <div id="ChartModalBodyText">
+                            </div>
+
+                            <button id="LoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left"
+                                    style="color: #0e3f8b"><i class="fa fa-plus pl-2"
+                                                              style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" class="modal-footer">
+
+                            <input type="number" id="ColumnModalPaginationInput" min="1" max="1" value="1"
+                                   class="form-select text-right float-right d-none">
+
+                            <button id="DownloadDocuments" class="btn btn-primary"><i class="fa fa-download"></i>
+                                دانلود
+                                اسناد
+                            </button>
+
+                            <button id="ExportExcel2" class="btn btn-primary"><i class="fa fa-download"></i> خروجی
+                                اکسل
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ChartModal_2 Container -->
+            <button type="button" id="ChartModalBtn_2" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#ChartModal_2"></button>
+            <div class="modal fade" id="ChartModal_2">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="ChartModalHeader_2" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="ChartModalText_2" class="modal-body text-justify">
+                            <h6 id="DocsCount_2" class='text-secondary'></h6>
+                            <div id="ChartModalBodyText_2">
+                            </div>
+
+                            <button id="LoadMoreDocuments_2" class="btn btn-white w-100 mb-1 float-left"
+                                    style="color: #0e3f8b"><i class="fa fa-plus pl-2"
+                                                              style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" class="modal-footer">
+
+                            <input type="number" id="ColumnModalPaginationInput_2" min="1" max="1" value="1"
+                                   class="form-select text-right float-right d-none">
+
+
+                            <button id="ExportExcel_2" class="btn btn-primary"><i class="fa fa-download"></i> خروجی
+                                اکسل
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ActorChartModal Container -->
+            <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#actors_modal"></button>
+            <div class="modal fade" id="actors_modal">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="actor_modal_header" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal body -->
+
+                        <div class="bg-light modal-body text-justify">
+                            <div class="highlight_options mt-0 p-0 float-left" style="z-index: 13;">
+                                <button onclick="showOtherActors()" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" title="نمایش سایر کنشگران"
+                                        class="btn border float-left m-0  px-1"><i style="font-size: 24px;"
+                                                                                   class="bi text-primary bi-people-fill"></i>
+                                </button>
+                                <!-- <button class="btn float-left m-0  px-1"><i style="font-size: 24px;" class="bi text-success bi-hourglass-split"></i></button> -->
+                            </div>
+                            <br>
+                            <div id="actor_modal_body" class="bg-light text-justify">
+
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div id="modal_footer" class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollbar -->
+            <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+                <i class="far fa-caret-square-up" style="float: right;"></i>
+                <!-- <i class="bi bi-chevron-up"></i> -->
+                <!-- <i class="bi bi-chevron-double-up"></i> -->
+                <!-- <i class="bi bi-arrow-up-circle"></i> -->
+            </button>
+
+
+            <!-- Toast -->
+            <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+                <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body">
+                        <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        <i style="position: relative; top: -4px; font-size: 18px;"
+                           class="bi bi-info-circle-fill  text-info"></i>
+                        <span id="toast_message">
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+    <!-- Intro Js -->
+    <script src="../../static/js/search/search_tour.js"></script>
+    <script src="../../static/js/tour.js"></script>
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+    <script src="../../static/js/column.js"></script>
+    <script src="../../static/js/ChartColumnInteractivity.js"></script>
+
+    
+    
+
+
+</div>
+</body>

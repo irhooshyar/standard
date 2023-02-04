@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- jsnetworkx -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+    <link rel="stylesheet" href="../../static/styles/en_style/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+    <meta charset="UTF-8">
+    <title>Субъективная адаптация</title>
+
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <div class="topnav fixed-top" id="myTopnav">
+        <a href="javascript:void(0);" id="menu_icon">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a href="{% url 'ru_index' %}" id="brand_name"><i id="brand_logo" class="bi bi-x-diamond-fill px-1 pl-0"
+                style="position: relative; top:-1px;"></i>
+            Кибер карта </a>
+        <a href="{% url 'ru_information' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/docs.png" alt="">
+            Одобрения
+        </a>
+        <a href="{% url 'ru_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph4.png" alt="">
+            График утверждений
+        </a>
+        <a href="{% url 'ru_search' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/search2.png" alt="">
+            Поиск разрешений
+        </a>
+        <a href="{% url 'ru_subject' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/subject2.png" alt="">
+            Субъективный анализ
+        </a>
+        <a href="{% url 'ru_subject_statistics' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/amar_subject.png" alt="">
+            Статистический анализ
+        </a>
+        <a href="{% url 'ru_adaptation' %}" style="font-size: 12px;" class="active">
+            <img width="18px;" src="../../static/icons/adaptation2.png" alt="">
+            Субъективная адаптация
+        </a>
+        <a href="{% url 'ru_votes_analysis' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/ara13.png" alt="">
+            Анализ голосов
+        </a>
+        <a href="{% url 'ru_subject_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph2.png" alt="">
+            Субъективный график
+        </a>
+
+        <select dir="ltr" id="language" name="language" class="d-inline-block p-1 text-left mr-2 rounded float-right">
+            <option value="Iran">Iran</option>
+            <option value="England">England</option>
+            <option selected value="Russia">Russia</option>
+        </select>
+        <!-- <a href="#logout" id="logout">
+            Exit
+            <i id="logout_icon" class="fa fa-sign-out" aria-hidden="true"></i>
+        </a> -->
+
+    </div>
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Language selection -->
+    <script>
+        $(document).ready(function () {
+            $('select#language').on('change', function (e) {
+
+                selected_language = this.value;
+                current_url = window.location.href;
+                if (selected_language == 'Iran') {
+                    window.location = "{% url 'index' %}";
+                } else if (selected_language == 'England') {
+                    window.location = "{% url 'en_index' %}";
+                }
+
+            })
+        });
+    </script>
+
+
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row px-0 py-5 px-md-5 py-md-5 m-0">
+
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row mt-2 mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-0">
+                    <label for="country" class=" text-left bg-light float-left">страна:</label>
+                    <select dir="ltr" id="country" name="country" class="form-select text-left float-left"
+                        onchange="CountryChanged()">
+
+                        {# <option value="C1">England- C1</option>#}
+                        {# <option value="C2">England- C2</option>#}
+
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <!-- Search Box input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-4">
+                    <label class="float-left" style="direction: ltr;">Ключевые слова:</label>
+                    <input style="direction: ltr;" class="float-left form-control text-left"
+                        placeholder="ключевое слово1/ ключевое слово2/ ..." type="text" required="" name="KeywordsBox"
+                        id="KeywordsBox" value="">
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button id="advanced_search" type="button" class="btn float-left" data-bs-toggle="collapse"
+                        data-bs-target="#advanced_fields" aria-expanded="false"
+                        aria-controls="advanced_fields">Расширенные настройки</button>
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-left ml-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">поиск ...</span>
+                        </div>
+                        Показывать
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Advanced Fields in Second Row -->
+            <div id="advanced_fields" class="collapse show row flex-row mx-auto mt-4">
+
+                <!-- File Input -->
+                <div class="col-12 col-lg-4 bg-light pb-0 pt-3">
+                    <label class="text-left d-block w-100 bg-light float-left" style="direction: ltr;;">Файл
+                        черновика:</label>
+                    <button type="button" id="file_input_btn" class="btn mb-0 p-1 d-block float-left">
+                        <i class="bi bi-folder"></i>
+                        Выберите файл
+                    </button>
+                    <span id="file_name" dir="ltr" class="mb-0 p-1 float-left text-center text-secondary">
+                    </span>
+                    <input type="file" name="DraftFile" id="DraftFile" class="d-none">
+                </div>
+
+
+                <!-- document level input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Уровень документа:</label>
+                    <select id="LevelSelect" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- document subject input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Тема документа:</label>
+                    <select id="SubjectSelect" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- search type input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">тип документа:</label>
+
+                    <select id="TypeSelect" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- Approval References -->
+                <div class="col-md-6  pt-3 col-12 col-lg-3 mt-1 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;"> Ссылка на
+                        утверждение:</label>
+
+                    <select id="ApprovalReferences" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- From Year input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">С года:</label>
+
+                    <select id="YearFrom" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- To Year input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light">
+
+                    <label class="text-left bg-light float-left" style="direction: ltr;;">до года:</label>
+
+                    <select id="YearTo" class="form-select text-left float-left" style="direction: ltr;">
+                    </select>
+
+                </div>
+
+                <!-- Document Type -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Место:</label>
+
+                    <select id="WhereSelect" class="form-select text-left float-left" style="direction: ltr;">
+                        <option value="0">Название и тело</option>
+                        <option value="Title">Заголовок</option>
+                        <option value="Body">Тело</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <div dir="ltr" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-left" role="presentation">
+                    <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">результаты поиска</button>
+                </li>
+
+                <!-- Result Count -->
+                <p id="DocumentCount" style="font-family: Arial, Helvetica, sans-serif;" dir="ltr"
+                    class="text-left float-right text-secondary  pr-2"></p>
+
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-left px-1 bg-white" id="pills-tabContent">
+
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-left" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table dir="ltr" class="table table-light table-striped">
+                            <thead class="table">
+                                <tr>
+                                    <th class="text-center col-1"> #</th>
+                                    <th class="text-center col-5">название документа</th>
+                                    <th class="text-center col-4">Ключевые слова</th>
+                                    <th class="text-center col-2">Сравнение</th>
+                                </tr>
+                            </thead>
+                            <tbody id="SearchTable">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div id="modal_dialog" class="modal-dialog modal-fullscreen  modal-dialog-scrollable ">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: ltr !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title w-100">
+                        <div class="row w-100">
+                            <div id="document_header" class="col-6 float-left text-center my-auto"></div>
+                            <div id="draft_header" class="col-6 float-left text-center my-auto"></div>
+                        </div>
+                    </h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body bg-light text-justify">
+                    <div class="row w-100 ">
+                        <div id="DocumentParagraph" class="col-6 float-left"></div>
+                        <div id="DraftParagraphs" class="col-6 float-left"></div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="Go To Top" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+</body>
+
+<script>
+    let draft_selected_paragraphs = []
+    $(document).ready(function () {
+
+        $('#file_input_btn').on('click', function () {
+            $('#DraftFile').trigger('click');
+
+        });
+
+        $('#DraftFile').change(function (e) {
+            var fileName = e.target.files[0].name;
+            $('span#file_name').text(fileName);
+        });
+
+    });
+</script>
+
+
+<script>
+    init()
+
+    async function init() {
+        const country_id = document.getElementById("country").value
+
+        /****************** Level List ****************************/
+        let request_link = 'http://' + location.host + "/GetLevelByCountryId/" + country_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["documents_level_list"]
+
+        document.getElementById("LevelSelect").innerHTML = "<option value=" + 0 + " >" + "All" + "</option>";
+
+        for (var i = 0; i < response.length; i++) {
+            const level_id = response[i]["id"]
+            const level_name = response[i]["level"]
+
+            const tag = "<option value=" + level_id + " >" + level_name + "</option>";
+
+            document.getElementById("LevelSelect").innerHTML += tag
+        }
+
+        /****************** Subject List ****************************/
+        request_link = 'http://' + location.host + "/GetSubjectsByCountryId/" + country_id + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["documents_subject_list"]
+
+        document.getElementById("SubjectSelect").innerHTML = "<option value=" + 0 + " >" + "All" + "</option>";
+
+        for (var i = 0; i < response.length; i++) {
+            const subject_id = response[i]["id"]
+            const subject_name = response[i]["subject"]
+
+            const tag = "<option value=" + subject_id + " >" + subject_name + "</option>";
+
+            document.getElementById("SubjectSelect").innerHTML += tag
+        }
+
+        /****************** Type List ****************************/
+        request_link = 'http://' + location.host + "/GetTypeByCountryId/" + country_id + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["documents_type_list"]
+
+        document.getElementById("TypeSelect").innerHTML = "<option value=" + 0 + " >" + "All" + "</option>";
+
+        for (var i = 0; i < response.length; i++) {
+            const type_id = response[i]["id"]
+            const type_name = response[i]["type"]
+
+            const tag = "<option value=" + type_id + " >" + type_name + "</option>";
+
+            document.getElementById("TypeSelect").innerHTML += tag
+        }
+
+
+        /****************** ApprovalReferences List ****************************/
+        request_link = 'http://' + location.host + "/GetApprovalReferencesByCountryId/" + country_id + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["documents_approval_list"]
+
+        document.getElementById("ApprovalReferences").innerHTML = "<option value=" + 0 + " >" + "All" + "</option>";
+
+        for (var i = 0; i < response.length; i++) {
+            const approval_reference_id = response[i]["id"]
+            const approval_reference_name = response[i]["approval_reference"]
+
+            const tag = "<option value=" + approval_reference_id + " >" + approval_reference_name + "</option>";
+
+            document.getElementById("ApprovalReferences").innerHTML += tag
+        }
+
+        /****************** ApprovalReferences List ****************************/
+        request_link = 'http://' + location.host + "/GetYearsBoundByCountryId/" + country_id + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["documents_approval_list"]
+        const min_year = response[0]
+        const max_year = response[1]
+
+
+        document.getElementById("YearFrom").innerHTML = "<option value=" + 0 + " >" + "All" + "</option>";
+        document.getElementById("YearTo").innerHTML = "<option value=" + 0 + " >" + "All" + "</option>";
+
+        for (var i = max_year; i >= min_year; i--) {
+            const tag = "<option value=" + i + " >" + i + "</option>";
+            document.getElementById("YearFrom").innerHTML += tag
+            document.getElementById("YearTo").innerHTML += tag
+        }
+
+    }
+
+    function CountryChanged() {
+        init()
+    }
+
+    async function ShowResult() {
+
+        await SpinnerModeFunction("Active");
+
+        const country_id = document.getElementById("country").value;
+        const level_id = document.getElementById("LevelSelect").value;
+        const subject_id = document.getElementById("SubjectSelect").value;
+        const type_id = document.getElementById("TypeSelect").value;
+        const approval_reference_id = document.getElementById("ApprovalReferences").value;
+        const from_year = document.getElementById("YearFrom").value;
+        const to_year = document.getElementById("YearTo").value;
+        const place = document.getElementById("WhereSelect").value;
+        const search_type = 'Exact'
+        const text = document.getElementById("KeywordsBox").value;
+        const draft_file_size = document.getElementById('DraftFile').files.length
+
+        let keywords = text.split('/');
+        keywords = keywords.map(function (keyword) {
+            return keyword.trim();
+        })
+
+        keywords = keywords.filter(keyword => (keyword != '' && keyword != ' '));
+        let documents_information_result = [];
+
+        all_keywords = keywords;
+
+        if (keywords.length > 0) {
+
+            if (draft_file_size != 0) {
+                uploadDraftFile(keywords);
+            } else {
+                $('span#file_name').text('No file chosen.');
+                draft_selected_paragraphs = [];
+
+            }
+            for (keyword of keywords) {
+
+                let request_link = 'http://' + location.host + "/SearchDocumentExact/" + country_id + "/" + level_id + "/" + subject_id + "/" + type_id + "/" +
+                    approval_reference_id + "/" + from_year + "/" + to_year + "/" + place + "/" + keyword + "/"
+
+                let response = await fetch(request_link).then(response => response.json());
+                /*  Get Documents Information Result */
+                documents_information_result.push(response["documents_information_result"])
+
+            }
+            let sorted_document_list = sortDocuments(documents_information_result);
+            showDocumentInformation(sorted_document_list)
+
+        } else {
+            alert('Enter some keywords.')
+            $('#KeywordsBox').focus();
+        }
+
+        await SpinnerModeFunction("Disable");
+
+    }
+
+    function sortDocuments(documents_information_result) {
+        documents_dict = {}
+
+        for (let documents of documents_information_result) {
+            for (let doc of documents) {
+                if (doc['id'] in documents_dict) {
+                    documents_dict[doc['id']]['searched_word'] += ('-' + doc['searched_word'])
+                    documents_dict[doc['id']]['keywords_count'] += 1
+                } else {
+                    documents_dict[doc['id']] = doc
+                }
+            }
+        }
+
+        // Create items array
+        var sorted_items = Object.keys(documents_dict).map(function (key) {
+            return [key, documents_dict[key]['name'], documents_dict[key]['searched_word'], documents_dict[key]['keywords_count']];
+        });
+
+        // Sort the array based on the second element
+        sorted_items.sort(function (first, second) {
+            return second[3] - first[3];
+        })
+        return sorted_items;
+    }
+
+    function showDocumentInformation(sorted_document_list) {
+        document.getElementById("SearchTable").innerHTML = ""
+        let index = 1;
+
+        for (let document_info of sorted_document_list) {
+
+            const id = document_info[0]
+            const name = document_info[1]
+            let keywords = document_info[2]
+            const document_link = 'http://' + location.host + "/information/?id=" + id
+            const detail_function = "DetailFunction(" + id + ",'" + keywords + "')";
+
+            keywords = keywords.replaceAll('-', ' - ');
+
+            const tag = "<tr>" +
+                "<td>" + index + "</td>" +
+                '<td><a href="' + document_link + '">' + name + "</a></td>" +
+                "<td style='font-size:14px;'>" + keywords + "</td>" +
+                "<td>" + '<button type="button" class="btn modal_btn" data-bs-toggle="modal" ' + ' onclick="' + detail_function + '" data-bs-target="#myModal">Details</button>' + "</td>" +
+                "</tr>";
+
+            document.getElementById("SearchTable").innerHTML += tag;
+            index += 1
+
+        }
+
+        document.getElementById("DocumentCount").innerText = (sorted_document_list.length).toString() + " documents found.";
+    }
+
+    async function DetailFunction(document_id, text) {
+
+        let request_link = 'http://' + location.host + "/GetKeywordsDetailsExact/" + document_id + "/" + text + "/"
+        let response = await fetch(request_link).then(response => response.json());
+
+        /*  Show detail Result */
+        let document_paragraphs_result = response["document_paragraphs_result"]
+        let preprocess_text = response["preprocess_text"][0]
+        let document_name = response["document_name"][0]
+
+        await showDetailsDataExact(document_id, document_name, document_paragraphs_result, preprocess_text)
+
+    }
+
+    async function showDetailsDataExact(document_id, document_name, paragraphs_list, text) {
+
+        /* Title Text */
+        const link = 'http://' + location.host + "/information/?id=" + document_id
+        let title_tag = "<a href='" + link + "'>" + document_name + "</a>"
+        document.getElementById("document_header").innerHTML = title_tag
+
+        /* Body Text */
+        const keywords = text.split("-")
+
+        document.getElementById("DocumentParagraph").innerHTML = "";
+
+        /* Highligth Keywords in Document */
+        for (let paragraph of paragraphs_list) {
+
+            for (let keyword of keywords) {
+
+                let tag = "<span class='text-primary bold'>" + keyword + "</span> "
+
+                if (paragraph.startsWith(keyword))
+                    paragraph = paragraph.replaceAll(keyword + ' ', tag + ' ');
+
+                paragraph = paragraph.replaceAll(' ' + keyword + ' ', ' ' + tag + ' ');
+                paragraph = paragraph.replaceAll(' ' + keyword, ' ' + tag);
+            }
+
+            /* Hightlight Approval References in Document */
+            $("#ApprovalReferences option").each(function () {
+                if ($(this).val() != 0) {
+
+                    let approval_reference = $(this).text().replace('مصوبات ', '');
+                    let tag = "<span class='text-warning bold'>" + approval_reference + "</span> "
+
+                    if (paragraph.startsWith(approval_reference))
+                        paragraph = paragraph.replaceAll(approval_reference + ' ', tag + ' ');
+
+                    paragraph = paragraph.replaceAll(' ' + approval_reference + ' ', ' ' + tag + ' ');
+                    paragraph = paragraph.replaceAll(' ' + approval_reference, ' ' + tag)
+
+
+                }
+
+            });
+
+            tag = "<li class='mb-3'>" + paragraph + "</li>"
+            document.getElementById("DocumentParagraph").innerHTML += tag;
+
+        }
+
+
+        draft_file_name = $('span#file_name').text().split('.')[0];
+        document.getElementById("draft_header").innerHTML = 'Draft: ' + draft_file_name;
+
+        /* Highligth All Keywords in Draft */
+        document.getElementById("DraftParagraphs").innerHTML = ""
+        for (let paragraph of draft_selected_paragraphs) {
+
+            for (let keyword of all_keywords) {
+
+                let tag = "<span class='text-primary bold'>" + keyword + "</span> "
+
+                if (paragraph.startsWith(keyword))
+                    paragraph = paragraph.replaceAll(keyword + ' ', tag + ' ');
+
+                paragraph = paragraph.replaceAll(' ' + keyword + ' ', ' ' + tag + ' ');
+                paragraph = paragraph.replaceAll(' ' + keyword, ' ' + tag);
+            }
+
+            /* Hightlight Approval References in Draft */
+            $("#ApprovalReferences option").each(function () {
+                if ($(this).val() != 0) {
+                    let approval_reference = $(this).text().replace('مصوبات ', '');;
+                    let tag = "<span class='text-warning bold'>" + approval_reference + "</span> "
+
+                    if (paragraph.startsWith(approval_reference))
+                        paragraph = paragraph.replaceAll(approval_reference + ' ', tag + ' ');
+
+                    paragraph = paragraph.replaceAll(' ' + approval_reference + ' ', ' ' + tag + ' ');
+                    paragraph = paragraph.replaceAll(' ' + approval_reference, ' ' + tag)
+                }
+            });
+
+            tag = "<li class='mb-3'>" + paragraph + "</li>"
+            document.getElementById("DraftParagraphs").innerHTML += tag;
+
+
+        }
+
+
+        document.getElementById("DraftParagraphs").innerHTML = "<ul>" + document.getElementById("DraftParagraphs").innerHTML + "</ul>";
+        let tag2 = ''
+        if (draft_file_name != 'No file chosen.') {
+            tag2 = '<button id="more_comparison" onclick="more_comparison(' + document_id + ')" type="button" class="btn float-left" data-bs-dismiss="modal">Comapre more</button>'
+        } else {
+            tag2 = '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> '
+        }
+
+        document.getElementById('modal_footer').innerHTML = (tag2)
+
+    }
+
+    function uploadDraftFile(keywords) {
+
+        let form_data = new FormData();
+
+        let draft_file = document.getElementById('DraftFile').files[0]
+        let country_id = document.getElementById("country").value
+        let keywords_text = keywords.toString()
+
+        form_data.append('keywords', keywords_text);
+        form_data.append('draft_file', draft_file);
+        form_data.append('country_id', country_id);
+        let link_request = 'http://' + location.host + '/UploadDraft/';
+
+        /* Send Request */
+        $.ajax({
+            url: link_request,
+            data: form_data,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            async: true,
+            enctype: 'multipart/form-data',
+
+        }).done(function (res) {
+            draft_selected_paragraphs = res['selected_paragraphs'];
+
+
+        }).fail(function (res) {
+
+        });
+
+
+    }
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+
+    function more_comparison(document_id) {
+
+        const draft_file_name = $('span#file_name').text();
+        const country_id = document.getElementById("country").value
+        const searched_keywords = all_keywords.toString();
+
+        if (draft_file_name != 'No file chosen.') {
+            let link_request = 'http://' + location.host + '/en/adaptation_comparison/' + country_id + "/" + document_id + "/" + draft_file_name + "/" + searched_keywords + "/";
+            window.open(link_request, '_blank');
+        }
+
+    }
+</script>
+
+</html>

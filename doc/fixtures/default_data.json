@@ -1,0 +1,119 @@
+[
+  {
+    "model": "doc.similarityMeasure",
+    "fields": {
+      "sim_measure_id": 1,
+      "algorithm": "CommonWords",
+      "persian_name": "رخداد کلمات مشترک (شباهت جاکارد)",
+      "type": "Document"
+    }
+  },
+  {
+    "model": "doc.similarityMeasure",
+    "fields": {
+      "sim_measure_id": 2,
+      "algorithm": "Word2Vec",
+      "persian_name": "شباهت معنایی Word2Vec (شباهت کسینوسی)",
+      "type": "Document"
+    }
+  },
+  {
+    "model": "doc.similarityMeasure",
+    "fields": {
+      "sim_measure_id": 3,
+      "algorithm": "lsiSimilarity",
+      "persian_name": "شباهت LSI",
+      "type": "Document"
+    }
+  },
+  {
+    "model": "doc.similarityMeasure",
+    "fields": {
+      "sim_measure_id": 4,
+      "algorithm": "w2w_graph",
+      "persian_name": "تعداد تکرار نسبت به کل اسناد",
+      "type": "Term"
+    }
+  },
+  {
+    "model": "doc.similarityMeasure",
+    "fields": {
+      "sim_measure_id": 5,
+      "algorithm": "w2w_graph_normal",
+      "persian_name": "تعداد تکرار نسبت به اجتماع (نرمال شده)",
+      "type": "Term"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 1,
+      "type": "آیین نامه",
+      "persian_name": "آیین نامه"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 2,
+      "type": "قانون",
+      "persian_name": "قانون"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 3,
+      "type": "مصوبه",
+      "persian_name": "مصوبه"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 4,
+      "type": "طرح",
+      "persian_name": "طرح"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 5,
+      "type": "مقررات",
+      "persian_name": "مقررات"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 6,
+      "type": "لایحه",
+      "persian_name": "لایحه"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 7,
+      "type": "موادی",
+      "persian_name": "موادی"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 8,
+      "type": "اصلاحیه",
+      "persian_name": "اصلاحیه"
+    }
+  },
+  {
+    "model": "doc.documentType",
+    "fields": {
+      "doc_type_id": 9,
+      "type": "اساسنامه",
+      "persian_name": "اساسنامه"
+    }
+  }
+]

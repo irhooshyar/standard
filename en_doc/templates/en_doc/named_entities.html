@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index2.css">
+    <link rel="stylesheet" href="../../static/styles/vote_analysis.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <title>Named Entity Recognition</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+
+    <!-- Menu -->
+    <nav dir="ltr" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "en_doc/header.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#SepecificDropdown').addClass('active');
+            $('#named_entities_panel').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'Iran') {
+                    let page_name = current_url.split('/')[3]
+                    console.log(page_name)
+                    let requested_url = current_url.replace('/en', '')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <div class="row p-5 flex-row bg-light mx-0">
+        <form id="subject_analysis_form" action="" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+
+            <div class="row flex-row mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+                    <label for="country" class=" text-left bg-light float-left">Country:</label>
+                    <select dir="ltr" id="country" name="country" class="form-select text-left float-left"
+                        onchange="CountryChanged()">
+
+                        {# <option value="C1">England- C1</option>#}
+                        {# <option value="C2">England- C2</option>#}
+
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+
+                <!-- Show button -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-left mt-1 ml-4">
+                        show
+                        <div class="spinner-border text-light ml-2" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" role="tablist">
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="result_doc" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#result_doc_subject" type="button" role="tab" aria-controls="result_doc_subject"
+                    aria-selected="true">Documents</button>
+            </li>
+
+
+            <!-- Result Count -->
+            <p id="SearchResultLable" class="result_count_label text-left float-right text-secondary pr-2"></p>
+            <p id="DocsWithoutSubject" style="position: relative;top: 10px;"
+                class="result_count_label d-none text-left float-right text-secondary pr-2"></p>
+        </ul>
+
+        <div id="original_pane" class="tab-content float-left bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <div dir=ltr id="result_doc_subject" class="tab-pane w-100 fade show active float-left" role="tabpanel"
+                aria-labelledby="result_doc_subject">
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped SubjectTable" id="SubjectTableId">
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: ltr !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title">Title</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="Go To Top" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+
+    <script>
+        init()
+
+        async function init() {
+
+            CountryChanged()
+        }
+
+        async function CountryChanged() {
+            ShowResult()
+
+        }
+
+
+        async function ShowResult() {
+
+            await SpinnerModeFunction("Active");
+            startBlockUI('SubjectTableId');
+            const country_id = document.getElementById("country").value
+            
+
+            const request_link4 = 'http://' + location.host + "/en" + "/GetDocumentsWithEntitiesByCountry/" + country_id + "/"
+            var response4 = await fetch(request_link4).then(response4 => response4.json());
+            let documentsList = response4["documentsList"]
+
+            let document_result = [];
+            for (var i = 0; i < documentsList.length; i++) {
+
+                //const subject = documentsList[i]["subject"]
+                const document_id = documentsList[i]["document_id"]
+                const document_name = documentsList[i]["document_name"]
+                const  document_entities_count= documentsList[i]["document_entities_count"]
+                const document_link = 'http://' + location.host + "/en/information/?id=" + document_id
+                const doc_name = '<a target="blank" href="' + document_link + '">' + document_name + "</a>"
+                const detail_function = "DetailFunction(" + document_id + ")"
+                const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" ' + ' onclick="' + detail_function + '" data-bs-target="#myModal">details</button>'
+                const row = {
+                    "id": (i + 1), "name": doc_name,"document_entities_count" : document_entities_count, "detail": detail
+                }
+                document_result.push(row)
+            }
+
+            document.getElementById("SubjectTableId").innerHTML = "";
+
+            $('.SubjectTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "Not Found.",
+                "columns": [{
+                    "name": "id",
+                    "title": "#",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "Document Name",
+                    "style": {
+                        "width": "25%"
+                    }
+                },{
+                    "name": "document_entities_count",
+                    "title": "Entities Count",
+                    "style": {
+                        "width": "10%"
+                    },
+                    "sorted": true,
+                    "direction": "DESC"
+                },
+                 {
+                    "name": "detail",
+                    "title": "Details",
+                    "style": {
+                        "width": "5%"
+                    }
+                }
+                ],
+                "rows": document_result
+            });
+
+            document.getElementById("SearchResultLable").innerText = (documentsList.length).toString() + " documents found.";
+            stopBlockUI('SubjectTableId', 'document');
+            await SpinnerModeFunction("Disable");
+        }
+
+        async function DetailFunction(document_id) {
+
+            
+                let request_link = 'http://' + location.host + "/en" + "/GetDocumentEntities/" + document_id + "/"
+                let response = await fetch(request_link).then(response => response.json());
+                
+
+                /*  Show detail Result */
+                let document_paragraphs_info = response["document_paragraphs_info"]
+                let document_name = response["document_name"]
+                console.log(document_paragraphs_info)
+                console.log(document_name)
+
+                await showDocumentParagraphs(document_id, document_name, document_paragraphs_info)
+
+            
+        }
+
+        async function showDocumentParagraphs(document_id, document_name, paragraphs_dict) {
+            /* Title Text */
+            const link = 'http://' + location.host + "/en/information/?id=" + document_id
+            let title_tag = "<a target='blank' href='" + link + "'>" + document_name + "</a>"
+            document.getElementById("ModalHeader").innerHTML = title_tag
+
+
+            /* Body Text */
+            document.getElementById("DetailText").innerHTML = ""
+            for (let [paragraph_id, paragraph_info] of Object.entries(paragraphs_dict)) {
+                paragraph_text = paragraph_info["text"]
+                paragraph_entities = paragraph_info["entities"]
+                for (let [entity, entity_type] of Object.entries(paragraph_entities)){
+                    entity_tag = "<span class='bg-info bold p-1 rounded'>" + entity +": "+ entity_type + "</span>"
+                    paragraph_text = paragraph_text.replaceAll(entity, entity_tag)
+                }
+
+                const tag = "<li class='mb-3'>" + paragraph_text + "</li>"
+                document.getElementById("DetailText").innerHTML += tag;
+            }
+            document.getElementById("DetailText").innerHTML = "<ul>" + document.getElementById("DetailText").innerHTML + "</ul>"
+        }
+
+
+        async function SpinnerModeFunction(mode) {
+            if (mode === "Active") {
+                $(".spinner-border").addClass("active");
+            } else if (mode === "Disable") {
+                $(".spinner-border").removeClass("active");
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#original_tabs button.nav-link').on('click', function () {
+                // alert($(this).attr('id'));
+                selected_tab_id = $(this).attr('id');
+                $('.result_count_label').removeClass('d-none');
+
+                if (selected_tab_id == 'result_doc') {
+
+                    $('#DocsWithoutSubject').addClass('d-none')
+
+                } else if (selected_tab_id == 'without_subject') {
+
+                    $('#SearchResultLable').addClass('d-none')
+
+                } else {
+
+                    $('.result_count_label').addClass('d-none');
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>

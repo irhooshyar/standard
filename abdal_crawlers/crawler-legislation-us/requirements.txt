@@ -1,0 +1,8 @@
+beautifulsoup4~=4.11.1
+requests~=2.27.1
+lxml
+pandas
+openpyxl
+Django
+html2text
+aiohttp

@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+{#    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"#}
+{#         />#}
+{#    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">#}
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.3.0/introjs-ltr.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+   <script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+    <link rel="stylesheet" href="../../static/styles/en_style/index2.css">
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+    <link rel="stylesheet" href="../../static/styles/information_chart.css">
+    <link rel="stylesheet" href="../../static/styles/en_style/user_guide_tour.css">
+
+
+    <script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>
+
+    <meta charset="UTF-8">
+
+    <title>Approvals Profile</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="ltr" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "en_doc/header.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#ApprovalsDropdown').addClass('active');
+            $('#information_panel').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'Iran') {
+                    let page_name = current_url.split('/')[3]
+                    console.log(page_name)
+                    let requested_url = current_url.replace('/en', '')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+
+        <!-- Form Inputs -->
+        <form autocomplete="on" action="" id="information_form" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+            <div class="row flex-row mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+                    <label style=" direction:ltr !important;" style=" direction:ltr !important;" for="country" class=" text-left bg-light float-left">Country:</label>
+                    <select dir="ltr" id="country" name="country" class="form-select text-left float-left"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+
+                        <option value="{{ k }}">{{ v }}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- selected document -->
+                <div id="document_div" class="col-md-6 pt-3 col-12 col-lg-6 mt-1">
+                    <label style=" direction:ltr !important;" for="document" class="text-left bg-light float-left">Document:</label>
+                    <select id="document" dir="ltr" name="document"
+                        class="form-select d-none text-left float-left document_select_box" onchange="ShowResult()"
+                        disabled>
+                    </select>
+                    <button dir="ltr" id="document_select" type="button"
+                        class="btn d-inline-block text-truncate w-100 text-left text-black float-left mx-0 bg-white border"
+                        data-bs-toggle="modal" data-bs-target="#SelectDocumentModal">
+                        Select
+                        <i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black" style="float: right;top: 2px;"></i>
+
+                    </button>
+                </div>
+
+                <!-- Download button -->
+                <div class="col-lg-4 col-md-2 pt-5 col-12 mt-1 px-0">
+                    <button type="button" id="copy_document" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Copy Document Name" class="float-left text-left p-0 d-none" onclick="copyDocumentName()">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+
+                    <button type="button" id="document_search" onclick="ShowDocumentContent()"
+                        class="btn d-flex float-left  mr-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">searching...</span>
+                        </div>
+                        Show
+                    </button>
+
+
+                    <div dir="ltr" class="dropdown float-left mr-2">
+                        <button id="document_download" class="btn dropdown-toggle float-left text-left" type="button"
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Download Document
+                        </button>
+                        <ul dir="ltr" class="dropdown-menu px-0 mx-0" aria-labelledby="dropdownMenuButton1">
+                            <li class="text-left" id="pdf_download" onclick="generatePDF()"><a class="dropdown-item"
+                                    href="#">PDF</a></li>
+                            <li class="text-left"><a class="dropdown-item" id="txt_download" download href="#">TXT</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div dir="ltr" class="doc_info_table mt-5" style="border: 1px solid #006666">
+                    <table style=" direction:ltr !important;" class="table table-light">
+                        <thead class="table" style="background: #006666;">
+                            <tr>
+                                <th class="text-center" scope="col">Legislative Body</th>
+                                <th class="text-center" scope="col">Legistlation Date</th>
+                                <th class="text-center" scope="col">Hierarchy of Law</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" id="approval_reference">-</td>
+                                <td class="text-center" id="approval_date">-</td>
+                                <td class="text-center" id="document_level">-</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+            </div>
+
+        </form>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="def_keywords_tab" class="nav-link active" data-bs-toggle="pill" data-bs-target="#def_keywords_pane"
+                    type="button" role="tab" aria-controls="def_keywords_pane" aria-selected="false">Definitions Analysis</button>
+            </li>
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="reference_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#reference_pane"
+                    type="button" role="tab" aria-controls="reference_pane" aria-selected="false">References</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="actor_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#actor_analysis_pane" type="button" role="tab" aria-controls="actor_analysis_pane"
+                    aria-selected="false">Actors Analysis</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="abbreviations_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#abbreviations_pane" type="button" role="tab" aria-controls="abbreviations_pane"
+                    aria-selected="false">Abbreviations</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="multiple_terms_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#multiple_terms_pane" type="button" role="tab" aria-controls="multiple_terms_pane"
+                    aria-selected="false">Phrases And Expressions</button>
+            </li>
+{#            <li class="nav-item float-left" role="presentation">#}
+{#                <button id="subject_analysis_tab" class="nav-link" data-bs-toggle="pill"#}
+{#                    data-bs-target="#subject_analysis_pane" type="button" role="tab"#}
+{#                    aria-controls="subject_analysis_pane" aria-selected="false">Subjects Analysis</button>#}
+{#            </li>#}
+{#            <li class="nav-item float-left" role="presentation">#}
+{#                <button id="user_comments" class="nav-link" data-bs-toggle="pill"#}
+{#                    data-bs-target="#user_comments_pane" type="button" role="tab" aria-controls="user_comments_pane"#}
+{#                    aria-selected="false">User Comments</button>#}
+{#            </li>#}
+{#            <li class="nav-item float-left" role="presentation">#}
+{#                <button id="user_notes" class="nav-link" data-bs-toggle="pill"#}
+{#                    data-bs-target="#user_notes_pane" type="button" role="tab" aria-controls="user_notes_pane"#}
+{#                    aria-selected="false">User Notes</button>#}
+{#            </li>#}
+        </ul>
+
+        <div id="original_pane" class="tab-content float-left bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+
+            <!-- Definition and keywords Pane -->
+            <div id="def_keywords_pane" class="tab-pane w-100 fade show active float-left  px-0 border-0" role="tabpanel"
+                aria-labelledby="def_keywords_tab">
+
+                <!-- Definition Segment -->
+                <h6 id="Definition_header" class="header mt-4  text-white d-block w-100 pt-2 px-2 float-left">
+                    <label style=" direction:ltr !important;" for="definition_container" class="text-left float-left d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Definitions</label>
+                </h6>
+                <div id="definition_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                </div>
+
+                <!-- Final Keywords Segment -->
+                <h6 id="Final_Keywords_header"
+                    class="header bg-secondary mt-0 border text-white d-block w-100 pt-2 px-2 float-left">
+                    <label style=" direction:ltr !important;" class="text-left float-left"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Final Keywords</label>
+                </h6>
+
+                <div id="final_Keywords_container" dir="ltr" class="text-left bg-light border p-4">
+
+                </div>
+
+            </div>
+
+            <!-- Multiple Terms Pane -->
+            <div class="tab-pane fade float-left w-100 " id="multiple_terms_pane" role="tabpanel"
+                aria-labelledby="multiple_terms_tab">
+
+                <div class="row mt-4 w-100 flex-row mx-auto">
+
+                                        <!-- statistical doc info segment -->
+                    <h6 class="Term_count_header pr-2">
+                        <label style=" direction:ltr !important;" class="text-left float-left mt-5">Document Words Number:</label>
+                    </h6>
+                    <div dir="ltr" class="doc_info_table">
+                        <table style=" direction:ltr !important;" class="table table-light">
+                            <thead class="table bg-secondary">
+                                <tr>
+                                    <th class="text-center" scope="col">Total Words</th>
+                                    <th class="text-center" scope="col">Stop Words</th>
+                                    <th class="text-center" scope="col">Distinct Words</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center" id="total_words">-</td>
+                                    <td class="text-center" id="stop_words">-</td>
+                                    <td class="text-center" id="distinct_words">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TF-IDF Segment -->
+                    <div dir="ltr" class="col-md-2 px-0 col-12 col-lg-2">
+                        <h6 class="table_header text-center  p-2  mb-0" style="padding-top: 4px !important;">
+                            <label style=" direction:ltr !important;" class="text-left float-left mt-2">Words With High TF-IDF:</label>
+                        </h6>
+                        <div dir="ltr" class="mt-0 pl-2">
+                            <table style=" direction:ltr !important;" class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-secondary">
+                                    <tr>
+                                        <th class="text-center" scope="col">#</th>
+                                        <th class="text-center" scope="col">Word</th>
+                                        <th class="text-center" scope="col">Frequency</th>
+                                        <!--<th class="text-center" scope="col">TF-IDF</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody id="TFIDF_table">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- container for 2-gram words whit (h and table) -->
+                    <div dir="ltr" class="col-md-5 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                           Bigrams
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table style=" direction:ltr !important;" class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">#</th>
+                                        <th class="text-center" scope="col">Word</th>
+                                        <th class="text-center" scope="col">Score</th>
+                                        <th class="text-center" scope="col">Frequency</th>
+                                        <th class="text-center" scope="col">Confirm</th>
+                                        <th class="text-center" scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="2gram_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 2Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-left ngram-textbox"
+                                placeholder="first keyword/second keyword/..." type="text" required=""
+                                name="2gram_TextBox" id="2gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('2gram')"
+                                class="btn float-left mx-0">
+                                Save
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                    <!-- container for 3-gram words with (h and table) -->
+                    <div dir="ltr" class="col-md-5 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            Trigrams
+                        </h6>
+                        <div class="mt-0 pr-2">
+                            <table style=" direction:ltr !important;" class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-secondary">
+                                    <tr>
+                                        <th class="text-center" scope="col"> #</th>
+                                        <th class="text-center" scope="col">Word</th>
+                                        <th class="text-center" scope="col">Score</th>
+                                        <th class="text-center" scope="col">Frequency</th>
+                                        <th class="text-center" scope="col">Confirm</th>
+                                        <th class="text-center" scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="3gram_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 3Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-left ngram-textbox"
+                                placeholder="first keyword/second keyword/..." type="text" required=""
+                                name="3gram_TextBox" id="3gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('3gram')"
+                                class="btn float-left mx-0">
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Reference Pane -->
+            <div class="tab-pane w-100 fade float-left" id="reference_pane" role="tabpanel"
+                aria-labelledby="reference_tab">
+                <!-- References in doc -->
+                <h6 class="header mt-4 border text-white d-block w-100 pt-2 px-2 float-left">
+                    <label style=" direction:ltr !important;" class="text-left float-left "><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        References in Document</label>
+                </h6>
+
+
+                <div class="text-left bg-light border border-top-0  px-4 mt-5">
+                    <ul dir="ltr" id="references_list">
+                    </ul>
+                </div>
+
+                <!-- Docs referenced to this doc -->
+                <h6 class="header mt-0 border text-white d-block w-100 pt-2 px-2 float-left">
+                    <label style=" direction:ltr !important;" class="text-left float-left"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Documents Refrenced To This Document</label>
+                </h6>
+
+                <div class="text-left bg-light border px-4">
+                    <ul dir="ltr" id="citation_list">
+                    </ul>
+                </div>
+
+            </div>
+
+
+
+            <!-- user comments pane -->
+            <div class="tab-pane w-100 fade float-left" id="user_comments_pane" role="tabpanel"
+                aria-labelledby="user_comments_tab">
+                    <div class="row flex-row px-0 m-0 mt-5">
+                    <div class="col-7">
+
+                        <div dir="ltr" class="doc_info_table">
+                            <table style=" direction:ltr !important;" class="table table-light table-striped cm_table">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">#</th>
+                                        <th class="text-center" scope="col">User Name</th>
+                                        <th class="text-center" scope="col">Comment</th>
+                                        <th class="text-center" scope="col">Agreement or Disagreement</th>
+                                        <th class="text-center" scope="col">Agreement Number</th>
+                                        <th class="text-center" scope="col">Disagreement Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comments_table_body">
+                                    <tr>
+                                        <td class="text-center" id="comment_number">-</td>
+                                        <td class="text-center" id="comment_first_name">-</td>
+                                        <td class="text-center" id="comment_text">-</td>
+                                        <td class="text-center">
+                                        <div class="">
+                                            <button type="button" data-change-to="agree"
+                                                    class="btn btn-success btn-agree-state"
+                                                    data-document-comment-id=""><i class="bi bi-hand-thumbs-up-fill"
+                                                                                style="position:relative;top:-3px;"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="agree"></i></button>
+                                            <button type="button" data-change-to="disagree"
+                                                    class="btn btn-danger btn-agree-state"
+                                                    data-document-comment-id=""><i class="bi bi-hand-thumbs-down-fill"
+                                                                                style="position:relative;top:-3px;"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="disagree"></i></button>
+                                        </div>
+                                    </td>
+                                        <td class="text-center" id="comment_agree">-</td>
+                                        <td class="text-center" id="comment_disagree">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                     <form class="shadow p-4 bg-white" id="comment_form" dir="ltr" method="POST">
+                        <div class="row text">
+                            <div class="mb-3">
+                                  <label style=" direction:ltr !important;" for="exampleFormControlTextarea1" class="form-label">Please type your comment about the selected document<span style="color: red">*</span>:</label>
+                                  <textarea class="form-control" id="form_comment_text" rows="10"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                 <input class="form-check-input p-1" style=" margin:5px " type="checkbox" value="true" id="form_comment_show_info" checked>
+                                 <label style=" direction:ltr !important;" class="form-check-label" style="margin-left: 28px" for="form_comment_show_info">
+                                    Personal Information
+                                 </label>
+                            </div>
+                            <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" value="submit">Submit Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- user notes Pane -->
+            <div class="tab-pane w-100 fade float-left" id="user_notes_pane" role="tabpanel"
+                aria-labelledby="user_notes_tab">
+                    <div class="row flex-row px-0 m-0 mt-5">
+                    <div class="col-7">
+
+                        <div dir="ltr" class="doc_info_table">
+                            <table style=" direction:ltr !important;" class="table table-light table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">#</th>
+                                        <th class="text-center" scope="col">Note Text</th>
+                                        <th class="text-center" scope="col">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notes_table_body">
+                                    <tr>
+                                        <td class="text-center" id="note_number">-</td>
+                                        <td class="text-center" id="note_text">-</td>
+                                        <td class="text-center" id="note_time">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                     <form class="shadow p-4 bg-white" id="note_form" dir="ltr" method="POST">
+                        <div class="row text">
+                            <div class="mb-3">
+                                  <label style=" direction:ltr !important;" for="exampleFormControlTextarea1" class="form-label">Please insert your note about the selected document<span style="color: red">*</span>:</label>
+                                  <textarea class="form-control" id="form_note_text" rows="10"></textarea>
+                            </div>
+
+                            <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" value="submit">Submit Note</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Pane -->
+            <div class="tab-pane fade float-left w-100" id="subject_analysis_pane" role="tabpanel"
+                aria-labelledby="subject_analysis_tab">
+                <!-- Subject distribution segment -->
+                <h6 class="subject_distribution pr-2 w-100 mt-4 text-left float-left">
+                    Subject Distribution
+                </h6>
+                <br>
+
+
+                <div id="subject_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+
+                </div>
+
+                <!-- Keywords for each subject segment -->
+                <h6 class="subject_keywords pr-2">
+                    <label style=" direction:ltr !important;" for="doc_info" class="text-left float-left mt-5">Document Keywords For Each Subject</label>
+                </h6>
+                <div dir="ltr" class="table-responsive">
+                    <table style=" direction:ltr !important;" class="table table-light table-striped  caption-top">
+                        <thead class="table">
+                            <tr>
+                                <th class="text-center" scope="col">#</th>
+                                <th class="text-center" scope="col"> Subject</th>
+                                <th class="text-center" scope="col">Text Keywords (repetation times)</th>
+                                <th class="text-center" scope="col">Title Keywords (repetation times)</th>
+                                <th class="text-center" scope="col">Specialist Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject_table">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Abbreviations Pane -->
+            <div id="abbreviations_pane" class="tab-pane w-100 fade float-left  px-0 border-0" role="tabpanel"
+                aria-labelledby="abbreviation_tab">
+                <!-- Abbreviation table -->
+                <div class="table-responsive search_result_table mt-4">
+                    <table class="table table-striped AbbreviationTable" id="AbbreviationTable">
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Actors Pane -->
+            <div class="tab-pane fade float-left w-100" id="actor_analysis_pane" role="tabpanel"
+                aria-labelledby="actor_analysis_tab">
+
+                <!-- Acotrs distribution segment -->
+                <h6 class="actors_distribution pr-2 w-100 mt-4 text-left float-left">
+                    Actors Distribution
+                </h6>
+                <br>
+
+                <div id="actors_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+        <!-- show document content modal -->
+        <!-- Modal Container for detail  -->
+        <div class="modal fade" id="documentContent">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="documentContentHeader" class="modal-title">Document Name</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="DocumentContentBody">
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Container -->
+        <div class="modal fade" id="SelectDocumentModal">
+            <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="ModalHeader" class="modal-title">Select Document</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+
+                    <!-- Modal body -->
+                    <div id="ModalBody" class="modal-body text-justify">
+                        <div class="container">
+
+
+                            <div class="d-flex col-12 mb-2">
+                                <input
+                                    style="direction: ltr;width: 90%; border-bottom-left-radius: 0;border-top-left-radius: 0;"
+                                    class="form-control text-left" placeholder="search document ..." type="text" required=""
+                                    name="SearchBox" id="SearchBox" value="">
+
+                                <button class="btn mr-0"
+                                    style="border-bottom-right-radius: 0;border-top-right-radius: 0;" type="button"
+                                    id="document_search" onclick="Search_Document_ByName()"
+                                    class="btn d-flex float-left mr-4">
+                                    <i class="bi bi-search" style="font-size: 16px;position: relative; top: -5px;"></i>
+                                </button>
+
+                                <div class="col-md-6  pt-3 col-12 col-lg-2" style="padding-top: 0px!important;">
+                                    <select name="load_count" id="LoadCount" class="form-select text-left float-left"
+                                        onchange="pagingchange()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="refresh"
+                                    style="font-size: 25px; text-align: center; cursor: pointer;color: var(--menu_color);"
+                                    class="fa fa-refresh mr-3 mt-2" onclick="CountryChanged()"></span>
+                            </div>
+
+                            <table style=" direction:ltr !important;" id="PopUpTable" class="table table-striped PopUpTable">
+                            </table>
+
+                            <p style="direction: ltr">
+                                <span style="color: #3e8f3e; direction: ltr" id="load_doc_count"></span>
+                                <span style="direction: ltr"> Documents Loaded From </span>
+                                <span style="color: #1A01CC; direction: ltr" id="all_doc_count"></span>
+                            </p>
+
+                            <span class="add-row"></span>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Abbreviation Modal Container -->
+        <div class="modal fade" id="AbbreviationModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: ltr !important;" class="modal-header">
+                    <h5 id="AbbreviationModalHeader" class="modal-title">Title</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="AbbreviationDetailText" class="modal-body text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+        <!-- ChartModal Container -->
+        <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#actors_modal"></button>
+        <div class="modal fade" id="actors_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="actor_modal_header" class="modal-title">Title</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="actor_paragraphs" class="modal-body text-justify">
+                        <div id="actor_modal_body">
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- References Container -->
+        <button type="button" id="references_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#references_modal"></button>
+        <div class="modal fade" id="references_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="references_modal_header" class="modal-title">Title</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="references_modal_paragraphs" class="modal-body text-justify">
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button class="btn btn-secondary" id="references_modal_btn">Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+
+    <!-- Toast -->
+    <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+        <div dir="ltr" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+                <i style="position: relative; top: -4px; font-size: 18px;"
+                    class="bi bi-info-circle-fill  text-info"></i>
+                <span id="toast_message">
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Vote Details Modal Container -->
+    <div class="modal fade" id="VoteDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: ltr !important;" class="modal-header">
+                    <h5 id="VoteModalHeader" class="modal-title">Title</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <div id="VoteDetailText" class="bg-light text-justify">
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+
+    <!-- Blocking UI Script -->
+    <script>
+        function startBlockUI() {
+            $.blockUI({
+
+                // BlockUI code for element blocking
+                message: ("<div class='lds-ellipsis'><div></div><div></div><div></div><div></div></div><h6 style = 'font-family:vazir;'>loading information ...<h6>"),
+
+                css: { color: 'var(--menu_color)', border: 'none', borderRadius: '5px', borderColor: 'var(--menu_color)', paddingTop: '5px' }
+            });
+
+            startTimer();
+        }
+        function stopBlockUI() {
+
+            $.unblockUI();
+            elapsed_time = endTimer();
+            toast_message = '<span style=" direction:ltr !important;" class="text-secondary"> ' + 'time spent: ' + '</span>' + '<span style=" direction:ltr !important;" class="bold" style="color:var(--menu_color)">' + elapsed_time + ' seconds' + '</span>'
+
+            if (elapsed_time > 0)
+                showToastMessage(toast_message);
+
+            // setTimeout(function () {
+            //     $.unblockUI();
+            //     elapsed_time = endTimer();
+            //     toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+            //     showToastMessage(toast_message);
+            // }, 4000);
+        }
+
+
+        function showToastMessage(message_text) {
+            document.getElementById('toast_message').innerHTML = message_text
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl)
+            });
+            toastList.forEach(toast => toast.show())
+        }
+
+    </script>
+
+
+    <script>
+
+        var startTime, endTime;
+
+        function startTimer() {
+            startTime = new Date();
+        };
+
+        function endTimer() {
+            endTime = new Date();
+            var timeDiff = endTime - startTime; //in ms
+            // strip the ms
+            timeDiff /= 1000;
+
+            // get seconds
+            var seconds = Math.round(timeDiff);
+            console.log(seconds + " seconds");
+            return seconds;
+        }
+    </script>
+
+    <script>
+
+        /* Footable */
+        var paging_size = document.getElementById("LoadCount").value
+        var counter = 0;
+
+        var load_size = 250;
+        let is_add_icon = true;
+        var loaded_doc = 0;
+        let abbreviation_paragraphs, abbreviation_data=[];
+        var ft = FooTable.init('#PopUpTable', {
+            "paging": {
+                "enabled": true
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "No Documents Founded",
+            "columns": [{
+                "name": "id",
+                "title": "#",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }
+            }, {
+                "name": "document_name",
+                "title": "Document Name"
+            }, {
+                "name": "approval_date",
+                "title": "Approval Date"
+            }, {
+                "name": "tag",
+                "title": "Select"
+            }],
+        });
+        var first_loading = true
+
+        /* Gloabal Constants */
+        const motevalian_punctuations = ['.', '،', 'ـ', '-', ':'];
+        const hamkaran_punctuations = ['،', ')', ':']
+
+        const motevali_keywords = ['موظف است', 'مکلف است', 'مکلف‌اند', 'موظف‌اند', 'موظفند', 'مکلفند', 'موظف به', 'مکلف به'];
+        const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+        const salahiat_keywords = ['مختار است', 'اختیار دارد', 'می‌تواند', 'می تواند', 'میتواند', 'می­تواند', 'می‏تواند', 'مجاز است'];
+
+
+        let actors_list = []
+
+        init()
+
+        async function init() {
+
+            /* Get Actors List */
+            const request_link = 'http://' + location.host + "/GetActorsList/";
+            const response = await fetch(request_link).then(response => response.json());
+            actors_list = response["actorsList"]
+
+            const url = new URL(window.location.href);
+            var document_id = url.searchParams.get("id");
+
+            if (document_id) {
+                const request_link = 'http://' + location.host + '/en' + "/GetDocumentById/" + document_id + "/";
+                let response = await fetch(request_link).then(response => response.json());
+                response = response["document_information"][0]
+
+                document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+                document.getElementById("country").value = response["country_id"]
+
+                document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black" style="float: right;top: 2px;"></i>' + response['name']
+                document.getElementById('document_select').innerHTML = document_select_tag;
+                document.getElementById('document_select').title = response['name'];
+
+                /* disable country , document */
+                document.getElementById("document_select").disabled = true;
+                document.getElementById("country").disabled = true;
+
+                await ShowResult();
+
+            } else {
+                const text = "select"
+                document.getElementById("document").innerHTML = "<option value=" + 0 + " disabled>" + text + "</option>";
+                document.getElementById("document_download").disabled = true;
+                document.getElementById("pdf_download").disabled = true;
+                document.getElementById("document_search").disabled = true;
+                CountryChanged();
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "render panel"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+
+        }
+
+        $("#document_select").click(function () {
+            $(".add-row-1").remove();
+            window.setTimeout(function () {
+                $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+            }, 1000);
+
+        });
+
+        $("#PopUpTable").click(function () {
+            $(".add-row-1").remove();
+            if (is_add_icon) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+        });
+
+
+        async function CountryChanged() {
+
+
+            document.getElementById("document_select").disabled = true;
+            startBlockUI();
+
+            const country_name = $("#country option:selected").text();
+
+            document.getElementById('ModalHeader').innerText = 'Country: ' + country_name;
+
+            document.getElementById("document_select").disabled = false;
+
+            counter = 0;
+            loaded_doc = 0
+            first_loading = true
+            is_add_icon = true;
+
+            $(".add-row-1").css('visibility', 'visible');
+
+
+            document.getElementById("document_select").disabled = true;
+            await setTimeout(loaddata, 1000)
+            document.getElementById("document_select").disabled = false;
+            // new
+            $(".add-row-1").remove();
+            window.setTimeout(function () {
+                $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+            }, 1000);
+
+            stopBlockUI();
+
+
+        }
+
+        async function pagingchange() {
+            paging_size = $('#LoadCount option:selected').val()
+            FooTable.get('#PopUpTable').pageSize(paging_size);
+            $(".add-row-1").remove();
+            window.setTimeout(function () {
+                $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+            }, 1000);
+        }
+
+
+        function loaddata() {
+            $('.add-row').trigger('click');
+            stopBlockUI();
+        }
+
+        async function loadMoreDoc() {
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/en" + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count) {
+                $(".add-row-1").remove();
+                is_add_icon = false;
+            }
+
+        }
+
+
+
+        $(".add-row").click(async function (e) {
+            e.preventDefault()
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/en" + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let document_count = response["document_count"]
+            let all_count = document_count;
+
+            if (first_loading === false){
+                ft.rows.load(documentsList, true);
+            }
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count) {
+                $(".add-row-1").remove();
+                }
+        })
+
+
+        async function SelectDocumentFunction(document_id) {
+            const request_link = 'http://' + location.host + '/en' +"/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+            document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+
+            let document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black" style="float: right;top: 2px;"></i>' + response['name'];
+            document.getElementById('document_select').innerHTML = document_select_tag;
+            document.getElementById('document_select').title = response['name'];
+            ShowResult();
+        }
+
+        async function DownloadLinkSet() {
+            var country_id = document.getElementById("country").value;
+            const request_link = 'http://' + location.host + '/en' + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            var document_name = document.getElementById("document").innerText;
+
+            if (document_name !== "select ...") {
+                var file_path = "";
+
+                if (country_name.includes("فاوا")) {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.docx';
+                } else {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.txt';
+                }
+                document.getElementById("txt_download").href = file_path;
+
+                const document_id = document.getElementById("document").value;
+
+            } else {
+                document.getElementById("txt_download").href = "#";
+                return false;
+            }
+        }
+
+
+        async function ShowResult() {
+            await DownloadLinkSet();
+            await ShowDocumentComment();
+            await ShowDocumentNote();
+
+            const document_id = document.getElementById("document").value
+            document.getElementById("document_download").disabled = false;
+            document.getElementById("pdf_download").disabled = false;
+            document.getElementById("document_search").disabled = false;
+
+            /******************************* Features **********************************/
+
+            let request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+
+            document.getElementById("total_words").innerText = response["word_count"];
+            document.getElementById("stop_words").innerText = response["stopword_count"];
+            document.getElementById("distinct_words").innerText = response["distinct_word_count"];
+            document.getElementById("approval_reference").innerText = response["approval_reference"];
+            document.getElementById("approval_date").innerText = response["approval_date"];
+            document.getElementById("document_level").innerText = response["level"];
+
+            /******************************* TFIDF **********************************/
+            request_link = 'http://' + location.host + '/en' + "/GetTFIDFByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_tfidf_list"]
+            let show_count = 10
+            document.getElementById("TFIDF_table").innerHTML = "";
+
+            for (var i = 0; i < show_count; i++) {
+                const index = i + 1;
+                const word = response[i]["word"]
+                const count = response[i]["count"]
+                const weight = response[i]["weight"]
+
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-4'>" + word + "</td>" +
+                    "<td class='col-3'>" + count + "</td>" +
+                    /*"<td class='col-3'>" + weight + "</td>" +*/
+                    "</tr>";
+
+                document.getElementById("TFIDF_table").innerHTML += tag;
+            }
+
+            /******************************* Definition **********************************/
+            request_link = 'http://' + location.host + "/en" +"/GetDefinitionByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_definition"][0];
+
+            let definition_text = response["text"]
+            if (definition_text === ""){
+                definition_text = "Couldn't find any Definition in this Document."
+            }
+
+            document.getElementById("definition_container").innerText = definition_text;
+
+            let final_keywords = response["keywords"];
+
+            console.log(response)
+            /******************************* final_keywords **********************************/
+            if (final_keywords === ""){
+                final_keywords = "There is no keyword in this Document."
+            }
+
+            document.getElementById("final_Keywords_container").innerText = final_keywords;
+
+            /******************************* 2-Gram **********************************/
+
+            request_link = 'http://' + location.host + '/en' + "/GetNGramByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("2gram_table").innerHTML = "";
+            for (let i = 0; i < show_count && i < response.length; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-3'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+                document.getElementById("2gram_table").innerHTML += tag;
+            }
+
+
+            /******************************* 3-Gram **********************************/
+
+            request_link = 'http://' + location.host + '/en' +"/GetNGramByDocumentId/" + document_id + "/" + 3 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("3gram_table").innerHTML = "";
+
+            for (let i = 0; i < show_count && i < response.length; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-5'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+
+                document.getElementById("3gram_table").innerHTML += tag;
+            }
+
+            /******************************* References List **********************************/
+            request_link = 'http://' + location.host + '/en' + "/GetReferencesByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+            if (response.length > 0) {
+                document.getElementById("references_list").innerHTML = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    const doc_id = response[i]["doc_id"]
+                    const doc_name = response[i]["doc_name"]
+                    let tag = "<li onclick='References_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></li>"
+                    document.getElementById("references_list").innerHTML += tag;
+                }
+            } else {
+                document.getElementById("references_list").innerText = "No references founded";
+            }
+
+            /******************************* Citation List **********************************/
+            request_link = 'http://' + location.host + '/en' + "/GetReferencesByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+
+            if (response.length > 0) {
+                document.getElementById("citation_list").innerHTML = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    const doc_id = response[i]["doc_id"]
+                    const doc_name = response[i]["doc_name"]
+                    let tag = "<li onclick='Citation_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></li>"
+                    document.getElementById("citation_list").innerHTML += tag;
+                }
+            } else {
+                document.getElementById("citation_list").innerText = "No references founded";
+            }
+
+            /******************************* Subject **********************************/
+            /*request_link = 'http://' + location.host + '/en' + "/GetSubjectByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_subject_list"]
+
+            document.getElementById("subject_table").innerHTML = ""
+
+            let chart_value_list = []
+
+            for (let i = 0; i < response.length; i++) {
+                const subject = response[i]["subject"]
+                const weight = response[i]["weight"] * 100
+                const keywords_text = response[i]["keywords_text"]
+                const keywords_title = response[i]["keywords_title"]
+                const special_references = response[i]["special_references"]
+
+                tag = "<tr>" +
+                    "<td class='col-1'>" + (i + 1) + "</td>" +
+                    "<td class='col-2'>" + subject + "</td>" +
+                    "<td class='col-4'>" + keywords_text + "</td>" +
+                    "<td class='col-3'>" + keywords_title + "</td>" +
+                    "<td class='col-1'>" + special_references + "</td>" +
+                    "</tr>";
+
+                document.getElementById("subject_table").innerHTML += tag;
+
+                chart_value_list.push([subject, weight])
+            }
+
+            document.getElementById("subject_chart_container").innerHTML = "";
+            showChart(chart_value_list, "subject_chart_container");*/
+
+            /******************************* Actor Paragraphs **********************************/
+            request_link = 'http://' + location.host + '/en' + "/GetActorsChartData/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const Actor_ChartData = response["Actor_ChartData"]
+            if (Actor_ChartData.length > 0) {
+                showActorsChart(Actor_ChartData, "actors_chart_container", false)
+            }
+            else
+            {
+                document.getElementById("actors_chart_container").innerHTML = "<h3 style='font-size:25px; color:red; text-align: center;'> No actors were found for this document </h3>"
+            }
+
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نتایج جست و جو"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+
+            /******************************* Abbreviation **********************************/
+            request_link = 'http://' + location.host + "/en" +"/GetAbbreviationsByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            abbreviation_data = response["document_abbreviations"];
+            showAbbreviationInformation();
+        }
+
+        function showAbbreviationInformation() {
+            let ind = 0;
+            let abbreviation_result = [];
+            for (const [key, value] of Object.entries(abbreviation_data)) {
+                const detail_function = "DetailAbbreviation('" + key +  "')"
+                const detail_button = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" ' + ' onclick="' + detail_function + '" data-bs-target="#AbbreviationModal">details</button>'
+
+                const row = {'index': ind, 'word':key, 'frequency': value['frequency'], 'detail': detail_button}
+                abbreviation_result.push(row)
+                ind = ind+1;
+            }
+            document.getElementsByClassName("AbbreviationTable")[0].innerHTML = "";
+            $('.AbbreviationTable').footable({
+                "paging": {
+                    "enabled": true,
+                    strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "Not Found.",
+                "columns": [{
+                    "name": "index",
+                    "title": "#",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "15%"
+                    }
+                }, {
+                    "name": "word",
+                    "title": "Abbreviation",
+                    "style": {
+                        "width": "35%"
+                    }
+                }, {
+                    "name": "frequency",
+                    "title": "Frequency",
+                    "style": {
+                        "width": "15%"
+                    }
+                }, {
+                    "name": "detail",
+                    "title": "Details",
+                    "style": {
+                        "width": "15%"
+                    }
+                }
+                ],
+                "rows": abbreviation_result
+            });
+        }
+
+        function DetailAbbreviation(word) {
+            /* Title Text */
+            word = word.toString();
+            document.getElementById('AbbreviationModalHeader').innerText = word
+
+            /* Body Text */
+            document.getElementById("AbbreviationDetailText").innerHTML = "";
+            const tag = "<span class='text-primary bold'>" + word + "</span>";
+
+            for (const p of abbreviation_data[word]['abbreviation_paragraphs']) {
+                let tokens = p.split(" ")
+                tokens = tokens.map((token) => {
+                    if (token == word) {
+                        return tag
+                    }
+                    const wIndex = token.indexOf(word)
+                    if (wIndex == -1) {
+                        return token
+                    }
+
+                    // word = AA, token = AA[non alphabet]
+                    if (wIndex == 0 && /^[^a-zA-Z]/i.test(token.substring(word.length, word.length+1))) {
+                            return tag + token.substring(word.length)
+                    }
+                    // word = AA, token = [non alphabet]AA
+                    if (wIndex + word.length == token.length && /^[^a-zA-Z]/i.test(token.substring(wIndex-1, wIndex))) {
+                        return token.substring(0, wIndex) + tag
+                    }
+                    // word = AA, token = [non alphabet]AA[non alphabet]
+                    if (/^[^a-zA-Z]/i.test(token.substring(wIndex-1, wIndex)) && /^[^a-zA-Z]/i.test(token.substring(wIndex+word.length, wIndex+word.length+1))) {
+                        return token.substring(0, wIndex) + tag + token.substring(wIndex+word.length)
+                    }
+                })
+                const tag1 = "<li class='mb-3'>" + tokens.join(" ") + "</li>";
+                document.getElementById("AbbreviationDetailText").innerHTML += tag1;
+            }
+            document.getElementById("AbbreviationDetailText").innerHTML = "<ul>" + document.getElementById("AbbreviationDetailText").innerHTML + "</ul>";
+        }
+
+        function showActorsChart(data, position, keySort) {
+            if (keySort === true) {
+                data.sort(function (element_a, element_b) {
+                    return element_a[0] - element_b[0];
+                });
+            }
+            else {
+                data.sort(function (element_a, element_b) {
+                    return element_a[1] - element_b[1];
+                });
+            }
+
+            // Sorts the data by descending.
+            data = anychart.data.set(data)
+
+            document.getElementById(position).innerHTML = ""
+
+            chart = anychart.column();
+            chart.container(position);
+            // create a column series and set the data
+            var series = chart.column(data);
+            chart
+                .animation(true)
+                .padding([10, 40, 5, 20])
+
+
+            chart.background().fill('#ffffff');
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // var state = series.normal();
+            // state.fill('#1481c0')
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("Paragraph Count");
+            yAxis.title().fontFamily('vazir');
+            yAxis.title().height(40);
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("{%value}");
+
+            chart.xAxis().labels().height(60);
+
+            chart.yAxis().labels().format("{%value}");
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+
+            chart.draw();
+
+            chart.listen('Click', async function (event) {
+                const click_tag = event.domTarget.tag;
+                const index = click_tag["index"]
+                const actor_name = data.row(index)[0];
+
+                const document_id = document.getElementById("document").value
+
+                const request_link = 'http://' + location.host + '/en' + "/GetActorsParagraphs/" + document_id + "/" + actor_name + "/";
+                const response = await fetch(request_link).then(response => response.json());
+                const Paragraph_Text = response["Paragraph_Text"]
+
+                document.getElementById("actor_modal_body").innerHTML = ""
+                for (let i =0; i<Paragraph_Text.length; i++)
+                {
+                    const tag = "<span class='text-primary'>" + actor_name + "</span>"
+                    const text = Paragraph_Text[i].replaceAll(actor_name, tag)
+
+                    document.getElementById("actor_modal_body").innerHTML += text + "<br><br>"
+                }
+
+                document.getElementById("actor_modal_header").innerText = "Actor: " + actor_name
+
+
+                $("#actors_modal_btn").click();
+
+
+            })
+
+        }
+
+
+
+        async function References_Show_Paragraphs(tag) {
+            const main_doc_id = document.getElementById("document").value
+            let request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/information?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "refrenced to:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/en" + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            console.log(response)
+            const references = response["references_from_doc1"]
+            let result_tag = "<ul>"
+            for (const paragraph of references) {
+                const tag = "<span class='text-primary'>" + document_name + "</span>"
+                const text = paragraph.toLowerCase().replaceAll(document_name, tag)
+                result_tag += "<li class='mb-3' >" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+        async function Citation_Show_Paragraphs(tag) {
+            const main_doc_id = document.getElementById("document").value
+
+            let request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/information?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "refrenced by:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/en" + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const citations = response["references_from_doc2"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of citations) {
+                const tag = "<span class='text-primary'>" + main_document_name + "</span>"
+                const text = paragraph.replaceAll(main_document_name, tag)
+                result_tag += "<li class='mb-3'>" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+
+        async function SaveGram_function(name) {
+            const document_id = document.getElementById("document").value
+            const gram = parseInt(name.charAt(0))
+
+            const table_id = name + "_table";
+
+            const checkedBoxesId = $("#" + table_id).find("input[type=checkbox]:checked").map(function () {
+                return this.id;
+            }).get();
+
+            let checkedBoxesConcatedId = "-1"
+            if (checkedBoxesId.length > 0) {
+                checkedBoxesConcatedId = checkedBoxesId.join("__")
+            }
+            const request_link = 'http://' + location.host + "/en" +"/UpdateNgramScore/" + document_id + "/" + gram + "/" + checkedBoxesConcatedId + "/";
+            await fetch(request_link).then(response => response.json());
+
+
+            const textbox_id = name + "_TextBox"
+            const textbox_value = document.getElementById(textbox_id).value.replaceAll("/", "__")
+
+            if (textbox_value.trim() !== "") {
+                const request_link = 'http://' + location.host + '/en' + "/InsertNgram/" + document_id + "/" + gram + "/" + textbox_value + "/";
+
+                await fetch(request_link).then(response => response.json());
+
+                document.getElementById(textbox_id).value = ""
+            }
+
+            ShowResult();
+
+        }
+
+
+        async function DeleteNGramWords(id) {
+            const request_link = 'http://' + location.host + "/en" + "/DeleteNgram/" + id + "/";
+            await fetch(request_link).then(response => response.json());
+            ShowResult();
+        }
+
+
+        // show document content
+        async function ShowDocumentContent() {
+
+            document.getElementById('DocumentContentBody').innerHTML = ""
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('Please choose a document')
+                return
+            }
+            $('#documentContent').modal('show');
+
+            const request_link = 'http://' + location.host + '/en' + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"]
+
+            for (var i = 0; i < response.length; i++) {
+                const document_name = response[i]["document_name"]
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p style="direction: ltr">' + paragraph_text + '</p>'
+                document.getElementById('documentContentHeader').innerText = document_name
+                document.getElementById('DocumentContentBody').innerHTML += paragraph_tag
+            }
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "show document"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+
+        // search document by name document content
+        async function Search_Document_ByName() {
+            const country_id = document.getElementById("country").value
+            let search_text = document.getElementById("SearchBox").value
+
+            const request_link = 'http://' + location.host + '/en' + "/SearchDocumentByname/" + country_id + "/" + search_text + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let document_count = response["document_count"]
+
+            document.getElementById("all_doc_count").innerText = document_count.toString()
+
+            ft.rows.load(documentsList);
+            loaded_doc = document_count;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+
+            if (loaded_doc === document_count) {
+                $(".add-row-1").remove();
+                is_add_icon = false
+            }
+            else {
+                $(".add-row-1").remove();
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+        /* Search after press Enter */
+        $("#SearchBox").keyup(function (event) {
+            if (event.keyCode === 13) {
+                Search_Document_ByName();
+            }
+        });
+
+    </script>
+
+    <script>
+        async function generatePDF() {
+            startBlockUI();
+
+            const approval_reference = document.getElementById("approval_reference").innerText
+            const approval_date = document.getElementById("approval_date").innerText
+
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('Please choose a document');
+                return;
+            }
+            const request_link = 'http://' + location.host + '/en' + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"];
+            const document_name = response[0]["document_name"];
+            let element = "<div class='container-fluid' style='direction: ltr'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> <div > <p style='direction: ltr'>Hooshyaran</p> </div> " +
+                "<div> <span>www.virtualjuristic.datakaveh.com</span> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>"+document_name+"</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span style='direction: ltr' </span> <span style='direction: ltr'> "+approval_date+" </span> </div> " +
+                "<div class='d-flex'> <span style='direction: ltr'>Approval Reference:   </span> <span style='direction: ltr'> "+approval_reference+" </span> </div> </div> </div> </div>"
+
+            for (let i = 0; i < response.length; i++) {
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p>' + paragraph_text + '</p>';
+                element += paragraph_tag;
+            }
+            element += '</div>';
+
+            let opt = {
+                margin: 1,
+                filename: document_name + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "download document"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+    </script>
+
+</body>
+
+
+
+<script>
+
+    function copyDocumentName() {
+        /* Get the text field */
+        var copyText = document.getElementById("document_select");
+
+        /* Copy the text to clipboard */
+        navigator.clipboard.writeText(copyText.innerText);
+
+        // Update js
+        $('.tooltip-inner').html('کپی شد!');
+
+    }
+
+</script>
+
+<script src="../../static/library/notyf.min.js"></script>
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = myip
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip["ip"] + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+    }
+
+    const notyf = new Notyf({position:{x:'left', y:'bottom'}});
+    document.getElementById("comment_form").addEventListener('submit', SubmitDocumentComment)
+    document.getElementById("note_form").addEventListener('submit', SubmitDocumentNote)
+
+    async function SubmitDocumentComment(e){
+        e.preventDefault()
+        try {
+            const document_id = document.getElementById("document").value
+            const comment_text = document.getElementById("form_comment_text").value
+            const comment_show_info = document.getElementById("form_comment_show_info").checked
+            const username = getCookie("username")
+
+            if (comment_text == '' || document_id == '') {
+                notyf.error('please fill everything');
+                return
+            }
+
+            /* Post Comment */
+
+            /* Get Actors List */
+            const request_link = 'http://' + location.host + "/CreateDocumentComment/" + document_id + "/" + comment_text + "/" + username + "/" + comment_show_info + "/";
+
+            const response = await fetch(request_link).then(response => response.json());
+            notyf.success('your comment successfully submitted');
+            document.getElementById("form_comment_text").value = "";
+            await ShowDocumentComment();
+
+        } catch (e){
+            notyf.error('please try again');
+        }
+
+    }
+
+    async function SubmitDocumentNote(e){
+
+        // var todayFa = new Date().toLocaleDateString('fa-IR');
+        let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        let todayFa = new Date().toLocaleDateString('fa-IR-u-nu-latn',options);
+        todayFa = todayFa.replace("/","-")
+        todayFa = todayFa.replace("/","-")
+        console.log(todayFa);
+
+        // var todayEn = new Date();
+        // var dd = todayEn.getDate();
+        // var mm = todayEn.getMonth()+1;
+        // var yyyy = todayEn.getFullYear();
+        // if(dd<10)
+        // {
+        //     dd='0'+dd;
+        // }
+        // if(mm<10)
+        // {
+        //     mm='0'+mm;
+        // }
+        // todayEn = dd+'-'+mm+'-'+yyyy;
+        // console.log(todayEn);
+
+        e.preventDefault()
+        try {
+            const document_id = document.getElementById("document").value
+            const note_text = document.getElementById("form_note_text").value
+            const username = getCookie("username")
+
+            if (note_text == '' || document_id == '') {
+                notyf.error('please fill everything');
+                return
+            }
+            /* Post Note */
+            const request_link = 'http://' + location.host + "/CreateDocumentNote/" + document_id + "/" + note_text + "/" + username + "/" + todayFa + "/";
+            const response = await fetch(request_link).then(response => response.json());
+            notyf.success('your note successfully submitted');
+            document.getElementById("form_note_text").value = "";
+            await ShowDocumentNote();
+
+        } catch (e){
+            notyf.error('please try again');
+        }
+
+    }
+
+    async function ShowDocumentComment(){
+        const document_id = document.getElementById("document").value
+        const username = getCookie("username")
+
+        {#const request_link = 'http://' + location.host + "/GetDocumentComments/" + document_id + "/" + username + "/";#}
+        {#const response = await fetch(request_link).then(response => response.json());#}
+        {#const comments = response['comments']#}
+        let comments = []
+
+        let table_data = ''
+        for (let i=0;i<comments.length;i++){
+            table_data+=`<tr>
+                                <td class="text-center" id="comment_number">${i+1}</td>
+                                <td class="text-center" id="comment_first_name">${comments[i].first_name} ${comments[i].last_name}</td>
+                                <td class="text-center" id="comment_text">${comments[i].comment}</td>
+                                <td class="text-center">
+                                <div class="">
+                                    <button type="button" onclick="OnVoteClick('agree', ${comments[i].id})"
+                                            class="btn btn-success btn-agree-state">
+                                            <i class="bi bi-hand-thumbs-up-fill" style="position:relative;top:-3px;"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="agree"></i></button>
+                                    <button type="button" onclick="OnVoteClick('disagree', ${comments[i].id})"
+                                            class="btn btn-danger btn-agree-state">
+                                           <i class="bi bi-hand-thumbs-down-fill" style="position:relative;top:-3px;"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="disagree"></i></button>
+                                </div>
+                            </td>
+                            <td class="text-center cursor-pointer" id="comment_agree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, true)">${comments[i].agreed_count}</td>
+                           <td class="text-center cursor-pointer" id="comment_disagree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, false)">${comments[i].disagreed_count}</td>
+                         </tr>`
+        }
+        if (comments.length==0){
+            table_data=` <tr>
+                                <td class="text-center" id="comment_number">-</td>
+                                <td class="text-center" id="comment_first_name">-</td>
+                                <td class="text-center" id="comment_text">-</td>
+                                <td class="text-center">
+                                <div class="">
+                                    <button type="button" data-change-to="agree"
+                                            class="btn btn-success btn-agree-state"
+                                            data-document-comment-id=""><i class="bi bi-hand-thumbs-up-fill"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="agree"></i></button>
+                                    <button type="button" data-change-to="disagree"
+                                            class="btn btn-danger btn-agree-state"
+                                            data-document-comment-id=""><i class="bi bi-hand-thumbs-down-fill"
+                                                                         data-bs-toggle="tooltip"
+                                                                         data-bs-placement="top"
+                                                                         title="disagree"></i></button>
+                                </div>
+                            </td>
+                            <td class="text-center" id="comment_agree">-</td>
+                            <td class="text-center" id="comment_disagree">-</td>
+                         </tr>`
+        }
+        document.getElementById('comments_table_body').innerHTML=table_data;
+        $('.cm_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            }
+        });
+    }
+
+    async function ShowDocumentNote(){
+        const document_id = document.getElementById("document").value
+        const username = getCookie("username")
+
+        {#const request_link = 'http://' + location.host + "/GetDocumentNotes/" + document_id + "/" + username + "/";#}
+        {#const response = await fetch(request_link).then(response => response.json());#}
+        {#const notes = response['notes']#}
+        let notes = []
+          let table_data = ''
+        for (let i=0;i<notes.length;i++){
+            table_data+=`<tr>
+                                <td class="text-center" id="note_number">${i+1}</td>
+                                <td class="text-center" id="note_text">${notes[i].note}</td>
+                                <td class="text-center" id="note_time">${notes[i].time}</td>
+                         </tr>`
+        }
+        if (notes.length==0){
+            table_data=`<tr>
+                                <td class="text-center" id="note_number">-</td>
+                                <td class="text-center" id="note_text">-</td>
+                                <td class="text-center" id="note_time">-</td>
+                         </tr>`
+        }
+        document.getElementById('notes_table_body').innerHTML=table_data;
+
+    }
+</script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+{#<script src="../../static/js/UserLogSave.js"></script>#}
+
+<!-- Intro Js -->
+<script src="../../static/js/en_js/information/information_tour.js">
+</script>
+<script src="../../static/js/signout_function.js"></script>
+
+
+<script>
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    });
+
+    async function OnVoteClick(state, document_comment){
+            try {
+                const username = getCookie("username")
+                const request_link = 'http://' + location.host + "/changeVoteState/" + username + "/" + document_comment + "/" + state + "/";
+                let response = await fetch(request_link);
+                if (state == "agree") {
+                    notyf.success('you were agree with this comment');
+
+                } else if (state == "disagree") {
+                    notyf.error('you were not agree with this comment');
+                }
+            } catch (err) {
+                notyf.error('error!');
+            }
+    ShowDocumentComment()
+    }
+
+    async function VoteDetailFunction(document_comment_id, agreed) {
+        {#let request_link = 'http://' + location.host + "/GetDocumentCommentVoters/" + document_comment_id + "/" + agreed + "/"#}
+        {#let response = await fetch(request_link).then(response => response.json());#}
+        {#/*  Show detail Result */#}
+        {#let result = response["result"]#}
+        let result = []
+        await showVoteDetailModal(result)
+    }
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+    }
+
+    async function showVoteDetailModal(voters) {
+        /* Title Text */
+        document.getElementById("VoteModalHeader").innerHTML = "اطلاعات کاربران"
+
+        /* Body Text */
+        let modal_body = voters.map(function(voter, i){
+            return `<p><b>${i+1}-</b> ${voter.first_name} ${voter.last_name} </p>`
+        }).join('<br>')
+
+        document.getElementById("VoteDetailText").innerHTML = modal_body
+        popup_handler();
+    }
+
+
+
+</script>
+
+</html>

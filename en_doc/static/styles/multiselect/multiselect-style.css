@@ -1,0 +1,165 @@
+.multi-select-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.multi-select-menu {
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    z-index: 1;
+    float: left;
+    min-width: 100%;
+    background: #fff;
+    margin: 1em 0;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.multi-select-menuitem {
+    display: block;
+    font-size: 0.875em;
+    padding: 0.6em 1em 0.6em 30px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.multi-select-menuitem--titled:before {
+    display: block;
+    font-weight: bold;
+    content: attr(data-group-title);
+    margin: 0 0 0.25em -20px;
+}
+
+.multi-select-menuitem--titledsr:before {
+    display: block;
+    font-weight: bold;
+    content: attr(data-group-title);
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.multi-select-menuitem + .multi-select-menuitem {
+    padding-top: 0;
+}
+
+.multi-select-presets {
+    border-bottom: 1px solid #ddd;
+}
+
+.multi-select-menuitem input {
+    position: absolute;
+    margin-top: 0.25em;
+    margin-left: -20px;
+    cursor: pointer;
+}
+
+.multi-select-button {
+    display: inline-block;
+    font-weight: 400;
+    padding: .375rem 2.25rem 0.375rem .75rem;
+    height:100%;
+    width:100%;
+    white-space: nowrap;
+    vertical-align: -0.5em;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    appearance: none;
+    transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    text-align: right!important;
+    overflow: hidden;
+    direction: rtl;
+}
+
+.multi-select-container--open .multi-select-menu {
+    display: block;
+}
+
+.multi-select-container--open .multi-select-button:after {
+    border-width: 0 0.4em 0.4em 0.4em;
+    border-color: transparent transparent #999 transparent;
+}
+
+.multi-select-container--positioned .multi-select-menu {
+    /* Avoid border/padding on menu messing with JavaScript width calculation */
+    /*box-sizing: border-box;*/
+}
+
+.multi-select-container--positioned .multi-select-menu label {
+    /* Allow labels to line wrap when menu is artificially narrowed */
+    white-space: normal;
+}
+
+
+.multiselect-class {
+  margin-bottom: 2em;
+}
+
+.multiselect-class > label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+.position-menu-within {
+  width: 18em;
+  height: 15em;
+  background: #eee;
+  overflow: auto;
+  padding: 2em 0 0 2em;
+}
+
+.modal-example .multi-select-menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 50%;
+  min-width: 0;
+  overflow: auto;
+  border: none;
+  border-radius: 0.3em;
+  box-shadow: 0 1em 3em rgba(0, 0, 0, 0.4);
+}
+
+.modal-example .multi-select-menuitem {
+  font-size: 1em;
+  padding: 1.5em 2.5em 1.5em 3.5em;
+}
+
+.modal-example .multi-select-menuitem + .multi-select-menuitem {
+  padding-top: 0;
+}
+
+.modal-example .multi-select-menuitem input {
+  margin-left: -2.5em;
+}
+
+.multi-select-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+}
+
+.multi-select-container--open .multi-select-modal {
+  display: block;
+}

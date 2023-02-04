@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+   <script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/recommendation.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+
+    <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+    <meta charset="UTF-8">
+
+    <title> گزارش خطا </title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#report_bug').addClass('active');
+            $('#ProfileDropdown').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+
+        <div class="col">
+        </div>
+        <div class="col-7">
+
+
+            <form class="shadow p-4 bg-white" id="report_bug_form" method="POST">
+
+                <div class="row text">
+                    <div class="form_title mb-3">
+                     <p class="title mt-3">فرم گزارش خطا</p>
+                    </div>
+                    
+                    <!-- main Panel -->
+                    <div class="mb-3" dir="rtl">
+
+                        <label for="exampleFormControlTextarea1" class="form-label">پنل اصلی<span style="color: red">*</span>:</label>
+
+                        <select onchange="PanelChanged()" id="panel_name"
+                            class="form-select text-right float-right searchable-select" dir="rtl">
+                        </select>
+
+                    </div>
+
+                    <!-- branch Panel -->
+                    <div class="mb-3" dir="rtl">
+
+                        <label for="exampleFormControlTextarea1" class="form-label">زیر پنل<span style="color: red">*</span>:</label>
+
+                        <select id="branch_name" class="form-select text-right float-right searchable-select" style="direction: rtl;"></select>
+
+                    </div>
+
+                    {% comment %} <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">لطفا پنلی که در آن باگ مشاهده کردید را انتخاب کنید<span style="color: red">*</span>:</label>
+                        <select dir="rtl" id="panel_name" name="panel_name" class="form-select text-right float-right">
+                            <option value="">--انتخاب کنید--</option>
+                            <option value="لاگین">لاگین</option>
+                            <option value="تحلیل مصوبات">تحلیل مصوبات</option>
+                            <option value="تحلیل کنشگران">تحلیل کنشگران</option>
+                            <option value="تحلیل موضوعی">تحلیل موضوعی</option>
+                            <option value="تحلیل اختصاصی">تحلیل اختصاصی</option>
+                            <option value="تحلیل تنطیم گری">تحلیل تنطیم گری</option>
+                            <option value="تحلیل هوشمند">تحلیل هوشمند</option>
+                            <option value="کار های آتی">کار های آتی</option>
+                            <option value="انتقادات و پیشنهادات">انتقادات و پیشنهادات</option>
+                            <option value="گزارش باگ">گزارش باگ</option>
+                            <option value="راهنما">راهنما</option>
+                            <option value="پنل ادمین">پنل ادمین</option>
+                        </select>
+                    </div> {% endcomment %}
+
+                    {% comment %} <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">لطفا نام پنلی که در آن باگ مشاهده کردید را وارد کنید:<span style="color: red">*</span>:</label>
+                        <textarea class="form-control" id="panel_name" rows="1" ></textarea>
+                    </div> {% endcomment %}
+
+                    <div class="mb-3">
+                          <label for="exampleFormControlTextarea1" class="form-label">لطفا گزارش خود را در کادر زیر وارد نمایید<span style="color: red">*</span>:</label>
+                          <textarea class="form-control" id="report_bug_text" rows="11" ></textarea>
+                    </div>
+
+                    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                        <button class="btn btn-primary" value="submit" onclick=SubmitResult()>ثبت و ارسال</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col">
+            
+        </div>
+
+
+    </div>
+</body>
+
+
+<script src="../../static/library/notyf.min.js"></script>
+<script src="../../static/js/logincheck.js"></script>
+
+<script>
+    initSearchableSelects()
+    var main_response = ""
+    init()
+
+    async function init() {
+        request_link = 'http://' + location.host + "/get_all_panels/";
+        response = await fetch(request_link).then(response => response.json());
+
+        main_response = response
+
+        let options = [{ value: "", text: '--انتخاب کنید--' }]
+        document.getElementById("branch_name").innerHTML = ""
+
+        for (main_panel of main_response["all_panels"]) {
+            options.push({ value: main_panel['id'], text: main_panel['persian_name']});
+        }
+
+        syncSelectOptions('panel_name', options);
+    }
+
+
+    async function PanelChanged() {
+        let selectd_panel = document.getElementById('panel_name').value
+
+        let options = []
+        for (main_panel of main_response["all_panels"]) {
+            if (main_panel['id'] == selectd_panel) {
+                for (branch of main_panel['sub_panels']) {
+                    options.push({value: branch['id'], text: branch['persian_name'] });
+                }
+            }
+        }
+        syncSelectOptions("branch_name", options)
+    }
+
+    function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+    const notyf = new Notyf();
+    const username = getCookie("username")
+
+    let ratingValue = 0
+    async function SubmitResult() {
+        try {
+            var report_bug_text = document.getElementById("report_bug_text").value
+            var panel_id = document.getElementById("panel_name").value
+            var branch_id = document.getElementById("branch_name").value
+            
+            if (username == '') {
+                notyf.error('ابتدا در سیستم لاگین کنید')
+                return
+            }
+
+            if (report_bug_text == '' || panel_id == '' || branch_id == '') {
+                notyf.error('برای ثبت گزارش باید تمام فیلدها را پر نمایید.')
+                return
+            }
+            
+            request_link = 'http://' + location.host + "/CreateReportBug/" + username + "/" + report_bug_text + "/" + panel_id + "/" + branch_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            notyf.success('گزارش شما با موفقیت ثبت شد');
+
+            document.getElementById("report_bug_text").value = "";
+            document.getElementById("panel_name").value = "";
+            document.getElementById("branch_name").innerHTML = "";
+
+        }catch (e) {
+            console.error(e)
+            notyf.error('لطفا دوباره تلاش کنید');
+        }
+
+    }
+    $("#report_bug_form").submit(function() {return false;});
+
+    $(document).ready(function(){
+
+      /* 1. Visualizing things on Hover - See next part for action on click */
+      $('#stars li').on('mouseover', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function(e){
+          if (e < onStar) {
+            $(this).addClass('hover');
+          }
+          else {
+            $(this).removeClass('hover');
+          }
+        });
+
+      }).on('mouseout', function(){
+        $(this).parent().children('li.star').each(function(e){
+          $(this).removeClass('hover');
+        });
+      });
+
+      /* 2. Action to perform on click */
+      $('#stars li').on('click', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+        var stars = $(this).parent().children('li.star');
+
+        for (i = 0; i < stars.length; i++) {
+          $(stars[i]).removeClass('selected');
+        }
+
+        for (i = 0; i < onStar; i++) {
+          $(stars[i]).addClass('selected');
+        }
+
+         ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+
+
+      });
+
+
+    });
+
+
+    </script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+<script src="../../static/js/UserLogSave.js"></script>
+
+<script src="../../static/js/signout_function.js"></script>
+
+</html>

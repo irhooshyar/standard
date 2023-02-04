@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+<p>downloading...</p>
+<script>
+    run()
+
+    async function run(){
+        const request_link = 'http://' + location.host + "/GetUnknownDocuments/";
+        let response = await fetch(request_link).then(response => response.json());
+        exportExcel(response.result)
+    }
+
+    async function exportExcel(result) {
+        const sep = ",";
+        let Csv = [
+            "مجموعه سند",
+            "عنوان سند",
+            "موضوع سند",
+            "نوع سند",
+            "مرجع تصویب",
+            "تاریخ تصویب"].join(sep) + '\n';
+
+         for (const document of result) {
+             Csv += [
+                document["collection"],
+                document["name"],
+                document["subject"],
+                document["type"],
+                document["reference"],
+                document["reference_date"]].join(sep) + '\n';
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+        const link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", "unknown_documents.csv");
+        document.body.appendChild(link);
+        link.click()
+    }
+
+</script>
+</body>
+</html>

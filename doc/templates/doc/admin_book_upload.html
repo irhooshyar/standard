@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="../../static/library/bootstrap-5.1.3.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.7.1.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <link rel="stylesheet" href="../../static/styles/admin_dashboard.css">
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+
+    <!-- jQuery library -->
+
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <script src="../../static/library/jquery.slim.min-3.5.1.js"></script>
+
+    <!-- Popper JS -->
+    <script src="../../static/library/popper.min-1.16.1.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="../../static/library/bootstrap.bundle.min-4.6.1.js"></script>
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+
+    <title>آپلود فایل</title>
+    {% include "doc/title_icon.html" %}
+    
+    <script src="../../static/js/signout_function.js"></script>
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#BooksDropdown').addClass('active');
+            $('#admin_book_upload').addClass('active');
+
+            $('select#document_language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+<!--container-->
+<div class="container-users">
+    <div class="row">
+        <div class="col">
+
+            <!--confirm-users data table-->
+            <div style="margin:0 auto; margin-top: 20px" class="row data-table col-10">
+            <br>
+                <!-- MainCode -->
+                <div class="text">
+                    <p class="user-list align-content-center"> آپلود فایل جدید: </p>
+                    <br>
+                </div>
+                <hr style="color:darkblue">
+                <div class="container-fluid process-div mb-3">
+                    <form class="form-inline mt-5"  action="" method="post" enctype="multipart/form-data">
+                        <div class="row d-flex m-auto mb-4">
+                            <div class="col-6 form-group">
+                                <label class="text-right d-block w-100 bg-light float-right pb-2" style="direction: rtl;;">نام
+                                فایل:
+                                </label>
+                                <button type="button" id="file_input_btn" class="btn mb-0 p-1 d-block float-right">
+                                    <i class="bi bi-folder"></i>
+                                    انتخاب فایل
+                                </button>
+                                <input type="file" name="inputFile_name" id="inputFile" class="d-none">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="country" class="mr-sm-2 pb-2">نام مجموعه:</label>
+                                <input type="text" class="form-control" id="country" placeholder="نام مجموعه" required>
+                            </div>
+                        </div>
+                        <div class="row list-table mt-3 mx-auto p-3 mb-4" id="taskList">
+                        </div>
+
+                        <div dir="ltr" class="m-auto">
+                            <button class="btn btn-color mt-3" onclick="UploadFile()">آپلود و پردازش</button>
+                        </div>
+
+                        <progress id="progressBar" value="0" max="100" style="height:30px; width:100%;"></progress>
+                        <h3 id="status" style="font-size:14px"></h3>
+                    </form>
+                </div>
+
+                <!--end confirm-users data table-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../static/js/logincheck.js"></script>
+
+<script>
+        $('#file_input_btn').on('click', function () {
+            $('#inputFile').trigger('click');
+        });
+
+        $('#inputFile').change(function (e) {
+            var fileName = e.target.files[0].name;
+            $('#file_input_btn').text(fileName);
+        });
+</script>
+
+<script>
+
+    init()
+    async function init()
+    {
+
+        LanguageChanged()
+
+    }
+
+    async function LanguageChanged()
+    {
+        // const language = document.getElementById("language").value
+        const language = 'کتاب'
+
+        /* Extract Task List */
+        const request_url = 'http://' + location.host + '/get_task_list/';
+        const task_list = await fetch(request_url).then(response => response.json());
+        document.getElementById("taskList").innerHTML = ""
+
+        for (const task in task_list[language])
+        {
+            const persian_name = task;
+            const english_name = task_list[language][task][0]
+            const status = task_list[language][task][1]
+            let s = ""
+            if (status === 1)
+                s = "disabled"
+
+            const tag =    '<div class="col-3 checkbox p-2 text-right">'+
+                                '<label>'+
+                                    '<input style="margin-left: 10px" name="task" type="checkbox" checked class="doc_checkbox form-check-input d-inline-block" '+s+' value="'+english_name+'">'+
+                                    persian_name+
+                                '</label>'+
+                            '</div>';
+
+            document.getElementById("taskList").innerHTML += tag
+        }
+    }
+
+    async function UploadFile()
+    {
+        const country = document.getElementById("country").value
+        const language = 'کتاب'
+        if (country !== "")
+        {
+            let checkboxes = document.querySelectorAll('input[name="task"]:checked');
+            let values = [];
+            checkboxes.forEach((checkbox) => {
+                values.push(checkbox.value);
+            });
+            const tasks_list = values.join("_")
+
+            let form_data = new FormData();
+
+            let inputFile = document.getElementById('inputFile').files[0];
+            form_data.append('inputFile', inputFile);
+
+            let link_request = 'http://' + location.host + '/UploadFile/'+country+"/"+language+"/"+tasks_list+"/";
+
+            var ajax = new XMLHttpRequest();
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+            ajax.open("POST", link_request);
+            ajax.send(form_data);
+
+        }
+        function _(el) {
+          return document.getElementById(el);
+        }
+        function progressHandler(event) {
+          var percent = (event.loaded / event.total) * 100;
+          _("progressBar").value = Math.round(percent);
+          _("status").innerHTML = Math.round(percent) + " درصد آپلود شد.";
+        }
+
+        function completeHandler(event) {
+            alert("با موفقیت آپلود گردید.")
+          _("status").innerHTML = "با موفقیت آپلود گردید.";
+          _("progressBar").value = 0;
+        }
+
+        function errorHandler(event) {
+            alert("خطایی در آپلود فایل رخ داد.")
+          _("status").innerHTML = "خطایی در آپلود فایل رخ داد.";
+        }
+
+        function abortHandler(event) {
+            alert("خطایی در آپلود فایل رخ داد.")
+          _("status").innerHTML = "آپلود قطع شد";
+        }
+
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+beautifulsoup4~=4.11.1
+requests~=2.27.1
+lxml
+pandas~=1.4.0
+openpyxl~=3.0.9
+html2text~=2020.1.16
+Django~=4.0.4

@@ -1,0 +1,3 @@
+استاندارد	id	subject	Green	subject	0
+سال تصویب	approval_year	approval_year	Red	year	1
+رشته	branch_id	branch_id__name	Blue	branch	1

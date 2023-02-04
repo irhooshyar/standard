@@ -1,0 +1,6 @@
+سند	document_id	document_id__name	Green	doc	0
+نوع سند	judgment_type	judgment_type__name	Red	type	1
+موضوع سند	subject_type_display_name	subject_type_display_name__name	Blue	subject	1
+دسته سند	categories	categories__name	Brown	category	1
+سال سند	judgment_year	judgment_year	#003366	year	1
+قاضی	judge_name_id	judge_name_id__name	#CC0066	judge	0

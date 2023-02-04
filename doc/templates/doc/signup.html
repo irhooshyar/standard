@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="../../static/library/bootstrap-5.1.3.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.7.1.css">
+    <link href="../../static/styles/login_signup.css" rel="stylesheet">
+
+     <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <script src="../../static/js/cc.js"></script>
+
+    <title>ثبت نام</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6 offset-md-3">
+                <form id="register" name="signup" method="POST" class="shadow p-4 bg-white" include-form-tracking>
+                    <div class="row">
+
+                        <div class="mb-3 text-center">
+                        <img width="150px" style=""
+                                src="../../static/icons/logo/logo-blue_text2.png" alt="">
+
+                        </div>
+
+                        <div class="col mb-3" style="margin-top: 8px">
+                            <label for="firstname">نام <span style="color: red">*</span>:</label>
+                            <input type="text" class="form-control fa-input" id="firstname" include-content-tracking required>
+                        </div>
+
+                        <div class="col" style="margin-top: 8px">
+                            <label for="lastname">نام خانوادگی <span style="color: red">*</span>:</label>
+                            <input type="text" class="form-control fa-input" id="lastname" include-content-tracking required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nationalcode">کدملی:</label>
+                            <input type="text" class="form-control" id="nationalcode" include-content-tracking placeholder="National Code">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email">ایمیل <span style="color: red">*</span>:</label>
+                            <input type="email" class="form-control" id="email" name="email" required include-content-tracking
+                                placeholder="example@example.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phonenumber">شماره تماس:</label>
+                            <input type="tel" class="form-control" id="phonenumber" include-content-tracking placeholder="09123456789">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role">نوع کاربری <span style="color: red">*</span>:</label>
+                            <select class="form-control" id="role">
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="multipleSelectDiv">
+                            <label for="expertise">زمینه تخصصی <span style="color: red">*</span>:</label>
+                            <select class="form-select text-right float-right" style="direction: rtl;" id="expertise" multiple>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username">نام کاربری <span style="color: red">*</span>:</label>
+                            <input type="username" class="form-control" id="username" required include-content-tracking placeholder="Username">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password">رمز عبور <span style="color: red">*</span>:</label>
+                            <input type="password" class="form-control" id="password" required placeholder="Password">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmPassword">تکرار رمز عبور <span style="color: red">*</span>:</label>
+                            <input type="password" class="form-control" id="confirmPassword" required
+                                placeholder="Confirm Password">
+                        </div>
+                        <div class="mb-2" id="messages"><span style="color: red">فیلدهای ستاره‌دار (*) اجباری
+                                هستند</span></div>
+                        <div class="mb-3" id="messages"></div>
+                        <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary" type="submit">ثبت نام</button>
+                        </div>
+                        <div>
+                            <hr>
+                            <p class="text-center mb-3">قبلا ثبت‌نام کرده‌اید؟<a href="{% url 'login' %}">ورود</a></p>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+
+    <script>
+        init()
+
+        async function init() {
+           await Promise.all([getUserRoles(), getUserExpertise()])
+            $('#expertise').multiSelect();
+        }
+
+         function getMultiSelectValue(container_id) {
+            let e = document.getElementById(container_id);
+            let selected = [...e.options]
+                .filter(option => option.selected)
+                .map(option => option.value)
+            return selected.join(",")
+        }
+
+
+        async function getUserRoles() {
+            const request_link = 'http://' + location.host + "/GetUserRole/";
+            let response = await fetch(request_link);
+            response = await response.json();
+            const user_roles = response["user_roles"]
+            console.log(user_roles)
+            for (const role of user_roles) {
+                const tag = "<option value=" + role["id"] + " >" + role["name"] + "</option>";
+                document.getElementById("role").innerHTML += tag;
+            }
+        }
+
+        async function getUserExpertise() {
+            const request_link = 'http://' + location.host + "/GetUserExpertise/";
+            let response = await fetch(request_link);
+            response = await response.json();
+            const res = response["result"]
+            for (const exp of res) {
+                const tag = "<option value=" + exp["id"] + " >" + exp["expertise"] + "</option>";
+                document.getElementById("expertise").innerHTML += tag;
+            }
+        }
+
+        document.getElementById("register").addEventListener("submit", onSubmit);
+
+        async function onSubmit(e) {
+            e.preventDefault()
+            const formElements = e.target.elements
+
+            let nationalcode = 0;
+            if (formElements.nationalcode.value !== "")
+                nationalcode = formElements.nationalcode.value
+
+            let phonenumber = 0;
+            if (formElements.phonenumber.value !== "")
+                phonenumber = formElements.phonenumber.value
+
+            const expertise = getMultiSelectValue("expertise")
+            const user_ip = "127.0.0.0"
+            const request_link = 'http://' + location.host + "/SaveUser/" + formElements.firstname.value + "/" + formElements.lastname.value + "/" + nationalcode + "/" + formElements.email.value + "/" + phonenumber + "/" + formElements.role.value + "/" + formElements.username.value + "/" + formElements.password.value + "/" + user_ip + "/" + expertise + "/";
+            let response = await fetch(request_link);
+            response = await response.json();
+
+            const messages = document.getElementById("messages");
+            messages.classList.remove("text-danger", "text-success")
+            if (response.status === "duplicated national code") {
+                messages.innerText = "کاربر با کدملی وارد شده از قبل در سامانه وجود دارد"
+                messages.classList.add("text-danger")
+            }
+            else if (response.status === "duplicated username") {
+                messages.innerText = "نام کاربری انتخاب شده تکراری است"
+                messages.classList.add("text-danger")
+            }
+            else if (response.status === "duplicated email") {
+                messages.innerText = "کاربر با ایمیل وارد شده از قبل در سامانه وجود دارد"
+                messages.classList.add("text-danger")
+            }
+            if (response.status === "OK") {
+                messages.innerText = "ثبت نام با موفقیت انجام شد. لطفا منتظر تایید توسط ادمین باشید."
+                messages.classList.add("text-success")
+            }
+        }
+
+        //check password and confirm password for matching
+        window.onload = function () {
+            var password = document.getElementById("password");
+            var confirmPassword = document.getElementById("confirmPassword");
+            password.onchange = ConfirmPassword;
+            confirmPassword.onkeyup = ConfirmPassword;
+
+            function ConfirmPassword() {
+                confirmPassword.setCustomValidity("");
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.setCustomValidity("رمز عبور و تکرار آن باید یکسان باشد");
+                }
+            }
+        }
+
+    </script>
+    <script> initCC(142);</script>
+</body>
+
+</html>

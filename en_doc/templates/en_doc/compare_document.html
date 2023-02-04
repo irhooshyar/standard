@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index2.css">
+    <link rel="stylesheet" href="../../static/styles/vote_analysis.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <!-- jsnetworkx -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+    <meta charset="UTF-8">
+    <title>Compare Documents</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="ltr" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "en_doc/header.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#SubjectDropdown').addClass('active');
+            $('#compare_document_panel').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'Iran') {
+                    let page_name = current_url.split('/')[3]
+                    console.log(page_name)
+                    let requested_url = current_url.replace('/en', '')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <div class="row flex-row mt-2 mx-auto">
+
+                <div class="col-md-6 pt-3 col-6 col-lg-4 bg-light">
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Country(latest version):</label>
+                    <select dir="ltr" id="country_old" name="country_old" class="form-select text-left float-left" style="direction: ltr; width: 80%">
+                    </select>
+                </div>
+
+
+                <div class="col-md-6 pt-3 col-6 col-lg-4 bg-light">
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Country(new version):</label>
+                    <select dir="ltr" id="country_new" name="country_new" class="form-select text-left float-left" style="direction: ltr; width: 80%">
+                    </select>
+                </div>
+                <div class="col-md-6 pt-3 col-6 col-lg-4 bg-light" style="text-align: left">
+                    <button type="button" id="document_search" onclick="ShowResult()" class="btn" style="margin-top: 30px; width: 25%">
+                            Show
+                    </button>
+                </div>
+
+            </div>
+
+
+        </form>
+        <div dir="ltr" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+                role="tablist">
+                <li class="nav-item float-left" role="presentation">
+                    <button id="budget_results_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#budget_results_pane" type="button" role="tab"
+                        aria-controls="budget_results_pane" aria-selected="false">Compare Documents</button>
+                </li>
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-left px-1 bg-white" id="pills-tabContent">
+                    <div style="margin-left: 1px !important; margin-top: 20px" id="compare_document_container" class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical">
+                    </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- ChartModal Container -->
+    <button type="button" id="ChartModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal" data-bs-target="#ChartModal"></button>
+    <div class="modal fade" id="ChartModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: ltr !important;" class="modal-header">
+                    <h5 id="ChartModalHeader" class="modal-title">Title</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="ChartModalText" class="modal-body text-justify">
+                </div>
+
+                <!-- Modal footer -->
+
+
+                <!-- Modal footer -->
+                <div dir="ltr" class="modal-footer">
+                    <button id="DownloadDocuments" class="btn btn-primary">Download<i class="fa fa-download ml-2"></i></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="Go To Top" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+
+    <script>
+        init()
+
+        async function init() {
+
+            CountryChanged()
+        }
+
+        async function CountryChanged() {
+
+            showResult('قوانین بودجه');
+            showResult('برنامه توسعه');
+
+        }
+
+        async function showResult(tab_name) {
+            const country_id = document.getElementById("country").value
+            const place = 'عنوان'
+            const level_id = 0
+            const subject_id = 0
+            const type_id = 0
+            const approval_reference_id = 0
+            const from_year = 0
+            const to_year = 0
+
+            let text = ''
+            let search_type = ''
+
+            let level_container = ''
+            let subject_container = ''
+            let year_container = ''
+            let approval_container = ''
+
+            if (tab_name == 'قوانین بودجه') {
+
+                text = 'بودجه'
+                search_type = "/SearchDocumentExact/"
+
+                subject_container = 'subject_container_budget';
+                level_container = 'level_container_budget';
+                year_container = 'year_container_budget';
+                approval_container = 'approval_container_budget';
+
+            } else {
+
+                text = 'برنامه توسعه'
+                search_type = "/SearchDocumentAnd/"
+
+                subject_container = 'subject_container_barname';
+                level_container = 'level_container_barname';
+                year_container = 'year_container_barname';
+                approval_container = 'approval_container_barname';
+            }
+
+            /* Make Request   */
+            let request_link = 'http://' + location.host + search_type + country_id + "/" + level_id + "/" + subject_id + "/" + type_id + "/" +
+                approval_reference_id + "/" + from_year + "/" + to_year + "/" + place + "/" + text + "/"
+
+            let response = await fetch(request_link).then(response => response.json());
+            const documents_information_result = response["documents_information_result"]
+                /* Show Chart  */
+            const subject_chart_data = response["subject_chart_data"]
+            const approval_references_chart_data = response["approval_references_chart_data"]
+            const level_chart_data = response["level_chart_data"]
+            const approval_year_chart_data = response["approval_year_chart_data"]
+            const type_chart_data = response["type_chart_data"]
+
+            showChartData(subject_chart_data, subject_container, documents_information_result, text, false)
+            showChartData(level_chart_data, level_container, documents_information_result, text, false)
+            showChartData(approval_year_chart_data, year_container, documents_information_result, text, true)
+            showChartData(approval_references_chart_data, approval_container, documents_information_result, text, false)
+        }
+
+        function showChartData(data, container, documents_information_result, BoxName, keySort) {
+            let chart_data = []
+            for (const [key, value] of Object.entries(data)) {
+                chart_data.push([value["name"], value["count"]])
+            }
+
+            if (chart_data.length === 0) {
+                document.getElementById(container).innerHTML = "<span class='d-block text-center' style='color: red'>هیچ سندی یافت نشد.</span>";
+            } else {
+                showChart(chart_data, container, documents_information_result, BoxName, keySort)
+            }
+
+        }
+
+        function showChart(data, position, documents_information_result, BoxName, keySort) {
+
+            if (keySort === true)
+            {
+                data.sort(function(element_a, element_b) {
+                    return element_a[0] - element_b[0];
+                });
+            }
+            else
+            {
+                data.sort(function(element_a, element_b) {
+                    return element_a[1] - element_b[1];
+                });
+            }
+
+            // Sorts the data by descending.
+            data = anychart.data.set(data)
+
+            document.getElementById(position).innerHTML = ""
+
+            chart = anychart.column();
+            chart.container(position);
+            // create a column series and set the data
+            var series = chart.column(data);
+            chart
+                .animation(true)
+                .padding([10, 40, 5, 20])
+
+
+            chart.background().fill('#ffffff');
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // var state = series.normal();
+            // state.fill('#1481c0')
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("Document Count");
+            yAxis.title().fontFamily('vazir');
+            yAxis.title().height(40);
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("{%value}");
+
+            chart.xAxis().labels().height(60);
+            
+            chart.yAxis().labels().format("{%value}");
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+
+            //xAxisLabels.rotation(-90)
+            // initiate drawing the chart
+            chart.draw();
+
+
+            chart.listen('Click', async function(event) {
+                const click_tag = event.domTarget.tag;
+                const index = click_tag["index"]
+                const text = data.row(index)[0];
+                let filtered_result = []
+                let header = ""
+                let save_file_name = BoxName;
+
+                if (position.includes("subject_container")) {
+                    filtered_result = documents_information_result.filter(function(row) {
+                        console.log(row)
+                        if (row["subject"] === text)
+                            return row
+                    });
+                    console.log(filtered_result)
+                    header = "Subject: " + text
+                    save_file_name += " (Country {1} and Subject {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                } else if (position.includes("approval_container")) {
+                    filtered_result = documents_information_result.filter(function(row) {
+                        if (row["approval_reference"] === text)
+                            return row
+                    });
+                    header = "Approval Reference: " + text
+                    save_file_name += " (Country {1} and Approval Reference {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                } else if (position.includes("level_container")) {
+                    filtered_result = documents_information_result.filter(function(row) {
+                        if (row["level"] === text)
+                            return row
+                    });
+                    header = "Level: " + text
+                    save_file_name += " (Country {1} and Document Level {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                } else if (position.includes("year_container")) {
+                    filtered_result = documents_information_result.filter(function(row) {
+                        if (row["approval_date"].substring(0, 4) === text.toString())
+                            return row
+                    });
+                    header = "Approval Year: " + text
+                    save_file_name += " (Country {1} and Approval Year {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                }
+
+                document.getElementById("ChartModalHeader").innerText = header
+                let filtered_result_tag = ""
+                let list_of_docId = ""
+                for (const doc of filtered_result) {
+                    const link = 'http://' + location.host + "/information/?id=" + doc["id"]
+                    let tag = "<li class='mt-3' id=" + doc["id"] + "><a href='" + link + "'>" + doc["name"] + "</a></li>"
+                    filtered_result_tag += tag
+
+                    list_of_docId += doc["id"] + "_"
+                }
+                filtered_result_tag = "<ol start='1'>" + filtered_result_tag + "</ol>"
+                document.getElementById("ChartModalText").innerHTML = filtered_result_tag
+
+
+                /* download file creation*/
+                document.getElementById("DownloadDocuments").onclick = function() {
+                    downloadFiles(filtered_result, save_file_name);
+                };
+
+
+                $("#ChartModalBtn").click();
+
+
+            })
+
+        }
+    </script>
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+    <script>
+        async function downloadFiles(file_name_list, save_file_name) {
+            const country_id = file_name_list[0]["country_id"]
+
+            let zip = new JSZip()
+
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            let extension = ".txt"
+            if (country_name.includes("فاوا")) {
+                extension = '.docx';
+            }
+
+            for (const document of file_name_list) {
+                const document_name = document["name"] + extension
+                const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name, value);
+                    })
+            }
+            zip.generateAsync({
+                    type: "blob"
+                })
+                .then(function(content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+        }
+    </script>
+
+</body>
+
+</html>
+
+</html>

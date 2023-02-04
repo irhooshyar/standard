@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+    <!-- jsnetworkx -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+    <!-- Download Zip Files -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <title>تحلیل کنشگران جمعی</title>
+    {% include "doc/title_icon.html" %}
+
+    <style>
+        #modal_dialog {
+            max-height: 100vh !important;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#ActorsDropdown').addClass('active');
+            $('#collective_actors').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mt-2 mx-auto">
+                <!-- Country Input -->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;" onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+                <div id="CollectiveActorSelectDiv" class="col-md-6  pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+
+                    <label class="text-right bg-light float-right" style="direction: rtl;;">نوع کنشگر جمعی <span
+                            style="color: red">(*)</span>:</label>
+
+                    <select dir="rtl" id="CollectiveActorSelect" class="form-select text-right float-right searchable-multi-select"
+                        style="direction: rtl;">
+                    </select>
+
+                </div>
+
+                <!-- Search Box input -->
+                <div class="col-md-6 pt-3 col-12 col-lg-4 bg-light">
+                    <label class="float-right" style="direction: rtl;">لیست کلیدواژه‌ها:</label>
+                    <input style="direction: rtl;" class="float-left form-control text-right"
+                        placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required="" name="KeywordsBox"
+                        id="KeywordsBox" value="" name="KeywordsBox">
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button id="advanced_search" type="button" class="btn float-right" data-bs-toggle="collapse"
+                        data-bs-target="#advanced_fields" aria-expanded="true" aria-controls="advanced_fields">تنظیمات
+                        پیشرفته</button>
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Advanced Fields in Second Row -->
+            <div id="advanced_fields" class="collapse show row flex-row-reverse mx-auto mt-4">
+
+
+
+                <!-- Members Count -->
+                <div class="col-md-6  pt-3 col-12 col-lg-3 mt-1 bg-light">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">
+                        حداقل تعداد عضو<span style="color: red"> (*)</span>:
+                    </label>
+
+                    <input type="number" id="MembersCountSelect" min="1" max="10" value="1"
+                        class="form-select text-right float-right" style="direction: rtl;">
+                </input>
+
+                </div>
+
+
+                <!-- Actor Category-->
+                <div class="col-md-6  pt-3 col-12 col-lg-3 mt-1 bg-light" dir="rtl">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">
+                        نوع عضو<span style="color: red"> (*)</span>:
+                    </label>
+
+                    <select id="ActorCategorySelect" onchange="CategoryChanged()"
+                        class="form-select text-right float-right searchable-select" style="direction: rtl;">
+                    </select>
+
+                </div>
+
+                <!-- Actor -->
+                <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light ActorSelect" dir="rtl">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">نام عضو<span
+                            style="color: red"> (*)</span>:</label>
+
+                    <select id="ActorSelect" class="form-select text-right float-right searchable-multi-select" style="direction: rtl;">
+                    </select>
+
+                </div>
+
+
+                <!-- Membership Type-->
+                <div class="col-md-6  pt-3 col-12 col-lg-3 mt-1 bg-light" dir="rtl">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">
+                        نوع عضویت<span style="color: red"> (*)</span>:
+                    </label>
+
+                    <select id="MembershipTypeSelect" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;">
+                        <option value="And">و (And)</option>
+                        <option value="OR">یا (OR)</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست‌وجو</button>
+                </li>
+
+                <!-- <li class="nav-item float-right" role="presentation">
+                    <button id="collective_members_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#collective_members_pane" type="button" role="tab"
+                        aria-controls="collective_members_pane" aria-selected="false">گراف
+                        کنشگران جمعی</button>
+                </li> -->
+
+                <!-- Download Buttons -->
+                <button disabled type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                    class="btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                </button>
+
+                <button disabled class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+                <!-- Result Count -->
+                <p id="DocumentCount" dir="rtl" class="text-left float-left text-secondary  pl-2"></p>
+
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- ActorsSupervisors Graph Pane -->
+                <div id="collective_members_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                    aria-labelledby="collective_members_tab">
+                    <div class="row mt-4 w-100 flex-row mx-0 px-4 pb-5">
+
+                        <div dir="ltr" id="collective_members_graph_container" style="height: 400px"
+                            class="bg-white w-100 p-1">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div id="modal_dialog" class="modal-dialog  modal-fullscreen">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body bg-light text-justify">
+                    <div class="row w-100 ">
+                        <div id="ParagraphsDetails" class="col-6 float-right" style="overflow-y: scroll;height: 74vh;">
+                        </div>
+                        <div id="GraphDetails" class="col-6 float-left" style="height: 74vh;"></div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myGraph">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ShowGraphHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="ShowGraph" class="modal-body bg-light text-justify">
+                </div>
+
+                <div id="ShowParagraph" class="modal-body bg-light text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+</body>
+
+
+
+<script>
+
+    initSearchableSelects();
+    container_id_list = ['SearchTable', 'DocumentCount']
+    collective_pattern_keywords = ['متشکل از', 'مرکب از', 'متشکل‌از', 'مرکب‌از']
+
+    function clearPrevResults(container_id_list) {
+
+        for (container_id of container_id_list) {
+            document.getElementById(container_id).innerHTML = "";
+        }
+    }
+
+    let SearchResultValue = []
+    let ActorsList = []
+    let ActorsDict = []
+
+    async function init() {
+        // get actor list
+        let request_link = 'http://' + location.host + "/GetActorsList/";
+        response = await fetch(request_link).then(response => response.json());
+        ActorsList = response['actorsList']
+
+        request_link = 'http://' + location.host + "/GetActorsDict/";
+        response = await fetch(request_link).then(response => response.json());
+        ActorsDict = response['actorsDict']
+
+        /****************** Collective Actor List ****************************/
+
+        request_link = 'http://' + location.host + "/GetCollectiveActorList/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["CollectiveActorList"]
+
+        disabled_options = []
+
+        let options = [{ value: "0", text: "همه"}];
+
+        for (var i = 0; i < response.length; i++) {
+            const tool_id = response[i]["id"]
+            const tool_name = response[i]["tool_name"]
+
+            if (disabled_options.includes(tool_name)) {
+                options.push({value:tool_id, text: tool_name});
+
+            } else {
+                options.push({value:tool_id, text: tool_name});
+
+            }
+            syncSelectOptions('CollectiveActorSelect', options)
+
+        }
+
+        /******************  Actor Category List ****************************/
+        request_link = 'http://' + location.host + "/GetActorCategoryList/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["ActorCategoryList"]
+
+        document.getElementById("ActorCategorySelect").innerHTML = "<option value=" + 0 + " >" + "همه" + "</option>";
+
+        for (let i = 0; i < response.length; i++) {
+            const category_id = response[i]["id"]
+            const category_name = response[i]["category_name"]
+            const tag = "<option value=" + category_id + " >" + category_name + "</option>";
+
+            if (category_name != 'کنشگران جمعی')
+                document.getElementById("ActorCategorySelect").innerHTML += tag
+        }
+
+        /******************  Actors List ****************************/
+        await CategoryChanged();
+
+
+        document.getElementById("document_search").disabled = false;
+
+
+        syncAllSelects()
+    }
+
+    init()
+
+
+    async function CategoryChanged() {
+        document.getElementById("document_search").disabled = true;
+
+        let selected_category_id = document.getElementById('ActorCategorySelect').value
+        let request_link = 'http://' + location.host + "/GetActorsByCategoryId/" + selected_category_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["ActorsList"];
+        options = [{ value: "0", text: "همه"}];
+
+        for (let i = 0; i < response.length; i++) {
+            const actor_id = response[i]["id"]
+            const actor_name = response[i]["actor_name"]
+
+            options.push({value:actor_id, text: actor_name});
+
+        }
+        syncSelectOptions('ActorSelect', options)
+
+        document.getElementById("document_search").disabled = false;
+    }
+
+
+
+
+    async function CountryChanged() {
+        clearPrevResults(container_id_list);
+    }
+
+
+    async function ShowResult() {
+
+        clearPrevResults(container_id_list);
+
+
+        const country_id = document.getElementById("country").value;
+        const keywords_text = document.getElementById("KeywordsBox").value;
+        const multiselect_collective_value = await GetMultiSelectCollectiveActorsValue();
+        const category_id = document.getElementById("ActorCategorySelect").value;
+        const membership_type = document.getElementById("MembershipTypeSelect").value;
+        const min_members_count = document.getElementById('MembersCountSelect').value 
+        const multiselect_actor_value = await GetMultiSelectValue('ActorSelect');
+
+        let keywords_list = []
+
+        keywords_list = keywords_text.split('/');
+        keywords_list = keywords_list.map(function (keyword) {
+            return keyword.trim();
+        })
+
+        keywords_list = keywords_list.filter(keyword => (keyword !== '' && keyword !== ' '));
+
+        preprocessed_keywords_text = keywords_list.toString()
+
+        if (preprocessed_keywords_text === '') {
+            preprocessed_keywords_text = 'empty';
+        }
+        if (multiselect_collective_value === "") {
+            showToastMessage(' کنشگر جمعی انتخاب نشده‌است.');
+        }
+        if (multiselect_actor_value === "") {
+            showToastMessage('کنشگر انتخاب نشده‌است.');
+        }
+        // else if (preprocessed_keywords_text === 'empty'){
+        else if (false) {
+            showToastMessage('کلیدواژه‌ای وارد نشده‌است.');
+            $('#KeywordsBox').focus();
+
+        }
+        else {
+            await SpinnerModeFunction("Active");
+
+            /****************** Get Documents Information Data ****************************/
+            notyf.dismissAll();
+
+            startBlockUI('SearchTable');
+
+            request_link = 'http://' + location.host + "/SearchDocumentsByCollectiveActorsKeywords/"
+                + country_id + "/" + multiselect_collective_value + "/" + category_id + "/" + multiselect_actor_value + "/" + membership_type + "/" + preprocessed_keywords_text + "/"
+                + min_members_count + "/";
+            response = await fetch(request_link).then(response => response.json());
+
+            let documents_information_dict = response["documents_information_dict"];
+            console.log(documents_information_dict)
+            await showDocumentInformation(documents_information_dict, category_id, multiselect_actor_value, multiselect_collective_value, membership_type, preprocessed_keywords_text);
+            stopBlockUI('SearchTable', 'نتایج جست‌وجو');
+
+            /****************** Get Actors Chart Data ****************************/
+
+            await SpinnerModeFunction("Disable");
+        }
+    }
+
+
+
+    async function GetMultiSelectCollectiveActorsValue() {
+        var e = document.getElementById("CollectiveActorSelect");
+        var selected = [...e.options]
+            .filter(option => option.selected)
+            .map(option => option.value)
+        return selected.join("__")
+    }
+
+
+    async function showDocumentInformation(documents_information_dict, category_id, actors_id, collectives_id, membership_type, keywords_text) {
+
+        SearchResultValue = documents_information_dict;
+
+        document.getElementById("DocumentCount").innerText = (Object.keys(documents_information_dict).length).toString() + " سند یافت شد.";
+        let index = 1;
+        let document_result = []
+
+
+        for (const [doc_id, doc_info] of Object.entries(documents_information_dict)) {
+
+
+            const document_id = doc_id
+            const document_name = doc_info["name"]
+
+            const document_subject = doc_info['subject']
+            const document_approval_reference = doc_info['approval_reference']
+            const document_approval_date = doc_info['approval_date']
+
+            const role_name = doc_info["role_name"]
+            let collective_counts = doc_info["collective_counts"]
+            collective_counts = collective_counts.toString().replaceAll(',', '<br>');
+
+            const document_link = 'http://' + location.host + "/information/?id=" + document_id
+            const doc_name = '<a target="blank" href="' + document_link + '">' + document_name + "</a>"
+
+            const detail_function = "DetailFunction(" + document_id + ",'" + collectives_id + "'," + category_id + ",'" + actors_id + "', '" + membership_type + "', '" + preprocessed_keywords_text + "')"
+            const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" ' + ' onclick="' + detail_function + '" data-bs-target="#myModal">جزئیات</button>'
+
+            const row = {
+                "id": index, "name": doc_name,
+                'document_subject': document_subject,
+                'document_approval_reference': document_approval_reference,
+                'document_approval_date': document_approval_date,
+                "collective_counts": collective_counts,
+                "detail": detail
+            }
+            document_result.push(row)
+            index += 1
+        }
+        $('#SearchTable').empty();
+        $('.SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "name",
+                "title": "نام سند",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "document_subject",
+                "title": "موضوع سند",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "collective_counts",
+                "title": "کنشگران جمعی (تعداد اعضاء)",
+                "style": {
+                    "width": "25%"
+                }
+            }, {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "5%"
+                }
+            }
+            ],
+            "rows": document_result
+        });
+
+    }
+
+
+
+    async function DetailFunction(document_id, collectives_id, category_id, actors_id, membership_type, preprocessed_keywords_text) {
+        let request_link = 'http://' + location.host + "/GetCollectiveActorsParagraphsDetails2/" + document_id
+            + "/" + collectives_id + "/" + category_id + "/" + actors_id + "/" + membership_type + "/" + preprocessed_keywords_text + "/"
+
+        let response = await fetch(request_link).then(response => response.json());
+
+        /*  Show detail Result */
+        let document_paragraphs_result = response["document_paragraphs_result"];
+        let document_name = response["document_name"];
+        console.log(document_paragraphs_result)
+        await showDetailsModal(document_id, document_name, document_paragraphs_result, preprocessed_keywords_text);
+        await createMemberGraphData(document_paragraphs_result, 'GraphDetails')
+
+    }
+
+
+    async function showDetailsModal(document_id, document_name, paragraphs_dict, preprocessed_keywords_text) {
+        /* Title Text */
+        const link = 'http://' + location.host + "/information/?id=" + document_id;
+        document.getElementById("ModalHeader").innerHTML = "<a target='to_blank' href='" + link + "'>" + document_name + "</a>";
+
+        /* Body Text */
+        document.getElementById("ParagraphsDetails").innerHTML = ""
+
+        for (const [para_id, para_info] of Object.entries(paragraphs_dict)) {
+            para_text = para_info['text'];
+            has_next_paragraph_members = para_info['has_next_paragraph_members'];
+            next_paragraphs = para_info['next_paragraphs'];
+            para_collective_name = para_info['collective_name'];
+            para_collective_members = para_info['collective_members'];
+
+            collective_header = '<h5 class="mt-3 text-secondary">' + para_collective_name +
+                (para_collective_name == 'کمیته' ? '‌ای' : 'ی') + ' با ' + (Object.keys(para_collective_members).length) + ' عضو' + ':' + '</h5>'
+
+            // collective_header += '<h6 class="text-secondary">' + 'نام ' + para_collective_name + ': نامشخص'+ '</h6>'
+            // collective_header += '<h6 class="text-secondary">' + 'اعضای ' + para_collective_name + ':'+ '</h6>'
+            // ul_tag = ''
+            // for (const[member_name,member_form] of Object.entries(para_collective_members)){
+            //     ul_tag += '<li class="text-primary mb-3 lh-md">' + member_name + '</li>'
+            // }
+
+            // ul_tag = '<ol start="1">' + ul_tag + '</ol>'
+            // collective_header += ul_tag;
+
+            // collective_header += '<h6 class="text-secondary">' + 'پاراگراف مرجع' + ':'+ '</h6>'
+
+            highlighted_para_text = highlightFunction(para_text, has_next_paragraph_members, para_collective_name, para_collective_members, preprocessed_keywords_text);
+
+
+            console.log(para_info['duties'])
+
+            let duties = ''
+            for (let duty of para_info['duties']) {
+                if (duty !== '')
+                    duties += '<li>' + duty + '</li>'
+            }
+
+            console.log(duties)
+
+            document.getElementById("ParagraphsDetails").innerHTML +=
+                collective_header +
+                "<li class='" + (!has_next_paragraph_members && duties === '' ? 'mb-5' : 'mb-2') + " lh-lg'>" + highlighted_para_text + "</li>";
+
+            if (has_next_paragraph_members) {
+                next_paragraphs_ul = ''
+                for (next_para of next_paragraphs) {
+                    next_paragraphs_ul +=
+                        "<p class='" + (duties === '' ? 'mb-5' : 'mb-2') + " lh-lg'>" + next_para + "</p>";
+                }
+
+                document.getElementById('ParagraphsDetails').innerHTML += next_paragraphs_ul
+
+            }
+
+            document.getElementById('ParagraphsDetails').innerHTML +=
+                (duties !== '' ? ('<div class="border border-2 rounded p-1 px-2">' + "<h6 class='font-weight-bold'> وظایف: </h6><ul class='mb-1'>"
+                    + duties + "</ul></div>") : '');
+
+
+        }
+
+
+        document.getElementById("ParagraphsDetails").innerHTML = "<ul>" + document.getElementById("ParagraphsDetails").innerHTML + "</ul>"
+
+    }
+
+
+
+    async function createMemberGraphData(paragraphs_dict, chart_container) {
+        nodes = []
+        edges = []
+        chart_data = []
+        for (const [para_id, para_info] of Object.entries(paragraphs_dict)) {
+            para_collective_name = para_info['collective_name'];
+            para_collective_members = para_info['collective_members'];
+
+            collective_node = {
+                id: para_id,
+                name: para_collective_name,
+                group: 'collectives',
+                fill: {
+                    'src': "../../static/icons/actors_icons/collective1.png"
+                }
+            }
+            nodes.push(collective_node);
+
+            for (const [member_id, member_info] of Object.entries(para_collective_members)) {
+                member_name = member_info['name']
+                member_selected = member_info['selected']
+                member_group = 'members'
+                if (member_selected) {
+                    member_group = 'selected_members'
+                }
+
+                member_node = {
+                    id: member_name,
+                    name: member_name,
+                    group: member_group,
+                    fill: {
+                        'src': "../../static/icons/actors_icons/actor_icon3.png"
+                    }
+                }
+                nodes.push(member_node)
+                edge = {
+                    from: para_id,
+                    from_name: para_collective_name,
+                    to: member_name,
+                    to_name: member_name
+                }
+
+                edges.push(edge);
+            }
+
+        }
+
+        chart_data['nodes'] = nodes
+        chart_data['edges'] = edges
+        showCollectiveMemberGraph(chart_container, chart_data)
+
+    }
+
+
+    async function showCollectiveMemberGraph(chart_container, chart_data) {
+
+
+        document.getElementById(chart_container).innerHTML = ''
+        // create a chart and set the data
+        var chart = anychart.graph(chart_data);
+        // set the container id
+        chart.container(chart_container);
+
+        let collectives = chart.group("collectives");
+        let members = chart.group("members");
+        let selected_members = chart.group("selected_members");
+
+
+        if (collectives != undefined) {
+            collectives.normal().height(55);
+            collectives.hovered().height(60);
+            collectives.selected().height(60);
+            collectives.normal().stroke(null);
+
+            collectives.labels().enabled(true);
+            collectives.labels().format("{%name}").fontFamily('vazir');
+            collectives.labels().fontSize(14);
+            collectives.labels().fontWeight(600);
+        }
+        if (members != undefined) {
+            members.normal().height(35);
+            members.hovered().height(40);
+            members.selected().height(40);
+            members.normal().stroke(null);
+
+            members.labels().enabled(true);
+            members.labels().format("{%name}").fontFamily('vazir');
+            members.labels().fontSize(14);
+            members.labels().fontWeight(600);
+        }
+        if (selected_members != undefined) {
+            selected_members.normal().height(40);
+            selected_members.hovered().height(45);
+            selected_members.selected().height(45);
+            selected_members.normal().stroke("#1481c0", 3);
+
+            selected_members.labels().enabled(true);
+            selected_members.labels().format("{%name}").fontFamily('vazir');
+            selected_members.labels().fontSize(14);
+            selected_members.labels().fontWeight(600);
+        }
+        let nodes = chart.nodes();
+        nodes.hovered().fill("#ffa000");
+        chart.nodes().tooltip().format("{%name}");
+        chart.edges().tooltip().format(" از: {%from_name} \n به: {%to_name}");
+        chart.edges().tooltip().fontFamily('vazir');
+        chart.nodes().tooltip().fontFamily('vazir');
+        chart.background("transparent");
+
+        chart.edges().arrows({
+            enabled: true,
+            size: 10,
+            position: '50%'
+        });
+
+
+        // initiate drawing the chart
+        chart.draw();
+
+        chart.listen("mouseOver", function(e){
+          document.body.style.cursor = "pointer";
+        });
+        chart.listen("mouseOut", function(e){
+          document.body.style.cursor = "auto";
+        });
+
+    }
+
+
+
+
+
+    function highlightFunction(para_text, has_next_paragraph_members, para_collective_name, para_collective_members, preprocessed_keywords_text) {
+        paragraph_pattern_kw = ''
+        for (pattern_kw of collective_pattern_keywords) {
+
+            if (para_text.includes(pattern_kw)) {
+                paragraph_pattern_kw = pattern_kw
+            }
+        }
+
+
+        start_index = para_text.indexOf(paragraph_pattern_kw);
+        cropped_text = para_text.substring(start_index)
+
+        end_index = cropped_text.indexOf('.')
+
+        if (end_index == -1) {
+            end_index = cropped_text.length
+        }
+
+        cropped_text = cropped_text.substring(0, end_index);
+
+        highlighted_cropped_text = cropped_text;
+        if (!has_next_paragraph_members) {
+
+            for (const [member_id, member_info] of Object.entries(para_collective_members)) {
+                member_form = member_info['form']
+                memeber_selected = member_info['selected']
+
+                if (memeber_selected)
+                    member_form_tag = "<span class='bg-primary text-white rounded px-1'>" + member_form + "</span>"
+                else {
+                    member_form_tag = "<span class='bold text-primary rounded px-1'>" + member_form + "</span>"
+                }
+
+                highlighted_cropped_text = highlighted_cropped_text.replaceAll(member_form, member_form_tag);
+            }
+
+            para_text = para_text.replaceAll(cropped_text, highlighted_cropped_text);
+
+        }
+
+
+        // highlight collective name
+        collective_tag = "<span class='bg-secondary text-white px-1 rounded'>" + para_collective_name + 'ی' + "</span> "
+        para_text = para_text.replaceAll(para_collective_name + 'ی', collective_tag)
+
+
+        collective_tag = "<span class='bg-secondary text-white px-1 rounded'>" + para_collective_name + '‌ای' + "</span> "
+        para_text = para_text.replaceAll(para_collective_name + '‌ای', collective_tag)
+
+
+        collective_tag = "<span class='bg-secondary text-white px-1 rounded'>" + para_collective_name + ' ای' + "</span> "
+        para_text = para_text.replaceAll(para_collective_name + ' ای', collective_tag)
+
+
+        collective_tag = "<span class='bg-secondary text-white px-1 rounded'>" + para_collective_name + '­ای' + "</span> "
+        para_text = para_text.replaceAll(para_collective_name + '­ای', collective_tag)
+
+        pattern_kw_tag = "<span class='gray_dotted_border px-1 rounded'>" + paragraph_pattern_kw + "</span> "
+
+
+        if (paragraph_pattern_kw != '') {
+            para_text = para_text.replaceAll(paragraph_pattern_kw, pattern_kw_tag);
+
+        }
+
+        if (preprocessed_keywords_text != 'empty') {
+            keywords_list = preprocessed_keywords_text.split(',');
+
+            for (kw of keywords_list) {
+                kw_tag = "<span class='bg-success text-white px-1 rounded'>" + kw + "</span> "
+                para_text = para_text.replaceAll(' ' + kw, ' ' + kw_tag);
+            }
+        }
+
+        return para_text;
+    }
+
+
+    async function GetMultiSelectValue(container_id) {
+        let e = document.getElementById(container_id);
+        let selected = [...e.options]
+            .filter(option => option.selected)
+            .map(option => option.value)
+        return selected.join("__")
+    }
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+
+
+
+</script>
+
+<!-- Export results -->
+
+<script>
+
+    async function downloadFiles(file_name_list, save_file_name) {
+        startFullPageBlockUI()
+        const country_id = document.getElementById("country").value
+
+        let zip = new JSZip()
+
+        const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["country_information"][0]
+        const country_folder = response["folder"];
+        const country_name = response["name"];
+
+        save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+        let extension = ".txt"
+        if (country_name.includes("فاوا")) {
+            extension = '.docx';
+        }
+
+
+        for (const [doc_id, doc_info] of Object.entries(SearchResultValue)) {
+            const document_name = doc_info['doc_name'] + extension
+
+            const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+            await fetch(path)
+                .then(res => res.arrayBuffer())
+                .then(value => {
+                    zip.file(document_name, value);
+                })
+        }
+        zip.generateAsync({
+            type: "blob"
+        })
+            .then(function (content) {
+                // see FileSaver.js
+                saveAs(content, save_file_name + ".zip");
+            });
+        stopFullPageBlockUI('دانلود اسناد');
+    }
+
+    async function DownloadSerachResultFunction() {
+        const save_file_name = " کنشگران جمعی در"
+        downloadFiles(SearchResultValue, save_file_name)
+    }
+
+    async function ExportExcelSerachResultFunction() {
+        var csv = "";
+
+        sep = ","
+
+
+        let Csv = "نام سند" + sep + "موضوع سند" + sep +
+            "مرجع تصویب" + sep + "تاریخ تصویب" + sep + "تعداد کنشگران جمعی" + sep + "کنشکران جمعی" + "\n"
+
+        for (const [doc_id, doc_info] of Object.entries(SearchResultValue)) {
+            const document_id = doc_id
+            const document_name = doc_info['doc_name']
+            const subject_name = doc_info['doc_subject']
+            const approval_references_name = doc_info['doc_approval_reference']
+            const doc_approval_date = doc_info['doc_approval_date']
+            const document_collective_actors = doc_info['collective_actor'].join(' / ')
+            const collective_actors_count = doc_info['collective_actor'].length
+
+            Csv += document_name + sep + subject_name + sep
+                + approval_references_name + sep
+                + doc_approval_date + sep
+                + collective_actors_count + sep
+                + document_collective_actors
+                + "\n"
+
+        }
+
+
+
+        let save_file_name = " کنشگران جمعی در"
+        save_file_name += " مجموعه سند {" + $('#country option:selected').text() + "}"
+
+        let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+        var link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", save_file_name + ".csv");
+        document.body.appendChild(link);
+        link.click()
+    }
+
+
+
+    /* Search after press Enter */
+    $("#info_form").submit(function () { return false; });
+    $("#KeywordsBox").keyup(function (event) {
+        if (event.keyCode === 13) {
+            ShowResult()
+        }
+    });
+
+</script>
+
+
+<script src="../../static/js/tooltip_handler.js"></script>
+<!-- Intro Js -->
+<!-- <script src="../../static/js/collective_actors/collective_actors_tour.js"> -->
+</script>
+<script src="../../static/js/UserLogSave.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+<script src="../../static/js/tour.js"></script>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+
+</html>

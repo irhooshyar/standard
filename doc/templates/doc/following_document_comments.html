@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+   <script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/recommendation.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+
+    <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+    <meta charset="UTF-8">
+
+    <title> مشاهده نظرات کاربران </title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <script>
+        initSearchableSelects();
+        $(document).ready(function () {
+
+            // Active panel
+            $('#UserProfileDropdown').addClass('active');
+            $('#following_document_comments').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+    <!-- Main Container -->
+
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+
+        <div class="col">
+        </div>
+        <div class="col-10">
+            <form class="shadow p-4 bg-white" id="report_bug_form" method="POST">
+                <div class="row text">
+                    <div class="form_title py-2">
+                        <p class="title my-auto">مشاهده نظرات کاربران</p>
+                    </div>
+
+                    <!-- main Panel -->
+                    <div class="mb-3 col-md-8 col-12 col-lg-2 pt-3  mt-1" dir="rtl">
+
+                        <label for="user_types" class="form-label">نوع کاربر:</label>
+
+                        <select id="user_types" onchange="UserTypeChanged()" class="form-select text-right float-right searchable-select"
+                            style="direction: rtl;">
+                            <option value="دنبال شده">دنبال شده</option>
+                            <option value="دنبال نشده">دنبال نشده</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-8 col-12 col-lg-6 pt-3  mt-1" dir="rtl">
+
+                        <label for="exampleFormControlTextarea1" class="form-label">کاربر:</label>
+
+                        <select id="user_name_select" onchange="ShowFollowingComment()"
+                            class="form-select text-right float-right searchable-select" style="direction: rtl;">
+                        </select>
+
+                    </div>
+
+                    <div id="FollowBtnContainer" class="following_btns mb-3 col-1 mr-0 mt-5 w-auto">
+                        <button onclick="FollowSelectedUser()" id="FollowBtn" class="btn py-0 btn-outline-success"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="درخواست دنبال کردن به کاربر">
+                            <i class="bi bi-person-plus bold"
+                                style="font-size: 26px;position: relative; top: -6px;"></i>
+                        </button>
+                    </div>
+
+                    <div id="UnfollowBtnContainer" class="following_btns mb-3 col-1 mr-0 mt-5 w-auto">
+                        <button onclick="UnFollowSelectedUser()" id="UnfollowBtn" class="btn py-0 btn-outline-warning"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="دنبال نکردن">
+                            <i class="bi bi-person-dash bold"
+                                style="font-size: 26px;position: relative; top: -6px;"></i>
+                        </button>
+                    </div>
+                     <div class="mb-3 col-1 mr-0 p-0"
+                          style="margin-top: 48px"
+                          data-bs-toggle="modal" data-bs-target="#pendingModal">
+                        <button class="btn py-0 btn-outline-primary"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="کاربران در انتظار تایید">
+                            <i class="bi bi-inboxes bold"
+                                style="font-size: 26px;position: relative; top: -6px;"></i>
+                        </button>
+                    </div>
+                    <!-- Hashtag Input -->
+                    <div class="mb-3 col-md-6 col-6 col-lg-4 pt-3  mt-1" dir="rtl">
+                        <label class=" text-right float-right" style="direction: rtl;;"> جستجو با هشتگ: </label>
+                        <select dir="rtl" name="hashtags" id="hash_tags_select" class="form-select text-right float-right searchable-select"
+                            style="direction: rtl;" >
+                        </select>
+                    </div>
+                    <div class="col-lg-1 col-md-2 pt-5 mt-1 col-12 mb-3 px-0">
+                        <button type="button" id="document_search" onclick="ShowComments()"
+                            class="btn d-flex float-right  mr-3">
+                            <div class="spinner-border text-light" role="status">
+                                <span class="sr-only">درحال جستجو ...</span>
+                            </div>
+                            نمایش
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div dir="rtl" class="doc_info_table shadow">
+                <table class="table table-light table-striped cm_table">
+                    <thead class="table">
+                        <tr>
+                            <th class="text-center" scope="col">ردیف</th>
+                            <th class="text-center" scope="col">نام سند</th>
+                            <th class="text-center" scope="col">نظر</th>
+                            <th class="text-center" scope="col">تعداد موافق</th>
+                            <th class="text-center" scope="col">تعداد مخالف</th>
+                            <th class="text-center" scope="col">تاریخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comments_table_body">
+                        <tr>
+                            <td class="text-center" id="comment_number">-</td>
+                            <td class="text-center" id="comment_document_name">-</td>
+                            <td class="text-center" id="comment_text">-</td>
+                            <td class="text-center" id="comment_agree">-</td>
+                            <td class="text-center" id="comment_disagree">-</td>
+                            <td class="text-center" id="comment_date">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col">
+
+        </div>
+
+
+    </div>
+    <!-- pending Modal Container -->
+    <div class="modal fade" id="pendingModal" tabindex="-1" aria-labelledby="pendingModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div style="direction: rtl !important;" class="modal-header">
+                <h5 id="pendingModalHeader" class="modal-title">لیست افراد</h5>
+                <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="pending_users" class="bg-light text-justify">
+                          <div dir="rtl" class="pending_users_table">
+                            <table class="table table-light table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام</th>
+                                        <th class="text-center" scope="col">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pending_users_body">
+                                    <tr>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                        <td class="text-center">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vote Details Modal Container -->
+    <div class="modal fade" id="VoteDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="VoteModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body bg-light text-justify">
+                    <div id="VoterDetailText" class="bg-light text-justify">
+                          <div dir="rtl" class="voter_info_table">
+                            <table class="table table-light table-striped">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام کاربر</th>
+                                        <th class="text-center" scope="col">تاریخ اولین ثبت رای</th>
+                                        <th class="text-center" scope="col">تاریخ آخرین تغییر رای</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vote_table_body">
+                                    <tr>
+                                        <td class="text-center" id="voter_number">-</td>
+                                        <td class="text-center" id="voter_name">-</td>
+                                        <td class="text-center" id="voter_date">-</td>
+                                        <td class="text-center" id="voter_modify_date">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script src="../../static/library/notyf.min.js"></script>
+<script src="../../static/js/logincheck.js"></script>
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+</script>
+
+<script>
+    initSearchableSelects()
+
+    const notyf = new Notyf({
+        position: {
+            x: "left",
+            y: "bottom",
+        },
+        dismissible: true,
+    });
+    const username = getCookie("username")
+
+    $("#report_bug_form").submit(function () { return false; });
+
+    async function init() {
+        UserTypeChanged();
+        getHashtags();
+        pendingFunction();
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نمایش پنل"
+        form_data.append('detail_type', detail_type);
+        UserLog(form_data)
+    }
+
+    init()
+
+    async function getUsers(user_type) {
+        const request_link = 'http://' + location.host + "/GetAllUsers_Commented/" + username + "/" + user_type + "/";
+        const response = await fetch(request_link).then(response => response.json());
+        const other_users_info = response['other_users_info']
+
+        let options = [{ value:'0', text: '--انتخاب کنید--' }];
+
+        for (let i = 0; i < other_users_info.length; i++) {
+            options.push( {value: other_users_info[i].id, text: other_users_info[i].first_name + other_users_info[i].last_name});
+
+        }
+        syncSelectOptions("user_name_select", options);
+
+    }
+
+    async function getHashtags() {
+        const request_link = 'http://' + location.host + "/GetAllUserCommentHashtags/";
+        const response = await fetch(request_link).then(response => response.json());
+        const hashtags = response['hash_tags']
+
+        let options = [{ value:'0', text: '--انتخاب کنید--' }];
+
+        for (let i = 0; i < hashtags.length; i++) {
+            options.push( {value: hashtags[i].id, text: hashtags[i].name});
+
+        }
+        syncSelectOptions("hash_tags_select", options);
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نتایج جست و جو"
+        let hashtags_search = hashtags
+        form_data.append('detail_type', detail_type);
+        form_data.append('hashtags_search', hashtags_search);
+        UserLog(form_data)
+
+    }
+
+    async function UserTypeChanged() {
+        const user_type = document.getElementById('user_types').value
+        $('.following_btns').removeClass('d-none');
+
+        if (user_type == 'دنبال شده') {
+
+            $('#FollowBtnContainer').addClass('d-none');
+
+        } else if (user_type == 'دنبال نشده') {
+
+            $('#UnfollowBtnContainer').addClass('d-none')
+
+        }
+        getUsers(user_type)
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نتایج جست و جو"
+        let user_type_search = user_type
+        form_data.append('detail_type', detail_type);
+        form_data.append('user_type_search', user_type_search);
+        UserLog(form_data)
+    }
+
+    function FollowSelectedUser() {
+        selected_user_id = document.getElementById('user_name_select').value
+        OnFollowClick(selected_user_id)
+    }
+
+
+    function UnFollowSelectedUser() {
+        selected_user_id = document.getElementById('user_name_select').value
+        OnUnFollowClick(selected_user_id)
+    }
+
+    async function OnFollowClick(following_user_id) {
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/follow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "already followed!") {
+                notyf.success('شما قبلا این کاربر را دنبال کرده‌اید');
+
+            } else if (response.status == "follow_request_sent!") {
+                notyf.success('درخواست شما با موفقیت ارسال شد');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده‌است');
+        }
+    }
+
+    async function OnUnFollowClick(following_user_id) {
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/unfollow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "successfully unfollowed!") {
+                notyf.success('عملیات با موفقیت انجام شد');
+
+            } else if (response.status == "already unfollowed!") {
+                notyf.success('عملیات با موفقیت انجام شد');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده‌است');
+        }
+    }
+
+    async function ShowComments() {
+        const hashtag_id = document.getElementById("hash_tags_select").value
+        const user_id = document.getElementById("user_name_select").value
+        document.getElementById('comments_table_body').innerHTML = '';
+
+        const request_link = 'http://' + location.host + "/GetUserComments/" + user_id + "/" + hashtag_id + "/";
+        const response = await fetch(request_link).then(response => response.json());
+        const comments = response['comments']
+
+        let table_data = ''
+        for (let i = 0; i < comments.length; i++) {
+            const document_address = 'http://' + location.host + "/information/?id=" + comments[i].document_id
+            const document_link = '<a target = "to_blank" href = "' + document_address + '">' + comments[i].document_name + '</a>'
+
+            table_data += `<tr>
+                        <td class="text-center" id="comment_number">${i + 1}</td>
+                        <td class="text-center" id="comment_text">${document_link}</td>
+                        <td class="text-center" id="comment_text">${comments[i].comment}</td>
+                        <td class="text-center cursor-pointer" id="comment_agree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, true)">${comments[i].agreed_count}</td>
+                        <td class="text-center cursor-pointer" id="comment_disagree" data-bs-target="#VoteDetailModal" data-bs-toggle="modal" onclick="VoteDetailFunction(${comments[i].id}, false)">${comments[i].disagreed_count}</td>
+                        <td class="text-center" id="comment_date" >${comments[i].time}</td>
+                     </tr>`
+        }
+        if (comments.length == 0) {
+            table_data = ` <tr>
+                        <td class="text-center" id="comment_number">-</td>
+                        <td class="text-center" id="comment_text">-</td>
+                        <td class="text-center" id="comment_agree">-</td>
+                        <td class="text-center" id="comment_disagree">-</td>
+                        <td class="text-center" id="comment_date">-</td>
+                        <td class="text-center" id="comment_date">-</td>
+                     </tr>`
+        }
+        document.getElementById('comments_table_body').innerHTML = table_data;
+        $('.cm_table').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            }
+        });
+    }
+
+    async function VoteDetailFunction(document_comment_id, agreed) {
+        let request_link = 'http://' + location.host + "/GetDocumentCommentVoters/" + document_comment_id + "/" + agreed + "/"
+        let response = await fetch(request_link).then(response => response.json());
+        /*  Show detail Result */
+        let result = response["result"]
+        await showVoteDetailModal(result)
+    }
+
+    async function showVoteDetailModal(voters) {
+        /* Title Text */
+        document.getElementById("VoteModalHeader").innerHTML = "اطلاعات نظر دهندگان"
+
+        /* Body Text */
+        let modal_body = voters.map(function(voter, i){
+            return`<tr>
+                        <td class="text-center" id="voter_number">${i+1}</td>
+                        <td class="text-center" id="voter_name">${voter.first_name} ${voter.last_name}</td>
+                        <td class="text-center" id="voter_date">${voter.created_at}</td>
+                        <td class="text-center" id="voter_modify_date">${voter.modified_at}</td>
+                    </tr>`
+        }).join(' ')
+
+        if (!modal_body) {
+            modal_body = `<tr>
+                        <td class="text-center" id="voter_number">-</td>
+                        <td class="text-center" id="voter_name">-</td>
+                        <td class="text-center" id="voter_date">-</td>
+                        <td class="text-center" id="voter_modify_date">-</td>
+                    </tr>`
+        }
+        document.getElementById("vote_table_body").innerHTML = modal_body
+        popup_handler();
+    }
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+    }
+
+    async function pendingFunction() {
+       let request_link = 'http://' + location.host + "/get_pending_followers/"
+       let response = await fetch(request_link).then(response => response.json());
+       /*  Show detail Result */
+       let result = response["result"]
+       await showpendingModal(result)
+    }
+
+    async function showpendingModal(users) {
+       /* Body Text */
+       let modal_body = users.map(function(follower, i){
+           const link = 'http://' + location.host + "/ShowUserProfile/?u=" + follower.user_id;
+           return`<tr>
+                       <th class="text-center">${i+1}</th>
+                       <th class="text-center"><a href="${link}">${follower.first_name} ${follower.last_name}</a></th>
+                       <th class="text-center">
+                            <button onclick="AcceptPending(${follower.id})" class="btn py-0 btn-outline-success"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="تایید">
+                                <i class="bi bi-person-check bold"
+                                    style="font-size: 26px;position: relative; top: -6px;"></i>
+                            </button>
+                            <button onclick="RejectPending(${follower.id})" class="btn py-0 btn-outline-danger"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="رد">
+                                <i class="bi bi-person-x bold"
+                                    style="font-size: 26px;position: relative; top: -6px;"></i>
+                            </button>
+                       </th>
+                   </tr>`
+       }).join(' ');
+
+       if (!modal_body) {
+           modal_body = `<tr>
+                       <th class="text-center">-</th>
+                       <th class="text-center">-</th>
+                       <th class="text-center">-</th>
+                   </tr>`;
+       }
+       document.getElementById("pending_users_body").innerHTML = modal_body;
+       popup_handler();
+    }
+
+    async function AcceptPending(following_id) {
+        try {
+            let request_link = 'http://' + location.host + "/accept_follower/" + following_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            notyf.success('کاربر با موفقیت تایید شد');
+
+        } catch(e) {
+            notyf.error('خطا در عملیات!');
+        }
+        pendingFunction()
+    }
+
+    async function RejectPending(following_id) {
+        try {
+            let request_link = 'http://' + location.host + "/reject_follower/" + following_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            notyf.success('کاربر با موفقیت رد شد');
+
+        } catch(e) {
+            notyf.error('خطا در عملیات!');
+        }
+        pendingFunction()
+    }
+
+</script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+<!-- <script src="../../static/js/UserLogSave.js"></script>-->
+
+<script src="../../static/js/signout_function.js"></script>
+
+</html>

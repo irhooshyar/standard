@@ -1,0 +1,11 @@
+check for es plugins
+
+es doticfull_documentgeneraldefinition missing ones with نامشخص
+es doticfull_documentcollectivemembers missing ones with نامشخص
+es doticfull_revokeddocument missing ones with نامشخص
+es rahbari_document missing ones with نامشخص
+es rahbari_fullprofileanalysis missing ones with نامشخص
+es doticfull_judgment missing ones with نامشخص
+es iran_fixed_document missing ones with نامشخص
+
+remove unnecessary access on phpmyadmin

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+{% load static %}
+<!-- searchable -->
+
+<link href="../../static/styles/select2.css" rel="stylesheet" />
+<link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css" />
+<link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+<script src="../../static/library/select2.min-4.1.0.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.searchable').select2({
+            dir: 'rtl',
+        });
+
+        $('.multisel').select2({
+            dir: 'rtl',
+            multiple: true,
+            placeholder: "انتخاب نمایید"
+        })
+    });
+</script>
+<script src="../../static/js/hide_header_panel.js"></script>
+<style>
+    ::-webkit-scrollbar {
+        height: 15px;
+        width: 15px;
+        background: #000;
+    }
+
+    ::-webkit-scrollbar-thumb:vertical:hover {
+        background-color: rgba(14, 63, 139, 0.13);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #dee2e6;
+        /*-webkit-border-radius: 1ex;*/
+        -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: #000;
+    }
+
+    #Profile_panels .dropdown-toggle::after {
+        content: none;
+    }
+</style>
+<div class="container-fluid pr-0 mx-0">
+    <a class="navbar-brand mr-0 px-1" href="{% url 'index' %}" id="brand_name" style="margin-left:25px">
+        <img width="100px" style="" src="{% static 'icons/logo/logo1.png' %}" alt="">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <div dir="rtl" class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav pr-0 mx-auto mb-2 mb-lg-0">
+
+            <!-- Approvals -->
+            <li class="nav-item dropdown" id="approvals_analysis" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="ApprovalsDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+                    تحلیل مصوبات
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ApprovalsDropdown">
+                    <li><a id="information" class="dropdown-item text-right" href="{% url 'information' %}"
+                            style="display: none;">پروفایل
+                            مصوبات</a>
+                    </li>
+
+
+                    <li><a id="es_search" class="dropdown-item text-right" href="{% url 'es_search' %}"
+                            style="display: none;">جست‌وجوی
+                            مصوبات</a>
+                    </li>
+                    <!--<li><a id="graph" class="dropdown-item text-right" href="{% url 'graph' %}" style="display: none;">گراف
+                            مصوبات</a>
+                    </li>-->
+                    <li><a id="advanced_graph" class="dropdown-item text-right" href="{% url 'graph2' %}"
+                            style="display: none;">گراف
+                            پیشرفته</a>
+                    </li>
+
+                    <!-- <li><a id="approvals_terminology" class="dropdown-item text-right" href="{% url 'approvals_terminology' %}" style="display: none;">ترمینولوژی
+                        مصوبات</a>
+                    </li> -->
+
+                    <li><a id="advisory_opinions_analysis" class="dropdown-item text-right"
+                            href="{% url 'advisory_opinions_analysis' %}" style="display: none;">
+                            تحلیل نظرات مشورتی</a>
+                    </li>
+
+                    <li><a id="interpretation_rules_analysis" class="dropdown-item text-right"
+                            href="{% url 'interpretation_rules_analysis' %}" style="display: none;">
+                            تحلیل قوانین استفساریه</a>
+                    </li>
+                    <li><a id="revoked_document1" class="dropdown-item text-right" href="{% url 'revoked_document' %}"
+                            style="display: none;">
+                            پالایش اعتباری قوانین</a>
+                    </li>
+
+                    <li><a id="judgment_search1" class="dropdown-item text-right" href="{% url 'judgment_search' %}"
+                            style="display: none;">
+                            آراء دیوان عدالت اداری</a>
+                    </li>
+
+                    <li><a id="judgement_graph1" class="dropdown-item text-right" href="{% url 'judgement_graph' %}"
+                            style="display: none;">
+                            گراف دیوان عدالت اداری</a>
+                    </li>
+                    {% comment %} <li><a id="cancellation" class="dropdown-item text-right"
+                            href="{% url 'cancellation' %}" style="display: none;">
+                            اسناد ابطال شده</a>
+                    </li> {% endcomment %}
+                </ul>
+            </li>
+
+            <!-- Actors -->
+            <li class="nav-item dropdown" id="actors_analysis" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="ActorsDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/actors5.png' %}" alt="">
+
+                    تحلیل کنشگران
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ActorsDropdown">
+                    <li><a id="actors_information" class="dropdown-item text-right"
+                            href="{% url 'actors_information' %}" style="display: none;">پروفایل
+                            کنشگران</a>
+                    </li>
+
+                    <li><a id="actors_search" class="dropdown-item text-right" href="{% url 'actors_search' %}"
+                            style="display: none;">جست‌وجوی
+                            کنشگران</a>
+                    </li>
+
+
+                    <li><a id="actors_graph" class="dropdown-item text-right" href="{% url 'actors_graph' %}"
+                            style="display: none;">گراف
+                            کنشگران</a></li>
+
+                    <li><a id="collective_actors" class="dropdown-item text-right" href="{% url 'collective_actors' %}"
+                            style="display: none;">
+                            کنشگران جمعی</a>
+                    </li>
+
+                    <li><a id="actors_agile" class="dropdown-item text-right" href="{% url 'actors_agile' %}"
+                            style="display: none;">
+                            چابک سازی کنشگران </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Rahbari -->
+            <li class="nav-item dropdown" id="rahbari_analysis" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="RahbariDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+
+                    تحلیل اسناد رهبری
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="RahbariDropdown">
+
+                    <li><a id="rahbari_search" class="dropdown-item text-right" href="{% url 'rahbari_search' %}"
+                            style="display: none;">
+                            جست‌وجو در بیانات و ابلاغیه‌ها</a>
+                    </li>
+                    <li><a id="approvals_adaptation" class="dropdown-item text-right"
+                            href="{% url 'approvals_adaptation' %}" style="display: none;">
+                            انطباق‌سنجی مصوبات</a>
+                    </li>
+
+                    <li onmouseover="Rahbari_onMouseIn()" onmouseout="Rahbari_onMouseOut()">
+
+                        <a id="rahbari_analysis_subPanel" href="javascript:void(0)"  class="dropdown-item text-right">تحلیل اسناد رهبری >></a>
+
+                        <ul id="rahbari_analysis_subPanel_ul" class="d-none" style="right: 100%; position: absolute; padding: 0; top: 60%; background-color: white">
+                            <li style="list-style: none;"><a id="rahbari_paraghraph" class="dropdown-item text-right" href="{% url 'rahbari_paraghraph' %}"
+                                style="display: none;">تحلیل نوع اسناد</a>
+                            </li>
+                            <li style="list-style: none;"><a id="rahbari_subject" class="dropdown-item text-right" href="{% url 'rahbari_subject' %}"
+                                    style="display: block;">تحلیل موضوعی</a>
+                            </li>
+                            <li style="list-style: none;"><a id="rahbari_graph" class="dropdown-item text-right" href="{% url 'rahbari_graph' %}"
+                                    style="display: block;">تحلیل
+                                    گرافی</a>
+                            </li>
+                            <li style="list-style: none;"><a id="rahbari_topic" class="dropdown-item text-right" href="{% url 'rahbari_topic' %}"
+                                style="display: block;">تحلیل هوشمند موضوعی</a>
+                            </li>
+                            <li style="list-style: none;"><a id="leadership_slogan" class="dropdown-item text-right" href="{% url 'leadership_slogan' %}"
+                                style="display: none;">
+                                تحلیل شعار سال</a>
+                            </li>
+                            <li style="list-style: none;"><a id="rahbari_organization" class="dropdown-item text-right" href="{% url 'rahbari_organization' %}"
+                                style="display: block; pointer-events: none;">تحلیل سازمان</a>
+                            </li>
+                            <li style="list-style: none;"><a id="rahbari_problem_system" class="dropdown-item text-right" href="{% url 'rahbari_problem_system' %}"
+                                style="display: block; pointer-events: none;">نظام مسائل رهبری</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Tangih Yar -->
+            <li class="nav-item dropdown" id="Tangih_analysis" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="TangihDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+                    تحلیل اعتباری و انطباقی
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="TangihDropdown">
+                    <li><a id="approvals_list" class="dropdown-item text-right" href="{% url 'approvals_list' %}"
+                            style="display: none;">
+                            فهرست بندی مصوبات</a>
+                    </li>
+                    <li><a id="document_validation" class="dropdown-item text-right"
+                            href="{% url 'document_validation' %}" style="display: none;">
+                            اعتبارسنجی مصوبات</a>
+                    </li>
+
+
+                    <li><a id="keywords_terminology" class="dropdown-item text-right"
+                            href="{% url 'approvals_terminology' %}" style="display: none;">
+                            ترمینولوژی لغات تخصصی</a>
+                    </li>
+                    <li><a id="approvals_keyword_edition" class="dropdown-item text-right" href="#"
+                            style="display: none;">
+                            ویراستاری شکلی مصوبات</a>
+                    </li>
+                    <li><a id="legal_consultancy" class="dropdown-item text-right" href="#" style="display: none;">
+                            مشاوره‌ حقوقی و تنقیحی</a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <!-- Regularity -->
+            <li class="nav-item dropdown" id="executive_regulations" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="ExecutiveDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/regulation1.png' %}" alt="">
+                    تحلیل آئین‌نامه‌های اجرایی
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ExecutiveDropdown">
+                    <li>
+                        <a id="executive_regulations_analysis_v2" class="dropdown-item text-right"
+                            href="{% url 'executive_regulations_analysis_v2' %}" style="display: none;">هشداردهی
+                        </a>
+                    </li>
+
+                    <li>
+                        <a id="executive_regulations_analysis_v3" class="dropdown-item text-right"
+                            href="{% url 'executive_regulations_analysis_v3' %}" style="display: none;">نظارت بر
+                            آئین‌نامه‌های اجرایی
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Subject Analysis -->
+            <li class="nav-item dropdown" id="subject_analysis" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="SubjectDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/adaptation2.png' %}" alt="">
+
+                    تحلیل موضوعی
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="SubjectDropdown">
+
+                    <li><a id="subject" class="dropdown-item text-right" href="{% url 'subject' %}"
+                            style="display: none;">تحلیل
+                            موضوعی</a></li>
+
+                    <li><a id="adaptation" class="dropdown-item text-right" href="{% url 'adaptation' %}"
+                            style="display: none;">انطباق
+                            موضوعی</a>
+                    </li>
+
+                    <li><a id="subject_graph" class="dropdown-item text-right" href="{% url 'subject_graph' %}"
+                            style="display: none;">گراف
+                            موضوعی</a>
+                    </li>
+
+                    <li><a id="subject_statistics" class="dropdown-item text-right"
+                            href="{% url 'subject_statistics' %}" style="display: none;">تحلیل
+                            آماری</a>
+                    </li>
+
+                    <li>
+                        <a id="compare_document" class="dropdown-item text-right" href="{% url 'compare_document' %}"
+                            style="display: none;">
+                            مقایسه اسناد
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+
+
+            <li class="nav-item dropdown" id="special_analysis" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="SepecificDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img width="25px" src="{% static 'icons/subject8.png' %}" alt="">
+
+                    تحلیل اختصاصی
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="SepecificDropdown">
+                    <li><a id="votes_analysis" class="dropdown-item text-right" href="{% url 'votes_analysis' %}"
+                            style="display: none;">
+                            تحلیل آراء</a>
+                    </li>
+                    <li><a id="leadership_slogan" class="dropdown-item text-right" href="{% url 'leadership_slogan' %}"
+                            style="display: none;">
+                            تحلیل شعار سال</a>
+                    </li>
+                    <li><a id="portal" class="dropdown-item text-right" href="{% url 'sample_template' 'portal' %}"
+                            style="display: none;">
+                            تحلیل درگاه</a>
+                    </li>
+                    <li><a id="definition" href="{% url 'definition' %}" style="display: none;"
+                            class="dropdown-item text-right">
+                            تحلیل تعاریف</a>
+                    </li>
+
+
+                    <li><a id="judge_behavior_analysis" class="dropdown-item text-right"
+                            href="{% url 'judge_dashboard' %}">
+                            تحلیل رفتاری قضات </a>
+                    </li>
+
+                    <li><a id="legal_literature_adaptation" class="dropdown-item text-right"
+                            href="{% url 'legal_literature_adaptation' %}" style="display: none;">
+                            انطباق ادبیات حقوقی</a>
+                    </li>
+
+                    <li><a id="document_subject_area" class="dropdown-item text-right"
+                            href="{% url 'document_subject_area' %}" style="display: none;">تحلیل کلان‌حوزه‌ها</a>
+                    </li>
+
+                    <!-- <li><a id="Cancellationـanalysis" class="dropdown-item text-right" #} {#
+                            href="{% url 'Cancellationـanalysis' %}" style="display: none;">
+                            تحلیل نسخ، ابطال</a>
+                         </li> -->
+
+
+                    <li><a id="principles_analysis" class="dropdown-item text-right"
+                            href="{% url 'principles_analysis' %}" style="display: none;">
+                            تحلیل اصول مندرج در مصوبات</a>
+                    </li>
+
+                    <!-- <li><a id="AI_topics" class="dropdown-item text-right" href="{% url 'AI_topics' %}">استخراج خودکار
+                        موضوعات</a>
+                    </li> -->
+
+                    <!-- <li><a id="keywords" class="dropdown-item text-right"
+                            href="{% url 'sample_template' 'keywords' %}" style="display: none;">
+                            تحلیل مالی</a>
+                    </li> -->
+
+                    <!-- <li><a id="official_reference" class="dropdown-item text-right"
+                                        href="{% url 'sample_template' 'official_reference' %}" style="display: none;">
+                                        تحلیل مرجع رسمی</a> -->
+            </li>
+        </ul>
+        </li>
+
+
+        <li class="nav-item dropdown" id="regularity_analysis" style="display: none;">
+            <a class="nav-link dropdown-toggle" href="#" id="RegularityDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img width="25px" src="{% static 'icons/regularity1.png' %}" alt="">
+
+                تحلیل تنظیم‌گری
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="RegularityDropdown">
+                <li><a id="regularity" class="dropdown-item text-right" href="{% url 'regularity' %}"
+                        style="display: none;">
+                        ابزار تنظیم‌گری</a>
+                </li>
+                <li><a id="window_unit" class="dropdown-item text-right" href="{% url 'window_unit' %}"
+                        style="display: none;">
+                        تحلیل پنجره‌ واحد</a>
+                </li>
+                <li><a id="business_advisor" class="dropdown-item text-right" href="{% url 'business_advisor' %}"
+                        style="display: none;">
+                        مشاوره به کسب و کارها</a>
+                </li>
+                <li><a id="official_references" class="dropdown-item text-right" href="{% url 'official_references' %}"
+                        style="display: none;">
+                        تحلیل مراجع رسمی</a>
+                </li>
+                <li><a id="regularity_life_cycle" class="dropdown-item text-right"
+                        href="{% url 'regularity_life_cycle' %}" style="display: none;">
+                        چرخه حیات تنظیم‌گری</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown" id="AI_analysis" style="display: none;">
+            <a class="nav-link dropdown-toggle" href="#" id="AIDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img width="25px" src="{% static 'icons/AI1.png' %}" alt="">
+                تحلیل هوشمند
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="GraphDropdown">
+                <!-- <li><a id="AI_graph_similarity" class="dropdown-item text-right"
+                        href="{% url 'AI_similarity_graph' %}" style="display: none;">شباهت میان اسناد</a>
+                     </li> -->
+
+                <li>
+                    <a id="AI_topics" class="dropdown-item text-right" href="{% url 'AI_topics' %}"
+                        style="display: none;">
+                        دسته‌بندی موضوعی (LDA)
+                    </a>
+                </li>
+                <li>
+                    <a id="paragraph_clustering" class="dropdown-item text-right"
+                        href="{% url 'paragrraph_clustering' %}" style="display: none;">خوشه‌بندی احکام</a>
+                </li>
+
+                <li>
+                    <a id="ManualClustering" class="dropdown-item text-right"
+                        href="{% url 'ManualClustering' %}">خوشه‌بندی
+                        سفارشی</a>
+                </li>
+                <li>
+                    <a id="SubjectKeywordGraph" class="dropdown-item text-right"
+                        href="{% url 'SubjectKeywordGraph' %}">دسته‌بندی مبتنی‌بر کلیدواژه</a>
+                </li>
+                <li>
+                    <a id="knowledgeGraph" class="dropdown-item text-right" href="{% url 'knowledgeGraph' %}">گراف
+                        دانش</a>
+                </li>
+                <li>
+                    <a id="sentimentAnalysis" class="dropdown-item text-right"
+                        href="{% url 'sentimentAnalysis' %}">پروفایل احکام</a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Books -->
+        <li class="nav-item dropdown" id="books_analysis" style="display: none;">
+            <a class="nav-link dropdown-toggle" href="#" id="BooksDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+                تحلیل کتب
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="BooksDropdown">
+                <li><a id="submit_book_informations" class="dropdown-item text-right"
+                        href="{% url 'submit_book_informations' %}" style="display: none;">
+                        ثبت اطلاعات کتب</a>
+                </li>
+
+                <li><a id="book_requests" class="dropdown-item text-right" href="{% url 'book_requests' %}"
+                        style="display: none;">
+                        مشاهده درخواست ها</a>
+                </li>
+
+                <li><a id="book_information" class="dropdown-item text-right" href="{% url 'book_information' %}"
+                        style="display: none;">
+                        پروفایل کتب</a>
+                </li>
+
+                <li><a id="book_search" class="dropdown-item text-right" href="{% url 'book_search' %}"
+                        style="display: none;">
+                        جست‌و‌جوی کتب</a>
+                </li>
+
+                <li><a id="book_graph" class="dropdown-item text-right" href="{% url 'book_graph' %}"
+                        style="display: none;">
+                        گراف کتب</a>
+                </li>
+
+                <li><a id="book_disagreement_with_rules" class="dropdown-item text-right"
+                        href="{% url 'book_disagreement_with_rules' %}" style="display: none;">
+                        مغایرت‌یابی با اسناد بالادستی</a>
+                </li>
+
+                <li><a id="flow_detection" class="dropdown-item text-right" href="{% url 'flow_detection' %}"
+                        style="display: none;">
+                        جریان‌یابی</a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Standard -->
+        {% comment %} <li class="nav-item dropdown" id="standards_analysis">
+            <a class="nav-link dropdown-toggle" href="#" id="StandardsDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+                استاندارد
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="StandardsDropdown"> {% endcomment %}
+
+                <li class="nav-item">
+                    <a class="nav-link" id="standard_search" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        href="{% url 'standard_search' %}" style="display: none;">
+                        <img width="25px" src="{% static 'icons/search3.png' %}" alt="">
+                        جست‌و‌جوی استانداردها
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="standard_graph" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        href="{% url 'standard_graph' %}" style="display: none;">
+                        <img width="25px" src="{% static 'icons/graph4.png' %}" alt="">
+                        گراف استانداردها
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="standard_graph_v2" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        href="{% url 'standard_graph_v2' %}" style="display: none;">
+                        <img width="25px" src="{% static 'icons/graph4.png' %}" alt="">
+                        گراف دانش استاندارد
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="standard_information" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        href="{% url 'standard_information' %}" style="display: none;">
+                        <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+                        پروفایل استانداردها
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="admin_standard_upload" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        href="{% url 'admin_standard_upload' %}" style="display: none;">
+                        <img width="25px" src="{% static 'icons/docs.png' %}" alt="">
+                        آپلود استانداردها
+                    </a>
+                </li>
+                {% comment %}
+            </ul>
+        </li> {% endcomment %}
+
+        <!-- <li class="nav-item">
+            <a id="future_work" class="nav-link" href="{% url 'future_work' %}" style="display: none;">
+                <img width="25px" src="{% static 'icons/future_work.png' %}" alt="">
+                کارهای آتی
+                </a>
+        </li> -->
+
+        <li class="nav-item dropdown" id="UserProfile_panels">
+            <a class="nav-link dropdown-toggle" href="#" id="UserProfileDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-sticky-note-o pl-1"
+                    style="font-size: 19px;position: relative; margin-top: 2px;font-weight: bold;"></i>
+                تعاملات و یادداشت‌ها
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="UserProfileDropdown">
+                <li><a id="following_document_comments" class="dropdown-item text-right"
+                        href="{% url 'following_document_comments' %}">
+                        نظرات تحلیلی دنبال‌شوندگان</a>
+                </li>
+                <li><a id="notes" class="dropdown-item text-right" href="{% url 'notes' %}">
+                        یادداشت‌های شخصی </a>
+                </li>
+
+                <!-- <li><hr class="dropdown-divider"></li> -->
+
+            </ul>
+        </li>
+
+        </ul>
+        <!-- vertical line -->
+        <div class="vr" style="color: white; margin-left: 10px; padding:1px"></div>
+
+        <ul class="navbar-nav pr-0 mb-2 mb-lg-0">
+            <li class="nav-item p-1" style="margin-left: -5px">
+                <a class="nav-link" id="help_link" onclick="showTour()" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" title="راهنما" href="#">
+                    <i id="help_icon" class="bi bi-question-circle"></i>
+                </a>
+            </li>
+
+            <li class="nav-item dropdown p-1" id="admin_panels" style="margin-left: -5px; display: none;">
+                <a class="nav-link" href="#" id="AdminDropdown" role="button" data-bs-toggle="dropdown"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="پنل ادمین" aria-expanded="false">
+                    <i class="fas fa-user-cog" style="font-size: 15px; text-align: center; margin-top:5px" ;></i>
+
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="AdminDropdown">
+                    <li><a id="manage_users_tab" class="dropdown-item text-right" href="{% url 'manage_users_tab' %}"
+                            style="display: none;">
+                            مدیریت کاربران</a>
+                    </li>
+                    <li><a id="admin_waiting_user" class="dropdown-item text-right"
+                            href="{% url 'admin_waiting_user' %}" style="display: none;">
+                            تایید کاربران</a>
+                    </li>
+                    <li><a id="admin_accepted_user" class="dropdown-item text-right"
+                            href="{% url 'admin_accepted_user' %}" style="display: none;">
+                            کاربران تایید شده</a>
+                    </li>
+                    <li><a id="admin_upload" class="dropdown-item text-right" href="{% url 'admin_upload' %}"
+                            style="display: none;">
+                            آپلود فایل</a>
+                    </li>
+                    <li><a id="admin_user_recommendation" class="dropdown-item text-right"
+                            href="{% url 'admin_user_recommendation' %}" style="display: none;">
+                            مشاهده نظرات کاربران</a>
+                    </li>
+                    <li><a id="admin_user_report_bug" class="dropdown-item text-right"
+                            href="{% url 'admin_user_report_bug' %}" style="display: none;">
+                            مشاهده گزارشات خطاها</a>
+                    </li>
+                    <li><a id="admin_accept_user_comments" class="dropdown-item text-right"
+                            href="{% url 'admin_accept_user_comments' %}" style="display: none;">
+                            تایید نظرات تحلیل اسناد</a>
+                    </li>
+                    <li><a id="super_admin_user_log" class="dropdown-item text-right"
+                            href="{% url 'super_admin_user_log' %}" style="display: none;">
+                            لاگ کاربران</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown p-1" id="Profile_panels" style="margin-left: -5px">
+                <a class="nav-link dropdown-toggle" href="#" id="ProfileDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"
+                        style="font-size: 18px;position: relative; top: -5px;font-weight: bold;"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="ProfileDropdown"
+                    style="min-width: 210px;">
+                    <li>
+                        <a class="dropdown-item text-right" id="user_profile" href="{% url 'ShowMyUserProfile' %}">
+                            <span>پروفایل</span>
+                            <i class="bi bi-person-lines-fill"
+                                style="font-size: 15px;position: relative; top: -5px;font-weight: bold; margin-right: 129px;"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="sign_out_function()" class="dropdown-item text-right" id="logout_link" href="#">
+                            <span>خروج</span>
+                            <i class="fa fa-sign-out float-left"></i>
+
+                        </a>
+                    </li>
+                    <li>
+                        <a id="recommendation" class="dropdown-item text-right" href="{% url 'recommendation' %}">
+                            <span>انتقادات و پیشنهادات</span>
+                            <i class="fa fa-lightbulb float-left"></i>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a id="report_bug" class="dropdown-item text-right" href="{% url 'report_bug' %}">
+                            <span>گزارش خطا</span>
+                            <i class="fa fa-bug float-left" style="margin-left: -3px"></i>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item p-1">
+                <select dir="rtl" id="language" name="language" class="d-inline-block mr-1 p-1 text-right rounded">
+                    <option selected value="Iran" class="text-right">ایران</option>
+                    <option value="England" class="text-right">انگلستان</option>
+                    <option value="Russia" class="text-right">روسیه</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function Rahbari_onMouseIn()
+    {
+        $("#rahbari_analysis_subPanel_ul").removeClass("d-none")
+        $("#rahbari_analysis_subPanel_ul").addClass("d-block")
+    }
+    function Rahbari_onMouseOut()
+    {
+        $("#rahbari_analysis_subPanel_ul").removeClass("d-block")
+        $("#rahbari_analysis_subPanel_ul").addClass("d-none")
+    }
+
+
+</script>

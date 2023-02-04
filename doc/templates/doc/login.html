@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="../../static/library/bootstrap-5.1.3.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.7.1.css">
+    <link href="../../static/styles/login_signup.css" rel="stylesheet">
+    
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <script src="../../static/js/cc.js"></script>
+    
+    <title>ورود</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 col-sm-11 col-lg-6 offset-md-3">
+
+                <form id="login" class="shadow p-4 bg-white" method="POST" include-form-tracking>
+                    <div class="mb-3 text-center">
+                    <img width="150px" style=""
+                            src="../../static/icons/logo/logo-blue_text2.png" alt="">
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="username">نام کاربری:</label>
+                        <input class="form-control" name="username" id="username" include-content-tracking placeholder="Username">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Password">رمز عبور:</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="checkbox" name="RememberMe"> مرا بخاطر بسپار
+                        <a href="{% url 'forgot_password' %}" class="float-start text-decoration-none">فراموشی رمز عبور</a>
+                    </div>
+
+
+                    <div class="mb-3" id="messages"></div>
+
+                    <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                        <button class="btn btn-primary" type="submit">ورود</button>
+                    </div>
+                    <hr>
+                    <p class="text-center mb-0">قبلا ثبت‌ نام نکرده‌اید؟ <a href="{% url 'signup' %}">ثبت نام</a></p>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+
+        <!-- cookies -->
+        <div id="cookieNotice" class="card shadow text-center ">
+            <div id="closeIcon" class="closeIcon" style="display: none;">
+            </div>
+            <div class="title-wrap">
+                <h4>حریم خصوصی شما!</h4>
+            </div>
+            <br>
+            <div class="content-wrap">
+                <div class="msg-wrap">
+                    <p>این وب‌سایت از کوکی‌ها یا فناوری‌های مشابه برای بهبود تجربه مرور شما و ارائه توصیه‌های شخصی استفاده می‌کند. با ادامه استفاده از وب سایت ما، با سیاست حفظ <a style="color:#115cfa;" href=""> حریم شخصی</a> ما موافقت میکنید. </p>
+
+                </div>
+                <div><br><button class="btn btn-primary btn-cookie"  onclick="acceptCookieConsent();">پذیرش</button></div>
+            </div>
+        </div>
+
+    <script>
+
+        // Create cookie
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        // Delete cookie
+        function deleteCookie(cname) {
+            const d = new Date();
+            d.setTime(d.getTime() + (24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=;" + expires + ";path=/";
+        }
+
+        // Read cookie
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        // Set cookie consent
+        function acceptCookieConsent(){
+            deleteCookie('user_cookie_consent');
+            setCookie('user_cookie_consent', 1, 30);
+            document.getElementById("cookieNotice").style.display = "none";
+        }
+
+
+        let cookie_consent = getCookie("user_cookie_consent");
+        if(cookie_consent != ""){
+            document.getElementById("cookieNotice").style.display = "none";
+        }else{
+            document.getElementById("cookieNotice").style.display = "block";
+        }
+
+
+       /* function setCookie(cname, cvalue, exhour) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exhour * 60 * 60 * 1000));
+            var expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) === 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }*/
+
+        document.getElementById("login").addEventListener("submit", onSubmit);
+
+        async function onSubmit(e) {
+            e.preventDefault()
+            const formElements = e.target.elements
+
+            const user_ip = "127.0.0.0"
+
+            const request_link = 'http://' + location.host + "/CheckUserLogin/" + formElements.username.value + "/" + formElements.password.value + "/" + user_ip + "/"
+            let response = await fetch(request_link);
+            response = await response.json();
+
+            const messages = document.getElementById("messages");
+
+            if (response.status === "not found" || response.status === "wrong password" ) {
+                messages.innerText = "نام کاربری یا رمزعبور اشتباه است"
+                messages.classList.add("text-danger")
+            }
+            else if (response.status === "not active") {
+                messages.innerText = "اطلاعات شما درحال بررسی توسط ادمین است."
+                messages.classList.add("text-danger")
+            }
+            else if (response.status === "de active") {
+                messages.innerText = "درخواست عضویت شما توسط ادمین رد شده است."
+                messages.classList.add("text-danger")
+            }
+            else if (response.status === "found admin") {
+                window.location.href = "{% url 'admin_confirm_waiting_user' %}"
+            }
+            else if (response.status === "found user") {
+                const username = formElements.username.value;
+                setCookie("username", username, 1)
+                if (username == "std" || username == "standard") {
+                    window.location.href = "{% url 'standard_search' %}"
+                }
+                else {
+                    window.location.href = "{% url 'index' %}"
+                }
+                
+            }
+        }
+
+    </script>
+    <script> initCC(142);</script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+{% block content %}
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>File uploader</title>
+
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+
+        <link rel="stylesheet" href="../../static/styles/index.css">
+        <!-- Latest compiled JavaScript -->
+
+
+        <style>
+            .img-thumbnail {
+                background: transparent;
+                border: unset;
+                width: 40px;
+                height: auto;
+                margin-right: 15px;
+            }
+
+            .file-upload-wrapper {
+                margin-bottom: 30px !important;
+                margin: auto;
+                width: 90%;
+                display: flex;
+                z-index: 999;
+                flex-wrap: wrap;
+                align-content: stretch;
+                justify-content: left;
+                align-items: center;
+            }
+        </style>
+    </head>
+
+    <body class="px-3">
+
+
+    <form action="{% url 'zip' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{{ form.non_field_errors }}</p>
+        <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+        <p>
+            {{ form.docfile.errors }} {{ form.docfile }}
+        </p>
+        <p>enter <b>file name:</b> <input type="text" id="file_name" name="file_name"></p>
+        <p>enter <b>language:</b> <input type="text" id="language" name="language"></p>
+        <p><input type="submit" value="Upload"/></p>
+        <b style="color:{{ color }};">{{ status }}</b>
+
+        <div class="file-upload-wrapper">
+            <h3>Uploaded files</h3>
+
+            <a href="{% url 'zip' %}">
+                <img src="../../static/image/refresh.png" class="img-thumbnail">
+            </a>
+        </div>
+
+
+    </form>
+
+    {% for file in files %}
+        <form method="POST">
+            {% csrf_token %}
+            <p>{{ file.name }} ({{ file.status }})
+                {# <input type="submit" name="delete_items" value="delete {{ file.pk }}" id="{{ file.pk }}">#}
+                {# <input type="submit" name="update_items" value="update {{ file.pk }}" id="{{ file.pk }}" content="{{ file.pk }}">#}
+                <a href="{% url 'update' file.pk file.language %}">Update</a>
+                <a href="{% url 'delete' file.pk  file.language %}">Delete</a>
+
+                {##---------------- temporary option , will be removed after level detection bug is fixed ----------------##}
+                <a href="{% url 'detect_level' file.pk %}">level</a>
+                <a href="{% url 'static_data_import_db'  file.pk 'English' %}">en-static-data</a>
+                <a href="{% url 'docs_approval_reference_extractor' file.pk %}">approval-reference</a>
+                <a href="{% url 'docs_definitions_extractor' file.pk %}">definitions</a>
+                <a href="{% url 'docs_subject_extractor' file.pk %}">subjects</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_actors_extractor' file.pk %}">actors-extractor</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'template_panels_data_import_db' file.pk %}">template-panels-data</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'static_data_import_db'  file.pk 'Persian' %}">fa-static-data</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'slogan_key_synonymous_words' 'Persian' %}">fa-static-slogan</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'leadership_slogan_analysis'  file.pk %}">fa-slogan-analysis</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_general_actors_extractor' file.pk %}">general-actors</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_general_definitions_extractor' file.pk %}">general-def</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'document_json_list' file.pk %}">doc_list_json</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'operators_static_data_to_db' file.pk %}">operators-to-db</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_regulators_extractor' file.pk %}">regulators-extractor</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_opertators_extractor' file.pk %}">operators-extractor</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_clause_extractor' file.pk %}">docs-clause-extractor</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_lda_topic_extraction' file.pk %}">LDA</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'collective_static_data_to_db' file.pk %}">collectives-to-db</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_collective_extractor' file.pk %}">collectives-extractor</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'docs_complete_para_extractor' file.pk %}">complete-para-extractor</a>
+
+                
+                <span class="bold"> | </span>
+
+                <a href="{% url 'actors_static_data_to_db' file.pk %}">actors-static-to-db</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'regulators_static_import_db' file.pk %}">regulators-static-import-db</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'actors_time_series_extractor' file.pk %}">actors_time_series_extractor</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'actors_graph_extractor' file.pk %}">actors-graph-extractor</a>
+
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'actors_new_graph_extractor' file.pk %}">actors-new-graph-extractor</a>
+
+
+                <span class="bold"> | </span>
+
+
+                <a href="{% url 'search_parameters_to_db' file.pk %}">search_parameters_to_db</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'create_advisory_opinion_count' file.pk file.language %}">create_advisory_opinion_count</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'create_interpretation_rules_count' file.pk file.language %}">create_interpretation_rules_count</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'indictment_to_db' file.pk %}">indictment_to_db</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'update_judgment_name' file.pk %}">update_judgment_name</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_judgments_table' file.pk %}">create_judgments_table</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_standards_table' file.pk %}">create_standards_table</a>
+
+
+                <span class="bold"> | </span>
+                <a href="{% url 'FindSubjectComplaint' file.pk %}">Find_Subject_Complaint</a>
+
+                <!-- test comit -->
+                <span class="bold"> | </span>
+                <a href="{% url 'ARIMA_Prediction_TO_DB' file.pk %}">ARIMA_Prediction_TO_DB</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'revoked_types_to_db' file.pk %}">revoked_types_to_db</a>
+
+
+                <span class="bold"> | </span>
+                <a href="{% url 'subject_area_keywords_to_db' file.pk %}">subject_area_keywords_to_db</a>
+
+
+                <span class="bold"> | </span>
+                <a href="{% url 'clustering_algorithms_to_db' file.pk %}">clustering_algorithms_to_db</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'findActor' file.pk %}">find-country-actor</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'fullProfileAnalysis' file.pk %}">full-profile-analysis</a>
+
+                <!-- ****** Advanced ARIMA ****** -->
+                <span class="bold"> | </span>
+                <a  href="{% url 'ARIMA_Prediction_TO_DB_2' file.pk %}">ARIMA_Prediction_TO_DB_2</a>
+                <!-- ****** Advanced ARIMA ****** -->
+
+                <!-- ****** AnalysisKnowledgeGraph ****** -->
+                <span class="bold"> | </span>
+                <a  href="{% url 'DocAnalysisKnowledgeGraph' file.pk %}">DocAnalysisKnowledgeGraph</a>
+
+                <span class="bold"> | </span>
+                <a  href="{% url 'DocAnalysisKnowledgeGraphPOS' file.pk %}">DocAnalysisKnowledgeGraphPOS</a>
+                <!-- ****** AnalysisKnowledgeGraph  ****** -->
+
+            
+          
+                <span class="bold"> | </span>
+                <a href="{% url 'rahbari_labels_to_db' file.pk %}">rahbari_labels_to_db</a>
+
+                <span class="bold"> | </span>
+
+                <a href="{% url 'rahbari_labels_time_series_extractor' file.pk %}">rahbari_labels_time_series_extractor</a>
+
+
+                <span class="bold"> | </span>
+                <a  href="{% url 'RahabriCoLabelsGraph' file.pk %}">RahabriCoLabelsGraph</a>
+
+                <span class="bold"> | </span>
+                <a  href="{% url 'RahbariGraphUpload' file.pk %}">RahbariGraph</a>
+
+                <span class="bold"> | </span>
+                <a  href="{% url 'RahbariTypeExtractor' file.pk %}">RahbariTypeExtractor</a>
+
+                <span class="bold"> | </span>
+                <a  href="{% url 'rahbari_correlated_labels_extractor' file.pk %}">rahbari_correlated_labels_extractor</a>
+
+                <span class="bold"> | </span>
+                <a  href="{% url 'insert_docs_to_rahbari_table' file.pk %}">insert_docs_to_rahbari_table</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'rahbari_search_parameters_to_db' file.pk %}">rahbari_search_parameters_to_db</a>
+
+                
+                
+            </p>
+
+        </form>
+
+        <form class="ml-2" method="POST">
+            {% csrf_token %}
+            <p>CUBE ({{ file.name }})
+                {# <input type="submit" name="delete_items" value="delete {{ file.pk }}" id="{{ file.pk }}">#}
+                {# <input type="submit" name="update_items" value="update {{ file.pk }}" id="{{ file.pk }}" content="{{ file.pk }}">#}
+
+                <a href="{% url 'create_CUBE_Subject_Statistics' file.pk %}">Subject-Statistics: (تحلیل آماری) </a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_Subject' file.pk %}">Subject: (تحلیل موضوعی)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_Votes' file.pk %}">Votes: (تحلیل آراء)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_CollectiveActor' file.pk %}">CollectiveActor: (تحلیل کنشگران جمعی)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_RegularityLifeCycle' file.pk %}">RegularityLifeCycle: (تحلیل چرخه حیات
+                    تنظیم گری)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_MandatoryRegulations' file.pk %}">MandatoryRegulations: (تحلیل آیین نامه
+                    های اجباری)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_Template' file.pk 'portal' %}">Template (تحلیل درگاه)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_Template' file.pk 'keywords' %}">Template (تحلیل مالی)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_BusinessAdvisor' file.pk %}">BusinessAdvisor: (مشاوره به کسب و کار)</a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_Principle' file.pk %}">principles: (تحلیل اصول مندرج در مصوبات) </a>
+
+                <span class="bold"> | </span>
+                <a href="{% url 'create_CUBE_MaxMinEffectActorsInArea' file.pk %}">Actor_Information: (نمودار تب
+                    اثرگذاری)</a>
+
+                    <span class="bold"> | </span>
+                    <a href="{% url 'rahbari_update_fields_from_file' file.pk %}">rahbari_update_fields_from_file</a>
+            </p>
+
+        </form>
+
+        <form class="ml-2 border-3 border-left pl-2" method="POST">
+            {% csrf_token %}
+            <p>Ingestions({{ file.name }}) </br>
+
+                <a href="{% url 'ingest_documents_to_index' file.pk file.language %}">Ingest-Documents</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_paragraphs_to_index' file.pk file.language 1 %}">Ingest-Paragraphs</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_document_actor_to_index' file.pk file.language %}">Ingest-Document-actor</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_actor_supervisor_to_index' file.pk file.language %}">Ingest-Actor-Supervisor</a>
+                <span class="bold"> | </span>
+
+
+                <a href="{% url 'ingest_standard_documents_to_index' file.pk file.language %}">Ingest-Standard-Documents</a>
+                <span class="bold"> | </span>
+
+
+                <a href="{% url 'ingest_standard_documents_to_sim_index' file.pk file.language %}">Ingest-Similarity-Documents</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_judgments_to_index' file.pk file.language %}">Ingest-Judgments-To-Index</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_terminology_to_index' file.pk file.language %}">Ingest-Terminology-To-Index</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_rahbari_to_index' file.pk %}">Ingest-Rahbari-To-Index</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_rahbari_to_sim_index' file.pk %}">Ingest-Rahbari-To-Similarity-Index</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_document_collective_members_to_index' file.pk %}">Ingest-DocumentCollectiveMembers-To-Index</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'rahbari_similarity_calculation' file.pk %}">rahbari_similarity_calculation</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'paragraphs_similarity_calculation' file.pk %}">paragraphs_similarity_calculation</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'books_similarity_calculation' file.pk %}">book-similarity-calculation</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'books_similarity_calculation_cube' file.pk %}">books_similarity_calculation_cube</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'update_file_name_extention' file.pk %}">update_file_name_extention</a>
+                <span class="bold"> | </span>
+                <a href="{% url 'ingest_revoked_documents' file.pk file.language %}">Ingest-Revoked-Documents</a>
+                <span class="bold"> | </span>
+                
+                <a href="{% url 'ingest_books' file.pk %}">ingest_books</a>
+                <span class="bold"> | </span>
+
+                <!-- <a  href="{% url 'ingest_spatiotemporal_to_index' file.pk %}">ingest-SpatioTemporal</a>
+            <span class="bold"> | </span> -->
+
+
+                <a href="{% url 'rahbari_paragraphs_similarity_calculation' file.pk %}">rahbari_paragraphs_similarity_calculation</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'trial_law_import' file.pk %}">trial_law_import</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'insert_subject_keyword_list' file.pk %}">insert_subject_keyword_list</a>
+                <span class="bold"> | </span>
+
+
+                <a href="{% url 'ingest_clustering_paragraphs_to_index' file.pk file.language %}">ingest-clustering-paragraphs</a>
+                <span class="bold"> | </span>
+
+                 <a href="{% url 'ingest_full_profile_analysis_to_elastic' file.pk %}">Ingest-rahbari-full-profile</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'ingest_paragraphs_to_index' file.pk file.language 0 %}">Ingest-Paragraphs-ForSimilarity</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'clause_extractor' file.pk %}">Clause Extractor</a>
+                <span class="bold"> | </span>
+
+                <a href="{% url 'executive_clauses_extractor' file.pk %}">Executive Clauses Extractor</a>
+                <span class="bold"> | </span>
+
+            </p>
+
+        </form>
+
+        <hr>
+    {% endfor %}
+
+
+    </body>
+
+    </html>
+{% endblock %}

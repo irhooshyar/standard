@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+        <!-- Bootstrap CSS -->
+        <link href="../../static/library/bootstrap-5.1.3.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.7.1.css">
+        <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+        <link rel="stylesheet" href="../../static/styles/admin_dashboard.css">
+        <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+             />
+        <!-- <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css"> -->
+        <script src="../../static/js/jquery_351/jquery.min.js"></script>
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+        <!-- commented for dromdown menu hover bug -->
+        <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+        <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+        <!--BS Icons -->
+        <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+        <!-- Fontawesome Icons -->
+
+        <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+             />
+        <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+        <style>
+            .checked {
+                color: orange;
+            }
+        </style>
+
+        <!-- anychart modules -->
+        <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+        <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+        <!-- Footable  -->
+        <script src="../../static/js/footable/demo-rows.js"></script>
+        <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+        <script src="../../static/js/footable/footable.js"></script>
+        <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+        <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+        <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+        <!-- Intro Js -->
+        <script src="../../static/library/intro.min-4.3.0.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+        <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+
+
+        <!-- Blocking UI -->
+        <script src="../../static/js/blockUI.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+            integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+            </script>
+        <link rel="stylesheet" href="../../static/styles/loader.css">
+
+        <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+        <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+        <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+        <link rel="stylesheet" href="../../static/styles/index2.css">
+        <link rel="stylesheet" href="../../static/styles/information_chart.css">
+        <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+        <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+        </script>-->
+
+        <meta charset="UTF-8">
+
+        <title> یادداشت‌ها</title>
+        {% include "doc/title_icon.html" %}
+
+    </head>
+
+    <body>
+        <!-- Menu -->
+        <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+            {% include "doc/header2.html" %}
+        </nav>
+
+        <script>
+            initSearchableSelects()
+            $(document).ready(function () {
+                // Active panel
+                $('#notes').addClass('active'); // header buttons
+                $('#UserProfileDropdown').addClass('active');
+
+                $('select#language').on('change', function (e) {
+                    let selected_language = this.value;
+                    let current_url = window.location.href;
+                    if (selected_language === 'England') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'en')
+                        window.location = requested_url;
+                    } else if (selected_language === 'Russia') {
+                        let page_name = current_url.split('/')[3]
+                        let requested_url = current_url.replace(page_name, 'ru')
+                        window.location = requested_url;
+                    }
+                });
+
+                $("#serach_input_document_name").on("keyup", function () {
+                    filterName();
+                    // var value = $(this).val().toLowerCase();
+                    // $(".test").filter(function () {
+                    //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    // });
+                });
+
+                $("#serach_input_note").on("keyup", function () {
+                    filterNote();
+                });
+
+                // $("#serach_input_label").on("keyup", function () {
+                //     filterLabel();
+                // });
+            });
+        </script>
+
+        <br>
+        <br>
+
+        <!--container-->
+        <div class="container-users mt-4">
+            <!-- filtering -->
+            <div class="row data-table">
+                <div class="col">
+                </div>
+                <div class="col-10" >
+                    <form class="row" name="user-log" id="user-log-form">
+                        <!-- time start -->
+                        <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-2">
+                            <label for="time-start"><small>از تاریخ:</small></label>
+                            <input type="text" id="time-start" class="form-control" placeholder="1400-12-08">
+                        </div>
+
+                        <!-- time end -->
+                        <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-2">
+                            <label for="time-end"><small>تا تاریخ:</small></label>
+                            <input type="text" id="time-end" class="form-control" placeholder="1401-04-16">
+                        </div>
+
+                        <!-- Hashtag Input -->
+                        <div class="col-md-6 col-12 col-lg-3 pt-4 bg-light" dir="rtl">
+                            <label class=" text-right bg-light float-right" style="direction: rtl;;"> هشتگ مورد‌نظر را انتخاب کنید: </label>
+                            <select dir="rtl" name="hashtags" id="hashtags" class="form-select text-right float-right searchable-select"
+                                style="direction: rtl;" >
+                            </select>
+                        </div>
+
+                        <!-- Label Input -->
+                        <div class="col-md-6 pt-4 col-12 col-lg-3 bg-light" dir="rtl">
+                            <label class=" text-right bg-light float-right" style="direction: rtl;;"> برچسب مورد‌نظر را انتخاب کنید: </label>
+                            <select dir="rtl" name="labels" id="labels" class="form-select text-right float-right searchable-select"
+                                style="direction: rtl;" >
+                            </select>
+                        </div>
+
+                        <!-- button -->
+                        <div class="col-lg-1 col-md-2 pt-5 col-12 mb-3 px-0">
+                            <button type="button" id="document_search" onclick="ShowResult()" 
+                                class="btn d-flex float-right  mr-3">
+                                <div class="spinner-border text-light" role="status">
+                                    <span class="sr-only">درحال جستجو ...</span>
+                                </div>
+                                نمایش
+                            </button>
+                        </div>
+                    </form>
+                    <hr>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <!-- searching in note-name and note-text -->
+            <div class="row data-table">
+                <div class="col">
+                </div>
+                <div class="col-10">
+                    <div class="col">
+                    </div>
+                    <div class="searching">
+                        <form class="d-flex col-10">
+                            <input class="form-control ml-5" id="serach_input_document_name" type="search" placeholder="جست‌وجو در نام سند" 
+                            aria-label="Search">
+                            <!-- class me-4 -->
+                            <!-- &nbsp  -->
+                            <input class="form-control me-xxl-5 " id="serach_input_note" type="search" placeholder="جست‌وجو در متن یادداشت"
+                            aria-label="Search">
+                            <!-- &nbsp  -->
+                            <!-- <input class="form-control me-2" id="serach_input_label" type="search" placeholder="جست‌وجو بر اساس برچسب"
+                            aria-label="Search"> -->
+                        </form>
+                        <br>
+                    </div>
+                    <hr>
+                    <!-- notes data table -->
+                    <div class="text">
+                        <strong class="recom-list align-content-center">یادداشت‌ها</strong>
+                            
+                        <!-- Download Buttons -->
+                        <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود یادداشت‌ها"
+                        class="btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadNotesFunction()" >
+                        <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button>
+            
+                        <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelFunction()"
+                            type="button">
+                            <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button>
+
+                        <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                            class="btn float-left p-0 px-1 mt-2" id="DownloadDocumentsBtn" onclick="DownloadDocumentsFunction()">
+                            <i class="fas fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button>
+
+                        <!-- Result Count -->
+                        <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+                    </div>
+                    <div>
+                        <div >
+                        <!-- <div class="col-12"> -->
+                            <div dir="rtl" class="doc_info_table">
+                                <table class="table table-light table-striped footable note_table" id="notes_table">
+                                    <thead class="table">
+                                        <tr>
+                                            <th class="text-center" scope="col">ردیف</th>
+                                            <th class="text-center" scope="col">نام سند</th>
+                                            <th class="text-center" scope="col">ستاره‌دار</th>
+                                            <th class="text-center" scope="col">برچسب</th>
+                                            <th class="text-center" scope="col">متن یادداشت </th>
+                                            <th class="text-center" scope="col"> تاریخ</th>
+                                            <th class="text-center" scope="col"> دانلود</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="notes_table_body">
+                                        <tr>
+                                            <td class="text-center" id="note_number">-</td>
+                                            <td class="text-center test" id="note_document_name">-</td>
+                                            <td class="text-center" id="note_star">-</td>
+                                            <td class="text-center" id="note_label">-</td>
+                                            <td class="text-center" id="note_text">-</td>
+                                            <td class="text-center" id="note_time">-</td>
+                                            <td class="text-center" id="note_download">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <!-- Modal Container for Note Text  -->
+            <div class="modal fade" id="documentContent">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="documentContentHeader" class="modal-title">نام پنل: </h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body bg-light text-justify">
+                            <div class="container" id="DocumentContentBody">
+
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Scrollbar -->
+            <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+                <i class="far fa-caret-square-up"></i>
+            </button>
+            <script src="../../static/js/scroll_button_handler.js">
+            </script>
+        </div>
+        <!--end container-->
+    </body>
+
+    <script src="../../static/library/notyf.min.js"></script>
+    <script src="../../static/js/information/information_tour.js"> 
+    </script>
+    <script src="../../static/js/tour.js"></script>
+    <script src="../../static/js/signout_function.js"></script>
+    <script src="../../static/js/tooltip_handler.js"></script>
+    <script src="../../static/js/logincheck.js"></script>
+    {#<script src="../../static/js/UserLogSave.js"></script>#}
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+            integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer">
+            </script> -->
+    <script src="../../static/library/html2pdf.bundle.min-0.9.3.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- save log user -->
+    <script>
+        async function UserLog(form_data) {
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = "127.0.0.0"
+                page_url = page_url.slice(0, -1);
+                if (page_url === "") {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+        }
+    </script>
+
+    <script>
+        init()
+        // document.addEventListener("DOMContentLoaded", init());
+        let tableContent = []
+
+        
+
+        async function init() {
+            if (getCookie("username") !== "") {
+                const username = getCookie("username")
+                let start_time = document.getElementById('time-start').value
+                if (document.getElementById('time-start').value === "")
+                {
+                    start_time = "0"
+                }
+                let end_time = document.getElementById('time-end').value
+                if (document.getElementById('time-end').value === "")
+                {
+                    end_time = "0"
+                }
+                const request_link = 'http://' + location.host + "/GetAllNotesInTimeRange/" + username + "/" + start_time + "/" + end_time + "/";
+                const response = await fetch(request_link).then(response => response.json());
+                // const notes = response['notes']
+                // tableContent = response['notes']
+                let notes = response['notes'].sort(function(a, b){
+                    if (a.starred == b.starred) {
+                        return 0;
+                    }
+                    else if (a.starred == true) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+                tableContent = response['notes'].sort(function(a, b){
+                    if (a.starred == b.starred) {
+                        return 0;
+                    }
+                    else if (a.starred == true) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+
+                
+                
+                // console.log(response['hashtags'])
+                LoadHashTags(response['hashtags'])
+                LoadLabels(response['labels'])
+                
+                let table_data = ''
+                for (let i=0;i<notes.length;i++){
+                    if (notes[i].label === null) {
+                        notes[i].label = "بدون برچسب"
+                    }
+                    const document_id = notes[i]['document_id'];
+                    const document_link = 'http://' + location.host + "/information/?id=" + document_id;
+                    const doc_name = '<a href="' + document_link + '">' + notes[i].document_name + "</a>";
+                    if (notes[i].starred) {
+                        table_data+=`<tr>
+                                            <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                            <td class="text-center name" id="note_document_name_${i+1}">${doc_name}</td>
+                                            <td class="text-center" >
+                                                <button value="1" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')" id="note_starred_${i+1}">
+                                                    <span class="fa fa-star checked">
+                                                    </span>
+                                                </button>
+                                            </td>
+                                            <td class="text-center label" id="note_label_${i+1}">${notes[i].label}</td>
+                                            <td class="text-center" id="note_text_${i+1}">
+                                                <div class="text-light" >
+                                                    <p hidden>${notes[i].note}</p>
+                                                    <button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" id="document_note_text" onclick="ShowNoteText('${notes[i].note}')">مشاهده</button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                            <td class="text-center " id="note_download_${i+1}">
+                                                <div class="text-center" >
+                                                    <button type="button" id="document_download" onclick="generatePDF('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')" 
+                                                        class="btn d-flex float-center  mr-2 ">
+                                                        PDF
+                                                    </button> 
+                                                </div>      
+                                            </td>
+                                    </tr>`
+                    }
+                    else {
+                        table_data+=`<tr>
+                                            <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                            <td class="text-center name" id="note_document_name_${i+1}">${doc_name}</td>
+                                            <td class="text-center" >
+                                                <button value="0" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')" id="note_starred_${i+1}">
+                                                    <span class="fa fa-star">
+                                                    </span>
+                                                </button>
+                                            </td>
+                                            <td class="text-center label" id="note_label_${i+1}">${notes[i].label}</td>
+                                            <td class="text-center" id="note_text_${i+1}">
+                                                <div class="text-light" >
+                                                    <p hidden>${notes[i].note}</p>
+                                                    <button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" id="document_note_text" onclick="ShowNoteText('${notes[i].note}')">مشاهده</button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                            <td class="text-center " id="note_download_${i+1}">
+                                                <div class="text-center" >
+                                                    <button type="button" id="document_download" onclick="generatePDF('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')" 
+                                                        class="btn d-flex float-center  mr-2 ">
+                                                        PDF
+                                                    </button> 
+                                                </div>      
+                                            </td>
+                                    </tr>`
+                    }
+                }
+                if (notes.length==0){
+                    table_data=`<tr>
+                                        <td class="text-center" id="note_number">-</td>
+                                        <td class="text-center" id="note_starred">-</td>
+                                        <td class="text-center" id="note_document_name">-</td>
+                                        <td class="text-center" id="note_label">-</td>
+                                        <td class="text-center" id="note_text">-</td>
+                                        <td class="text-center" id="note_time">-</td>
+                                        <td class="text-center" id="note_download">-</td>
+                                </tr>`
+                }
+                document.getElementById('notes_table_body').innerHTML=table_data;
+            }
+            $('.note_table').footable({
+                 "paging": {
+                    "enabled": true,
+                strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                // },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                }
+            });
+            
+            // document.getElementById('notes_table_body').innerHTML= "";
+            TableCount();
+        
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+            
+        }
+
+        async function ShowResult() {
+            if (getCookie("username") !== "") {
+                const username = getCookie("username")
+                let start_time = document.getElementById('time-start').value
+                if (document.getElementById('time-start').value === "")
+                {
+                    start_time = "0"
+                }
+                let end_time = document.getElementById('time-end').value
+                if (document.getElementById('time-end').value === "")
+                {
+                    end_time = "0"
+                }
+                const selected_label = $("#labels option:selected").text();
+                const selected_hashtag = $("#hashtags option:selected").text();
+                const request_link = 'http://' + location.host + "/GetNotesInTimeRangeFilterLabelHashtag/" + username + "/" + start_time + "/" + end_time + "/" + encodeURIComponent(selected_label) + "/" + encodeURIComponent(selected_hashtag) + "/";
+                const response = await fetch(request_link).then(response => response.json());
+                // const notes = response['notes']
+                // tableContent = response['notes']
+                let notes = response['notes'].sort(function(a, b){
+                    if (a.starred == b.starred) {
+                        return 0;
+                    }
+                    else if (a.starred == true) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+                tableContent = response['notes'].sort(function(a, b){
+                    if (a.starred == b.starred) {
+                        return 0;
+                    }
+                    else if (a.starred == true) {
+                        return -1;
+                    }
+                    else {
+                        return 1;
+                    }
+                })
+                
+                // console.log(response['hashtags'])
+                // LoadHashTags(response['hashtags'])
+                // LoadLabels(response['labels'])
+                
+                let table_data = ''
+                for (let i=0;i<notes.length;i++){
+                    if (notes[i].label === null) {
+                        notes[i].label = "بدون برچسب"
+                    }
+                    const document_id = notes[i]['document_id'];
+                    const document_link = 'http://' + location.host + "/information/?id=" + document_id;
+                    const doc_name = '<a href="' + document_link + '">' + notes[i].document_name + "</a>";
+                    if (notes[i].starred) {
+                        table_data+=`<tr>
+                                            <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                            <td class="text-center name" id="note_document_name_${i+1}">${doc_name}</td>
+                                            <td class="text-center" >
+                                                <button value="1" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')" id="note_starred_${i+1}">
+                                                    <span class="fa fa-star checked">
+                                                    </span>
+                                                </button>
+                                            </td>
+                                            <td class="text-center label" id="note_label_${i+1}">${notes[i].label}</td>
+                                            <td class="text-center" id="note_text_${i+1}">
+                                                <div class="text-light" >
+                                                    <p hidden>${notes[i].note}</p>
+                                                    <button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" id="document_note_text" onclick="ShowNoteText('${notes[i].note}')">مشاهده</button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                            <td class="text-center " id="note_download_${i+1}">
+                                                <div class="text-center" >
+                                                    <button type="button" id="document_download" onclick="generatePDF('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')" 
+                                                        class="btn d-flex float-center  mr-2 ">
+                                                        PDF
+                                                    </button> 
+                                                </div>      
+                                            </td>
+                                    </tr>`
+                    }
+                    else {
+                        table_data+=`<tr>
+                                            <td class="text-center" id="note_number_${i+1}">${i+1}</td>
+                                            <td class="text-center name" id="note_document_name_${i+1}">${doc_name}</td>
+                                            <td class="text-center" >
+                                                <button value="0" style="border: none;" onclick="ToggleStar('${notes[i].id}','note_starred_${i+1}')" id="note_starred_${i+1}">
+                                                    <span class="fa fa-star">
+                                                    </span>
+                                                </button>
+                                            </td>
+                                            <td class="text-center label" id="note_label_${i+1}">${notes[i].label}</td>
+                                            <td class="text-center" id="note_text_${i+1}">
+                                                <div class="text-light" >
+                                                    <p hidden>${notes[i].note}</p>
+                                                    <button style="background-color:lightblue;color:black" type="button" class="btn modal_btn" data-bs-toggle="modal" id="document_note_text" onclick="ShowNoteText('${notes[i].note}')">مشاهده</button>
+                                                </div>
+                                            </td>
+                                            <td class="text-center" id="note_time_${i+1}">${notes[i].time}</td>
+                                            <td class="text-center " id="note_download_${i+1}">
+                                                <div class="text-center" >
+                                                    <button type="button" id="document_download" onclick="generatePDF('${notes[i].document_name}','${notes[i].time}','${notes[i].note}')" 
+                                                        class="btn d-flex float-center  mr-2 ">
+                                                        PDF
+                                                    </button> 
+                                                </div>      
+                                            </td>
+                                    </tr>`
+                    }
+                }
+                if (notes.length==0){
+                    table_data=`<tr>
+                                        <td class="text-center" id="note_number">-</td>
+                                        <td class="text-center" id="note_starred">-</td>
+                                        <td class="text-center" id="note_document_name">-</td>
+                                        <td class="text-center" id="note_label">-</td>
+                                        <td class="text-center" id="note_text">-</td>
+                                        <td class="text-center" id="note_time">-</td>
+                                        <td class="text-center" id="note_download">-</td>
+                                </tr>`
+                }
+                document.getElementById('notes_table_body').innerHTML=table_data;
+            }
+            $('.note_table').footable({
+                 "paging": {
+                    "enabled": true,
+                strings: {
+                        first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                 },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                }
+            });
+            // document.getElementById('notes_table_body').innerHTML= "";
+            TableCount();
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نتایج جست و جو"
+            let time_start_select = $("#time-start option:selected").text();
+            let time_end_select = $("time-end option:selected").text();
+            let labels_select = $("labels option:selected").text();
+            let hashtags_select = $("hashtags option:selected").text();
+            form_data.append('detail_type', detail_type);
+            form_data.append('time_start_select', time_start_select);
+            form_data.append('time_end_select', time_end_select);
+            form_data.append('labels_select', labels_select);
+            form_data.append('hashtags_select', hashtags_select);
+            UserLog(form_data)
+        }
+
+        function LoadHashTags(hashtags) {
+            let options = [{ value:'0', text: 'همه' }];
+
+            for (let i=0;i<hashtags.length;i++){
+                        options.push( {value: hashtags[i], text: hashtags[i]});
+            }
+
+            syncSelectOptions("hashtags", options);
+        }
+
+        function LoadLabels(labels) {
+            let options = [{ value:'0', text: 'همه' }];
+            for (let i=0;i<labels.length;i++){
+                if (labels[i] != null){
+                        options.push( {value: labels[i], text: labels[i]});
+
+                }
+            }
+            syncSelectOptions("labels", options);
+
+        }
+
+        async function ShowNoteText(document_note_text) {
+            document.getElementById('documentContentHeader').innerHTML = "";
+            document.getElementById('DocumentContentBody').innerHTML = "";
+            $('#documentContent').modal('show');
+
+            const header = 'متن یادداشت'
+            const text =  '<p>' + document_note_text + '</p>'
+            document.getElementById('documentContentHeader').innerText += header
+            document.getElementById('DocumentContentBody').innerHTML += text
+        }
+
+        async function ExportExlceFunction() {
+            var csv = "";
+            sep = ","
+            let Csv = "ردیف" + sep + "نام سند" + sep + "برچسب" + sep + "متن یادداشت" + sep + "تاریخ" + "\n";
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+            let i = 1;
+            let row = 0;
+            for (const document of tableContent) {
+                // console.log(tr[row].style.display === "none")
+                if(tr[row].style.display == "none") {
+                    row += 1;
+                    continue;
+                }
+                // Csv += encodeURI(i + sep + document.document_name + sep + document.label + sep + document.note + sep + document.time + "\n")
+                Csv += (i + sep + document.document_name + sep + encodeURIComponent(document.label) + sep + encodeURIComponent(document.note) + sep + document.time + "\n")
+                i += 1;
+                row += 1;
+            }
+
+            let save_file_name = "یادداشت‌ها"
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + decodeURI(Csv);
+            // let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click()
+        }
+
+        async function DownloadNotesFunction() {
+            // const save_file_name = "نتیجه جستجو {" + document.getElementById("SearchBox").value + "}"
+            const save_file_name = "یادداشت‌ها"
+            downloadNotes(tableContent, save_file_name) // tableContent, save_file_name
+        }
+        
+        async function downloadNotes(file_name_list, save_file_name) {
+            startFullPageBlockUI()
+
+            let zip = new JSZip()
+            let extension = ".txt"
+            let i = 1;
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+            row = 0;
+            for (const document of file_name_list) { 
+                if(tr[row].style.display == "none") {
+                    row += 1;
+                    continue;
+                }
+                const document_name = i + " " + document.document_name  + extension
+                
+                let value = "نام کاربری :" + getCookie("username") + "\n" + "نام سند:" + document.document_name + "\n" + "تاریخ:" + document.time + "\n" + "متن یادداشت:" + document.note + "\n" ;
+                zip.file(document_name, value)
+                i += 1;
+                row += 1;
+            }
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+            stopFullPageBlockUI('دانلود یادداشت‌ها');
+        }
+
+        async function DownloadLinkSet(country_id,document_name) {
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            // console.log(request_link)
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            var file_path = "";
+            if (country_name.includes("فاوا")) {
+                file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.docx';
+            } else {
+                file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.txt';
+            }
+            // console.log(file_path)
+            return file_path // give you path in DownloadDocumentsFunction
+        }
+
+        async function DownloadDocumentsFunction() {
+            const save_file_name = "سند ها"
+            // DownloadLinkSet --> info
+            // generatePDF --> info
+            downloadDocs(tableContent, save_file_name)
+        }
+        
+        async function downloadDocs(file_name_list, save_file_name) {
+            startFullPageBlockUI()
+            let zip = new JSZip()
+
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+            row = 0;
+            for (const document of file_name_list) {
+                if(tr[row].style.display == "none") {
+                    row += 1;
+                    continue;
+                }
+                let extension = ".txt"
+                if (document.country_name.includes("فاوا")) {
+                    extension = '.docx';
+                }
+                // const document_name = document.document_name + extension
+
+                const document_name = document.document_name
+                const path = await DownloadLinkSet(document.document_country_id,document.document_name);
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name + extension, value);
+                    })
+                row += 1;
+            }
+
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+            stopFullPageBlockUI('دانلود اسناد');
+        }
+
+        function filterName() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("serach_input_document_name");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                // if (tr[i].style.display != "none") { // if the row is not hidden -- this condition is for filtering with AND
+                    td = tr[i].getElementsByClassName("name")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                // }
+            }
+            TableCount()
+        }
+
+        function filterNote() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("serach_input_note");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                // if (tr[i].style.display != "none") { // if the row is not hidden -- this condition is for filtering with AND
+                    td = tr[i].getElementsByTagName("p")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                // }
+            }
+            TableCount()
+        }
+
+        // function filterLabel() {
+        //     // Declare variables
+        //     var input, filter, table, tr, td, i, txtValue;
+        //     input = document.getElementById("serach_input_label");
+        //     filter = input.value.toUpperCase();
+        //     table = document.getElementById("notes_table_body");
+        //     tr = table.getElementsByTagName("tr");
+
+        //     // Loop through all table rows, and hide those who don't match the search query
+        //     for (i = 0; i < tr.length; i++) {
+        //         td = tr[i].getElementsByClassName("label")[0];
+        //         if (td) {
+        //             txtValue = td.textContent || td.innerText;
+        //             if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        //                 tr[i].style.display = "";
+        //             } else {
+        //                 tr[i].style.display = "none";
+        //             }
+        //         }
+        //     }
+        // }
+
+        async function generatePDF(docName,docDate,docNote) {
+            startBlockUI();
+
+            let element = "<div class='container-fluid' style='direction: rtl'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>"+docName+"</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span> تاریخ تصویب </span> <span> "+docDate+" </span> </div> " +
+                "</div> </div> </div>"
+            
+            // element += '<p>' + ' متن یادداشت' + '</p>' + '<p>' + docNote + '</p>'
+            element += "<p style='direction: rtl'>" + ' متن یادداشت' + '</p>' + "<p style='direction: rtl'>" + docNote + '</p>'
+
+
+            element += '</div>';
+            // console.log(element);
+
+            let opt = {
+                margin: 1,
+                filename: docName + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+        }
+
+        function startBlockUI() {
+            $.blockUI({
+
+                // BlockUI code for element blocking
+                message: ("<div class='lds-ellipsis'><div></div><div></div><div></div><div></div></div><h6 style = 'font-family:vazir;'>...در حال دریافت اطلاعات<h6>"),
+
+                css: { color: 'var(--menu_color)', border: 'none', borderRadius: '5px', borderColor: 'var(--menu_color)', paddingTop: '5px' }
+            });
+
+            startTimer();
+        }
+        
+        function stopBlockUI() {
+
+            $.unblockUI();
+            elapsed_time = endTimer();
+            toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+
+            {#if (elapsed_time > 0)#}
+            {#    showToastMessage(toast_message);#}
+
+            // setTimeout(function () {
+            //     $.unblockUI();
+            //     elapsed_time = endTimer();
+            //     toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+            //     showToastMessage(toast_message);
+            // }, 4000);
+        }
+
+        async function ToggleStar(note_id,star_id) {
+            startFullPageBlockUI();
+            const request_link = 'http://' + location.host + "/ToggleNoteStar/" + note_id + "/";
+            // console.log(star_id) // http://127.0.0.1:8000/ToggleNoteStar/129/
+            fetch(request_link).then(response => response.json()).then(response => {
+                if (response['starred']){
+                    document.getElementById(star_id).innerHTML=`<span class="fa fa-star checked"></span>`
+                    // document.getElementById(star_id).value = "1";
+                }
+                else{
+                    document.getElementById(star_id).innerHTML=`<span class="fa fa-star"></span>`
+                    // document.getElementById(star_id).value = "0";
+                }
+            }).catch(error => {
+                // console.log(error)
+                alert(error)
+            }
+            ,)
+            stopFullPageBlockUI('تغییر ستاره با موفقیت انجام شد');
+    }
+
+        function filterHashTag() {
+            const selected_hashtag = $("#hashtags option:selected").text();
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = selected_hashtag;
+            filter = input.toUpperCase();
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                // if (tr[i].style.display != "none") { // if the row is not hidden -- this condition is for filtering with AND
+                    td = tr[i].getElementsByTagName("p")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    // }
+                }
+            }
+
+            // for (i = tr.length; i >= 0; i--) {
+            //     td = tr[i].getElementsByTagName("p")[0];
+            //     if (td) {
+            //         txtValue = td.textContent || td.innerText;
+            //         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            //             // tr[i].style.display = "";
+            //         } else {
+            //             // tr[i].style.display = "none";
+            //             document.getElementById("notes_table").deleteRow(i)
+            //         }
+            //     }
+            // }
+            TableCount();
+        }
+
+        function filterLabel() {
+            const selected_label = $("#labels option:selected").text();
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = selected_label;
+            filter = input.toUpperCase();
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                // if (tr[i].style.display != "none") { // if the row is not hidden -- this condition is for filtering with AND
+                    td = tr[i].getElementsByClassName("label")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                            // tr[i].remove();
+                        }
+                    // }
+                }
+            }
+            TableCount();
+        }
+
+        function filterHashTagANDLable() {
+            const selected_hashtag = $("#hashtags option:selected").text();
+            const selected_label = $("#labels option:selected").text();
+            if (selected_hashtag == 'همه' && selected_label == 'همه') {
+                return;
+            }
+            else if (selected_hashtag == 'همه') {
+                var input, filter, table, tr, td, i, txtValue;
+                input = selected_label;
+                filter = input.toUpperCase();
+                table = document.getElementById("notes_table_body");
+                tr = table.getElementsByTagName("tr");
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByClassName("label")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                            // tr[i].remove();
+                        }
+                    }
+                }
+                TableCount();
+                return;
+            }
+            else if (selected_label == 'همه') {
+                const selected_hashtag = $("#hashtags option:selected").text();
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue;
+                input = selected_hashtag;
+                filter = input.toUpperCase();
+                table = document.getElementById("notes_table_body");
+                tr = table.getElementsByTagName("tr");
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("p")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+                TableCount();
+                return;
+            }
+            else {
+                // Declare variables
+                var input1, filter1, table, tr, td1, i, txtValue1;
+                var input2, filter2, table, tr, td2, i, txtValue2;
+                input1 = selected_hashtag;
+                filter1 = input1.toUpperCase();
+                input2 = selected_label;
+                filter2 = input2.toUpperCase();
+                table = document.getElementById("notes_table_body");
+                tr = table.getElementsByTagName("tr");
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td1 = tr[i].getElementsByTagName("p")[0];
+                    td2 = tr[i].getElementsByClassName("label")[0];
+                    if (td1 && td2) {
+                        txtValue1 = td1.textContent || td1.innerText;
+                        txtValue2 = td2.textContent || td2.innerText;
+                        if ( (txtValue1.toUpperCase().indexOf(filter1) > -1) && (txtValue2.toUpperCase().indexOf(filter2) > -1) ){
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+                TableCount();
+            }
+        }
+
+        function hashtag(text){
+            var repl = text.replace(/#(\w+)/g, '<a href="#">#$1</a>');
+            // var repl = text.replace(/#(\S+)/g, '<a href="#">#$1</a>'); for persian letters
+            return repl;
+        }
+
+        function TableCount() {
+            table = document.getElementById("notes_table_body");
+            tr = table.getElementsByTagName("tr");
+            let num_of_rows = 0;
+            if (tr[0].getElementsByClassName("text-center")[0].innerText != "-") {
+                for (i = 0; i < tr.length; i++) {
+                    if(tr[i].style.display == "none") {
+                        continue;
+                    }
+                    else {
+                        num_of_rows++;
+                    }
+                }
+            }
+            document.getElementById("SearchResultLable").innerText = (num_of_rows).toString() + " یادداشت یافت شد";
+            
+        }
+    </script>
+
+
+</html>

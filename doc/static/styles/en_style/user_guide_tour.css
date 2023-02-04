@@ -1,0 +1,27 @@
+.customTooltip * {
+    color: #4a4a4a;
+    font-size: 16px;
+    font-family: Helvetica, sans-serif;
+}
+
+.customTooltip .introjs-nextbutton,.customTooltip .introjs-prevbutton{
+    background-color: var(--menu_color);
+    color: white;
+}
+.introjs-bullets ul li a {
+    background: var(--menu_color);
+}
+.customTooltip .introjs-tooltip-title {
+    color: #0a41c9;
+}
+
+.customTooltip .introjs-tooltip-header {
+    padding-left: 0px;
+}
+
+.customTooltip .introjs-tooltiptext {
+    direction: ltr;
+    text-align: left;
+    /* color: var(--menu_color) */
+
+}

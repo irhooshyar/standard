@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- jsnetworkx -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+    <!-- Download Zip Files -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+    <script src="../../static/js/chart.js"></script>
+
+    <meta charset="UTF-8">
+    <title>نظارت بر آئین‌نامه‌های اجرایی</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#ExecutiveDropdown').addClass('active');
+            $('#executive_regulations_analysis_v3').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mt-2 mx-auto">
+                <!-- Country Input -->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;" onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست و جو</button>
+                </li>
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="bar_chart_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#bar_chart_info_pane" type="button" role="tab"
+                        aria-controls="bar_chart_info_pane" aria-selected="false">داشبورد آماری</button>
+                </li>
+
+                <!-- Download Buttons -->
+                <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                    class="btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                </button>
+
+                <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+                <!-- Result Count -->
+                <p id="DocumentCount" dir="rtl" class="text-left float-left text-secondary  pl-2"></p>
+
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Bar chart Info Pane -->
+                <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                    id="bar_chart_info_pane" role="tabpanel" aria-labelledby="bar_chart_info_tab">
+
+                    <div class="charts-list-container">
+                        <div id="sup_container" class="half"></div>
+                        <div id="subject_container" class="half"></div>
+                        <div id="actor_container" class="full" chart-height="850px"></div>
+                        <div id="year_container" class="full" chart-height="850px"></div>
+                        <div id="approval_container" class="full" chart-height="1500px"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div id="modal_dialog" class="modal-dialog modal-xl  modal-dialog-scrollable ">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title w-100">
+                    </h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body bg-light text-justify">
+
+                </div>
+
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ChartModal Container -->
+    <button type="button" id="ChartModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+        data-bs-target="#ChartModal"></button>
+    <div class="modal fade" id="ChartModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ChartModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="ChartModalText" class="modal-body text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div dir="rtl" class="modal-footer">
+                    <button id="DownloadDocuments" class="btn btn-primary"><i class="fa fa-download"></i> دانلود
+                        اسناد</button>
+
+                    <button id="ExportExcel2" class="btn btn-primary"><i class="fa fa-download"></i> خروجی اکسل
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <script src="../../static/js/executive_regulations_analysis/executive_regulations_supervisions_tour.js">
+    </script>
+    <script src="../../static/js/tour.js"></script>
+
+</body>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+</script>
+
+<script>
+    initSearchableSelects();
+    let SearchResultValue = []
+    let executive_list = []
+    let last_paragraph = null;
+    let next_paragraph = '';
+
+    container_id_list = ['SearchTable','DocumentCount']
+
+    function clearPrevResults(container_id_list) {
+
+        for (container_id of container_id_list) {
+            document.getElementById(container_id).innerHTML = "";
+        }
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نمایش پنل"
+        form_data.append('detail_type', detail_type);
+        UserLog(form_data)
+    }
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+
+        
+    }
+
+    CountryChanged()
+
+    async function CountryChanged() {
+        await ShowResult();
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نمایش پنل"
+        form_data.append('detail_type', detail_type);
+        UserLog(form_data)
+
+    }
+
+    async function ShowResult() {
+        clearPrevResults(container_id_list);
+        notyf.dismissAll();
+        startBlockUI('SearchTable');
+
+        await SpinnerModeFunction("Active");
+
+        let country_id = document.getElementById("country").value;
+        let request_link = 'http://' + location.host + "/GetMandatoryRegulations2/" + country_id + '/';
+        let response = await fetch(request_link).then(response => response.json());
+
+
+        await showDocumentInformation(response,$("#country option:selected").text());
+        await SpinnerModeFunction("Disable");
+        stopBlockUI('SearchTable', 'نتایج جست و جو');
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نتایج جست و جو"
+        let country_name = $("#country option:selected").text();
+        form_data.append('detail_type', detail_type);
+        form_data.append('country_name', country_name);
+    }
+
+
+    async function showDocumentInformation(response,country_id) {
+        executive_list = response["executive_list"];
+        SearchResultValue = response["documents_information_result"];
+        const subject_chart_data = response["subject_chart_data"]
+        const approval_references_chart_data = response["approval_references_chart_data"]
+        const approval_year_chart_data = response["approval_year_chart_data"]
+        document.getElementById("DocumentCount").innerText =
+            (executive_list.length).toString() + " سند یافت شد.";
+
+        let index = 1
+        for (let executive of executive_list) {
+            let supervisions_text = ''
+            for (let supervision of executive['supervisions'])
+            {
+                if (supervision['tag_name'])
+                    supervisions_text += supervision['tag_name'];
+            }
+            executive['index'] = index;
+            index ++;
+            executive['supervisions_text'] = supervisions_text
+            executive['has_supervision_symbol'] = executive['supervision_paragraphs'].length> 0 ?
+                '<i class="bi bi-check-circle-fill text-success"></i>' :
+                '<i class="bi bi-x-circle-fill text-danger"></i>'
+        }
+
+        $('#SearchTable').empty();
+        $('#SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                 strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "regulator",
+                "title": "نام آئین‌نامه‌",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "has_supervision_symbol",
+                "title": "دارای ناظر",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "supervisions_text",
+                "title": "مرجع/مراجع ناظر",
+                "style": {
+                    "width": "25%"
+                }
+            }, {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "10%"
+                }
+            }
+            ],
+            "rows": executive_list
+        });
+
+
+
+
+
+        {# load charts #}
+        startBlockUI('bar_chart_info_pane');
+        let chart_data = []
+        let has_supervision = 0
+        let doesnt_have_supervision = 0
+        for (let executive of executive_list)
+        {
+            if (executive['supervisions'].length > 0)
+                has_supervision++;
+            else
+                doesnt_have_supervision++;
+        }
+        chart_data.push(['دارای ناظر', has_supervision])
+        chart_data.push(['بدون ناظر', doesnt_have_supervision])
+        showChart(chart_data, "sup_container", SearchResultValue, false,country_id,executive_list, "نظارت", "نظارت")
+
+
+        chart_data = []
+        let chart_data_dict = {}
+        for (let executive of executive_list)
+        {
+            let sups = executive['supervisions']
+            for (let sup of sups)
+            {
+                if(sup['name'])
+                {
+                    if (chart_data_dict[sup['name']])
+                        chart_data_dict[sup['name']] += 1;
+                    else
+                        chart_data_dict[sup['name']] = 1
+                }
+            }
+        }
+        for (let key of Object.keys(chart_data_dict))
+        {
+            chart_data.push([key, chart_data_dict[key]])
+        }
+        showChart(chart_data, "actor_container", SearchResultValue, false,country_id,executive_list, "مراجع ناظر", "مراجع ناظر")
+        showChartData(subject_chart_data, "subject_container", SearchResultValue, false, 'موضوع سند', "موضوع سند")
+        showChartData(approval_year_chart_data, "year_container", SearchResultValue, true, 'سال تصویب', 'سال تصویب')
+        showChartData(approval_references_chart_data, "approval_container", SearchResultValue, false, 'مرجع تصویب', 'مرجع تصویب')
+        stopBlockUI('bar_chart_info_pane', 'داشبورد آماری');
+    }
+
+    async function DetailFunction(regulator_id) {
+
+        /*  Show detail Result */
+        let response = null
+        for (let record of executive_list)
+            if(record['id'].toString() === regulator_id.toString())
+                response = record
+        await showDetailsDataExact(response);
+
+    }
+
+    async function showDetailsDataExact(response) {
+        let regulator_id  = response["id"];
+        let regulator_name = response["name"];
+        let supervisions_text_list = response["supervision_paragraphs"];
+        let supervisions_text = ''
+        let supervisions = response['supervisions']
+
+        /* Title Text */
+        const regulator_link = 'http://' + location.host + "/information/?id=" + regulator_id;
+        let regulator_tag = "<a href='" + regulator_link + "'>" + regulator_name + "</a>";
+        document.getElementById("ModalHeader").innerHTML = regulator_tag;
+
+        /* Body Text */
+        for (let key in supervisions_text_list)
+        {
+            supervisions_text += '<li class="lh-lg">'+supervisions_text_list[key]+'</li>'
+        }
+        supervisions_text = '<ul style="list-style: none;">'+supervisions_text+'</ul>'
+
+
+        let pattern = 'نظارت.*?بر.*?حسن.*?اجرای.*?این'
+        let regex = new RegExp(pattern,'g')
+        let pattern_text = 'نظارت بر حسن اجرای این'
+        if(regex.test(supervisions_text))
+        {
+            supervisions_text = supervisions_text.replaceAll(regex,
+                "<span class='bg-secondary text-white rounded px-1'>"+pattern_text+"</span>")
+        }
+        {#else if(supervisions_text.includes(pattern2))#}
+        {#{#}
+        {#    supervisions_text = supervisions_text.replaceAll(pattern2,#}
+        {#        "<span class='bg-secondary text-white rounded px-1'>"+pattern+"</span>")}#}
+        else
+        {
+            pattern = 'حسن اجرای این'
+            supervisions_text = supervisions_text.replaceAll(pattern,
+                "<span class='bg-secondary text-white rounded px-1'>"+pattern+"</span>")
+            pattern = 'نظارت'
+            supervisions_text = supervisions_text.replaceAll(pattern,
+                "<span class='bg-secondary text-white rounded px-1'>"+pattern+"</span>")
+        }
+
+
+        for (let supervision of supervisions)
+        {
+            if (!supervision['name'])
+                continue;
+            if (supervisions_text.includes(supervision['form']))
+            {
+                let supervision_highlight = "<span class='text-primary bold'>" + supervision['tag_form'] + "</span> "
+                supervision_highlight = supervision_highlight.replace(/.{2}/g, '$&%#')
+                supervisions_text = supervisions_text.replaceAll(supervision['form'],supervision_highlight);
+            }
+        }
+
+        for (let supervision of supervisions)
+        {
+            if (supervision['name'])
+                continue;
+            if (supervisions_text.includes(supervision['form']))
+            {
+                let supervision_highlight = "<span class='text-primary bold'>" + supervision['tag_form'] + "</span> "
+                supervision_highlight = supervision_highlight.replace(/.{2}/g, '$&%#')
+                supervisions_text = supervisions_text.replaceAll(supervision['form'], supervision_highlight);
+            }
+        }
+
+
+        supervisions_text = supervisions_text.replaceAll('%#','')
+
+
+        document.getElementById("DetailText").innerHTML = '<p class="m-4">'+supervisions_text+'</p>';
+        popup_handler();
+    }
+
+
+    function showChartData(data, container, documents_information_result, keySort, xAxisTitle, title) {
+        let chart_data = []
+        for (const [key, value] of Object.entries(data)) {
+            chart_data.push([value["name"], value["count"]])
+        }
+        showChart(chart_data, container, documents_information_result, keySort,'',{}, xAxisTitle, title)
+    }
+
+    function showChart(data, container, documents_information_result, sortKeys, country_id, sups, xAxisTitle, title) {
+        const options = {
+            data,
+            sortKeys,
+            xAxisTitle,
+            title,
+            yAxisTitle: "تعداد سند",
+            onClick: async function (event, data) {
+                const click_tag = event.domTarget.tag;
+                const index = click_tag["index"]
+                const text = data.row(index)[0];
+                let filtered_result = []
+                let header = ""
+                let save_file_name = '';
+    
+                if (container === "sup_container") {
+                    filtered_result = sups.filter(function (row) {
+                        if (text == 'بدون ناظر')
+                        {
+                            if (row["supervisions"].length===0)
+                                return row
+                        }
+                        else
+                        {
+                            if (row["supervisions"].length>0)
+                                return row
+                        }
+                    });
+                    header = text
+                    save_file_name += " (مجموعه سند {1} و {2})".replace("1", country_id).replace("2", text)
+                }
+    
+                else if (container === "subject_container") {
+                    filtered_result = documents_information_result.filter(function (row) {
+                        if (row["subject"] === text)
+                            return row
+                    });
+                    header = "موضوع: " + text
+                    save_file_name += " (مجموعه سند {1} و موضوع {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                }
+    
+                else if (container === "approval_container") {
+                    filtered_result = documents_information_result.filter(function (row) {
+                        if (row["approval_reference"] === text)
+                            return row
+                    });
+                    header = "مرجع تصویب: " + text
+                    save_file_name += " (مجموعه سند {1} و مرجع تصویب {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                }
+    
+                else if (container === "year_container") {
+                    filtered_result = documents_information_result.filter(function (row) {
+                        if (row["approval_date"].substring(0, 4) === text.toString() || (text.toString() === row['approval_date']))
+                            return row
+                    });
+                    header = "سال تصویب: " + text
+                    save_file_name += " (مجموعه سند {1} و سال تصویب {2})".replace("1", filtered_result[0]["country"]).replace("2", text)
+                }
+    
+                else if (container === "actor_container") {
+                    filtered_result = sups.filter(function (row) {
+                        for(let supervision of row['supervisions'])
+                        {
+                            if(supervision['name']===text)
+                                return row
+                        }
+                    });
+                    header = "مرجع ناظر: " + text
+                    save_file_name += " (مجموعه سند {1} و به عنوان ناظر {2})".replace("1", country_id).replace("2", text)
+                }
+    
+    
+                document.getElementById("ChartModalHeader").innerText = header
+                let filtered_result_tag = ""
+                let list_of_docId = ""
+                for (const doc of filtered_result) {
+                    const link = 'http://' + location.host + "/information/?id=" + doc["id"]
+                    let tag = "<li class='mt-3' id=" + doc["id"] + "><a href='" + link + "'>" + doc["name"] + "</a></li>"
+                    filtered_result_tag += tag
+                    list_of_docId += doc["id"] + "_"
+                }
+    
+                filtered_result_tag = "<ol start='1'>" + filtered_result_tag + "</ol>"
+                document.getElementById("ChartModalText").innerHTML = filtered_result_tag
+    
+    
+                /* download file creation */
+                document.getElementById("DownloadDocuments").onclick = function () {
+                    downloadFiles(filtered_result, save_file_name);
+                };
+    
+                /* export into excel files */
+                document.getElementById("ExportExcel2").onclick = function ExportExcelFunction() {
+    
+                    var csv = "";
+    
+                    sep = ","
+                    let Csv = "نام سند" + sep + "سطح سند" + sep +
+                        "موضوع سند" + sep + "نوع سند" + sep + "مرجع تصویب" + sep + "تاریخ تصویب" + "\n"
+                    for (let document of filtered_result) {
+                        let new_doc=document;
+                        if(!document["level"])
+                        {
+                            for(let temp of documents_information_result)
+                            {
+                                if(temp['id']===parseInt(document['id']))
+                                {
+                                    new_doc = temp;
+                                    break;
+                                }
+                            }
+                        }
+                        Csv += new_doc["name"] + sep + new_doc["level"] + sep + new_doc["subject"] + sep +
+                            new_doc["type"] + sep + new_doc["approval_reference"] + sep + new_doc["approval_date"] + "\n"
+    
+                    }
+    
+                    let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", csvContent);
+                    link.setAttribute("download", save_file_name + ".csv");
+                    document.body.appendChild(link);
+                    link.click()
+                };
+    
+                $("#ChartModalBtn").click();
+            }
+        };
+
+        newBarChart(container, options)
+    }
+
+
+
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+
+</script>
+
+<!-- Export results -->
+
+<script>
+
+    async function downloadFiles(file_name_list, save_file_name) {
+        startFullPageBlockUI()
+        const country_id = document.getElementById("country").value
+
+        let zip = new JSZip()
+
+        const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["country_information"][0]
+        const country_folder = response["folder"];
+        const country_name = response["name"];
+
+        save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+        let extension = ".txt"
+        if (country_name.includes("فاوا")) {
+            extension = '.docx';
+        }
+
+
+        for (const document of file_name_list) {
+            const document_name = document['name'] + extension
+
+            const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+            await fetch(path)
+                .then(res => res.arrayBuffer())
+                .then(value => {
+                    zip.file(document_name, value);
+                })
+        }
+        zip.generateAsync({
+            type: "blob"
+        })
+            .then(function (content) {
+                // see FileSaver.js
+                saveAs(content, save_file_name + ".zip");
+            });
+        stopFullPageBlockUI( 'دانلود اسناد');
+    }
+
+    async function DownloadSerachResultFunction() {
+        const save_file_name = " آئین‌نامه‌های اجرایی در"
+        downloadFiles(SearchResultValue, save_file_name)
+    }
+
+    async function ExportExcelSerachResultFunction() {
+        var csv = "";
+
+        sep = ","
+
+
+        let Csv = "نام آئین‌نامه‌" + sep + "سطح سند" + sep + "موضوع سند" + sep +
+                "نوع سند" + sep + "مرجع تصویب" + sep + "تاریخ تصویب" + sep +
+                "دارای ناظر" + sep +
+            "مرجع/مراجع ناظر" + "\n"
+        for (const document of SearchResultValue) {
+            let new_doc=document;
+            for(let temp of executive_list)
+            {
+                if(parseInt(temp['id'])===parseInt(document['id']))
+                {
+                    new_doc = temp;
+                    break;
+                }
+            }
+            let temp = ''
+
+            for(let supervision of new_doc['supervisions'])
+            {
+                if (supervision['name'])
+                    temp += ";" + supervision['name']
+            }
+            if(temp.length > 0)
+                temp = temp.substring(1, temp.length)
+            Csv += document["name"] + sep + document["level"] + sep + document["subject"] + sep +
+                    document["type"] + sep + document["approval_reference"] + sep + document["approval_date"] + sep +
+            (
+            new_doc["has_supervision"]?
+            'دارد'
+            :
+            'ندارد'
+            )
+            + sep + temp + "\n"
+        }
+
+        let save_file_name = " آئین‌نامه‌های اجرایی در"
+        save_file_name += " مجموعه سند {" + $('#country option:selected').text() + "}"
+
+        let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+        var link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", save_file_name + ".csv");
+        document.body.appendChild(link);
+        link.click()
+    }
+
+</script>
+
+
+<script src="../../static/js/tooltip_handler.js"></script>
+<script src="../../static/js/signout_function.js"></script>
+
+
+
+</html>

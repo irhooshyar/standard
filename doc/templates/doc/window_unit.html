@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <!-- jsnetworkx -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+    <!-- Download Zip Files -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+    <script src="../../static/js/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>پنجره واحد</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#RegularityDropdown').addClass('active');
+            $('#window_unit').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+    <!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mt-2 mx-auto">
+                <!-- Country Input -->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right searchable-select"
+                        style="direction: rtl;" onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-4">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                role="tablist">
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست‌وجو</button>
+                </li>
+
+                <li class="nav-item float-right" role="presentation">
+                    <button id="window_unit_chart_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#bar_chart_info_pane" type="button" role="tab"
+                        aria-controls="bar_chart_info_pane" aria-selected="false">نمودار نتایج</button>
+                </li>
+
+
+
+                <!-- Download Buttons -->
+                <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                    class="btn float-left p-0 px-1 mt-2" id="DownloadBtn" onclick="DownloadSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                </button>
+
+                <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                </button>
+                <!-- Result Count -->
+                <p id="DocumentCount" dir="rtl" class="text-left float-left text-secondary  pl-2"></p>
+
+            </ul>
+
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+                <!-- Search Result Pane -->
+                <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                    aria-labelledby="search_result_tab">
+
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Bar chart Info Pane -->
+                <div dir="rtl" class="tab-pane fade float-right w-100" id="bar_chart_info_pane" role="tabpanel"
+                    aria-labelledby="window_unit_chart_tab">
+
+                    <div class="charts-list-container">
+
+                        <div id="trigram_container" class="full" chart-height="2000px">
+                        </div>
+
+                        <div id="bigram_container" class="full" chart-height="2000px">
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Container -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="ModalHeader" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="DetailText" class="modal-body bg-light text-justify">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ChartModal Container -->
+    <button type="button" id="chart_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+        data-bs-target="#chart_modal"></button>
+
+    <div class="modal fade" id="chart_modal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h6 id="chart_modal_header" class="modal-title">
+                    </h6>
+
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="regulators_paragraphs" class="modal-body bg-light text-justify">
+                    <div id="chart_modal_body">
+
+                    </div>
+                </div>
+
+
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <script src="../../static/js/window_unit/window_unit_tour.js">
+    </script>
+    <script src="../../static/js/tour.js"></script>
+
+</body>
+<!-- save log user -->
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+</script>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+<script>
+    initSearchableSelects();
+    let SearchResultValue = []
+
+    container_id_list = ['SearchTable','DocumentCount']
+
+    function clearPrevResults(container_id_list) {
+
+        for (container_id of container_id_list) {
+            document.getElementById(container_id).innerHTML = "";
+        }
+    }
+
+    CountryChanged()
+    async function CountryChanged() {
+        ShowResult()
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نمایش پنل"
+        form_data.append('detail_type', detail_type);
+        UserLog(form_data)
+    }
+    async function ShowResult() {
+        clearPrevResults(container_id_list);
+        notyf.dismissAll();
+        startBlockUI('SearchTable');
+        startBlockUI('bar_chart_info_pane');
+
+        await SpinnerModeFunction("Active");
+
+        country_id = document.getElementById("country").value
+        request_link = 'http://' + location.host + "/SearchDocumentsByWindowUnit/" + country_id + '/';
+        response = await fetch(request_link).then(response => response.json());
+
+        let documents_information_result = response["documents_information_result"];
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نتایج جست و جو"
+        let country_name_select = $("#country option:selected").text();
+        form_data.append('detail_type', detail_type);
+        form_data.append('country_name_select', country_name_select);
+        UserLog(form_data)
+
+        /* Show Chart  */
+        const bigram_chart_data = response["bigram_chart_data"]
+        const trigram_chart_data = response["trigram_chart_data"]
+
+        await showDocumentInformation(documents_information_result);
+        stopBlockUI('SearchTable','نتایج جست‌وجو');
+
+        await showChartData(bigram_chart_data, "bigram_container", documents_information_result, false, "عبارت", 'عبارات 2 کلمه‌ای');
+        await showChartData(trigram_chart_data, "trigram_container", documents_information_result, false, "عبارت", 'عبارات 3 کلمه‌ای');
+        
+        stopBlockUI('bar_chart_info_pane','نمودار نتایج');
+
+        await SpinnerModeFunction("Disable");
+
+        
+    }
+
+    async function showDocumentInformation(documents_information_result) {
+
+        SearchResultValue = documents_information_result;
+
+        document.getElementById("DocumentCount").innerText = (documents_information_result.length).toString() + " سند یافت شد.";
+        let index = 1;
+        let document_result = [];
+
+        for (let doc of documents_information_result) {
+            const id = doc["id"]
+            const name = doc["name"]
+            const subject = doc["subject"]
+            const approval_reference = doc["approval_reference"]
+            const approval_date = doc["approval_date"]
+            const count = doc["count"]
+            const level = doc["level"]
+            const type = doc["type"]
+            const communicated_date = doc["communicated_date"]
+
+            const document_link = 'http://' + location.host + "/information/?id=" + id;
+            const doc_name = '<a ' +
+                'target="to_blank" href="' + document_link + '">' + name +
+                "</a>";
+
+            const detail_function = "DetailFunction(" + id + ")";
+            const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" '
+                + ' onclick="' + detail_function + '" data-bs-target="#myModal">جزئیات</button>';
+
+            const row = { "id": index, "name": doc_name, "subject": subject, "approval_reference": approval_reference, "approval_date": approval_date, "level": level, "detail": detail }
+
+            document_result.push(row);
+            index += 1;
+        }
+        $('#SearchTable').empty();
+        $('.SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                 strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "name",
+                "title": "نام سند",
+                "style": {
+                    "width": "35%"
+                }
+            }, {
+                "name": "subject",
+                "title": "موضوع سند",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "approval_reference",
+                "title": "مرجع تصویب",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "approval_date",
+                "title": "تاریخ تصویب",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "level",
+                "title": "سطح سند",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "5%"
+                }
+            }
+            ],
+            "rows": document_result
+        });
+
+    }
+
+    async function DetailFunction(document_id) {
+        let request_link = 'http://' + location.host + "/GetWindowUnitParagraphsDetails/" + document_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+
+        /*  Show detail Result */
+        let document_paragraphs_result = response["document_paragraphs_result"];
+        let document_name = response["document_name"];
+
+        await showDetailsModal(document_id, document_name, document_paragraphs_result);
+
+    }
+
+    async function showDetailsModal(document_id, document_name, paragraphs_list) {
+        /* Title Text */
+        const link = 'http://' + location.host + "/information/?id=" + document_id;
+        document.getElementById("ModalHeader").innerHTML =
+            "<a target='to_blank' href='" + link + "'>" + document_name + "</a>";
+
+        /* Body Text */
+        const request_link = 'http://' + location.host + "/GetActorsList/";
+        const response = await fetch(request_link).then(response => response.json());
+        actors_list = response["actorsList"];
+
+        document.getElementById("DetailText").innerHTML = ""
+        for (let paragraph of paragraphs_list) {
+            let paragraph_text = paragraph['text'];
+
+            let request_link = 'http://' + location.host + "/GetParagraphDefinitions/" + document_id + '/' + paragraph['id'] + '/';
+            let response = await fetch(request_link).then(response => response.json());
+
+            let paragraph_definitions = response["definitions"];
+
+            request_link = 'http://' + location.host + "/GetParagraphReferences/" + paragraph['id'] + '/';
+            response = await fetch(request_link).then(response => response.json());
+
+            let paragraph_references = [];
+            for (let ref of response["references"]) {
+                paragraph_references.push(ref["doc_name"]);
+                paragraph_references.push(ref["doc_name"]);
+            }
+            paragraph_text = replaceReferences(paragraph_text, paragraph_references);
+
+            let highlight_motevalian = highlightMotevalian(paragraph_text, actors_list, 'border-primary');
+            paragraph_text = highlight_motevalian["paragraph_text"];
+            let paragraph_actors = highlight_motevalian["motevalian_results"];
+
+            let find_subject = findSubject(paragraph_text);
+            paragraph_text = find_subject['paragraph_text'];
+            let paragraph_subjects = find_subject['subjects'];
+
+            let window_unit_tag = "<span class='bg-warning text-white px-1 rounded'>" + 'پنجره واحد' + "</span> ";
+            paragraph_text = paragraph_text.replaceAll('پنجره واحد', window_unit_tag);
+            document.getElementById("DetailText").innerHTML +=
+                "<li class='mb-3 lh-lg'>" + paragraph_text + "<ul class='mt-1 mb-5 border border-2 rounded'>" +
+                "<li> <span style='font-weight: bold;'>" + "کنشگران پنجره واحد: " + "</span>" + printList(paragraph_actors) + "</li>" +
+                "<li> <span style='font-weight: bold;'>" + "موضوع پنجره واحد: " + "</span>" + printList(paragraph_subjects) + "</li>" +
+                "<li> <span style='font-weight: bold;'>" + "ارجاع به اسناد دیگر: " + "</span>" + printList(paragraph_references) + "</li>" +
+                "<li> <span style='font-weight: bold;'>" + "ارجاع به بخش تعاریف: " + "</span>" + paragraph_definitions + "</li>" +
+                "</ul" + "</li>";
+        }
+        document.getElementById("DetailText").innerHTML = "<ul>" + document.getElementById("DetailText").innerHTML + "</ul>"
+
+    }
+
+    function printList(input_list) {
+        let result = ''
+        for (let item of input_list) {
+            result += item + ' - ';
+        }
+        return result;
+    }
+
+    function highlightMotevalian(paragraph, actors_list, border_color) {
+        const motevali_keywords = ['موظف است', 'مکلف است', 'موظفند', 'مکلفند', 'باهمکاری', 'با همکاری', 'موظف به همکاری','مکلف به','موظف به'];
+        const motevalian_punctuations = ['.', '،', 'ـ', '-', ':'];
+        let motevalian_results = []
+
+        for (let pattern_keyword of motevali_keywords) {
+
+            /* Highlight without actors list */
+            let regex = '', result, indices = [];
+            if (pattern_keyword === 'موظف است') {
+                regex = /موظف است/gi;
+            }
+            else if (pattern_keyword === 'موظف به') {
+                regex = /موظف به/gi;
+            }
+            else if (pattern_keyword === 'مکلف است') {
+                regex = /مکلف است/gi;
+            }
+            else if (pattern_keyword === 'مکلف به') {
+                regex = /مکلف به/gi;
+            }
+            else if (pattern_keyword === 'مکلفند') {
+                regex = /مکلفند/gi;
+            }
+            else if (pattern_keyword === 'موظفند') {
+                regex = /موظفند/gi;
+            }
+            else if (pattern_keyword === 'باهمکاری') {
+                regex = /باهمکاری/gi;
+            }
+            else if (pattern_keyword === 'با همکاری') {
+                regex = /با همکاری/gi;
+            }
+            else if (pattern_keyword === 'باهمکاری') {
+                regex = /باهمکاری/gi;
+            }
+            else if (pattern_keyword === 'موظف به همکاری') {
+                regex = /موظف به همکاری/gi;
+            }
+
+            while ((result = regex.exec(paragraph))) {
+                indices.push(result.index);
+            }
+            for (index of indices) {
+                let start_index = (index - 1);
+                let reference = '';
+                let reference_tag = '';
+                for (let i = (start_index); i >= 0; i--) {
+                    if (motevalian_punctuations.includes(paragraph[i]) || i === 0) {
+                        if (paragraph[i + 1] === ' ') {
+                            reference = paragraph.substring((i !== 0 ? (i + 2) : i), start_index);
+                        } else {
+                            reference = paragraph.substring((i !== 0 ? (i + 1) : i), start_index);
+                        }
+                        reference_tag = "<span class='detected_reference border border-2 " + border_color + " rounded px-1'>" + reference + "</span>";
+                        break;
+                    }
+                }
+                if (reference !== ' ' && reference.length > 1 && reference.length < 30) {
+                    let pattern_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span> ";
+                    paragraph = paragraph.replaceAll(reference + ' ' + pattern_keyword, reference_tag + ' ' + pattern_tag);
+                    motevalian_results.push(reference);
+                }
+            }
+        }
+        /* Highlight with actors list */
+        for (let actor of actors_list) {
+            if (!motevalian_results.includes(actor)) {
+                actor_tag = "<span class='bg-primary text-white rounded px-1 reference'>" + actor + "</span>";
+                let flag = true;
+                if (paragraph.search(actor) > 0) {
+                    paragraph = paragraph.replaceAll(actor, actor_tag);
+                    motevalian_results.push(actor);
+                    flag = false;
+                }
+
+                let actor_without_postfix = actor.replace(' جمهوری اسلامی ایران', '');
+                if (flag && paragraph.search(actor_without_postfix) > 0) {
+                    actor_tag = "<span class='bg-primary text-white rounded px-1 reference'>" + actor + "</span>";
+                    paragraph = paragraph.replaceAll(actor_without_postfix, actor_tag);
+                    motevalian_results.push(actor_without_postfix);
+                }
+            }
+        }
+        return { "paragraph_text": paragraph, "motevalian_results": motevalian_results };
+    }
+
+    function highlightHamkaran(paragraph, actors_list, bg_color, border_color) {
+        const hamkaran_punctuations = ['،', ')', ':']
+        const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+        const window_length = 100;
+        let hamkaran_results = [];
+        /* Highlight pattern keywords and references */
+        for (let pattern_keyword of hamkaran_keywords) {
+            /* Highlight more with actors list */
+            let regex = '', result, indices = [];
+            if (pattern_keyword === 'با همکاری') {
+                regex = /با همکاری/gi;
+            } else {
+                regex = /باهمکاری/gi;
+            }
+            while ((result = regex.exec(paragraph))) {
+                indices.push(result.index);
+            }
+            for (const index of indices) {
+                let start_index = (index + pattern_keyword.length);
+                let substring = paragraph.substring(start_index, start_index + window_length);
+                let current_substring = substring;
+                for (actor of actors_list) {
+                    actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                    substring = substring.replaceAll(' ' + actor + ' ', ' ' + actor_tag + ' ');
+                    substring = substring.replaceAll('(' + actor + ')', '(' + actor_tag + ')');
+
+                    for (symbol of hamkaran_punctuations) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                        substring = substring.replaceAll(' ' + actor + symbol, ' ' + actor_tag + symbol);
+
+                    }
+
+                    actor_without_affix = actor.replaceAll('وزارت ', '').replaceAll('سازمان ', '').replaceAll(' جمهوری اسلامی ایران', '')
+
+                    if (actor_without_affix !== 'اطلاعات' && actor_without_affix !== 'مجموعه سند' && !substring.includes(actor)) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                        substring = substring.replaceAll(' ' + actor_without_affix + ' ', ' ' + actor_tag + ' ');
+                        substring = substring.replaceAll('(' + actor_without_affix + ')', '(' + actor_tag + ')');
+
+                        for (symbol of hamkaran_punctuations) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor_without_affix + symbol, ' ' + actor_tag + symbol);
+
+                        }
+
+                    }
+
+                }
+
+                paragraph = paragraph.replaceAll(current_substring, substring);
+
+            }
+            /* Highlight with actors list */
+            let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+            paragraph = paragraph.replaceAll(pattern_keyword, pattern_keyword_tag);
+
+        }
+        return { "paragraph_text": paragraph, "hamkaran_results": hamkaran_results };
+    }
+
+    function replaceReferences(paragraph, paragraph_references) {
+        for (let ref of paragraph_references) {
+            if (paragraph.search(ref) > 0) {
+                let pattern_tag = "<span class='text-primary'>" + ref + "</span> ";
+                paragraph = paragraph.replaceAll(ref, pattern_tag);
+            }
+        }
+        return paragraph;
+    }
+
+    function findSubject(paragraph) {
+        let subject_keywords = ['درباره'];
+        let subjects = [];
+        for (let subject_key of subject_keywords) {
+            if (paragraph.search(subject_key) > 0) {
+                let subject = findTrigrams(paragraph, subject_key);
+                let subject_tag = "<span class='bg-success text-white px-1 rounded'>" + subject + "</span> ";
+                paragraph = paragraph.replaceAll(subject, subject_tag);
+                subjects.push(subject);
+
+                let pattern_tag = "<span class='bg-secondary text-white rounded px-1'>" + subject_key + "</span> ";
+                paragraph = paragraph.replaceAll(subject_key, pattern_tag);
+            }
+        }
+        return { 'paragraph_text': paragraph, 'subjects': subjects };
+    }
+
+    function findTrigrams(text, word, number_of_words = 4) {
+        text = text.split(' ');
+        let result = [];
+        for (let i = 0; i < text.length; i++) {
+            let trigram = '';
+            if (text[i] === word) {
+                for (let j = 0; j < number_of_words; j++) {
+                    trigram += text[i + 1 + j] + ' ';
+                }
+                result.push(trigram);
+            }
+        }
+        return result;
+    }
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+    async function showChartData(data, container, documents_information_result, keySort, xAxisTitle, title) {
+        let chart_data = [];
+        for (const [key, value] of Object.entries(data)) {
+            chart_data.push([value["name"], value["count"]]);
+        }
+        await showChart(chart_data, container, documents_information_result, keySort, xAxisTitle, title);
+    }
+
+    async function showChart(data, container, documents_information_result, sortKeys, xAxisTitle, title) {
+
+        const options = {
+                data,
+                sortKeys,
+                xAxisTitle,
+                title,
+                yAxisTitle: "تعداد سند",
+                onClick: async function (event, data) {
+            document.getElementById('chart_modal_header').innerText = ""
+            document.getElementById('chart_modal_body').innerHTML = ""
+
+            const click_tag = event.domTarget.tag;
+            const index = click_tag["index"]
+            const word = list_chart_data[index][0]
+
+
+            const country_id = document.getElementById("country").value;
+            const link = 'http://' + location.host + "/searchDocumentsByWindowUnitKeyword/" + country_id + "/" + word + "/";
+            response = await fetch(link).then(response => response.json());
+            paragraphs_information_dict = response['paragraphs_information_dict']
+
+
+            modal_paragraphs_tag = ''
+
+            //in modal
+            let filtered_result_tag = ""
+            document.getElementById('chart_modal_header').innerText = 'کلیدواژه: ' + word
+
+            for (const [doc_id, paragraphs_list] of Object.entries(paragraphs_information_dict)) {
+
+                for (paragraph_info of paragraphs_list) {
+
+                    paragraph_text = paragraph_info['text']
+                    doc_name = paragraph_info['doc_name']
+
+                    let window_unit_tag = "<span class='bg-secondary text-white px-1 rounded'>" + 'پنجره واحد' + "</span> ";
+
+
+                    pattern_tag = window_unit_tag + "<span class='bg-success text-white px-1 rounded'>" + word + "</span>: "
+                    paragraph_text = paragraph_text.replaceAll('پنجره واحد ' + word, pattern_tag)
+
+
+                    const document_address = 'http://' + location.host + "/information/?id=" + doc_id
+                    const document_link = '<a target = "to_blank" href = "' + document_address + '">' + doc_name + ':</a>'
+
+                    doc_tag = '<h6 class="bold">' + document_link + '</h6>'
+                    paragraph_tag = '<li dir="rtl" class = "text-right lh-lg">' + doc_tag + paragraph_text + '</li>'
+                    modal_paragraphs_tag += paragraph_tag
+
+                }
+
+
+            }
+
+            document.getElementById('chart_modal_body').innerHTML = '<ol start="1"> ' + modal_paragraphs_tag + '</ol>';
+
+
+            if (position == 'trigram_container')
+                $("#chart_modal_btn").click();
+
+
+        }
+            };
+
+        newBarChart(container, options)
+    }
+
+
+</script>
+
+<!-- Export results -->
+
+<script>
+
+    async function downloadFiles(file_name_list, save_file_name) {
+        startFullPageBlockUI()
+        const country_id = document.getElementById("country").value
+
+        let zip = new JSZip()
+
+        const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        response = response["country_information"][0]
+        const country_folder = response["folder"];
+        const country_name = response["name"];
+
+        save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+        let extension = ".txt"
+        if (country_name.includes("فاوا")) {
+            extension = '.docx';
+        }
+
+
+        for (const document of file_name_list) {
+            const document_name = document['name'] + extension
+
+            const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+            await fetch(path)
+                .then(res => res.arrayBuffer())
+                .then(value => {
+                    zip.file(document_name, value);
+                })
+        }
+        zip.generateAsync({
+            type: "blob"
+        })
+            .then(function (content) {
+                // see FileSaver.js
+                saveAs(content, save_file_name + ".zip");
+            });
+        stopFullPageBlockUI( 'دانلود اسناد');
+    }
+
+    async function DownloadSerachResultFunction() {
+        const save_file_name = " پنجره واحد در"
+        downloadFiles(SearchResultValue, save_file_name)
+    }
+
+    async function ExportExcelSerachResultFunction() {
+        var csv = "";
+
+        sep = ","
+
+
+        let Csv = "نام سند" + sep + "سطح سند" + sep +
+            "موضوع سند" + sep + "نوع سند" + sep + "مرجع تصویب" + sep + "تاریخ تصویب" + "\n"
+        for (const document of SearchResultValue) {
+            Csv += document["name"] + sep + document["level"] + sep + document["subject"] + sep +
+                document["type"] + sep + document["approval_reference"] + sep + document["approval_date"] + "\n"
+
+        }
+
+        let save_file_name = " پنجره واحد در"
+        save_file_name += " مجموعه سند {" + $('#country option:selected').text() + "}"
+
+        let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+        var link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", save_file_name + ".csv");
+        document.body.appendChild(link);
+        link.click()
+    }
+
+</script>
+
+
+<script src="../../static/js/tooltip_handler.js"></script>
+<!-- Intro Js -->
+<script src="../../static/js/window_unit/window_unit_tour.js">
+</script>
+<script src="../../static/js/tour.js"></script>
+<!-- <script src="../../static/js/UserLogSave.js"></script>-->
+<script src="../../static/js/signout_function.js"></script>
+
+
+
+</html>

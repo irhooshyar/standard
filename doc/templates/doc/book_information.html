@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dromdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css" />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+
+
+
+    <!--<script src="../../static/library/html2pdf.bundle.min-0.10.1.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="../../static/library/html2pdf.bundle.min-0.9.3.js"
+        integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/information_chart.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+
+    <style>
+        #doc_1_paragraphs {
+            position: relative;
+            overflow-y: scroll;
+        }
+
+        #modal_dialog {
+            max-height: 100vh !important;
+        }
+    </style>
+    <title> اطلاعات کتب</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#BooksDropdown').addClass('active');
+            $('#book_information').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+        });
+    </script>
+
+
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-5">
+
+        <!-- Form Inputs -->
+        <form autocomplete="on" action="" id="information_form" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+            <div class="row flex-row-reverse mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+                    <label for="country" class=" text-right bg-light float-right">مجموعه کتاب:</label>
+                    <select dir="rtl" id="country" name="country" class="form-select text-right float-right"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+
+                        <option value="{{ k }}">{{ v }}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- selected document -->
+                <div id="document_div" class="col-md-6 pt-3 col-12 col-lg-6 mt-1">
+                    <label for="document" class="text-right bg-light float-right">کتاب:</label>
+                    <select id="document" dir="rtl" name="document"
+                        class="form-select d-none text-right float-right document_select_box" onchange="ShowResult()"
+                        disabled>
+                    </select>
+                    <button dir="rtl" id="document_select" type="button"
+                        class="btn d-inline-block text-truncate w-100 text-right text-black float-right mx-0 bg-white border"
+                        data-bs-toggle="modal" data-bs-target="#SelectDocumentModal">
+                        <i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>
+                        انتخاب نمایید
+                    </button>
+                </div>
+
+                <!-- Download button -->
+                <div class="col-lg-4 col-md-2 pt-5 col-12 mt-1 px-0">
+                    <button type="button" id="copy_document" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="کپی نام کتاب" class="float-right text-right p-0 d-none" onclick="copyDocumentName()">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+
+                    <button type="button" id="document_search" onclick="ShowDocumentContent()"
+                        class="btn d-flex float-right  mr-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+
+
+                    <div dir="rtl" class="dropdown float-right mr-2">
+                        <button id="document_download" class="btn dropdown-toggle float-right text-right" type="button"
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            دانلود کتاب
+                        </button>
+
+                        <!-- <button type="button" id="similar_paragraphs" onclick="ShowSimilarParagraphs()"
+                        class="btn d-flex float-right  mr-2">
+                        پاراگراف‌های مشابه
+                    </button> -->
+                        <!-- <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                            type="button">
+                            <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button> -->
+                        <ul dir="rtl" class="dropdown-menu px-0 mx-0" aria-labelledby="dropdownMenuButton1">
+                            <li class="text-left" id="pdf_download" onclick="generatePDF()"><a class="dropdown-item"
+                                    href="#">PDF</a></li>
+                            <li class="text-left"><a class="dropdown-item" id="txt_download" download href="#">TXT</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div dir="rtl" class="doc_info_table mt-5" style="border: 1px solid #006666">
+                <table class="table table-light">
+                    <thead class="table" style="background: #006666;">
+                        <tr>
+                            <th class="text-center" scope="col">نام کتاب</th>
+                            <th class="text-center" scope="col">موضوع کتاب</th>
+                            <th class="text-center" scope="col">نام ناشر</th>
+                            <th class="text-center" scope="col">تعداد صفحه</th>
+                            <th class="text-center" scope="col">سال چاپ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" id="book_name">-</td>
+                            <td class="text-center" id="book_subject">-</td>
+                            <td class="text-center" id="publisher_name">-</td>
+                            <td class="text-center" id="pagecount">-</td>
+                            <td class="text-center" id="year">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+            <li class="nav-item float-right" role="presentation">
+                <button id="find_similarity_tab" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#find_similarity_pane" type="button" role="tab" aria-controls="find_similarity_pane"
+                    aria-selected="false">مشابهت یابی</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="frequency_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#frequency_pane"
+                    type="button" role="tab" aria-controls="frequency_pane" aria-selected="false">تحلیل تواتر
+                    محور</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="subject_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#subject_analysis_pane" type="button" role="tab"
+                    aria-controls="subject_analysis_pane" aria-selected="false">تحلیل موضوعی</button>
+            </li>
+            <li class="nav-item float-right" role="presentation">
+                <button id="LDA_subject_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#LDA_subject_analysis_pane" type="button" role="tab"
+                    aria-controls="LDA_subject_analysis_pane" aria-selected="false">تحلیل موضوعی (LDA)</button>
+            </li>
+        </ul>
+
+        <div id="original_pane" class="tab-content float-right bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+            <!-- Frequency Pane -->
+            <div class="tab-pane fade float-right w-100" id="frequency_pane" role="tabpanel"
+                aria-labelledby="frequency_tab">
+
+                <!-- statistical doc info segment -->
+                <h6 class="Term_count_header pr-2">
+                    <label class="text-right float-right mt-5">داشبورد آماری:</label>
+                </h6>
+                <div dir="rtl" class="doc_info_table mb-3">
+                    <table class="table table-light">
+                        <thead class="table bg-secondary">
+                            <tr>
+                                <th class="text-center" scope="col">کل واژه‌ها</th>
+                                <th class="text-center" scope="col">ایست‌واژه‌ها</th>
+                                <th class="text-center" scope="col">واژه‌های متمایز</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" id="total_words">-</td>
+                                <td class="text-center" id="stop_words">-</td>
+                                <td class="text-center" id="distinct_words">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row mt-4 w-100 flex-row-reverse mx-auto">
+                    <!-- container for 1-gram words whit (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-2 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم تک-کلمه‌ای
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-success">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="1gram_frequency_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                    <!-- container for 2-gram words whit (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم 2-کلمه‌ای
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">امتیاز</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                        <th class="text-center" scope="col"> تایید</th>
+                                        <th class="text-center" scope="col">حذف</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="2gram_frequency_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 2Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-right ngram-textbox"
+                                placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required=""
+                                name="2gram_TextBox" id="2gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('2gram')"
+                                class="btn float-right mx-0">
+                                ذخیره
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                    <!-- container for 3-gram words with (h and table) -->
+                    <div dir="rtl" class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            عبارات مهم 3-کلمه‌ای
+                        </h6>
+                        <div class="mt-0 pr-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-secondary">
+                                    <tr>
+                                        <th class="text-center" scope="col"> ردیف</th>
+                                        <th class="text-center" scope="col">واژه</th>
+                                        <th class="text-center" scope="col">امتیاز</th>
+                                        <th class="text-center" scope="col">فراوانی</th>
+                                        <th class="text-center" scope="col"> تایید</th>
+                                        <th class="text-center" scope="col">حذف</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="3gram_frequency_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 3Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-right ngram-textbox"
+                                placeholder="کلیدواژه اول/ کلیدواژه دوم/ ..." type="text" required=""
+                                name="3gram_TextBox" id="3gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('3gram')"
+                                class="btn float-right mx-0">
+                                ذخیره
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <!-- Subject Pane -->
+            <div class="tab-pane fade float-right w-100" id="subject_analysis_pane" role="tabpanel"
+                aria-labelledby="subject_analysis_tab">
+                <!-- Subject distribution segment -->
+                <h6 class="subject_distribution pr-2 w-100 mt-4 text-right float-right">
+                    توزیع موضوعی کتاب
+                </h6>
+                <br>
+
+
+                <div id="subject_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+
+                </div>
+
+                <!-- Keywords for each subject segment -->
+                <h6 class="subject_keywords pr-2">
+                    <label for="doc_info" class="text-right float-right mt-5">واژه‌های کلیدی کتاب در هر موضوع</label>
+                </h6>
+                <div dir="rtl" class="table-responsive">
+                    <table class="table table-light table-striped  caption-top">
+                        <thead class="table">
+                            <tr>
+                                <th class="text-center" scope="col">ردیف</th>
+                                <th class="text-center" scope="col"> موضوع</th>
+                                <th class="text-center" scope="col">واژه‌های کلیدی در متن ( تعداد تکرار )</th>
+                                <th class="text-center" scope="col">واژه‌های کلیدی در عنوان ( تعداد تکرار )</th>
+                                <th class="text-center" scope="col">مرجع تخصصی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject_table">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- LDA Subject Pane -->
+            <div class="tab-pane fade float-right w-100" id="LDA_subject_analysis_pane" role="tabpanel"
+                aria-labelledby="LDA_subject_analysis_tab">
+                <!-- LDA Subject distribution segment -->
+                <h6 class="subject_distribution pr-2 w-100 mt-4 text-right float-right">
+                    توزیع موضوعی کتاب
+                </h6>
+                <br>
+
+
+                <div id="LDA_subject_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+
+                </div>
+
+                <!-- Keywords for each subject segment -->
+                <h6 class="subject_keywords pr-2">
+                    <label for="doc_info" class="text-right float-right mt-5">جزییات موضوع ها:</label>
+                </h6>
+                <div dir="rtl" class="table-responsive">
+                    <table class="table table-light table-striped  caption-top">
+                        <thead class="table">
+                            <tr>
+                                <th class="text-center" scope="col">ردیف</th>
+                                <th class="text-center" scope="col"> موضوع</th>
+                                <th class="text-center" scope="col">کلمات مربوط به موضوع</th>
+                                <th class="text-center" scope="col">امتیاز</th>
+                            </tr>
+                        </thead>
+                        <tbody id="LDA_subject_table">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Similarity Pane -->
+            <div class="tab-pane fade float-right w-100 show active" id="find_similarity_pane" role="tabpanel"
+                aria-labelledby="find_similarity_tab">
+
+                {% comment %}
+                <!-- statistical doc info segment -->
+                <h6 class="Term_count_header pr-2">
+                    <label class="text-right float-right mt-5">داشبورد آماری:</label>
+                </h6> {% endcomment %}
+
+                <!-- Search Result Pane -->
+                <div dir="rtl" id="search_result_pane" class="tab-pane w-100 fade show active float-right"
+                    role="tabpanel" aria-labelledby="search_result_tab">
+                    <!-- Search Result table -->
+                    <div class="table-responsive search_result_table mt-4">
+                        <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- show document content modal -->
+        <!-- Modal Container for detail  -->
+        <div class="modal fade" id="documentContent">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="documentContentHeader" class="modal-title">نام کتاب</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="DocumentContentBody">
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" id="similar_para_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="documentNameHeader" class="modal-title">نام کتاب</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body bg-light text-justify">
+                        <div class="container" id="similar_para_modal_body">
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Container -->
+        <div class="modal fade" id="SelectDocumentModal">
+            <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="ModalHeader" class="modal-title">انتخاب کتاب</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+
+                    <!-- Modal body -->
+                    <div id="ModalBody" class="modal-body text-justify">
+                        <div class="container">
+
+
+                            <div class="d-flex col-12 mb-2">
+                                <input
+                                    style="direction: rtl;width: 90%; border-bottom-left-radius: 0;border-top-left-radius: 0;"
+                                    class="form-control text-right" placeholder="جستجو کتاب ..." type="text" required=""
+                                    name="SearchBox" id="SearchBox" value="">
+
+                                <button class="btn mr-0"
+                                    style="border-bottom-right-radius: 0;border-top-right-radius: 0;" type="button"
+                                    id="document_search" onclick="Search_Document_ByName()"
+                                    class="btn d-flex float-right mr-4">
+                                    <i class="bi bi-search" style="font-size: 16px;position: relative; top: -5px;"></i>
+                                </button>
+
+                                <div class="col-md-6  pt-3 col-12 col-lg-2" style="padding-top: 0px!important;">
+                                    <select name="load_count" id="LoadCount" class="form-select text-right float-right"
+                                        onchange="pagingchange()">
+                                        <option value="10">۱۰</option>
+                                        <option value="20">۲۰</option>
+                                        <option value="30">۳۰</option>
+                                        <option value="40">۴۰</option>
+                                        <option value="50">۵۰</option>
+                                    </select>
+                                </div>
+
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="تازه‌سازی"
+                                    style="font-size: 25px; text-align: center; cursor: pointer;color: var(--menu_color);"
+                                    class="fa fa-refresh mr-3 mt-2" onclick="CountryChanged()"></span>
+                            </div>
+
+                            <table id="PopUpTable" class="table table-striped PopUpTable">
+                            </table>
+
+                            <p>
+                                <span>از میان </span>
+                                <span style="color: #1A01CC" id="all_doc_count"></span>
+                                <span> کتاب، </span>
+                                <span style="color: #3e8f3e" id="load_doc_count"></span>
+                                <span> کتاب بازیابی شده است </span>
+                            </p>
+
+                            <span class="add-row"></span>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ChartModal Container -->
+        <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#actors_modal"></button>
+        <div class="modal fade" id="actors_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="actor_paragraphs" class="modal-body text-justify">
+                        <div id="actor_modal_body">
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- References Container -->
+        <button type="button" id="references_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#references_modal"></button>
+        <div class="modal fade" id="references_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: rtl !important;" class="modal-header">
+                        <h5 id="references_modal_header" class="modal-title">عنوان</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="references_modal_paragraphs" class="modal-body text-justify">
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button class="btn btn-secondary" id="references_modal_btn">بستن
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+
+
+    <!-- Toast -->
+    <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+        <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+                <i style="position: relative; top: -4px; font-size: 18px;"
+                    class="bi bi-info-circle-fill  text-info"></i>
+                <span id="toast_message">
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Details Modal Container -->
+    <div class="modal fade" id="DetailModal">
+        <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <div>
+                        <label for="measure" class=" text-right bg-light float-right">تحلیل مشابهت بر اساس:</label>
+                        <select dir="rtl" id="measure" name="measure" class="form-select text-right float-right"
+                            onchange="Update_Details_Modal_table()">
+
+                        </select>
+                    </div>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+
+                <!-- Modal body -->
+                <div id="DetailsModalBody" class="modal-body text-justify">
+                    <div class="container">
+
+                        <table class="table table-striped DetailsTable" style="min-height: 200px;" id="DetailsTable">
+                        </table>
+
+
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">بستن</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- BM25 Details Modal Container -->
+
+    <div class="modal fade" id="BM25DetailModal">
+        <div id="modal_dialog" class="modal-dialog modal-fullscreen  modal-dialog-scrollable ">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="BM25ModalHeader" class="modal-title w-100">
+                        <div id="MainHeader" class="col-12 float-right text-center my-auto">
+
+                        </div>
+                        <div class="row w-100">
+                            <div id="doc_1_header" class="col-6 float-right text-center my-auto"></div>
+                            <div id="doc_2_header" class="col-6 float-left text-center my-auto"></div>
+                        </div>
+                    </h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="BM25ModalBody" class="modal-body bg-light text-justify">
+                    <div class="row w-100 ">
+                        <div id="doc_1_paragraphs" class="col-6 float-right"></div>
+                        <div id="doc_2_paragraphs" class="col-6 float-left"></div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../static/js/logincheck.js"></script>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+    <!-- bootstrap5 dataTables js cdn -->
+    <!-- <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
+
+    <script>
+        $.blockUI.defaults = {
+            // message displayed when blocking (use null for no message)
+            message: "<h1>Please wait...</h1>",
+
+            title: null, // title string; only used when theme == true
+            draggable: true, // only used when theme == true (requires jquery-ui.js to be loaded)
+
+            theme: false, // set to true to use with jQuery UI themes
+
+            // styles for the message when blocking; if you wish to disable
+            // these and use an external stylesheet then do this in your code:
+            // $.blockUI.defaults.css = {};
+            css: {
+                padding: 0,
+                margin: 0,
+                width: "30%",
+                top: "40%",
+                left: "35%",
+                textAlign: "center",
+                color: "#000",
+                border: "3px solid #aaa",
+                backgroundColor: "#fff",
+                cursor: "wait",
+            },
+
+            // minimal style set used when themes are used
+            themedCSS: {
+                width: "30%",
+                top: "40%",
+                left: "35%",
+            },
+
+            // styles for the overlay
+            overlayCSS: {
+                backgroundColor: "#000",
+                opacity: 0.6,
+                cursor: "wait",
+            },
+
+            // style to replace wait cursor before unblocking to correct issue
+            // of lingering wait cursor
+            cursorReset: "default",
+
+            // styles applied when using $.growlUI
+            growlCSS: {
+                width: "350px",
+                top: "10px",
+                left: "",
+                right: "10px",
+                border: "none",
+                padding: "5px",
+                opacity: 0.6,
+                cursor: null,
+                color: "#fff",
+                backgroundColor: "#000",
+                "-webkit-border-radius": "10px",
+                "-moz-border-radius": "10px",
+            },
+
+            // IE issues: 'about:blank' fails on HTTPS and javascript:false is s-l-o-w
+            // (hat tip to Jorge H. N. de Vasconcelos)
+            iframeSrc: /^https/i.test(window.location.href || "")
+                ? "javascript:false"
+                : "about:blank",
+
+            // force usage of iframe in non-IE browsers (handy for blocking applets)
+            forceIframe: false,
+
+            // z-index for the blocking overlay
+            baseZ: 2000,
+
+            // set these to true to have the message automatically centered
+            centerX: true, // <-- only effects element blocking (page block controlled via css above)
+            centerY: true,
+
+            // allow body element to be stetched in ie6; this makes blocking look better
+            // on "short" pages.  disable if you wish to prevent changes to the body height
+            allowBodyStretch: true,
+
+            // enable if you want key and mouse events to be disabled for content that is blocked
+            bindEvents: true,
+
+            // be default blockUI will supress tab navigation from leaving blocking content
+            // (if bindEvents is true)
+            constrainTabKey: true,
+
+            // fadeIn time in millis; set to 0 to disable fadeIn on block
+            fadeIn: 200,
+
+            // fadeOut time in millis; set to 0 to disable fadeOut on unblock
+            fadeOut: 400,
+
+            // time in millis to wait before auto-unblocking; set to 0 to disable auto-unblock
+            timeout: 0,
+
+            // disable if you don't want to show the overlay
+            showOverlay: false,
+
+            // if true, focus will be placed in the first available input field when
+            // page blocking
+            focusInput: true,
+
+            // suppresses the use of overlay styles on FF/Linux (due to performance issues with opacity)
+            // no longer needed in 2012
+            // applyPlatformOpacityRules: true,
+
+            // callback method invoked when fadeIn has completed and blocking message is visible
+            onBlock: null,
+
+            // callback method invoked when unblocking has completed; the callback is
+            // passed the element that has been unblocked (which is the window object for page
+            // blocks) and the options that were passed to the unblock call:
+            //   onUnblock(element, options)
+            onUnblock: null,
+
+            // don't ask; if you really must know: http://groups.google.com/group/jquery-en/browse_thread/thread/36640a8730503595/2f6a79a77a78e493#2f6a79a77a78e493
+            quirksmodeOffsetHack: 4,
+
+            // class name of the message block
+            blockMsgClass: "blockMsg",
+
+            // if it is already blocked, then ignore it (don't unblock and reblock)
+            ignoreIfBlocked: false,
+        };
+    </script>
+    <!-- Blocking UI Script -->
+    <script>
+        function startBlockUI() {
+            $.blockUI({
+
+                // BlockUI code for element blocking
+                message: ("<div class='lds-ellipsis'><div></div><div></div><div></div><div></div></div><h6 style = 'font-family:vazir;'>...در حال دریافت اطلاعات<h6>"),
+
+                css: { color: 'var(--menu_color)', border: 'none', borderRadius: '5px', borderColor: 'var(--menu_color)', paddingTop: '5px' }
+            });
+
+            startTimer();
+        }
+        function stopBlockUI() {
+
+            $.unblockUI();
+            elapsed_time = endTimer();
+            toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+
+            { #if(elapsed_time > 0)# }
+            {#    showToastMessage(toast_message);# }
+
+        }
+        function startBlockUI2(container_id) {
+
+            container_selector = "#" + container_id;
+
+            $(container_selector).block({
+                // BlockUI code for element blocking
+                message:
+                    "<div class='lds-ellipsis'><div></div><div></div><div></div><div></div></div><h6 dir='rtl' style = 'font-family:vazir;'>در حال دریافت اطلاعات...<h6>",
+                css: {
+                    color: "var(--menu_color)",
+                    border: "none",
+                    borderRadius: "5px",
+                    borderColor: "var(--menu_color)",
+                    paddingTop: "5px",
+                },
+            });
+            startTimer();
+        }
+
+        function stopBlockUI2(container_id, tab_name) {
+            console.log(tab_name);
+            container_selector = "#" + container_id;
+            $(container_selector).unblock();
+
+            elapsed_time = endTimer();
+
+            if (elapsed_time > 0) {
+                notyf_message = tab_name + ": " + elapsed_time + " ثانیه";
+
+                { #notyf.success(notyf_message);# }
+            }
+
+            // setTimeout(function () {
+            //     $.unblockUI();
+            //     elapsed_time = endTimer();
+            //     toast_message = '<span class="text-secondary"> ' + 'زمان سپری شده: ' + '</span>' + '<span class="bold" style="color:var(--menu_color)">' + elapsed_time + ' ثانیه' + '</span>'
+            //     showToastMessage(toast_message);
+            // }, 4000);
+        }
+
+
+        function showToastMessage(message_text) {
+            document.getElementById('toast_message').innerHTML = message_text
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl)
+            });
+            toastList.forEach(toast => toast.show())
+        }
+
+    </script>
+
+
+    <script>
+
+
+        var startTime, endTime;
+
+        function startTimer() {
+            startTime = new Date();
+        };
+
+        function endTimer() {
+            endTime = new Date();
+            var timeDiff = endTime - startTime; //in ms
+            // strip the ms
+            timeDiff /= 1000;
+
+            // get seconds
+            var seconds = Math.round(timeDiff);
+            console.log(seconds + " seconds");
+            return seconds;
+        }
+    </script>
+
+    <script>
+
+        /* Footable */
+        var paging_size = document.getElementById("LoadCount").value
+        var counter = 0;
+
+        var load_size = 250;
+
+        var loaded_doc = 0;
+        var ft = FooTable.init('#PopUpTable', {
+            "paging": {
+                "enabled": true,
+                strings: {
+                    first: '»',
+                    prev: '›',
+                    next: '‹',
+                    last: '«'
+                }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "در حال بازیابی کتاب ها (لطفا صبر نمایید)",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }
+            }, {
+                "name": "document_name",
+                "title": "نام کتاب"
+            }, {
+                "name": "subject",
+                "title": "موضوع کتاب"
+            }, {
+                "name": "tag",
+                "title": "انتخاب"
+            }],
+        });
+        var first_loading = true
+
+        /* Gloabal Constants */
+        const motevalian_punctuations = ['.', '،', 'ـ', '-', ':'];
+        const hamkaran_punctuations = ['،', ')', ':']
+
+        const motevali_keywords = ['موظف است', 'مکلف است', 'مکلف‌اند', 'موظف‌اند', 'موظفند', 'مکلفند', 'موظف به', 'مکلف به'];
+        const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+        const salahiat_keywords = ['مختار است', 'اختیار دارد', 'می‌تواند', 'می تواند', 'میتواند', 'می­تواند', 'می‏تواند', 'مجاز است'];
+
+
+        let actors_list = []
+
+        init()
+
+        async function init() {
+
+            /* Get Actors List */
+            const request_link = 'http://' + location.host + "/GetActorsList/";
+            const response = await fetch(request_link).then(response => response.json());
+            actors_list = response["actorsList"]
+
+            const url = new URL(window.location.href);
+            var document_id = url.searchParams.get("id");
+
+            if (document_id) {
+                const request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+                let response = await fetch(request_link).then(response => response.json());
+                response = response["document_information"][0]
+
+                document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+                document.getElementById("country").value = response["country_id"]
+
+                document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>' + response['name']
+                document.getElementById('document_select').innerHTML = document_select_tag;
+                document.getElementById('document_select').title = response['name'];
+
+                /* disable country , document */
+                document.getElementById("document_select").disabled = true;
+                document.getElementById("country").disabled = true;
+
+                await ShowResult();
+
+            } else {
+                const text = "انتخاب نمایید"
+                document.getElementById("document").innerHTML = "<option value=" + 0 + " disabled>" + text + "</option>";
+                document.getElementById("document_download").disabled = true;
+                document.getElementById("pdf_download").disabled = true;
+                document.getElementById("document_search").disabled = true;
+                CountryChanged();
+            }
+
+
+
+
+        }
+
+        $("#document_select").click(function () {
+            if ($('.add-row-1').length === 0) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        });
+
+        async function DetailFunction(document_id) {
+            main_document_id = document.getElementById("document").value
+            measure = document.getElementById("measure").innerHTML = ` 
+                <option value="${document_id}_${main_document_id}_DFI">DFI</option>                           
+                <option value="${document_id}_${main_document_id}_BM25">BM25</option>
+                <option value="${document_id}_${main_document_id}_DFR">DFR</option>
+                {% comment %} <option value="${document_id}_${main_document_id}_TFIDF">TFIDF</option> {% endcomment %}
+            `
+
+            await Update_Details_Modal_table();
+            popup_handler();
+        }
+
+        async function BM25DetailFunction(document_id) {
+            main_document_id = document.getElementById("document").value
+            let request_link = 'http://' + location.host + "/get_similarity_highlighted_text/" + main_document_id + "/" + document_id + "/" + "BM25" + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            /*  Show detail Result */
+            let result = response["result"]
+            console.log(result)
+            // await showDetailModal(result)
+            await showBM25DetailModal(result)
+        }
+
+
+
+        async function CountryChanged() {
+
+            startBlockUI();
+            document.getElementById("document_select").disabled = true;
+
+            const country_name = $("#country option:selected").text();
+
+            document.getElementById('ModalHeader').innerText = 'مجموعه کتاب: ' + country_name;
+
+            document.getElementById("document_select").disabled = false;
+
+            counter = 0;
+            loaded_doc = 0
+            first_loading = true
+
+            $(".add-row-1").css('visibility', 'visible');
+
+            document.getElementById("document_select").disabled = true;
+            await setTimeout(loaddata, 1000)
+            document.getElementById("document_select").disabled = false;
+            // new
+            if ($('.add-row-1').length === 0) {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+            stopBlockUI()
+        }
+
+        async function pagingchange() {
+            paging_size = $('#LoadCount option:selected').val()
+            FooTable.get('#PopUpTable').pageSize(paging_size);
+            window.setTimeout(function () {
+                $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+            }, 1000);
+        }
+
+
+        function loaddata() {
+            $('.add-row').trigger('click');
+            stopBlockUI();
+        }
+
+        async function loadMoreDoc() {
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count) {
+                $(".add-row-1").css('visibility', 'hidden');
+            }
+            else {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a class='add-row-1' href='#' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+
+
+        $(".add-row").click(async function (e) {
+            e.preventDefault()
+
+
+
+            console.log(counter)
+
+
+            let start_index = load_size * counter
+            let end_index = load_size * (counter + 1)
+
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/GetDocumentsByCountryId_Modal/" + country_id + "/" + start_index + "/" + end_index + "/"
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let all_count = response["document_count"]
+
+            if (first_loading === false)
+                ft.rows.load(documentsList, true);
+            else {
+                ft.rows.load(documentsList);
+                document.getElementById("all_doc_count").innerText = all_count.toString()
+            }
+
+            loaded_doc += documentsList.length;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+            counter += 1
+            first_loading = false
+
+            if (loaded_doc === all_count)
+                $(".add-row").css('visibility', 'hidden');
+        })
+
+
+        async function SelectDocumentFunction(document_id) {
+            const request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+            document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+
+            document_select_tag = '<i class="dropdown_icon bi bi-chevron-down ml-2 bold text-black"></i>' + response['name']
+            document.getElementById('document_select').innerHTML = document_select_tag;
+            document.getElementById('document_select').title = response['name'];
+            ShowResult();
+        }
+
+        async function DownloadLinkSet() {
+            var country_id = document.getElementById("country").value;
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            var document_name = document.getElementById("document").innerText;
+
+            if (document_name !== "انتخاب نمایید ...") {
+                var file_path = "";
+
+                file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.docx';
+
+                document.getElementById("txt_download").href = file_path;
+
+                const document_id = document.getElementById("document").value;
+
+            } else {
+                document.getElementById("txt_download").href = "#";
+                return false;
+            }
+        }
+
+
+        async function ShowResult() {
+
+
+            await DownloadLinkSet();
+
+            const document_id = document.getElementById("document").value
+            document.getElementById("document_download").disabled = false;
+            document.getElementById("pdf_download").disabled = false;
+            document.getElementById("document_search").disabled = false;
+
+
+            /******************************* Features **********************************/
+            let request_link = 'http://' + location.host + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+
+            document.getElementById("total_words").innerText = response["word_count"];
+            document.getElementById("stop_words").innerText = response["stopword_count"];
+            document.getElementById("distinct_words").innerText = response["distinct_word_count"];
+
+            request_link = 'http://' + location.host + "/GetBookDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["book_information"][0]
+
+            document.getElementById("book_name").innerText = response["book_name"];
+            document.getElementById("book_subject").innerText = response["subject"];
+            document.getElementById("publisher_name").innerText = response["publisher_name"];
+            document.getElementById("pagecount").innerText = response["pagecount"];
+            document.getElementById("year").innerText = response["year"];
+
+            /******************************* Subject **********************************/
+            request_link = 'http://' + location.host + "/GetSubjectByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_subject_list"]
+
+            document.getElementById("subject_table").innerHTML = ""
+
+            let chart_value_list = []
+
+            for (let i = 0; i < response.length; i++) {
+                const subject = response[i]["subject"]
+                const weight = response[i]["weight"] * 100  /* For Scale To 0-100*/
+                const keywords_text = response[i]["keywords_text"]
+                const keywords_title = response[i]["keywords_title"]
+                const special_references = response[i]["special_references"]
+
+                tag = "<tr>" +
+                    "<td class='col-1'>" + (i + 1) + "</td>" +
+                    "<td class='col-2'>" + subject + "</td>" +
+                    "<td class='col-4'>" + keywords_text + "</td>" +
+                    "<td class='col-3'>" + keywords_title + "</td>" +
+                    "<td class='col-1'>" + special_references + "</td>" +
+                    "</tr>";
+
+                document.getElementById("subject_table").innerHTML += tag;
+
+                chart_value_list.push([subject, weight])
+            }
+
+            document.getElementById("subject_chart_container").innerHTML = "";
+            showChart(chart_value_list, "subject_chart_container");
+
+
+            /******************************* LDA Subject **********************************/
+            request_link = 'http://' + location.host + "/GetLDAForDocByID/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["topic_documents"]
+
+            document.getElementById("LDA_subject_table").innerHTML = ""
+
+            chart_value_list = []
+
+            for (let i = 0; i < response.length; i++) {
+                const topic_name = response[i]["topic_name"]
+                const topic_words = response[i]["topic_words"]
+                const score = response[i]["score"]
+
+                tag = "<tr>" +
+                    "<td class='col-1'>" + (i + 1) + "</td>" +
+                    "<td class='col-2'>" + topic_name + "</td>" +
+                    "<td class='col-4'>" + topic_words + "</td>" +
+                    "<td class='col-1'>" + score + "</td>" +
+                    "</tr>";
+
+                document.getElementById("LDA_subject_table").innerHTML += tag;
+
+                chart_value_list.push([topic_name, score])
+            }
+
+            document.getElementById("LDA_subject_chart_container").innerHTML = "";
+            showChart(chart_value_list, "LDA_subject_chart_container");
+
+
+            /******************************* Similarity **********************************/
+            startBlockUI('SearchTable');
+            request_link = 'http://' + location.host + "/GetSimilarity/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["docs"]
+            similrity_result = []
+
+            document.getElementById("SearchTable").innerHTML = "";
+            for (let i = 0; i < response.length; i++) {
+                const index = i + 1;
+
+                const curr_document_id = response[i]["document_id"]
+                const document_name = response[i]["document_name"]
+                {% comment %} var TFIDF_similarity = response[i]["TFIDF_similarity"] {% endcomment %}
+            const LDA_similarity = response[i]["LDA_similarity"]
+            let BM25_similarity = response[i]["BM25_similarity"]
+            const DFR_similarity = response[i]["DFR_similarity"]
+            const DFI_similarity = response[i]["DFI_similarity"]
+            const average_similarity = response[i]["average_similarity"]
+
+            const book_link = 'http://' + location.host + "/book_information?id=" + curr_document_id
+            name = "<a href=" + book_link + ">" + document_name + "</a>"
+
+            const Details = `<button style="background-color:lightblue" type="button" class="btn d-flex float-right mr-4" id="similarity_Details" data-bs-target="#DetailModal" data-bs-toggle="modal" onclick="DetailFunction(${curr_document_id})">مشاهده</button>`
+            const ParagraphsDetails = `<button style="background-color:lightblue" type="button" class="btn d-flex float-right mr-4" id="paragraphs_similarity_Details" data-bs-target="#ParagraphsDetailModal" data-bs-toggle="modal" onclick="ParagraphsSimilarityDetailFunction(${document_id},${curr_document_id})">مشاهده</button>`
+
+            const row = {
+                "index": index,
+                "document_name": name,
+                    {% comment %} "TFIDF_similarity": TFIDF_similarity, {% endcomment %}
+        "LDA_similarity": LDA_similarity,
+            "BM25_similarity": BM25_similarity,
+                "DFR_similarity": DFR_similarity,
+                    "DFI_similarity": DFI_similarity,
+                        "average_similarity": average_similarity,
+                            "Details": Details,
+                                "ParagraphsDetails": ParagraphsDetails
+                }
+
+        similrity_result.push(row)
+            }
+
+        $('#SearchTable').empty();
+        $('.SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                    first: '»',
+                    prev: '›',
+                    next: '‹',
+                    last: '«'
+                }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "کتابی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "document_name",
+                "title": "نام کتاب",
+                "style": {
+                    "width": "30%"
+                }
+            }, {
+                "name": "BM25_similarity",
+                "title": "مشابهت بر اساس BM25",
+                "style": {
+                    "width": "10%"
+                }
+            }, {
+                "name": "DFR_similarity",
+                "title": "مشابهت بر اساس DFR",
+                "style": {
+                    "width": "10%"
+                }
+            }, {
+                "name": "DFI_similarity",
+                "title": "مشابهت بر اساس DFI",
+                "style": {
+                    "width": "10%"
+                }, "sorted": true,
+                "direction": "DESC",
+            }, {
+                "name": "LDA_similarity",
+                "title": "مشابهت بر اساس LDA",
+                "style": {
+                    "width": "10%"
+                }
+            }, {
+                "name": "average_similarity",
+                "title": "میانگین مشابهت",
+                "style": {
+                    "width": "10%"
+                }
+            }, {
+                "name": "Details",
+                "title": "جزئیات",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "ParagraphsDetails",
+                "title": "تشابه پاراگرافی",
+                "style": {
+                    "width": "5%"
+                }
+            }
+            ],
+            "rows": similrity_result
+        });
+        stopBlockUI('SearchTable', 'دریافت اطلاعات مشابهت');
+        /******************************* 1-Gram **********************************/
+        request_link = 'http://' + location.host + "/GetTFIDFByDocumentId/" + document_id + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["documents_tfidf_list"]
+        document.getElementById("1gram_frequency_table").innerHTML = "";
+        let show_count = 10;
+        for (var i = 0; i < show_count; i++) {
+            const index = i + 1;
+            const word = response[i]["word"]
+            const count = response[i]["count"]
+            const weight = response[i]["weight"]
+
+
+            let tag = "<tr>" +
+                "<td class='col-1'>" + index + "</td>" +
+                "<td class='col-3'>" + word + "</td>" +
+                "<td class='col-2'>" + count + "</td>" +
+                "</tr>";
+
+            document.getElementById("1gram_frequency_table").innerHTML += tag;
+        }
+
+        /******************************* 2-Gram **********************************/
+
+        request_link = 'http://' + location.host + "/GetNGramByDocumentId/" + document_id + "/" + 2 + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["document_ngram_list"]
+        show_count = 10
+
+        document.getElementById("2gram_frequency_table").innerHTML = "";
+        for (let i = 0; i < show_count && i < response.length; i++) {
+            const index = i + 1;
+
+            const id = response[i]["id"]
+            const word = response[i]["text"]
+            const count = response[i]["count"]
+            const score = response[i]["score"]
+
+            let status = ""
+            if (score === 1) {
+                status = "checked";
+            }
+
+            const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+
+            const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+            let tag = "<tr>" +
+                "<td class='col-1'>" + index + "</td>" +
+                "<td class='col-3'>" + word + "</td>" +
+                "<td class='col-2'>" + score + "</td>" +
+                "<td class='col-2'>" + count + "</td>" +
+                "<td class='col-2'>" + checkBox + "</td>" +
+                "<td class='col-1'>" + deleteBox + "</td>"
+            "</tr>";
+
+            document.getElementById("2gram_frequency_table").innerHTML += tag;
+        }
+
+
+        /******************************* 3-Gram **********************************/
+
+        request_link = 'http://' + location.host + "/GetNGramByDocumentId/" + document_id + "/" + 3 + "/";
+        response = await fetch(request_link).then(response => response.json());
+        response = response["document_ngram_list"]
+        show_count = 10
+        document.getElementById("3gram_frequency_table").innerHTML = "";
+
+        for (let i = 0; i < show_count && i < response.length; i++) {
+            const index = i + 1;
+
+            const id = response[i]["id"]
+            const word = response[i]["text"]
+            const count = response[i]["count"]
+            const score = response[i]["score"]
+
+            let status = ""
+            if (score === 1) {
+                status = "checked";
+            }
+
+            const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+            const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+            let tag = "<tr>" +
+                "<td class='col-1'>" + index + "</td>" +
+                "<td class='col-5'>" + word + "</td>" +
+                "<td class='col-2'>" + score + "</td>" +
+                "<td class='col-2'>" + count + "</td>" +
+                "<td class='col-2'>" + checkBox + "</td>" +
+                "<td class='col-1'>" + deleteBox + "</td>"
+            "</tr>";
+
+
+            document.getElementById("3gram_frequency_table").innerHTML += tag;
+
+        }
+        {% comment %} stopBlockUI2('subject_analysis_pane', 'دریافت اطلاعات تواتر محور'); {% endcomment %}
+
+
+        //user log
+        let form_data = new FormData()
+        let detail_type = "نتایج جست و جو"
+        let country_name = $("#country option:selected").text();
+        let document_select_name = document.getElementById("document_select").title
+        form_data.append('detail_type', detail_type);
+        form_data.append('country_name', country_name);
+        form_data.append('document_select_name', document_select_name);
+        UserLog(form_data)
+
+        }
+
+
+        function check_non_eghdam_kw_exists(sentence, pattern_keywords) {
+            for (p_kw of pattern_keywords) {
+                pattern = p_kw
+                if (sentence.includes(pattern)) {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+
+
+        async function highlightHamkaran(paragraph_text, actor_form, pattern_keywords, bg_color, all_hamkar) {
+            let all_actors = actors_list
+
+            const window_length = 100;
+
+            let space_counter = 0;
+
+            /* Highlight pattern keywords and references */
+            for (pattern_keyword of pattern_keywords) {
+
+
+                /* Highlight more with actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'با همکاری') {
+                    regex = /با همکاری/gi;
+                } else {
+                    regex = /باهمکاری/gi;
+                }
+
+                while ((result = regex.exec(paragraph_text))) {
+                    indices.push(result.index);
+                }
+
+                for (const index of indices) {
+
+                    let start_index = (index + pattern_keyword.length);
+                    let substring = paragraph_text.substring(start_index, start_index + window_length);
+                    let current_substring = substring;
+
+                    if (!all_hamkar) {
+                        all_actors = [actor_form]
+                    }
+                    for (actor of all_actors) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                        substring = substring.replaceAll(' ' + actor + ' ', ' ' + actor_tag + ' ');
+                        substring = substring.replaceAll(' ' + actor + '،', ' ' + actor_tag + '،');
+                        substring = substring.replaceAll('(' + actor + ')', '(' + actor_tag + ')');
+
+                        for (symbol of hamkaran_punctuations) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor + symbol, ' ' + actor_tag + symbol);
+
+                        }
+
+                        actor_without_prefix = actor.replaceAll('وزارت ', '').replaceAll('سازمان ', '')
+
+                        if (actor_without_prefix != 'اطلاعات' && actor_without_prefix != 'کشور' && !substring.includes(actor)) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+                            substring = substring.replaceAll(' ' + actor_without_prefix + '،', ' ' + actor_tag + '،');
+                            substring = substring.replaceAll('(' + actor_without_prefix + ')', '(' + actor_tag + ')');
+
+                            for (symbol of hamkaran_punctuations) {
+
+                                actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                                substring = substring.replaceAll(' ' + actor_without_prefix + symbol, ' ' + actor_tag + symbol);
+
+                            }
+
+                        } else if (actor_without_prefix == 'کشور' && substring.includes('وزارتخانه')) {
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_without_prefix + "</span>"
+
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+
+                        }
+
+                    }
+
+                    paragraph_text = paragraph_text.replaceAll(current_substring, substring);
+
+                }
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                paragraph_text = paragraph_text.replaceAll(pattern_keyword, pattern_keyword_tag);
+
+            }
+
+
+
+            return paragraph_text;
+
+
+
+        }
+
+        async function highlightSalahiat(paragraph_text, actor_form, pattern_keywords, bg_color, is_ref_actor, ref_paragraph_text) {
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                actor_with_postfix_1 = actor_form + ' ' + 'جمهوری اسلامی ایران'
+                actor_with_postfix_2 = actor_form + ' ' + 'ایران'
+                actor_with_postfix_3 = actor_form + ' ' + 'کشور'
+
+                paragraph_text = paragraph_text.split('.').map((sentence) => {
+
+
+                    if (sentence.includes(actor_form + ' ' + pattern_keyword)) {
+
+                        if (is_ref_actor) {
+
+                            popover_title = actor_form;
+                            popover_content = ref_paragraph_text;
+                            actor_tag = '<a dir="rtl" tabindex="0" class="d-inline-block ' + bg_color.replace('bg', 'text') + ' text-right bold"  data-bs-placement="bottom" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="' + popover_title + '" data-bs-content="' + popover_content + '">' + popover_title + '</a>'
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+
+                        } else {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_form + "</span>"
+                            sentence = sentence.replaceAll(actor_form + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+
+                        }
+
+                    }
+                    else if (sentence.includes(actor_with_postfix_1 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_1 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_1 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_2 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_2 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_2 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes(actor_with_postfix_3 + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor_with_postfix_3 + "</span>"
+                        sentence = sentence.replaceAll(actor_with_postfix_3 + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_form + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_form + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_form + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_1 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_1 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_2 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_2 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+                    else if (sentence.includes('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword)) {
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + '(' + actor_with_postfix_3 + ')' + "</span>"
+                        sentence = sentence.replaceAll('(' + actor_with_postfix_3 + ')' + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                    }
+
+                    return sentence
+                }).join('.')
+
+            }
+
+
+
+            return paragraph_text;
+
+        }
+
+
+
+        async function showActorsChart(chart_container, chart_data) {
+
+
+            document.getElementById(chart_container).innerHTML = ""
+            // create a data set
+            var data = anychart.data.set(chart_data);
+
+            // map the data
+            var salahiat_series_data = data.mapAs({ x: 0, value: 3 });
+            var hamkaran_series_data = data.mapAs({ x: 0, value: 2 });
+            var motevalian_series_data = data.mapAs({ x: 0, value: 1 });
+
+
+            // create a chart
+            var chart = anychart.column();
+
+            chart
+                .animation(true)
+                .padding([10, 60, 10, 0])
+
+            chart.background().fill('#ffffff');
+
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("تعداد کتاب");
+            yAxis.title().fontFamily('vazir');
+            yAxis.title().fontWeight("bold");
+            yAxis.title().height(40);
+
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+
+            // set the container id
+            chart.container(chart_container);
+
+            // create the second series, set the data and name
+            var salahiat_series = chart.column(salahiat_series_data);
+            salahiat_series.normal().stroke("#28a745", 0);
+            salahiat_series.normal().fill("#ffc107");
+            salahiat_series.name("دارای صلاحیت اختیاری");
+
+
+            // create the second series, set the data and name
+            var hamkaran_series = chart.column(hamkaran_series_data);
+            hamkaran_series.normal().stroke("#28a745", 0);
+            hamkaran_series.normal().fill("#28a745");
+            hamkaran_series.name("همکار");
+
+
+            // create the first series, set the data and name
+            var motevalian_series = chart.column(motevalian_series_data);
+            // configure the visual settings of the first series
+            motevalian_series.normal().fill("#007bff");
+            motevalian_series.normal().stroke("#28a745", 0);
+            motevalian_series.name("متولی اجرا");
+
+            // enable the legend
+            chart.legend(true);
+
+            var legend = chart.legend();
+            legend.fontFamily('vazir')
+
+            // set position mode
+            legend.positionMode("inside");
+            // set position and alignement
+            legend.position("top");
+            legend.align("center");
+            legend.itemsLayout("horizontalExpandable");
+            // initiate drawing the chart
+            chart.draw();
+
+            // motevalian columns
+            motevalian_series.listen('click', async function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'متولی اجرا';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+            // hamkaran columns
+            hamkaran_series.listen('click', function (e) {
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'همکار';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+            // salahiat columns
+            salahiat_series.listen('click', function (e) {
+                /* Modal Headers */
+                const click_tag = e.domTarget.tag;
+                const column_index = click_tag["index"]
+                const actor_name = chart_data[column_index][0];
+                const actor_role_name = 'دارای صلاحیت اختیاری';
+                showActorParagraphs_Modal(actor_name, actor_role_name);
+            });
+
+        }
+
+        async function showActorParagraphs_Modal(actor_name, actor_role_name) {
+            doc_id = document.getElementById('document').value
+
+            request_link = 'http://' + location.host + "/GetDocActorParagraphs_Column_Modal/" + doc_id + "/" + actor_name + "/" + actor_role_name + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const actor_paragraphs = response["actor_paragraphs"]
+            modal_title = actor_role_name + ": " + actor_name
+            $('#actors_modal #modal_header').text(modal_title)
+            $('#actors_modal_btn').click();
+
+            paragraph_list = "";
+            for (const [para_id, para_info] of Object.entries(actor_paragraphs)) {
+                paragraph_text = para_info['text']
+                actor_role = para_info['actor_role']
+                actor_form = para_info['actor_form']
+                is_ref_actor = para_info['is_ref_actor']
+                ref_text = para_info['ref_text']
+
+
+                highlighted_paragraph = await highlightParagraph(paragraph_text, actor_role, actor_form, false, is_ref_actor, ref_text);
+
+                paragraph_tag = '<li class="mb-1 px-1 lh-lg">' + highlighted_paragraph + '</li>'
+
+                paragraph_list += paragraph_tag
+            }
+            document.getElementById("actor_modal_body").innerHTML = "<ol start='1'>" + paragraph_list + "</ol>";
+
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            });
+
+
+        }
+
+        function showChart(data, position) {
+
+            data.sort(function (x, y) { return x[0] === 'نامشخص' ? -1 : y[0] === 'نامشخص' ? 1 : 0; });
+
+
+            chart = anychart.column();
+
+            // create a column series and set the data
+            var series = chart.column(data);
+
+
+            chart.animation(true);
+            chart.background().fill('#f8f9fa');
+
+            chart.background().fill('white');
+
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("%{%value}");
+
+            // set all axis title
+            var xAxis = chart.xAxis();
+            xAxis.title("موضوع");
+            xAxis.title().fontFamily('vazir');
+            xAxis.title().fontWeight("bold");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("درصد شباهت");
+            yAxis.title().fontFamily('vazir');
+            yAxis.title().fontWeight("bold");
+            chart.yAxis().labels().format("٪{%value}");
+
+            chart.xAxis().labels().height(30);
+
+            chart.container(position);
+            chart.draw();
+        }
+
+        async function SaveGram_function(name) {
+            const document_id = document.getElementById("document").value
+            const gram = parseInt(name.charAt(0))
+
+            const table_id = name + "_table";
+
+            const checkedBoxesId = $("#" + table_id).find("input[type=checkbox]:checked").map(function () {
+                return this.id;
+            }).get();
+
+            let checkedBoxesConcatedId = "-1"
+            if (checkedBoxesId.length > 0) {
+                checkedBoxesConcatedId = checkedBoxesId.join("__")
+            }
+            const request_link = 'http://' + location.host + "/UpdateNgramScore/" + document_id + "/" + gram + "/" + checkedBoxesConcatedId + "/";
+            await fetch(request_link).then(response => response.json());
+
+
+            const textbox_id = name + "_TextBox"
+            const textbox_value = document.getElementById(textbox_id).value.replaceAll("/", "__")
+
+            if (textbox_value.trim() !== "") {
+                const request_link = 'http://' + location.host + "/InsertNgram/" + document_id + "/" + gram + "/" + textbox_value + "/";
+
+                await fetch(request_link).then(response => response.json());
+
+                document.getElementById(textbox_id).value = ""
+            }
+
+            ShowResult();
+
+        }
+
+
+        async function DeleteNGramWords(id) {
+            const request_link = 'http://' + location.host + "/DeleteNgram/" + id + "/";
+            await fetch(request_link).then(response => response.json());
+            ShowResult();
+        }
+
+
+        // show document content
+        async function ShowDocumentContent() {
+
+            document.getElementById('DocumentContentBody').innerHTML = ""
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک کتاب را انتخاب نمایید.')
+                return
+            }
+
+            $('#documentContent').modal('show');
+            startFullPageBlockUI();
+
+            const request_link = 'http://' + location.host + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"]
+
+            for (var i = 0; i < response.length; i++) {
+                const document_name = response[i]["document_name"]
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p>' + paragraph_text + '</p>'
+                document.getElementById('documentContentHeader').innerText = document_name
+                document.getElementById('DocumentContentBody').innerHTML += paragraph_tag
+            }
+            stopFullPageBlockUI('نمایش محتوای سند')
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش کتاب"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+
+        async function ParagraphsSimilarityDetailFunction(document_id, curr_document_id) {
+
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک کتاب را انتخاب نمایید.')
+                return
+            }
+            
+            document.getElementById('documentNameHeader').innerText = ""
+            document.getElementById('similar_para_modal_body').innerHTML = ""
+
+            $('#similar_para_modal').modal('show');
+
+            startFullPageBlockUI();
+            /******************************* Paragraph Similarity **********************************/
+            let request_link = 'http://' + location.host + "/GetParagraphSimilarity/" + document_id + "/" + curr_document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["result"]
+            console.log(response)
+
+            src_doc_name = response[0]['src_doc_name']
+            document.getElementById('documentNameHeader').innerText = src_doc_name
+
+            tag = ''
+            for (row of response) {
+                src_para = row['src_para']
+                dest_para = row['dest_para']
+                dest_doc_id = row['dest_doc_id']
+                dest_doc_name = row['dest_doc_name']
+
+                dest_doc_link = 'http://' + location.host + "/book_information/?id=" + dest_doc_id
+                dest_doc_tag = '<a style="text-decoration:none;" href="' + dest_doc_link + '">' + dest_doc_name + "</a>"
+
+
+                score = row['score']
+                tag += '<div class="mb-2 px-2 pt-2 border border-2 rounded">' +
+                    '<p class="text-secondary">' + 'پاراگراف مبدأ: ' + '</p>' + '<p>' + src_para + '</p>' +
+                    '<p class="text-secondary">' + 'امتیاز شباهت: ' + '<span class="text-primary bold">' + score + '</span>' + '</p>' +
+                    '<span class="text-secondary">' + 'پاراگراف مشابه در سند ' +
+                    '<span class="bold">' + dest_doc_tag + ':</span>' + '</span>' +
+                    '<p class="mt-1">' + dest_para + '</p>' +
+                    '</div>'
+
+            }
+            document.getElementById('similar_para_modal_body').innerHTML = tag
+            stopFullPageBlockUI();
+        }
+
+        // search document by name document content
+        async function Search_Document_ByName() {
+            const country_id = document.getElementById("country").value
+            let search_text = document.getElementById("SearchBox").value
+
+            const request_link = 'http://' + location.host + "/SearchDocumentByname/" + country_id + "/" + search_text + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            let document_count = response["document_count"]
+
+            document.getElementById("all_doc_count").innerText = document_count.toString()
+
+            ft.rows.load(documentsList);
+
+            loaded_doc = document_count;
+
+            document.getElementById("load_doc_count").innerText = loaded_doc.toString()
+
+            if (loaded_doc === document_count)
+                $(".add-row-1").css('visibility', 'hidden');
+            else {
+                window.setTimeout(function () {
+                    $(".pagination").append("<li class='footable-page visible'><a href='#' class='add-row-1' onclick='loadMoreDoc()'>+</a></li>");
+                }, 1000);
+            }
+
+        }
+
+        async function ExportExcelSerachResultFunction() {
+            const country_id = document.getElementById("country").value
+
+            const request_link = 'http://' + location.host + "/get_excels_data_book/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+
+            const columns = response['columns']
+            const rows = response['books']
+            var csv = "";
+
+            sep = ","
+
+            let Csv = "";
+
+            for (column of columns) {
+                Csv += column + sep;
+            }
+            Csv += "\n";
+
+            for (row of rows) {
+                console.log(row)
+                for (column of columns) {
+                    Csv += row[column] + sep;
+                }
+                Csv += "\n";
+            }
+
+
+            let save_file_name = "نتایج مروبوط به الاستیک"
+
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click()
+        }
+
+        /* Search after press Enter */
+        $("#SearchBox").keyup(function (event) {
+            if (event.keyCode === 13) {
+                Search_Document_ByName();
+            }
+        });
+
+    </script>
+
+    <script>
+        async function generatePDF() {
+            startBlockUI();
+
+            const approval_reference = document.getElementById("book_name").innerText
+            const approval_date = document.getElementById("year").innerText
+
+            const document_id = document.getElementById("document").value
+            // disable show button before choosing a document
+            if (!document_id || document_id == '0') {
+                alert('لطفا یک کتاب را انتخاب نمایید.');
+                return;
+            }
+            const request_link = 'http://' + location.host + "/GetDocumentContent/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_paragraphs"];
+            const document_name = response[0]["document_name"];
+            let element = "<div class='container-fluid' style='direction: rtl'> " +
+                "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> <div > <p>سامانه هوشیاران</p> </div> " +
+                "<div> <span>www.virtualjuristic.datakaveh.com</span> </div> </div> <div style='margin: auto;text-align: center'> " +
+                "<h5 style='padding-bottom: 10px'>" + document_name + "</h5> </div> " +
+                "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+                "<div class='d-flex'> <span> تاریخ تصویب  </span> <span> " + approval_date + " </span> </div> " +
+                "<div class='d-flex'> <span>مرجع تصویب:   </span> <span> " + approval_reference + " </span> </div> </div> </div> </div>"
+
+            for (let i = 0; i < response.length; i++) {
+                const paragraph_text = response[i]["paragraph_text"]
+                const paragraph_tag = '<p>' + paragraph_text + '</p>';
+                element += paragraph_tag;
+            }
+            element += '</div>';
+            console.log(element);
+
+            let opt = {
+                margin: 1,
+                filename: document_name + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+            stopBlockUI();
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "دانلود کتاب"
+            let country_name = $("#country option:selected").text();
+            let document_select_name = document.getElementById("document_select").title
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('document_select_name', document_select_name);
+            UserLog(form_data)
+        }
+    </script>
+
+</body>
+
+<script>
+
+    function copyDocumentName() {
+        /* Get the text field */
+        var copyText = document.getElementById("document_select");
+
+        /* Copy the text to clipboard */
+        navigator.clipboard.writeText(copyText.innerText);
+
+        // Update js
+        $('.tooltip-inner').html('کپی شد!');
+
+    }
+
+</script>
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+<!-- save log user -->
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+
+    const notyf = new Notyf({ position: { x: 'left', y: 'bottom' } });
+
+
+    async function ToggleStar(note_id, star_id) {
+        const request_link = 'http://' + location.host + "/ToggleNoteStar/" + note_id + "/";
+        console.log(request_link)
+        fetch(request_link).then(response => response.json()).then(response => {
+            if (response['starred']) {
+                document.getElementById(star_id).innerHTML = `<span class="fa fa-star checked"></span>`
+            }
+            else {
+                document.getElementById(star_id).innerHTML = `<span class="fa fa-star"></span>`
+            }
+        }).catch(error => {
+            console.log(error)
+        }
+            ,)
+    }
+</script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+{#
+<script src="../../static/js/UserLogSave.js"></script>#}
+
+<!-- Intro Js -->
+<script src="../../static/js/information/information_tour.js">
+</script>
+<script src="../../static/js/tour.js"></script>
+
+<script src="../../static/js/signout_function.js"></script>
+
+
+<script>
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    });
+
+
+
+    function popup_handler() {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
+    }
+
+
+    async function Update_Details_Modal_table() {
+        let measure = document.getElementById('measure').value.split('_')
+        let main_document_id = measure[0]
+        let document_id = measure[1]
+        measure = measure[2]
+
+        let request_link = 'http://' + location.host + "/get_similarity_for_2_document/" + main_document_id + "/" + document_id + "/" + measure + "/";
+        let response = await fetch(request_link).then(response => response.json());
+
+        let words = response["words"]
+        const title1 = 'وزن در کتاب ' + response["book1"]
+        const title2 = 'وزن در کتاب ' + response["book2"]
+
+        detail_result = []
+
+        document.getElementById("DetailsTable").innerHTML = "";
+        for (let i = 0; i < words.length; i++) {
+            const index = i + 1;
+
+            let word = words[i].word;
+            let weight1 = words[i].weight1;
+            let weight2 = words[i].weight2;
+
+
+            const row = {
+                "index": index,
+                "word": word,
+                "weight1": weight1,
+                "weight2": weight2
+            }
+
+            detail_result.push(row)
+        }
+
+        $('#DetailsTable').empty();
+        $('.DetailsTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                    first: '»',
+                    prev: '›',
+                    next: '‹',
+                    last: '«'
+                }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "نتیجه ای یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "word",
+                "title": "کلمه",
+                "style": {
+                    "width": "10%"
+                }
+            }, {
+                "name": "weight1",
+                "title": title1,
+                "style": {
+                    "width": "20%"
+                }
+            }, {
+                "name": "weight2",
+                "title": title2,
+                "style": {
+                    "width": "20%"
+                }
+            }
+            ],
+            "rows": detail_result
+        });
+
+    }
+
+
+    async function showBM25DetailModal(result) {
+        /* Title Text */
+        document.getElementById("MainHeader").innerHTML = "معیار مشابهت BM25"
+        document.getElementById("doc_1_header").innerHTML = result['doc_name_1']
+        document.getElementById("doc_2_header").innerHTML = result['doc_name_2']
+
+        /* Body Text */
+        let doc_1_body = result["source_highlight"].split('\n').map(line => {
+            if (line.replaceAll(" ", "").replaceAll("\t", "").length > 10) {
+                line = (line.replaceAll("\t", "").replaceAll("  ", " "))
+                return ('<p class="lh-lg">' + line + '</p>')
+            }
+
+        })
+
+        let doc_2_body = result["highlighted_text"].split('\n').map(line => {
+            if (line.replaceAll(" ", "").replaceAll("\t", "").length > 10) {
+                line = (line.replaceAll("\t", "").replaceAll("  ", " "))
+                return ('<p class="lh-lg">' + line + '</p>')
+            }
+
+        })
+
+        document.getElementById("doc_1_paragraphs").innerHTML = doc_1_body
+        document.getElementById("doc_2_paragraphs").innerHTML = doc_2_body
+        popup_handler();
+    }
+
+    async function generatePDFNote(docName, docDate, docNote) {
+        startBlockUI();
+
+        let element = "<div class='container-fluid' style='direction: rtl'> " +
+            "<div class='row p-4 mx-auto' style='border: 4px solid #ccc; border-radius: 20px;'> " +
+            "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+            "<div> </div> </div> <div style='margin: auto;text-align: center'> " +
+            "<h5 style='padding-bottom: 10px'>" + docName + "</h5> </div> " +
+            "<div class='d-flex' style='justify-content: space-between;width: 100%'> " +
+            "<div class='d-flex'> <span style='direction: rtl'>  تاریخ تصویب </span> <span> " + docDate + " </span> </div> " +
+            "</div> </div> </div>"
+
+        element += "<p style='direction: rtl'>" + 'متن یادداشت' + '</p>' + "<p style='direction: rtl'>" + docNote + '</p>'
+
+        element += '</div>';
+        // console.log(element);
+
+        let opt = {
+            margin: 1,
+            filename: docName + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+
+        stopBlockUI();
+
+    }
+
+    async function OnFollowClick(following_user_id) {
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/follow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "already followed!") {
+                notyf.success('شما قبلا این کاربر را دنبال کرده‌اید.');
+
+            } else if (response.status == "followed!") {
+                notyf.success('شما با موفقیت کاربر را دنبال کردید.');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده است');
+        }
+    }
+    async function OnUnFollowClick(following_user_id) {
+        try {
+            const follower_username = getCookie("username")
+            const request_link = 'http://' + location.host + "/unfollow/" + follower_username + "/" + following_user_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            if (response.status == "successfully unfollowed!") {
+                notyf.success('شما با موفقیت کاربر را آنفالو کردید.');
+
+            } else if (response.status == "already unfollowed!") {
+                notyf.success('-');
+            }
+        } catch (err) {
+            console.log(err)
+            notyf.error('عملیات ناموفق بوده است');
+        }
+    }
+
+
+</script>
+
+
+
+</html>

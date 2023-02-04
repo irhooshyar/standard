@@ -1,0 +1,32 @@
+#barchart_container1,
+#barchart_container2,
+#barchart_container3,
+.chart_container {
+    height: 750px;
+    text-align: center;
+}
+
+.extractected_references,
+.document_year,
+.document_subject,
+.document_level,
+.document_complaint_from,
+.document_judge_name {
+    color: #0e3f8b;
+}
+
+.canvas {
+    z-index: 999;
+    height: 400px;
+    width: 650px;
+    overflow-y: visible;
+}
+
+.canvas svg {
+    pointer-events: none;
+    height: 100%;
+    border: 1px solid white;
+    width: 95%;
+    margin: auto;
+    display: block;
+}

@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"/>
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+    <script src="../../static/js/chart.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>تحلیل اسناد رهبری</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+<!-- Menu -->
+<nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+    {% include "doc/header2.html" %}
+</nav>
+
+<script>
+    $(document).ready(function () {
+
+        // Active panel
+        $('#RahbariDropdown').addClass('active');
+        $('#rahbari_paraghraph').addClass('active');
+
+        $('select#language').on('change', function (e) {
+
+            let selected_language = this.value;
+            let current_url = window.location.href;
+            if (selected_language === 'England') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'en')
+                window.location = requested_url;
+            } else if (selected_language === 'Russia') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'ru')
+                window.location = requested_url;
+            }
+
+        });
+    });
+</script>
+
+<!-- Main Container includes: Form Fields, Tab Pills, Tab Panes -->
+<div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+    <div class="d-flex align-items-center rtl flex-row-reverse mx-auto p-1" style="background: linear-gradient(#8693AB, #cbd3da, #e9ecef); box-shadow: 0 0 2px 2px #f8f9fa inset; border: 4px solid #f8f9fa; border-radius: 24px">
+        <img style="width: 120px;" id="prefix_ShowHideImg" src="../../static/image/rahbar_profile.png">
+        <div class="d-flex flex-column gap-2 rtl mr-2" dir="rtl">
+            <span class="font-weight-bolder">تحلیل اسناد رهبری</span>
+            <span>صفحه تحلیل اسناد رهبری</span>
+        </div>
+    </div>
+    <!-- Form Fields -->
+    <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+          method="post" autocomplete="off" novalidate>
+
+        <!-- Primary Fields in First Row -->
+        <div class="row flex-row-reverse mx-auto">
+
+            <!-- Country Input -->
+            <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+
+                <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                <select dir="rtl" id="country" name="country"
+                        class="form-select text-right float-right searchable-select" style="direction: rtl;"
+                        onchange="">
+                    {% for k,v in countries.items %}
+                        {% if "رهبری" in v %}
+                            <option value="{{ k }}">{{ v }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Search Box input -->
+            <div class="col-md-6 pt-3 col-12 col-lg-4 bg-light">
+                <label class="float-right" style="direction: rtl;">عبارت مورد نظر:</label>
+                <input style="direction: rtl;" class="float-left form-control text-right"
+                       placeholder="متن جست‌وجو ..." type="text" required="" name="SearchBox" id="SearchBox" value="">
+            </div>
+
+            <!--  Buttons -->
+            <div class="col-lg-4 col-md-6 pt-5 col-12">
+                <button id="advanced_search" type="button" class="btn float-right" data-bs-toggle="collapse"
+                        data-bs-target="#advanced_fields" aria-expanded="true" aria-controls="advanced_fields">تنظیمات
+                    پیشرفته
+                </button>
+                <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-right mr-4">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">درحال جستجو ...</span>
+                    </div>
+                    جست‌وجو
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Advanced Fields in Second Row -->
+        <div id="advanced_fields" class="collapse show row flex-row-reverse mx-auto mt-4">
+            <!-- Match Type -->
+            <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light" dir="rtl">
+                <label for="TypeSelect" class=" text-right bg-light float-right" style="direction: rtl;"> نوع سند:</label>
+                <select id="TypeSelect" multiple class="form-select text-right float-right searchable-multi-select" style="direction: rtl;">
+                </select>
+            </div>
+
+            <div class="col-md-6 pt-3 col-12 col-lg-3 mt-1 bg-light" dir="rtl">
+                <label for="LabelSelect" class="text-right bg-light float-right" style="direction: rtl;">برچسب:</label>
+                <select id="LabelSelect" class="form-select text-right float-right searchable-multi-select" style="direction: rtl;">
+                </select>
+            </div>
+
+        </div>
+
+    </form>
+    <div dir="rtl" class="row w-100 p-0">
+        <!--Original Tabs -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="search_result_tab" class="nav-link active" data-bs-toggle="pill"
+                        data-bs-target="#search_result_pane" type="button" role="tab" aria-controls="search_result_pane"
+                        aria-selected="true">نتایج جست‌وجو
+                </button>
+            </li>
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="bar_chart_info_tab" class="nav-link" data-bs-toggle="pill"
+                        data-bs-target="#bar_chart_info_pane" type="button" role="tab"
+                        aria-controls="bar_chart_info_pane" aria-selected="false"> داشبورد آماری اسناد
+                </button>
+            </li>
+
+
+            <!-- Result Count -->
+            <p id="SearchResultLable" class="text-left float-left text-secondary pl-2"></p>
+        </ul>
+
+        <!-- Original Panes -->
+        <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+
+            <!-- Search Result Pane -->
+            <div id="search_result_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                 aria-labelledby="search_result_tab">
+
+                <!-- Table Headers -->
+                <div class="mt-4">
+                    <!-- Column Selection -->
+                    <p id="ColumnSelection" class="text-left text-secondary float-right">فهرست براساس:</p>
+
+
+                    <!-- Column select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-right" dir="rtl">
+
+                        <select id="ColumnSelect" onchange="show_table_result();"
+                                class="form-select text-right float-right searchable-multi-select"
+                                style="direction: rtl;">
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="float-left">
+                        <!-- Download Buttons -->
+                        <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="دانلود اسناد"
+                                class="btn float-left p-0 px-1 mt-2" id="DownloadBtn"
+                                onclick="DownloadSerachResultFunction()" type="button">
+                            <i class="far fa-file-archive m-0" style="font-size: 25px;margin: 0px;"></i>
+
+                        </button>
+
+                        <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                                type="button">
+                            <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                        </button>
+                    </div>
+
+                    <!-- Page select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-left">
+
+                        <input type="number" disabled="true" onchange="TablePaginationChanged(event)"
+                               id="TablePaginationInput" min="1" max="1" value="1"
+                               class="form-select text-right float-right" style="direction: rtl;">
+
+                    </div>
+
+
+                    <!-- Result Pagination -->
+                    <p id="ResultPagination" class="text-left text-secondary float-left">صفحه:
+                        <span id="from_page">1</span>
+                        /
+                        <span id="total_page">1</span>
+                    </p>
+
+                </div>
+
+                <!-- Search Result table -->
+                <div class="table-responsive search_result_table mt-4">
+                    <table class="table table-striped SearchTable mt-4" style="min-height: 200px;" id="SearchTable">
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bar chart Info Pane -->
+            <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                 id="bar_chart_info_pane" role="tabpanel" aria-labelledby="bar_chart_info_tab">
+
+                <!--new charts added-->
+                <div class="row mt-4 w-100 flex-row-reverse justify-content-around mx-0 px-0">
+
+                    <div id="type_container" class="half" chart-height="350px">
+                    </div>
+
+                    <div id="rahbari_type_container" class="half" chart-height="350px">
+                    </div>
+
+                    <div id="year_container" class="half" chart-height="1500px">
+                    </div>
+
+                    <div id="labels_container" class="half" chart-height="1500px">
+                    </div>
+
+                </div>
+            </div>
+
+            <div dir="rtl" style="min-height: 200px;" class="tab-pane fade float-right w-100"
+                 id="paragraph_person_info_pane" role="tabpanel" aria-labelledby="paragraph_person_info_tab">
+                <div class="mt-4">
+                    <p id="PersonColumnSelection" class="text-left text-secondary float-right">فهرست براساس:</p>
+                    <!-- Column select -->
+                    <div class="col-md-6 col-12 col-lg-2 float-right" dir="rtl">
+
+                        <select id="PersonColumnSelect" onchange="table_show_result()"
+                                class="form-select text-right float-right searchable-multi-select"
+                                style="direction: rtl;">
+
+                        </select>
+
+                    </div>
+
+                    <button class="btn float-left p-0 px-1" id="ExportExcel" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="خروجی اکسل" onclick="tableExportExcel()" type="button">
+                        <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                    </button>
+                </div>
+
+                <table id="PersonsTable" class="table table-striped PopUpTable">
+                </table>
+            </div>
+
+
+            <!-- EdgeModal Container -->
+            <button type="button" id="EdgeModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#EdgeModal"></button>
+            <div class="modal fade" id="EdgeModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="EdgeModalHeader" class="modal-title"></h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="EdgeModalText" class="modal-body text-justify">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" class="modal-footer">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal Container -->
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="DetailHeader" class="modal-title"></h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="DetailText" class="modal-body bg-light text-justify">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Container -->
+            <button type="button" id="RahbariTypeDetailBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#RahbariTypeDetailModal"></button>
+            <div class="modal fade" id="RahbariTypeDetailModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="RahbariTypeDetailHeader" class="modal-title"></h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="RahbariTypeDetailText" class="modal-body bg-light text-justify">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ChartModal Container -->
+            <button type="button" id="ChartModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#ChartModal"></button>
+            <div class="modal fade" id="ChartModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="ChartModalHeader" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="ChartModalText" class="modal-body text-justify">
+                            <h6 id="DocsCount" class='text-secondary'></h6>
+                            <div id="ChartModalBodyText">
+                            </div>
+
+                            <button id="LoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left"
+                                    style="color: #0e3f8b"><i class="fa fa-plus pl-2"
+                                                              style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" class="modal-footer">
+
+                            <input type="number" id="ColumnModalPaginationInput" min="1" max="1" value="1"
+                                   class="form-select text-right float-right d-none">
+
+                            <button id="DownloadDocuments" class="btn btn-primary"><i class="fa fa-download"></i>
+                                دانلود
+                                اسناد
+                            </button>
+
+                            <button id="ExportExcel2" class="btn btn-primary"><i class="fa fa-download"></i> خروجی
+                                اکسل
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ChartModal_2 Container -->
+            <button type="button" id="ChartModalBtn_2" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#ChartModal_2"></button>
+            <div class="modal fade" id="ChartModal_2">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="ChartModalHeader_2" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="ChartModalText_2" class="modal-body text-justify">
+                            <h6 id="DocsCount_2" class='text-secondary'></h6>
+                            <div id="ChartModalBodyText_2">
+                            </div>
+
+                            <button id="LoadMoreDocuments_2" class="btn btn-white w-100 mb-1 float-left"
+                                    style="color: #0e3f8b"><i class="fa fa-plus pl-2"
+                                                              style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" class="modal-footer">
+
+                            <input type="number" id="ColumnModalPaginationInput_2" min="1" max="1" value="1"
+                                   class="form-select text-right float-right d-none">
+
+
+                            <button id="ExportExcel_2" class="btn btn-primary"><i class="fa fa-download"></i> خروجی
+                                اکسل
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ActorChartModal Container -->
+            <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#actors_modal"></button>
+            <div class="modal fade" id="actors_modal">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" class="modal-header">
+                            <h5 id="actor_modal_header" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+                        <!-- Modal body -->
+
+                        <div class="bg-light modal-body text-justify">
+                            <div class="highlight_options mt-0 p-0 float-left" style="z-index: 13;">
+                                <button onclick="showOtherActors()" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" title="نمایش سایر کنشگران"
+                                        class="btn border float-left m-0  px-1"><i style="font-size: 24px;"
+                                                                                   class="bi text-primary bi-people-fill"></i>
+                                </button>
+                                <!-- <button class="btn float-left m-0  px-1"><i style="font-size: 24px;" class="bi text-success bi-hourglass-split"></i></button> -->
+                            </div>
+                            <br>
+                            <div id="actor_modal_body" class="bg-light text-justify">
+
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div id="modal_footer" class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="RahbariTypeModalBtn" class="btn d-none modal_btn" data-bs-toggle="modal"
+                    data-bs-target="#RahbariTypeModal"></button>
+            <div class="modal fade" id="RahbariTypeModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg" style="max-width: 65%;">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div style="direction: rtl !important;" id="RahbariTypeModalHeader" class="modal-header">
+                            <h5 id="RahbariTypeModalTitle" class="modal-title">عنوان</h5>
+                            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div id="RahbariTypeModalBody" class="modal-body text-justify">
+
+                            <div id="rahbari_chart_type_container" class="full" chart-height="350px">
+                            </div>
+
+                            <table class="tg" style="width: 100%">
+                                <thead>
+                                  <tr>
+                                    <th>نوع</th>
+                                    <th>امتیاز</th>
+                                    <th>کلیدواژه‌ها</th>
+                                    <th>جزئیات</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="RahbariTypeTableBody">
+                                </tbody>
+                                </table>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div dir="rtl" id="RahbariTypeModalFooter" class="modal-footer">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollbar -->
+            <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+                <i class="far fa-caret-square-up" style="float: right;"></i>
+                <!-- <i class="bi bi-chevron-up"></i> -->
+                <!-- <i class="bi bi-chevron-double-up"></i> -->
+                <!-- <i class="bi bi-arrow-up-circle"></i> -->
+            </button>
+
+
+            <!-- Toast -->
+            <div class="position-absolute top-0 start-50 translate-middle p-3" style="z-index: 11;margin-top:95px;">
+                <div dir="rtl" id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body">
+                        <button type="button" class="btn-close float-left ml-0" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        <i style="position: relative; top: -4px; font-size: 18px;"
+                           class="bi bi-info-circle-fill  text-info"></i>
+                        <span id="toast_message">
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+    <!-- Intro Js -->
+    <script src="../../static/js/search/search_tour.js"></script>
+    <script src="../../static/js/tour.js"></script>
+
+
+    <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+    <script src="../../static/js/column.js"></script>
+    <script src="../../static/js/ChartColumnInteractivity.js"></script>
+
+    <script>
+        TABLE_INFO = []
+        MAX_RESULT_WINDOW = 5000
+        SEARCH_RESULT_SIZE = 500
+
+        const CHART_FIELD_DICT = {
+            "labels_container": "label_name",
+            "type_container": "type_name",
+            "year_container": "rahbari_year",
+            "rahbari_type_container": "rahbari_type",
+        }
+
+        initSearchableSelects();
+        init()
+
+
+        const COLUMNS = {
+            "rahbari_type": 'نوع سند',
+            "rahbari_date": 'تاریخ',
+            "rahbari_labels": 'برچسب'
+        }
+        append_column(COLUMNS)
+
+        let UserSearchParameters = {
+
+            country_id: "",
+            type_name: "",
+            label_name: "",
+            from_year: "",
+            to_year: "",
+            rahbari_type: "",
+            place: "",
+            text: "",
+            search_type: "",
+            table_curr_page: "",
+            column_curr_page: "",
+
+            update_parameters: async function () {
+
+
+                this.country_id = document.getElementById("country").value;
+                this.type_name = "همه"
+                this.label_name = await GetMultiSelectValue("LabelSelect") + "__OR";
+                if (this.label_name == "0__OR"){
+                    this.label_name = "همه"
+                }
+                this.from_year = "همه"
+                this.to_year = "همه"
+                this.place = "عنوان یا متن"
+                this.rahbari_type = await GetMultiSelectValue("TypeSelect") + "__OR";
+                if (this.rahbari_type == "0__OR"){
+                    this.rahbari_type = 0
+                }
+
+                user_text = document.getElementById("SearchBox").value;
+
+                if (user_text.trim().length > 0) {
+
+                    this.text = user_text.replaceAll('/', '>').replaceAll('\\', '<')
+
+                } else {
+                    this.text = "empty"
+                }
+
+                this.search_type = "exact"
+                this.table_curr_page = document.getElementById('TablePaginationInput').value
+                this.column_curr_page = document.getElementById('ColumnModalPaginationInput').value
+                }
+        }
+
+
+        let Rahbari_type_data = null
+        async function init()
+        {
+
+            let request_link = 'http://' + location.host + "/GetRahbariTypes/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["type_list"];
+            Rahbari_type_data = response
+            let options = [{ value: "0", text: "همه"}];
+
+            for (let i = 0; i < response.length; i++) {
+                const type_id = response[i]["id"]
+                const type_name = response[i]["name"]
+
+                options.push({value:type_id, text: type_name});
+
+            }
+            console.log(options)
+            syncSelectOptions('TypeSelect', options)
+
+            request_link = 'http://' + location.host + "/GetRahbariLabels/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["label_list"];
+            options = [{ value: "0", text: "همه"}];
+
+            for (let i = 0; i < response.length; i++) {
+                const label_id = response[i]["id"]
+                const label_name = response[i]["name"]
+
+                options.push({value:label_name, text: label_name});
+
+            }
+            syncSelectOptions('LabelSelect', options)
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+
+        }
+
+        async function GetMultiSelectValue(container_id) {
+            let e = document.getElementById(container_id);
+            let selected = [...e.options]
+                .filter(option => option.selected)
+                .map(option => option.value)
+            return selected.join("__")
+        }
+
+        async function ShowResult()
+        {
+
+            const country_id = document.getElementById("country").value
+            const type_id = 0
+
+            let label_name = await GetMultiSelectValue("LabelSelect") + "__OR"
+            if (label_name === '0__OR') {
+                label_name = 0
+            }
+            console.log(label_name)
+            const from_year = 0;
+            const to_year = 0;
+            const place = "عنوان و متن"
+
+            let rahbari_type = await GetMultiSelectValue("TypeSelect") + "__OR"
+            if (rahbari_type === '0__OR') {
+                rahbari_type = 0
+            }
+
+            let text = document.getElementById("SearchBox").value
+            if (text === '') {
+                text = "empty"
+            }
+
+            UserSearchParameters.update_parameters();
+
+            const search_type = "exact"
+            const curr_page = document.getElementById('TablePaginationInput').value
+
+            const request_link = 'http://' + location.host + "/SearchRahbari_ES/" + country_id + "/" + type_id + "/" +
+                label_name + "/" + from_year + "/" + to_year + "/" + rahbari_type + "/" + place + "/" + text + "/" + search_type + "/"
+                + curr_page + "/" + SEARCH_RESULT_SIZE + "/";
+
+            let response = await fetch(request_link).then(response => response.json());
+
+            /*  Show Table Result */
+            const total_hits = response["total_hits"]
+            const ES_SearchResult = response["result"]
+            const ES_Aggregations = response["aggregations"]
+            const max_score = response["max_score"]
+            update_table_pagination_input(curr_page, total_hits)
+
+            showDocumentInformation(ES_SearchResult, search_type, place, total_hits, text, curr_page, max_score)
+            GetChartData_Es(country_id, text, ES_Aggregations, ES_SearchResult);
+            {#await getFullProfileInfo(country_id, type_id, label_name, from_year, to_year, place, text, search_type, curr_page)#}
+            document.getElementById('TablePaginationInput').disabled = false;
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نتایج جست و جو"
+            let country_name = $("#country option:selected").text();
+            let search_text = text
+            type_select = ""
+            label_select = ""
+            $("#TypeSelect option:selected").each(function () {
+                type_select += $(this).text() + "، ";
+            });
+            $("#LabelSelect option:selected").each(function () {
+                label_select += $(this).text() + "، ";
+            });
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('search_text', search_text);
+            form_data.append('type', type_select);
+            form_data.append('label', label_select);
+            UserLog(form_data)
+
+        }
+
+        async function update_table_pagination_input(curr_page, total_hits, pagination_id = "TablePaginationInput", from_page_id = "from_page", total_page_id = "total_page") {
+
+            page_count = 0;
+
+            if (total_hits < SEARCH_RESULT_SIZE) {
+                page_count = 1
+
+            } else if (total_hits < MAX_RESULT_WINDOW) {
+                page_count = Math.ceil(total_hits / SEARCH_RESULT_SIZE)
+
+            } else if (total_hits >= MAX_RESULT_WINDOW) {
+                page_count = MAX_RESULT_WINDOW / SEARCH_RESULT_SIZE
+            }
+
+            document.getElementById(pagination_id).min = 1;
+            document.getElementById(pagination_id).max = page_count;
+            document.getElementById(pagination_id).value = curr_page;
+
+            document.getElementById(from_page_id).innerText = curr_page;
+            document.getElementById(total_page_id).innerText = page_count
+
+        }
+
+        function showDocumentInformation(documents_information_result, mode, where, total_hits, text, curr_page, max_score) {
+
+            document.getElementById("search_result_tab").addEventListener("click", () => {
+                document.getElementById("SearchResultLable").innerText = "تعداد کل نتایج: " + total_hits + " سند"
+            })
+            document.getElementById("bar_chart_info_tab").addEventListener("click", () => {
+                document.getElementById("SearchResultLable").innerText = "تعداد کل نتایج: " + total_hits + " سند"
+            })
+            document.getElementById("SearchResultLable").innerText = "تعداد کل نتایج: " + total_hits + " سند"
+            let index = (curr_page - 1) * SEARCH_RESULT_SIZE + 1;
+            let document_result = []
+
+            for (let doc of documents_information_result) {
+                const doc_id = doc['_source']['document_id']
+                var doc_name = doc['_source']['name']
+                const doc_file_name = doc['_source']['document_file_name']
+                const type = doc['_source']['type']
+                const rahbari_date = doc['_source']['rahbari_date']
+                const rahbari_year = doc['_source']['rahbari_year'] !== 0 ? doc['_source']['rahbari_year'] : 'نامشخص'
+                const labels = doc['_source']['labels']
+                const rahbari_type = doc['_source']['rahbari_type']
+                let score = Math.round((doc['_score'] / max_score) * 100)
+
+
+                let button_disable = ""
+
+                let is_disabled = ""
+                if (text === "empty")
+                    is_disabled = "disabled"
+
+                // const detail_function = `DetailFunction('${es_id}', '${name}', '${mode}', '${where}', '${index - 1}')`;
+                const detail_function = `DetailFunction2('${doc_id}','${doc_name}','${mode}','${text}','${1}')`;
+                const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" ' + button_disable + ' onclick="' + detail_function + '" data-bs-target="#myModal" ' + is_disabled + '>جزئیات</button>'
+
+                const rahbari_type_function = `TypeDetailFunction('${doc_id}','${doc_name}','${mode}','${text}')`;
+                const rahbari_type_detail = '<a type="button" onclick="' + rahbari_type_function + '">'+rahbari_type+'<img style="width: 25px; margin-right: 10px;" src="../../static/image/viewMore.png"></a>'
+
+
+
+                const document_link = 'http://' + location.host + "/information/?id=" + doc_id
+                doc_name = '<a target="blank" href="' + document_link + '">' + doc_name + "</a>"
+
+
+
+                const row = {
+                    "index": index,
+                    "doc_id": doc_id,
+                    "doc_name": doc_name,
+                    "doc_file_name": doc_file_name,
+                    "rahbari_date": rahbari_date,
+                    "rahbari_year": rahbari_year,
+                    "type": type,
+                    "rahbari_labels": labels,
+                    "rahbari_type": rahbari_type_detail,
+                    "count": score,
+                    "detail": detail
+                }
+
+                document_result.push(row)
+                index += 1
+            }
+
+            TABLE_INFO = document_result
+            show_table_result()
+
+
+        }
+
+        async function show_table_result() {
+            selected_columns = ["index", "doc_name", "count", "detail"]
+            selected_columns = find_selected_column(selected_columns)
+
+
+            columns = [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "doc_name",
+                "title": "نام سند",
+                "style": {
+                    "width": "25%"
+                }
+            }, {
+                "name": "type",
+                "title": "دسته سند",
+                "style": {
+                    "width": "10%"
+                }
+            }, {
+                "name": "rahbari_type",
+                "title": "نوع سند",
+                "style": {
+                    "width": "20%"
+                }
+            }, {
+                "name": "rahbari_date",
+                "title": "تاریخ",
+                "style": {
+                    "width": "10%"
+                }
+            }
+            ,{
+                "name": "rahbari_labels",
+                 "title": "برچسب",
+                 "style": {
+                     "width": "25%"
+                 }
+            },
+                {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "5%"
+                }
+            }]
+            if (!selected_columns.includes("all")) {
+                for (let column of columns) {
+                    if (selected_columns.includes(column["name"])) {
+                        column["visible"] = true
+                    } else {
+                        column["visible"] = false
+                    }
+                }
+            }
+
+            $('#SearchTable').empty();
+            if (typeof TABLE_INFO !== 'undefined') {
+                $('#SearchTable').footable({
+                    "paging": {
+                        "enabled": true,
+                        strings: {
+                            first: '»',
+                            prev: '›',
+                            next: '‹',
+                            last: '«'
+                        }
+                    },
+                    "filtering": {
+                        "enabled": false
+                    },
+                    "sorting": {
+                        "enabled": true
+                    },
+                    "empty": "سندی یافت نشد.",
+                    "columns": columns,
+                    "rows": TABLE_INFO
+                });
+            }
+        }
+
+
+        async function GetChartData_Es(country_id, text, ES_Aggregations, documents_information_result) {
+            let request_link = '';
+            startBlockUI('bar_chart_info_pane');
+
+            rahbari_type_chart = ES_Aggregations['rahbari-rahbari_type-agg']['buckets']
+            type_chart = ES_Aggregations['rahbari-type-agg']['buckets']
+            year_chart = ES_Aggregations['rahbari-year-agg']['buckets']
+            labels_chart = ES_Aggregations['rahbari-labels-agg']['buckets']
+
+            doc_ids = []
+
+            for (doc of documents_information_result) {
+                doc_id = doc['_source']['document_id']
+                doc_ids.push(doc_id)
+            }
+            /* Show Chart  */
+            showChartData(rahbari_type_chart, "rahbari_type_container", "rahbari_type", documents_information_result, false, "نوع", "توزیع اسناد براساس نوع", "تعداد سند")
+            showChartData(type_chart, "type_container", "type", documents_information_result, false, "دسته", "توزیع اسناد براساس دسته", "تعداد سند")
+            showChartData(year_chart, "year_container", "year", documents_information_result, true, "سال", "توزیع اسناد براساس سال", "تعداد سند")
+            showChartData(labels_chart, "labels_container", "label", documents_information_result, true, "برچسب", "توزیع اسناد براساس برچسب", "تعداد سند")
+
+            stopBlockUI('bar_chart_info_pane', 'داشبورد آماری');
+
+        }
+
+        function showChartData(data, container, tab_name, documents_information_result, keySort, xAxisTitle, title, yAxisTitle = "") {
+
+            let chart_data = []
+            for (column of data) {
+                key = column["key"]
+                // key = column["key"] != 0 ? column["key"] : 'نامشخص'
+                value = column["doc_count"]
+
+                if (key !== "بدون شخص حقیقی" && key !== "بدون موقعیت مکانی") {
+                    chart_data.push([key, value])
+                }
+            }
+            if (chart_data.length > 0) {
+                showChart(chart_data, container, tab_name, documents_information_result, keySort, xAxisTitle, title, yAxisTitle)
+            }
+        }
+
+        function showChart(data, container, tab_name, documents_information_result, sortKeys, xAxisTitle, title, yAxisTitle = "تعداد سند") {
+
+            const options = {
+                data,
+                sortKeys,
+                xAxisTitle,
+                title,
+                yAxisTitle: yAxisTitle,
+                onClick: async function (event, data) {
+
+                    const click_tag = event.domTarget.tag;
+                    const index = click_tag["index"]
+                    const text = data.row(index)[0];
+                    const best_result_count = documents_information_result.length
+
+                    let filtered_result = []
+                    let header = ""
+                    let save_file_name = document.getElementById("SearchBox").value;
+
+                    if (tab_name !== "rahbari_type_detail_chart")
+                    {
+                        await GetClickedColumnDocuments(container, text)
+                        $("#ChartModalBtn").click();
+                    }
+
+                
+                }
+            };
+
+            newBarChart(container, options)
+
+
+        }
+
+        async function GetClickedColumnDocuments(position, column_value) {
+            startFullPageBlockUI();
+            document.getElementById("ChartModalBodyText").innerHTML = ""
+            RESULT_DOCUMENTS = []
+            await load_documents(position, column_value, 1, RESULT_DOCUMENTS)
+
+            stopFullPageBlockUI('کلیک روی نمودار');
+        }
+        async function load_documents(position, column_value, next_page_number, RESULT_DOCUMENTS) {
+            console.log(UserSearchParameters)
+
+            Doc_Field = CHART_FIELD_DICT[position]
+
+            label_name_list = [UserSearchParameters.label_name]
+            type_name = UserSearchParameters.type_name
+            from_year = UserSearchParameters.from_year
+            to_year = UserSearchParameters.to_year
+            rahbari_type = UserSearchParameters.rahbari_type
+
+            header = ""
+            let save_file_name = document.getElementById("SearchBox").value;
+
+            if (Doc_Field == 'label_name') {
+
+                header = "برچسب: " + column_value
+                if (!label_name_list.includes(column_value))
+                    label_name_list.push(column_value)
+
+                save_file_name += " (مجموعه سند {1} و برچسب {2})".replace("1", "اسناد رهبری").replace("2", column_value)
+
+            } else if (Doc_Field == 'type_name') {
+
+                header = "دسته سند: " + column_value
+                type_name = column_value
+                save_file_name += " (مجموعه سند {1} و دسته سند {2})".replace("1", "اسناد رهبری").replace("2", column_value)
+
+            } else if (Doc_Field == 'rahbari_type') {
+
+                header = "نوع اسناد: " + column_value
+                save_file_name += " (مجموعه سند {1} و نوع اسناد {2})".replace("1", "اسناد رهبری").replace("2", column_value)
+                rahbari_type = -1
+                for(rahbari_type_obj of Rahbari_type_data){
+                    if(rahbari_type_obj['name'] == column_value){
+                        rahbari_type = rahbari_type_obj['id'] + "__OR"
+                    }
+                }
+                
+
+
+            }else if (Doc_Field == 'rahbari_year') {
+
+                header = "سال اسناد: " + column_value
+                save_file_name += " (مجموعه سند {1} و سال اسناد {2})".replace("1", "اسناد رهبری").replace("2", column_value)
+
+                if (column_value == 'نامشخص') {
+                    from_year = "0"
+                    to_year = "0"
+                } else {
+                    from_year = to_year = column_value
+                }
+
+
+            }
+            label_name_list = label_name_list.toString();
+
+            request_link = 'http://' + location.host + "/Search_Rahbari_Column_ES/"
+                + UserSearchParameters.country_id + "/"
+                + type_name + "/"
+                + label_name_list + "/"
+                + from_year + "/"
+                + to_year + "/"
+                + rahbari_type + "/"
+                + UserSearchParameters.place + "/"
+                + UserSearchParameters.text + "/"
+                + UserSearchParameters.search_type + "/"
+                + next_page_number + "/"
+            console.log(label_name_list)
+            console.log(rahbari_type)
+            console.log(request_link)
+
+            let response = await fetch(request_link).then(response => response.json());
+            result_documents = response['result']
+            total_hits = response['total_hits']
+            curr_page = response['curr_page']
+
+            RESULT_DOCUMENTS = RESULT_DOCUMENTS.concat(result_documents);
+
+
+            /* download file creation */
+            document.getElementById("DownloadDocuments").onclick = function () {
+                downloadFiles(RESULT_DOCUMENTS, save_file_name);
+            };
+
+            /* export into excel files */
+            document.getElementById("ExportExcel2").onclick = function ExportExcelFunction() {
+                // startFullPageBlockUI()
+
+                var csv = "";
+
+                sep = ","
+                let Csv = "نام سند" + sep + "دسته سند" + sep +
+                    "برچسب سند" + sep + "سال سند" + "\n"
+
+                for (const document of RESULT_DOCUMENTS) {
+                    Csv += document['_source']["name"].replaceAll(',', '-') + sep + document['_source']["type"].replaceAll(',', '-') + sep + document['_source']['labels'].toString().replaceAll(',', '-') + sep +
+                        document['_source']["rahbari_year"].replaceAll(',', '-') + "\n"
+
+                }
+
+                let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+                var link = document.createElement("a");
+                link.setAttribute("href", csvContent);
+                link.setAttribute("download", save_file_name + ".csv");
+                document.body.appendChild(link);
+                link.click()
+                // stopFullPageBlockUI('خروجی اکسل');
+
+            };
+
+
+            await update_column_pagination_input(curr_page, total_hits);
+            max_page = parseInt(document.getElementById("ColumnModalPaginationInput").max)
+
+            document.getElementById("ChartModalHeader").innerText = header
+            document.getElementById("DocsCount").innerText = total_hits + " سند:"
+
+            await show_modal_documents(result_documents, position, column_value, curr_page, max_page, RESULT_DOCUMENTS);
+
+
+        }
+
+        async function show_modal_documents(result_documents, position, column_value, curr_page, max_page, RESULT_DOCUMENTS) {
+
+
+            let filtered_result_tag = ""
+            let list_of_docId = ""
+
+            for (const doc of result_documents) {
+                const link = 'http://' + location.host + "/information/?id=" + doc["_source"]["document_id"]
+                let tag = "<li class='mt-3' id=" + doc["_source"]["document_id"] + "><a target='blank' href='" + link + "'>" + doc["_source"]["name"] + "</a></li>"
+                filtered_result_tag += tag
+                list_of_docId += doc["document_id"] + "_"
+            }
+
+            index = (curr_page - 1) * SEARCH_RESULT_SIZE + 1;
+
+            filtered_result_tag = "<ol start='" + index + "'>" + filtered_result_tag + "</ol>"
+            document.getElementById("ChartModalBodyText").innerHTML += filtered_result_tag
+
+            if (curr_page >= max_page) {
+                $("#LoadMoreDocuments").hide();
+            } else {
+                $("#LoadMoreDocuments").show();
+            }
+
+            /* LoadMoreDocuments */
+            document.getElementById("LoadMoreDocuments").onclick = function () {
+
+                next_page_number = ColumnModalNextPage(curr_page);
+                load_documents(position, column_value, next_page_number, RESULT_DOCUMENTS);
+
+            };
+
+
+        }
+
+        async function update_column_pagination_input(curr_page, total_hits) {
+
+            page_count = 0;
+
+            if (total_hits < SEARCH_RESULT_SIZE) {
+                page_count = 1
+
+            } else if (total_hits < MAX_RESULT_WINDOW) {
+                page_count = Math.ceil(total_hits / SEARCH_RESULT_SIZE)
+
+            } else if (total_hits >= MAX_RESULT_WINDOW) {
+                page_count = MAX_RESULT_WINDOW / SEARCH_RESULT_SIZE
+            }
+
+            document.getElementById("ColumnModalPaginationInput").min = 1;
+            document.getElementById("ColumnModalPaginationInput").max = page_count;
+            document.getElementById("ColumnModalPaginationInput").value = curr_page;
+
+        }
+
+        function ColumnModalNextPage(curr_page) {
+
+
+            next_page_number = curr_page;
+            max_page_number = parseInt(document.getElementById("ColumnModalPaginationInput").max);
+
+            if (next_page_number < max_page_number) {
+                next_page_number = curr_page + 1
+            }
+
+            document.getElementById("ColumnModalPaginationInput").value = next_page_number
+
+            return next_page_number;
+
+        }
+
+
+        async function downloadFiles(file_name_list, save_file_name) {
+            startFullPageBlockUI()
+            const country_id = document.getElementById('country').value
+            let zip = new JSZip()
+
+            const request_link = 'http://' + location.host + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+
+            save_file_name += " مجموعه سند {" + country_name + "}"
+
+
+            let extension = ".txt"
+            if (country_name.includes("فاوا")) {
+                extension = '.docx';
+            }
+
+            for (const document of file_name_list) {
+                const document_name = document["_source"]["document_file_name"] + extension
+                const path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name;
+
+                await fetch(path)
+                    .then(res => res.arrayBuffer())
+                    .then(value => {
+                        zip.file(document_name, value);
+                    })
+            }
+            zip.generateAsync({
+                type: "blob"
+            })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, save_file_name + ".zip");
+                });
+            stopFullPageBlockUI('دانلود اسناد');
+        }
+
+        async function DownloadSerachResultFunction() {
+
+            const save_file_name = "نتیجه جستجو {" + document.getElementById("SearchBox").value + "}"
+            downloadFiles(SearchResultValue, save_file_name)
+        }
+
+        async function ExportExcelSerachResultFunction() {
+            var csv = "";
+
+            sep = ","
+
+            let Csv = "نام سند" + sep + "دسته سند" + sep +
+                "برچسب سند" + sep + "سال سند" + "\n"
+
+            for (const document of SearchResultValue) {
+                Csv += document['_source']["name"].replaceAll(',', '-') + sep + document['_source']["type"].replaceAll(',', '-') + sep + document['_source']['labels'].toString().replaceAll(',', '-') + sep +
+                    document['_source']["rahbari_year"].replaceAll(',', '-') + "\n"
+
+            }
+
+            let save_file_name = "نتیجه جستجو {" + document.getElementById("SearchBox").value + "}"
+            save_file_name += " مجموعه سند {" + document.getElementById("country").innerText + "}"
+
+            let csvContent = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(Csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", save_file_name + ".csv");
+            document.body.appendChild(link);
+            link.click()
+        }
+
+        function TablePaginationChanged(event) {
+
+        input_id = event.target.id
+
+        curr_page_number = parseInt(event.target.value);
+        max_page_number = parseInt(document.getElementById(input_id).max);
+        min_page_number = parseInt(document.getElementById(input_id).min);
+
+
+        if (curr_page_number > max_page_number) {
+            document.getElementById(input_id).value = max_page_number
+        } else if (curr_page_number < min_page_number) {
+            document.getElementById(input_id).value = min_page_number
+        }
+
+        ShowResult()
+
+    }
+
+    async function DetailFunction2(doc_id, doc_name, search_type, text, isRule=0) {
+            startFullPageBlockUI();
+
+            document.getElementById("DetailText").innerHTML = ""
+            let doc_text = ''
+
+            let request_link = 'http://' + location.host + "/GetSearchDetails_ES_Rahbari_2/" + doc_id + "/" + search_type + "/" + text + "/" + isRule + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            paragraph_list = response["result"]
+
+            console.log(paragraph_list)
+
+            const link = 'http://' + location.host + "/information/?id=" + doc_id
+            let title_tag = "<a class='text-primary my-2' target='blank' href='" + link + "'>" + doc_name + "</a>"
+            document.getElementById("DetailHeader").innerHTML = '<span class="mb-3 lh-lg"> <strong>نام سند:</strong>' + title_tag + '</span>'
+
+
+            body_tag = ""
+            for (para of paragraph_list) {
+
+                try {
+                    paragraph_id = para['_source']['paragraph_id']
+                    paragraph = para["highlight"]["attachment.content"][0]
+
+
+
+
+                    paragraph_link = 'http://' + location.host + "/sentiment_analysis/?id=" + paragraph_id;
+
+                    paragraph_tag = "<a class='' title = 'پروفایل سند' target='blank' href='" + paragraph_link + "'>" + paragraph + "</a>"
+
+                    // profile_tag = paragraph
+
+                    tag = "<li class='mb-3 lh-lg'>" + paragraph_tag + "</li>"
+                    body_tag += tag
+
+                }
+                catch {}
+
+
+            }
+
+            document.getElementById("DetailText").innerHTML = "<ul>" + body_tag + "</ul>"
+
+            stopFullPageBlockUI('جزئیات')
+    }
+
+    async function TypeDetailFunction(doc_id, doc_name, search_type, text) {
+        document.getElementById("RahbariTypeModalTitle").innerHTML = doc_name
+
+        let request_link = 'http://' + location.host + "/GetRahbariTypeDetail/" + doc_id + "/";
+        let response = await fetch(request_link).then(response => response.json());
+        let rahbari_type_data = response["rahbari_type_data"]
+        let rahbari_type_chart_data  = response["rahbari_type_chart_data"]
+
+        rahbari_type_data = rahbari_type_data.slice().sort((a, b) => b.rahbari_type_score - a.rahbari_type_score);
+
+        document.getElementById("RahbariTypeTableBody").innerHTML = ""
+        let tag = ""
+        for (const rahbari_type of rahbari_type_data)
+        {
+            const rahbari_type_id = rahbari_type["rahbari_type_id"]
+            const rahbari_type_name = rahbari_type["rahbari_type_name"]
+            const rahbari_type_score = rahbari_type["rahbari_type_score"]
+            const keywords = rahbari_type["keywords"]
+
+            tag += '<tr style="border-bottom: 1px solid"><td style="padding: 30px 0px">'+rahbari_type_name+'</td><td>'+rahbari_type_score+'</td>'
+            let keyword_tag = ""
+            for(const kyeword in keywords)
+            {
+                const title_count = keywords[kyeword].title_count
+                const text_count = keywords[kyeword].text_count
+
+                const keyword_span_tag = "<span style='font-weight: bold'>" + kyeword + "</span>"
+                const title_count_tag = "&emsp; <span>" + "تکرار در عنوان: " + title_count + "</span> &emsp;"
+                const text_count_tag = "&emsp; <span>" + "تکرار در متن: " + text_count + "</span>"
+
+                keyword_tag += '<li class="mt-2">'+ keyword_span_tag + title_count_tag + text_count_tag + '</li>'
+            }
+            tag += "<td>" + keyword_tag + "</td>"
+
+            if (Object.keys(keywords).length > 0) {
+                const detail_function = `TypeDetailFunction2('${rahbari_type_id}','${doc_id}','${doc_name}')`;
+                tag += '<td><button type="button" class="btn modal_btn" data-bs-toggle="modal" data-bs-target="#RahbariTypeDetailModal" onclick="' + detail_function + '">جزئیات</button></td>'
+            }
+            else
+            {
+                tag += "<td></td>"
+            }
+            tag += "</tr>"
+        }
+
+        document.getElementById("RahbariTypeTableBody").innerHTML = tag
+
+
+        showChartData(rahbari_type_chart_data, "rahbari_chart_type_container", "rahbari_type_detail_chart", [], false, "نوع", "امتیاز سند براساس نوع", "امتیاز")
+
+
+        $("#RahbariTypeModalBtn").click()
+    }
+
+
+    async function TypeDetailFunction2(rahbari_type_id, doc_id, doc_name)
+    {
+            let request_link = 'http://' + location.host + "/GetRahbariTypeDetails_ES/" + doc_id + "/" + rahbari_type_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            paragraph_list = response["result"]
+
+            const link = 'http://' + location.host + "/information/?id=" + doc_id
+            let title_tag = "<a class='text-primary my-2' target='blank' href='" + link + "'>" + doc_name + "</a>"
+            document.getElementById("DetailHeader").innerHTML = '<span class="mb-3 lh-lg"> <strong>نام سند:</strong>' + title_tag + '</span>'
+
+
+            body_tag = ""
+            for (para of paragraph_list) {
+
+                try {
+                    paragraph_id = para['_source']['paragraph_id']
+                    paragraph = para["highlight"]["attachment.content"][0]
+
+                    paragraph_link = 'http://' + location.host + "/sentiment_analysis/?id=" + paragraph_id;
+
+                    paragraph_tag = "<a class='' title = 'پروفایل سند' target='blank' href='" + paragraph_link + "'>" + paragraph + "</a>"
+
+                    // profile_tag = paragraph
+
+                    tag = "<li class='mb-3 lh-lg'>" + paragraph_tag + "</li>"
+                    body_tag += tag
+
+                }
+                catch {}
+            }
+
+            document.getElementById("RahbariTypeDetailText").innerHTML = "<ul>" + body_tag + "</ul>"
+
+            stopFullPageBlockUI('جزئیات')
+    }
+
+    $('#RahbariTypeDetailModal').on('hidden.bs.modal', function () {
+        $("#RahbariTypeModalBtn").click()
+    })
+
+    </script>
+    
+
+    
+</div>
+</body>
+<!-- save log user -->
+<script>
+    async function UserLog(form_data) {
+        if (getCookie("username") !== "") {
+            const user_name = getCookie("username")
+            let page_url = window.location.pathname
+            const user_ip = "127.0.0.0"
+            page_url = page_url.slice(0, -1);
+            if (page_url === "") {
+                page_url = "/0";
+            }
+
+
+            let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/" + user_ip + "/";
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: true,
+
+
+            }).done(function (res) {
+                console.log("done")
+
+            }).fail(function (res) {
+                console.log("fail")
+            });
+
+        }
+    }
+</script>

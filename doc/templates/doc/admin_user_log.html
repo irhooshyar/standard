@@ -1,0 +1,598 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-radar.min.js"></script>
+
+    <script src="../../static/library/anychart-base.min-8.10.0.js"></script>
+    <!-- <script src="../../static/library/anychart-8.10.0-exports.min.js"></script> -->
+    <script src="../../static/library/anychart-ui.min-8.10.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/anychart-ui.min-8.10.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/anychart-font.min-8.10.0.css">
+
+    <!-- Multi Select  -->
+    <link rel="stylesheet" type="text/css" href="../../static/styles/multiselect/multiselect-style.css">
+    <script type="text/javascript" src="../../static/js/multiselect/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../../static/js/multiselect/jquery.multi-select.js"></script>
+
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <!-- Download Zip Files -->
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/adaptation.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <meta charset="UTF-8">
+    <title>داشبورد ادمین</title>
+    {% include "doc/title_icon.html" %}
+
+    <!-- Bootstrap CSS -->
+{#    <link rel="stylesheet" href="../../static/styles/index2.css">#}
+{#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"#}
+{#          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">#}
+{#    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.7.1.css">#}
+{#    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">#}
+{#    <link rel="stylesheet" href="../../static/styles/admin_dashboard.css">#}
+{#    <script src="../../static/js/jquery_351/jquery.min.js"></script>#}
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#AdminDropdown').addClass('active');
+            $('#super_admin_user_log').addClass('active');
+
+
+
+            // chart controller
+
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+
+
+        });
+    </script>
+
+</head>
+
+<body>
+
+{% load static %}
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4 full_screen">
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row-reverse mt-2 mx-auto">
+
+                <!-- Country Input مجموعه سند-->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 mt-1 bg-light" dir="rtl">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">انتخاب کاربر:</label>
+                    <select dir="rtl" id="user-id" name="user-id"
+                            class="form-select searchable-select text-right float-right"
+                            style="direction: rtl" required>
+                        <option value="0">همه</option>
+                        {% for k in users %}
+                            <option value="{{ k.id }}">{{ k.first_name}} {{ k.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- از تاریخ-->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 mt-1 bg-light">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">از تاریخ:</label>
+                    <input type="text" id="time-start" class="form-control" placeholder="2022-02-02">
+                </div>
+
+                <!-- Actor Sub-Area زیر حوزه-->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 mt-1 bg-light">
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">تا تاریخ:</label>
+                    <input type="text" id="time-end" class="form-control" placeholder="2022-04-04">
+                </div>
+
+
+                <!--  Buttons -->
+                <div class="col-lg-2 col-md-6 pt-5 mt-1 col-12">
+                    <button type="button" id="document_search" onclick="init()"
+                        class="btn d-flex float-right mr-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="sr-only">درحال جستجو ...</span>
+                        </div>
+                        نمایش
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Advanced Fields in Second Row -->
+            <div id="advanced_fields" class="collapse show row flex-row-reverse mx-auto mt-4">
+
+
+
+            </div>
+        </form>
+
+        <div dir="rtl" class="row w-100 p-0">
+            <!--Original Tabs -->
+            <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+                            role="tablist">
+
+                            <li class="nav-item float-right" role="presentation">
+                                <button id="chart_info_tab" class="nav-link active" data-bs-toggle="pill"
+                                    data-bs-target="#chart_info_pane" type="button" role="tab" aria-controls="chart_info_pane"
+                                    aria-selected="false">اطلاعات
+                                    آماری</button>
+                            </li>
+
+                            <li class="nav-item float-right" role="presentation">
+                                <button id="keyword_chart_tab" class="nav-link" data-bs-toggle="pill"
+                                    data-bs-target="#keyword_chart_pane" type="button" role="tab" aria-controls="keyword_chart_pane"
+                                    aria-selected="false">جدول کلید واژه‌ها</button>
+                            </li>
+
+                            <li class="nav-item float-right" role="presentation">
+                                <button id="log_chart_tab" class="nav-link" data-bs-toggle="pill"
+                                    data-bs-target="#log_chart_pane" type="button" role="tab"
+                                    aria-controls="log_chart_pane" aria-selected="false">جدول لاگ‌ خام</button>
+                            </li>
+
+                        </ul>
+            <!-- Original Panes -->
+            <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+                            <div id="chart_info_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                                aria-labelledby="chart_info_tab">
+                                <div class="row mt-4 w-100 flex-row mx-0 px-4 pb-5">
+                                    <div id="chart_container_div">
+                                <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                        توزیع لاگ براساس ماه
+                                </h5>
+                                <br>
+                                <div id="month_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                                </div>
+
+                                <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                        توزیع لاگ براساس ساعت
+                                </h5>
+                                <br>
+                                <div id="hour_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                                </div>
+
+                                <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                        توزیع لاگ براساس پنل
+                                </h5>
+                                <br>
+                                <div id="panel_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                                </div>
+
+                                <!-- <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                        تعاملات کاربران در پنل نمایش مصوبات
+                                </h5>
+                                <br>
+                                <div id="information_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                                </div> -->
+
+                                <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                        تعاملات کاربران در پنل جستجو مصوبات
+                                </h5>
+                                <br>
+                                <div id="search_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                                </div>
+
+                                <h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">
+                                        تعاملات کاربران در پنل گراف مصوبات
+                                </h5>
+                                <br>
+                                <div id="graph_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                                </div>
+                        </div>
+                                </div>
+                            </div>
+
+                            <div id="keyword_chart_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                                aria-labelledby="keyword_chart_pane">
+
+                                <div class="table-responsive search_result_table mt-4">
+                                    <table class="table table-striped KeyWordTable" style="min-height: 200px;" id="KeyWordTable">
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="log_chart_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                                aria-labelledby="log_chart_pane">
+
+                                <div class="table-responsive search_result_table mt-4">
+                            <table class="table table-striped SearchTable" style="min-height: 200px;" id="SearchTable">
+                            </table>
+                        </div>
+                            </div>
+                        </div>
+        </div>
+    </div>
+<!--end container-->
+
+
+
+<script>
+    initSearchableSelects()
+
+    var chart_flag = true
+    async function getchart_Data(start_time, end_time, user_id){
+        {#stopBlockUI('chart_info_pane', 'نمایش داشبورد آماری');#}
+        if(user_id == '0' && chart_flag){
+            const chart_container_div = document.getElementById('chart_container_div')
+            chart_container_div.innerHTML += '<div id= "user_chart_div"><h5 class="document_subject w-100 mt-4 text-center float-right pt-3 pb-3">تعاملات کاربران </h5> <br> <div id="user_chart_container" style="height: 400px" class="bg-white w-100 p-4"> </div></div>'
+            chart_flag = false
+        }
+        if(user_id != '0' && !chart_flag){
+            document.getElementById('user_chart_div').innerHTML= ''
+            chart_flag = true
+        }
+
+        if(user_id == '0'){
+            const request_link = 'http://' + location.host + "/getUserChartLogs/" + user_id + "/" + start_time + "/" + end_time + "/";
+            let response = await fetch(request_link);
+            response = await response.json();
+            user_chart_data_list = response['user_chart_data_list']
+        }
+
+        const request_link = 'http://' + location.host + "/getChartLogs/" + user_id + "/" + start_time + "/" + end_time + "/";
+        let response = await fetch(request_link);
+        response = await response.json();
+        chart_value_list = response['chart_data_list']
+        // chart_data_information = response['chart_data_information']
+        chart_data_search = response['chart_data_search']
+        chart_data_graph = response['chart_data_graph']
+        month_chart_data = response['month_chart_data_list']
+        hour_chart_data = response['hour_chart_data_list']
+
+
+
+        await showChart(chart_value_list, "panel_chart_container", 'نام پنل');
+        // await showChart(chart_data_information, "information_chart_container", 'نوع لاگ');
+        await showChart(chart_data_search, "search_chart_container", 'نوع لاگ');
+        await showChart(chart_data_graph, "graph_chart_container", 'نوع لاگ');
+        await showChart(month_chart_data, "month_chart_container", 'ماه');
+        await showChart(hour_chart_data, "hour_chart_container", 'ساعت');
+        if(user_id == '0'){
+            await showChart(user_chart_data_list, "user_chart_container", 'نام کاربر');
+        }
+
+        {#startBlockUI('chart_info_pane');#}
+
+    }
+
+    async function showChart(data, position, xtitle) {
+
+            document.getElementById(position).innerHTML = ""
+
+            data.sort(function (element_a, element_b) {
+                    return element_a[0] - element_b[0];
+                });
+            chart = anychart.column();
+
+            // create a column series and set the data
+            var series = chart.column(data);
+
+
+            chart.animation(true);
+            chart.background().fill('#f8f9fa');
+
+            chart.background().fill('white');
+
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("{%value}");
+
+            // set all axis title
+            var xAxis = chart.xAxis();
+            xAxis.title(xtitle);
+            xAxis.title().fontFamily('vazir');
+xAxis.title().fontWeight("bold");
+
+            var yAxis = chart.yAxis();
+            yAxis.title("تعداد لاگ");
+            yAxis.title().fontFamily('vazir');
+yAxis.title().fontWeight("bold");
+            chart.yAxis().labels().format("{%value}");
+
+            chart.xAxis().labels().height(30);
+
+            chart.yScale().minimum(0);
+            chart.yScale().ticks().allowFractional(false);
+
+            chart.container(position);
+            chart.draw();
+        }
+
+    async function gettable_Data(start_time, end_time, user_id){
+        {#stopBlockUI('keyword_chart_pane', 'نمایش جدول کلید واژه‌ها');#}
+        const request_link = 'http://' + location.host + "/getTableUserLogs/" + user_id + "/" + start_time + "/" + end_time + "/";
+        let response = await fetch(request_link);
+        response = await response.json();
+
+        let table_rows = []
+        let index = 1;
+        keyword_table_data_list = response['keyword_table_data_list']
+
+        for (keyword of keyword_table_data_list) {
+            let row = {
+                "index": keyword[0],
+                "keyword": keyword[1],
+                "frq": keyword[2],
+            }
+            index++
+            table_rows.push(row)
+        }
+        $('#KeyWordTable').empty();
+        $('.KeyWordTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            },{
+                "name": "keyword",
+                "title": "نام کلمه",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "frq",
+                "title": "تعداد تکرار",
+                "sorted": true,
+                "direction": 'DESC',
+                "style": {
+                    "width": "15%"
+                }
+            },],
+            "rows": table_rows
+        });
+
+        {#startBlockUI('keyword_chart_pane');#}
+
+    }
+
+    async function init(){
+        await SpinnerModeFunction("Active");
+        startBlockUI('chart_info_pane');
+
+        let user_id = document.getElementById("user-id").value
+        if (user_id == 0)
+        {
+            user_id = "0"
+        }
+
+        let start_time = document.getElementById("time-start").value
+        if (start_time === "")
+        {
+            start_time = "0"
+        }
+        let end_time = document.getElementById("time-end").value
+        if (end_time === "")
+        {
+            end_time = "0"
+        }
+
+        await getchart_Data(start_time, end_time, user_id)
+        await gettable_Data(start_time, end_time, user_id)
+        await showResult(user_id, start_time, end_time)
+        await SpinnerModeFunction("Disable");
+        stopBlockUI('chart_info_pane', 'نمایش لاگ‌');
+    }
+
+    async function showResult(user_id, start_time, end_time){
+        {#startBlockUI('log_chart_pane');#}
+        const request_link = 'http://' + location.host + "/getUserLogs/" + user_id + "/" + start_time + "/" + end_time + "/";
+        let response = await fetch(request_link);
+        response = await response.json();
+
+        let table_rows = []
+        log_response = response['user_logs']
+
+        let index = 1;
+
+        for (log of log_response) {
+            let row = {
+                "index": index,
+                "user":log.name,
+                "panel_name": log.url,
+                "time":log.time,
+                "detail": JSON.stringify(log.detail),
+            }
+            index++
+            table_rows.push(row)
+        }
+
+        $('#SearchTable').empty();
+        $('.SearchTable').footable({
+            "paging": {
+                "enabled": true,
+                strings: {
+                        first: '»',
+                        prev:'›',
+                        next: '‹',
+                        last: '«'
+                    }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "سندی یافت نشد.",
+            "columns": [{
+                "name": "index",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            },{
+                "name": "user",
+                "title": "نام کاربر",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "panel_name",
+                "title": "نام پنل",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "time",
+                "title": "تاریخ و زمان",
+                "style": {
+                    "width": "15%"
+                }
+            }, {
+                "name": "detail",
+                "title": "جزئیات",
+                "style": {
+                    "width": "35%"
+                }
+            }],
+            "rows": table_rows
+        });
+
+        {#stopBlockUI('log_chart_pane', 'نمایش جدول لاگ‌ خام');#}
+
+    }
+
+    async function SpinnerModeFunction(mode) {
+        if (mode === "Active") {
+            $(".spinner-border").addClass("active");
+        } else if (mode === "Disable") {
+            $(".spinner-border").removeClass("active");
+        }
+    }
+
+
+
+</script>
+
+</body>
+
+    <script src="../../static/js/signout_function.js"></script>
+ <!-- Blocking UI -->
+    <script src="../../static/js/blockUI.js"></script>
+    <script src="../../static/js/blockUI_handler.js"></script>
+    <link rel="stylesheet" href="../../static/styles/loader.css">
+
+</html>

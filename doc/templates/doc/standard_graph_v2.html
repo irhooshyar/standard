@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="../../static/js/jsnetworkx.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/graph.css">
+    <meta charset="UTF-8">
+
+    <!-- simple graph  -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="../../static/library/d3.tip.v0.6.3.js"></script>
+    <link rel="stylesheet" href="../../static/styles/sim_graph.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+
+    <script src="../../static/library/jquery.min-2.2.2.js"></script>
+    <script src="../../static/library/jquery-ui.min-1.11.4.js"></script>
+
+        <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <title> گراف دانش استاندارد</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+
+            // Active panel
+            //$('#JudgmentDropdown').addClass('active');
+            $('#standard_graph_v2').addClass('active');
+
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+
+
+    <div class="row p-5 pb-0 flex-row-reverse mx-auto bg-light mt-5">
+        <form action="" class="custom-control mx-auto needs-validation" id="graph_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <div class="row mb-0 flex-row-reverse mx-auto">
+
+                <div class="col-md-6 pt-3 col-12 col-lg-2 bg-light">
+
+                    <label class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+
+                    <select id="country" name="country" class="form-select text-right float-right"
+                        onchange="CountryChanged()" style="direction: rtl;">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="col-lg-3 mr-0 col-md-6 pt-5 col-12">
+                    <!-- Show result btn -->
+                    <button type="button" id="graph_show" class="btn float-right" onclick="ShowGraph()"> نمایش
+                        گراف</button>
+                </div>
+
+
+            </div>
+        </form>
+
+        <!--Original Tabs -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-right" role="presentation" id="advanced_view_tab">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#advanced_view_pane" type="button"
+                    role="tab" aria-controls="advanced_view_pane" aria-selected="true">نمای پیشرفته</button>
+            </li>
+        </ul>
+
+        <!-- Original Panes -->
+        <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+            <!--  Document Graph Pane -->
+            <div class="tab-pane fade show active float-right w-100" id="advanced_view_pane" role="tabpanel"
+                aria-labelledby="advanced_view_tab">
+                <div class="row mt-4 w-100 flex-row-reverse  mx-auto pb-5 px-4">
+                    <!-- doc colors -->
+                    <div dir="rtl" id="ColorBox" class="w-100 text-right" style="display: inline-flex">
+                    </div>
+
+                    <div id="constraints_container" class="collapse show constraints_container row flex-row-reverse pt-0 mb-0 mt-0 mx-auto">
+
+                        <div id="DegreeDiv" class="col-md-3 p-1 col-12 col-lg-6 mt-1">
+                            <div class="source_header bg-white row mx-auto p-1">
+                                <label class="text-center my-0" style="direction: rtl;">فیلتر درجه</label>
+                            </div>
+                            <div class="source_container pb-2 row mx-auto">
+                                <div dir="rtl" class="wrapper mt-5 mb-1" id="RangeSlider" style="visibility: hidden;">
+                                  <div class="container" style="display: flex; justify-content: center;">
+                                    <div class="slider-wrapper">
+                                      <div dir="ltr" id="slider-range"></div>
+                                      <div dir="rtl" style="display:flex; width: 300px; justify-content: center" class="range-wrapper">
+                                        <div dir="ltr" class="range mt-1"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="WeightDiv" class="col-md-3 p-1 col-12 col-lg-6 mt-1">
+                            <div class="source_header bg-white row mx-auto p-1">
+                                <label class="text-center my-0" style="direction: rtl;">فیلتر وزن</label>
+                            </div>
+                            <div class="source_container pb-2 row mx-auto">
+                                <div dir="rtl" class="wrapper mt-5 mb-1" id="WeightSlider" style="visibility: hidden;">
+                                  <div class="container" style="display: flex; justify-content: center;">
+                                    <div class="slider-wrapper">
+                                        <div dir="ltr" id="slider-range"></div>
+                                          <div dir="rtl" style="display:flex; width: 300px; justify-content: center" class="range-wrapper">
+                                            <div dir="ltr" class="range mt-1"></div>
+                                          </div>
+                                    </div>
+                                    </div>
+                                  </div>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div dir="ltr">
+                        <img style="width: 4%; cursor: pointer" src="../../static/image/neighbourhood.png" onclick="SelectNeighbourhood()">
+                        <img style="width: 3%; cursor: pointer" id="ShowHideImg" src="../../static/image/hide_nodes.png" onclick="ShowHideNode()">
+                    </div>
+
+                    <select id="ChangeLayout" name="ChangeLayout" onchange="ChangeLayout()" class="form-select text-right float-right" style="direction: rtl;">
+                        <option value="grid">مربعی</option>
+                        <option value="circular"> دایره ای </option>
+                        <option value="force">ساده</option>
+                        <option value="dagre">بالا به پایین</option>
+                        <option value="radial">شعاعی</option>
+                        <option value="concentric">متحدالمرکز</option>
+                        <option value="comboForce">خوشه ای</option>
+                    </select>
+
+                    <script src="../../static/js/graph/color_picker_handler.js">
+                    </script>
+
+                    <div id="advanced_graph_container" class="border mt-1 position-static" style="height:500px; overflow: hidden;">
+                    </div>
+
+                    <div dir="rtl" style="display: flex; margin-bottom: 50px;">
+                    <div class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            گره های انتخاب شده
+                        </h6>
+                        <table id="selected_node_table" class="table table-striped PopUpTable" style="width: 95%;margin: auto;">
+
+                        </table>
+                    </div>
+
+                    <div class="col-md-6 px-0 col-12 col-lg-7 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            یال های انتخاب شده
+                        </h6>
+                        <table id="selected_edge_table" class="table table-striped PopUpTable" style="width: 95%;margin: auto;">
+
+                        </table>
+                    </div>
+                </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js"></script>
+    <!-- Intro Js -->
+    <script src="../../static/js/graph/graph_tour.js"></script>
+
+    <script>
+        init()
+
+        container_id_list = ['advanced_graph_container']
+
+        let graph_object;
+        let data_graph;
+        let min_selected_degree;
+        let max_selected_degree;
+        let min_selected_weight;
+        let max_selected_weight;
+        let show_hide_state = "show"
+
+        function clearPrevResults(container_id_list) {
+
+            for (container_id of container_id_list) {
+                document.getElementById(container_id).innerHTML = "";
+            }
+        }
+
+        async function init() {
+            const country_id = document.getElementById("country").value
+
+            /******************************** Get Type Color *****************************************/
+
+            request_link = 'http://' + location.host + "/GetStandardTypeByCountryId/" + country_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["type_list"]
+            console.log(response)
+            document.getElementById("ColorBox").innerHTML = "";
+            for (var i = 0; i < response.length; i++) {
+                const type_id = response[i]["id"]
+                const type_name = response[i]["name"]
+                const type_color = response[i]["color"]
+                let is_checked = "checked"
+                if (response[i]["is_checked"] === "0")
+                    is_checked = ""
+
+                tag = '<div class="form-check"><input type="checkbox" id="'+type_id+'" '+is_checked+'>'
+                tag += '<label class="form-check-label" style="padding-right: 20px; color: '+type_color+'" for="flexCheckChecked">'+type_name+'</label></div>'
+
+                document.getElementById("ColorBox").innerHTML += tag
+            }
+
+            tag = '<button type="button" id="graph_show" class="btn float-right" onclick="ShowGraph()" style="bottom: 10px;position: relative;"> نمایش مجدد</button>'
+            document.getElementById("ColorBox").innerHTML += tag
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+        }
+
+        function CountryChanged() {
+            clearPrevResults(container_id_list);
+            init()
+        }
+
+        async function ShowGraph()
+        {
+            $('#selected_node_table').empty();
+            $('#selected_edge_table').empty();
+
+            clearPrevResults(container_id_list);
+            notyf.dismissAll();
+
+            startBlockUI('advanced_graph_container');
+
+            const country_id = document.getElementById("country").value
+
+            /*********************** Create Graph ****************************/
+            const selected_type = $("input:checkbox:checked").toArray()
+            let selected_type_txt = ""
+            for (const item of selected_type)
+            {
+                selected_type_txt += item["id"] + "_"
+            }
+
+            if (selected_type_txt === "")
+            {
+                stopBlockUI('advanced_graph_container');
+                return;
+            }
+
+
+            selected_type_txt = selected_type_txt.slice(0, -1);
+
+            let request_link = 'http://' + location.host + "/GetStandardGraphNodesEdges/" + country_id + "/" + selected_type_txt + "/";
+            let response = await fetch(request_link).then(response => response.json());
+
+            let Nodes_data = response["Nodes_data"]
+            let Edges_data = response["Edges_data"]
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش گراف"
+            let country_name = $("#country option:selected").text();
+            let graph_type = $("#GraphType option:selected").text();
+            let minimum_similarity = $("#MinimumSimilarity option:selected").text();
+            {#let tab_name = $('ul#original_tabs').find('button.active').text()#}
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('graph_type', graph_type);
+            form_data.append('minimum_similarity', minimum_similarity);
+            {#form_data.append('tab_name', tab_name);#}
+            UserLog(form_data)
+
+            /*********************** Show Graph ****************************/
+
+            data_graph = {
+              nodes: Nodes_data,
+              edges: Edges_data
+            };
+
+            const container = document.getElementById('advanced_graph_container');
+            const width = container.scrollWidth;
+            const height = container.scrollHeight  || 500;
+
+            const tooltip = new G6.Tooltip({
+              offsetX: 10,
+              offsetY: 10,
+              itemTypes: ['node', 'edge'],
+              getContent: (e) => {
+                const outDiv = document.createElement('div');
+                outDiv.style.width = 'fit-content';
+                let a = e.item.getType()
+                if ( a === "node")
+                {
+                    outDiv.innerHTML = `<div>
+                                            <p>
+                                                <span style="font-weight: bold">${e.item.getModel().type_name}:</span>
+                                                 ${e.item.getModel().name}
+                                            </p>
+                                        </div>`;
+                }
+                else if ( a === "edge")
+                {
+                    outDiv.innerHTML = `<div>
+                        <p>
+                            <span style="font-weight: bold">${e.item.getModel().source_type_name}:</span>
+                            ${e.item.getModel().source_name}
+                        </p>
+                        <p>
+                            <span style="font-weight: bold">${e.item.getModel().target_type_name}:</span>
+                            ${e.item.getModel().target_name}
+                        </p>
+                        <li style="font-weight: bold">وزن: ${e.item.getModel().weight}</li>
+                    </div>`;
+                }
+                return outDiv;
+              }
+            });
+
+            graph_object = new G6.Graph({
+              container: 'advanced_graph_container',
+              width,
+              height,
+              modes: {
+                default: ['zoom-canvas',
+                    'drag-node',
+                    'drag-canvas',
+                    {type:"brush-select", trigger: 'ctrl'},
+                ], //"activate-relations"
+              },
+              plugins: [tooltip],
+              layout:  "grid",
+              animate: true,
+              defaultEdge: {
+                style: {
+                    stroke: '#404040',
+                },
+              },
+              nodeStateStyles: {
+                selected: {
+                  stroke: 'Yellow',
+                  fill: 'Yellow'
+               },
+              cursor: "pointer"
+              },
+            });
+
+            graph_object.data(data_graph);
+            graph_object.render();
+
+            graph_object.on('nodeselectchange', e => {
+                const selected_nodes = e.selectedItems.nodes
+                const selected_edges = e.selectedItems.edges
+
+                let nodes_data = []
+                let id = 1
+                for (const node of selected_nodes)
+                {
+                    const node_object = node._cfg.model
+                    const node_id = node_object.id
+                    const node_name = node_object.name
+                    const type_name = node_object.type_name
+
+                    const degree = graph_object.getNodeDegree(node_object.id, 'total');
+
+                    const nodeSelection = "NodeSelection('" + node_id + "')"
+                    const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+                    nodes_data.push({id:id, name: node_name, type_name: type_name, degree: degree, node_selection: detail})
+                    id = id + 1
+                }
+                $('#selected_node_table').empty();
+                $('#selected_node_table').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گره ای انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام گره",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "degree",
+                    "title": "درجه",
+                    "style": {
+                        "width": "10%"
+                    }
+                },{
+                    "name": "type_name",
+                    "title": "نوع گره",
+                    "style": {
+                        "width": "15%"
+                    }
+                },{
+                    "name": "node_selection",
+                    "title": "انتخاب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": nodes_data
+            });
+
+
+                let edges_data = []
+                id = 1
+                for (const edge of selected_edges)
+                {
+                    const edge_object = edge._cfg.model
+
+                    const src_node_id = edge_object.source
+                    const src_node_name = edge_object.source_name
+                    const source_doc_link = 'http://' + location.host +'/standard_information/?id=' + src_node_id.toString()
+                    const source_doc_tag = '<a class="document_link" target="blank" href="' + source_doc_link + '">' + src_node_name +"</a>"
+
+                    const target_node_id = edge_object.target
+                    const target_node_name = edge_object.target_name
+                    const target_doc_link = 'http://' + location.host +'/standard_information/?id=' + target_node_id.toString()
+                    const target_doc_tag = '<a class="document_link" target="blank" href="' + target_doc_link + '">' + target_node_name +"</a>"
+
+                    const weight = edge_object.weight
+
+                    edges_data.push({id:id, src_name: src_node_name, target_name:target_node_name, weight:weight})
+                    id = id + 1
+                }
+                $('#selected_edge_table').empty();
+                $('#selected_edge_table').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "یالی انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "src_name",
+                    "title": "مبدا",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "target_name",
+                    "title": "مقصد",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "weight",
+                    "title": "وزن",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": edges_data
+            });
+
+            })
+
+            /*function handleNodeClick(event) {
+              const item = event.item._cfg.model;
+              window.open('http://' + location.host + "/information?id=" + item["id"]);
+            }
+            graph_object.on('node:dblclick', handleNodeClick);
+
+            function handleEdgeClick(event) {
+              const item = event.item._cfg.model;
+              const edge_id = item["source"] + "__" + item["target"]
+              window.open('http://' + location.host + "/comparison?id=" + edge_id);
+            }
+            graph_object.on('edge:dblclick', handleEdgeClick);*/
+
+            if (typeof window !== 'undefined')
+              window.onresize = () => {
+                if (!graph_object || graph_object.get('destroyed')) return;
+                if (!container || !container.scrollWidth || !container.scrollHeight) return;
+                graph_object.changeSize(container.scrollWidth, 500);
+              };
+
+            var select = $("#ChangeLayout");
+            select.val(select.children(":first").val());
+
+            let min_degree = 1.797693134862315E+308
+            let max_degree = 0
+            data_graph.nodes.forEach((node) => {
+                const degree = graph_object.getNodeDegree(node["id"], 'total');
+                if(degree < min_degree)
+                {
+                    min_degree = degree
+                }
+                if(degree > max_degree)
+                {
+                    max_degree = degree
+                }
+            })
+
+            if (min_degree === 1.797693134862315E+308)
+                min_degree = 0
+
+            let min_weight = 1.797693134862315E+308
+            let max_weight = 0
+            data_graph.edges.forEach((edge) => {
+                const weight = edge["weight"];
+                if(weight < min_weight)
+                {
+                    min_weight = weight
+                }
+                if(weight > max_weight)
+                {
+                    max_weight = weight
+                }
+            })
+
+            if (min_weight === 1.797693134862315E+308)
+                min_weight = 0
+
+            await ShowRangeSlider(min_degree, max_degree)
+            await ShowWeightSlider(min_weight, max_weight)
+            stopBlockUI('advanced_graph_container', 'نمای پیشرفته');
+
+        }
+
+        function NodeSelection(node_id)
+        {
+            data_graph.nodes.forEach((node) => {
+                let item = graph_object.findById(node["id"])
+                if(node["id"] === node_id)
+                {
+                    graph_object.setItemState(item, 'selected', true);
+                }
+                else
+                {
+                    graph_object.setItemState(item, 'selected', false);
+                }
+            })
+
+           graph_object.getEdges().forEach((edge) => {
+               graph_object.setItemState(edge, 'selected', false);
+
+           });
+
+            let item = graph_object.findById(node_id)._cfg.model
+            const degree = graph_object.getNodeDegree(node_id, 'total');
+            const nodeSelection = "NodeSelection('" + node_id + "')"
+            const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+            nodes_data = [{id:1, name: item["name"], degree:degree, type_name:item.type_name, node_selection: detail}]
+            $('#selected_node_table').empty();
+            $('#selected_node_table').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گره ای انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام گره",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "degree",
+                    "title": "درجه",
+                    "style": {
+                        "width": "10%"
+                    }
+                },{
+                    "name": "type_name",
+                    "title": "نوع گره",
+                    "style": {
+                        "width": "15%"
+                    }
+                },{
+                    "name": "node_selection",
+                    "title": "انتخاب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": nodes_data
+            });
+
+            $('#selected_edge_table').empty();
+            $('#selected_edge_table').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "یالی انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "src_name",
+                    "title": "مبدا",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "target_name",
+                    "title": "مقصد",
+                    "style": {
+                        "width": "40%"
+                    }
+                },{
+                    "name": "weight",
+                    "title": "وزن",
+                    "style": {
+                        "width": "15%"
+                    }
+                },
+                ],
+                "rows": []
+            });
+
+        }
+
+        function ShowRangeSlider(min, max)
+        {
+            document.getElementById("RangeSlider").style.visibility = "visible"
+
+            $('#RangeSlider #slider-range').slider({
+              range: true,
+              min: min,
+              max: max,
+              step: 1,
+              values: [min, max]
+            });
+
+            // Move the range wrapper into the generated divs
+            $('#RangeSlider .ui-slider-range').append($('#RangeSlider .range-wrapper'));
+
+            console.log($('#RangeSlider #slider-range'))
+            // Apply initial values to the range container
+            $('#RangeSlider .range').html(
+                '<span class="range-value"><sup></sup>' +
+                $('#RangeSlider #slider-range').slider("values", 0).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                $("#RangeSlider #slider-range").slider("values", 1).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+            // Show the gears on press of the handles
+            $('#RangeSlider .ui-slider-handle, #RangeSlider .ui-slider-range').on('mousedown', function() {
+              $('.gear-large').addClass('active');
+            });
+
+
+            $('#RangeSlider #slider-range').slider({
+              slide: function(event, ui) {
+                $('#RangeSlider .range').html(
+                    '<span class="range-value"><sup></sup>' +
+                    ui.values[0].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                    '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                    ui.values[1].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+                // Get old value
+                var previousVal = parseInt($(this).data('value'));
+
+                min_selected_degree = ui.values[0]
+                max_selected_degree = ui.values[1]
+
+                FilterGraphDegreeWeight()
+
+                // Save new value
+                $(this).data({
+                  'value': parseInt(ui.value)
+                });
+              }
+            });
+
+            $("#RangeSlider .ui-slider-handle").parent().css('z-index', 0);
+
+        }
+
+        function ShowWeightSlider(min, max)
+        {
+
+            document.getElementById("WeightSlider").style.visibility = "visible"
+
+            $('#WeightSlider #slider-range').slider({
+              range: true,
+              min: min,
+              max: max,
+              step: 1,
+              values: [min, max]
+            });
+
+            // Move the range wrapper into the generated divs
+            $('#WeightSlider .ui-slider-range').append($('#WeightSlider .range-wrapper'));
+
+            // Apply initial values to the range container
+            $('#WeightSlider .range').html(
+                '<span class="range-value"><sup></sup>' +
+                $('#WeightSlider #slider-range').slider("values", 0).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                $("#WeightSlider #slider-range").slider("values", 1).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+            // Show the gears on press of the handles
+            $('#WeightSlider .ui-slider-handle, #WeightSlider .ui-slider-range').on('mousedown', function() {
+              $('.gear-large').addClass('active');
+            });
+
+            $('#WeightSlider #slider-range').slider({
+              slide: function(event, ui) {
+                $('#WeightSlider .range').html(
+                    '<span class="range-value"><sup></sup>' +
+                    ui.values[0].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") +
+                    '</span><span class="range-divider"></span><span class="range-value"><sup></sup>' +
+                    ui.values[1].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "1,") + '</span>');
+
+                // Get old value
+                var previousVal = parseInt($(this).data('value'));
+
+                min_selected_weight = ui.values[0]
+                max_selected_weight = ui.values[1]
+
+                FilterGraphDegreeWeight()
+
+                // Save new value
+                $(this).data({
+                  'value': parseInt(ui.value)
+                });
+              }
+            });
+
+            $("#WeightSlider .ui-slider-handle").parent().css('z-index', 0);
+
+        }
+
+        function FilterGraphDegreeWeight()
+        {
+            graph_object.getEdges().forEach((edge) => {edge.show()})
+            graph_object.getNodes().forEach((node) => {node.show()})
+
+            const min_degree = min_selected_degree
+            const max_degree = max_selected_degree
+
+            const min_weight = min_selected_weight
+            const max_weight = max_selected_weight
+
+            graph_object.getEdges().forEach((edge) => {
+                const edge_item = edge._cfg.model
+                const edge_weight = edge_item.weight
+                if (edge_weight < min_weight || edge_weight > max_weight)
+                {
+                     edge.hide()
+                }
+                else
+                {
+                    const source_node_degree = graph_object.getNodeDegree(edge_item.source, 'total');
+                    const target_node_degree = graph_object.getNodeDegree(edge_item.target, 'total');
+
+                    if (source_node_degree < min_degree || source_node_degree > max_degree)
+                    {
+                        graph_object.findById(edge_item.source).hide();
+                        graph_object.getEdges().forEach((edge_temp) => {
+                            if (edge_temp._cfg.model.source === edge_item.source || edge_temp._cfg.model.target === edge_item.source)
+                            {
+                                edge_temp.hide()
+                            }
+                        })
+                    }
+                    if (target_node_degree < min_degree || target_node_degree > max_degree)
+                    {
+                        graph_object.findById(edge_item.target).hide();
+                        graph_object.getEdges().forEach((edge_temp) => {
+                            if (edge_temp._cfg.model.source === edge_item.target || edge_temp._cfg.model.target === edge_item.target)
+                            {
+                                edge_temp.hide()
+                            }
+                        })
+                    }
+                }
+            })
+
+            graph_object.getNodes().forEach((node) => {
+                const node_degree = graph_object.getNodeDegree(node._cfg.model.id, 'total');
+                if (node_degree < min_degree || node_degree > max_degree)
+                {
+                    graph_object.findById(node._cfg.model.id).hide();
+                }
+            });
+
+        }
+
+        const { louvain } = G6.Algorithm;
+        function ChangeLayout()
+        {
+            layout = document.getElementById("ChangeLayout").value
+            la = {type: layout}
+            graph_object.updateLayout(la);
+        }
+
+        function onlyUnique(value, index, self) {
+          return self.indexOf(value) === index;
+        }
+
+        function SelectNeighbourhood()
+        {
+            const selected_node_list = []
+            let selected_nodes = []
+            let selected_edges = []
+
+            graph_object.cfg.states.selected.forEach((item) => {
+                const item_cfg = item._cfg
+                if (item_cfg.type === "node")
+                {
+                    selected_node_list.push(item_cfg.model.id)
+                    selected_nodes.push(item)
+                }
+                else
+                {
+                    selected_edges.push(item)
+                }
+
+            })
+
+            graph_object.getEdges().forEach((edge) => {
+
+                if (edge.get('visible') === true)
+                {
+                    const source_id = edge._cfg.model.source
+                    const target_id = edge._cfg.model.target
+
+                    if (selected_node_list.includes(source_id))
+                    {
+                        graph_object.setItemState(edge, 'selected', true);
+                        graph_object.setItemState(graph_object.findById(target_id), 'selected', true);
+                        selected_nodes.push(graph_object.findById(target_id))
+                        selected_edges.push(edge)
+                    }
+                    else if (selected_node_list.includes(target_id))
+                    {
+                        graph_object.setItemState(edge, 'selected', true);
+                        graph_object.setItemState(graph_object.findById(source_id), 'selected', true);
+                        selected_nodes.push(graph_object.findById(source_id))
+                        selected_edges.push(edge)
+                    }
+                }
+           });
+
+            let nodes_data = []
+            let id = 1
+            for (const node of selected_nodes.filter(onlyUnique))
+            {
+                const node_object = node._cfg.model
+                const node_id = node_object.id
+                const node_name = node_object.name
+
+                const degree = graph_object.getNodeDegree(node_object.id, 'total');
+
+                const doc_link = 'http://' + location.host +'/standard_information/?id=' + node_id.toString()
+                const doc_tag = '<a class="document_link" target="blank" href="' + doc_link + '">' + node_name +"</a>"
+
+                const nodeSelection = "NodeSelection('" + node_id + "')"
+                const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" onclick="' + nodeSelection + '" data-bs-target="#detailModal">انتخاب</button>'
+
+
+                nodes_data.push({id:id, name: node_name, degree:degree, type_name:node_object.type_name, node_selection: detail})
+                id = id + 1
+            }
+            $('#selected_node_table').empty();
+            $('#selected_node_table').footable({
+                "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                },
+                "filtering": {
+                    "enabled": false
+                },
+                "sorting": {
+                    "enabled": true
+                },
+                "empty": "گره ای انتخاب نشده است",
+                "columns": [{
+                    "name": "id",
+                    "title": "ردیف",
+                    "breakpoints": "xs sm",
+                    "type": "number",
+                    "style": {
+                        "width": "5%"
+                    }
+                }, {
+                    "name": "name",
+                    "title": "نام گره",
+                    "style": {
+                        "width": "60%"
+                    }
+                }, {
+                    "name": "degree",
+                    "title": "درجه",
+                    "style": {
+                        "width": "10%"
+                    }
+                },{
+                    "name": "type_name",
+                    "title": "نوع گره",
+                    "style": {
+                        "width": "15%"
+                    }
+                },{
+                    "name": "node_selection",
+                    "title": "انتخاب",
+                    "style": {
+                        "width": "10%"
+                    }
+                }
+                ],
+                "rows": nodes_data
+            });
+
+
+            let edges_data = []
+            id = 1
+            for (const edge of selected_edges.filter(onlyUnique))
+            {
+                const edge_object = edge._cfg.model
+
+                const src_node_id = edge_object.source
+                const src_node_name = edge_object.source_name
+                const source_doc_link = 'http://' + location.host +'/standard_information/?id=' + src_node_id.toString()
+                const source_doc_tag = '<a class="document_link" target="blank" href="' + source_doc_link + '">' + src_node_name +"</a>"
+
+                const target_node_id = edge_object.target
+                const target_node_name = edge_object.target_name
+                const target_doc_link = 'http://' + location.host +'/standard_information/?id=' + target_node_id.toString()
+                const target_doc_tag = '<a class="document_link" target="blank" href="' + target_doc_link + '">' + target_node_name +"</a>"
+
+                const weight = edge_object.weight
+
+                edges_data.push({id:id, src_name: src_node_name, target_name:target_node_name, weight:weight})
+                id = id + 1
+            }
+            $('#selected_edge_table').empty();
+            $('#selected_edge_table').footable({
+            "paging": {
+                "enabled": true,
+                 strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                "enabled": false
+            },
+            "sorting": {
+                "enabled": true
+            },
+            "empty": "یالی انتخاب نشده است",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": "5%"
+                }
+            }, {
+                "name": "src_name",
+                "title": "مبدا",
+                "style": {
+                    "width": "40%"
+                }
+            },{
+                "name": "target_name",
+                "title": "مقصد",
+                "style": {
+                    "width": "40%"
+                }
+            },{
+                "name": "weight",
+                "title": "وزن",
+                "style": {
+                    "width": "15%"
+                }
+            },
+            ],
+            "rows": edges_data
+        });
+
+        }
+
+        function ShowHideNode()
+        {
+            const img_tag_id = "ShowHideImg"
+
+            if (show_hide_state === "show")
+            {
+                document.getElementById(img_tag_id).src = "../../static/image/show_nodes.png"
+                show_hide_state = "hide"
+                checked_Nodes = []
+                graph_object.getEdges().forEach((edge) => {
+                    const edge_object = edge._cfg.model
+                    const source_object = graph_object.findById(edge_object.source)
+                    const target_object = graph_object.findById(edge_object.target)
+                    if (source_object._cfg.states.includes('selected') === false)
+                    {
+                        source_object.hide()
+                    }
+                    if (target_object._cfg.states.includes('selected') === false)
+                    {
+                        target_object.hide()
+                    }
+                    if (edge._cfg.states.includes('selected') === false)
+                    {
+                        console.log(2)
+                        edge.hide()
+                    }
+                    checked_Nodes.push(edge_object.source)
+                    checked_Nodes.push(edge_object.target)
+                });
+
+                graph_object.getNodes().forEach((node) => {
+                    if(checked_Nodes.includes(node._cfg.model.id) === false &&
+                    node._cfg.states.includes('selected') === false)
+                    {
+                        node.hide()
+                    }
+                })
+            }
+            else if (show_hide_state === "hide")
+            {
+                document.getElementById(img_tag_id).src = "../../static/image/hide_nodes.png"
+                show_hide_state = "show"
+
+                FilterGraphDegreeWeight()
+
+            }
+
+        }
+
+
+    </script>
+
+
+</body>
+
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = "127.0.0.0"
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+        }
+</script>
+<!-- Intro Js -->
+<script src="../../static/js/graph/graph_tour.js">
+</script>
+
+{#<script src="../../static/js/UserLogSave.js"></script>#}
+<script src="../../static/js/signout_function.js"></script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+
+<script>
+</script>
+
+</html>

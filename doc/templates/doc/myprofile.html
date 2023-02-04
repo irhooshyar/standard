@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"
+          />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <script src="../../static/js/signout_function.js"></script>
+
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>پروفایل</title>
+    {% include "doc/title_icon.html" %}
+
+</head>
+
+<body>
+<!-- Menu -->
+<nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+    {% include "doc/header2.html" %}
+</nav>
+
+<script>
+    $(document).ready(function () {
+
+        // Active panel
+        $('#ProfileDropdown').addClass('active');
+        $('#user_profile').addClass('active');
+
+        $('select#language').on('change', function (e) {
+
+            let selected_language = this.value;
+            let current_url = window.location.href;
+            if (selected_language === 'England') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'en')
+                window.location = requested_url;
+            } else if (selected_language === 'Russia') {
+                let page_name = current_url.split('/')[3]
+                let requested_url = current_url.replace(page_name, 'ru')
+                window.location = requested_url;
+            }
+
+        });
+    });
+</script>
+
+
+<!--container-->
+<div class="container-users mt-4" style="margin-top: 15px">
+    <div class="row">
+        <div class="col">
+            <div class="row data-table">
+                <div class="col">
+                </div>
+                <div class="col-10">
+                    <br>
+                    <br>
+                    <br>
+                    <div class="text">
+                        <p class="recom-list align-content-center">
+                            اطلاعات پروفایل
+                        </p>
+                    </div>
+                    <hr style="color:darkblue">
+                    <div class="container py-5" >
+                        <div class="row" id="profile-container">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--end container-->
+
+<!--password modal container-->
+<div class="modal fade" id="password_modal">
+<div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div style="direction: rtl !important;" class="modal-header">
+            <h5 id="password_modal_header" class="modal-title">تغییر رمز عبور</h5>
+            <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+        </div>
+        <!-- Modal body -->
+        <div id="password_modal_paragraphs" class="modal-body text-justify">
+          <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-sm-11 col-lg-6 offset-md-3">
+        
+                    <div id="change_password" class="shadow p-4 bg-white">
+        
+                        <div class="mb-3">
+                            <label for="old_password">رمز عبور قبلی:</label>
+                            <input type="password" class="form-control" name="old_password" id="old_password">
+                        </div>
+
+                        <div class="mb-3">
+                          <p>
+                            <label for="new_password">رمز عبور جدید:</label>
+                            <input type="password" class="form-control" name="new_password" id="new_password">
+                            {% comment %} <i class="bi bi-eye-slash" id="togglePassword"></i> {% endcomment %}
+                          </p>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="confirm_password">تکرار رمز عبور جدید:</label>
+                          <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+                        </div>
+        
+                        <div class="mb-3" id="messages"></div>
+        
+                        <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary" onclick=changePassword()>ذخیره</button>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div id="modal_footer" class="modal-footer">
+            <button class="btn btn-secondary" id="password_modal_btn" data-bs-dismiss="modal">بستن
+            </button>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!--end container-->
+
+
+<script src="../../static/library/notyf.min.js"></script>
+<script src="../../static/js/logincheck.js"></script>
+
+<script>
+    const notyf = new Notyf();
+    let image;
+
+    init()
+
+    async function init() {
+        const username = getCookie("username")
+        const request_link = 'http://' + location.host + "/GetMyUserProfile/";
+        const response = await fetch(request_link).then(response => response.json());
+        const profile = response.profile;
+
+        let tag = `
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+             <div class="avatar-wrapper">
+                <img class="profile-pic" src="${profile.avatar}" />
+            </div>
+            <h5 class="my-3">${username}</h5>
+            <p class="text-muted mb-1">زمینه تخصصی: ${profile.expertise}</p>
+            <p class="text-muted mb-4">نوع کاربری: ${profile.role}</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">نام</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">${profile.first_name}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">نام خانوادگی</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">${profile.last_name}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">ایمیل</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">${profile.email}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">تلفن</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">${profile.mobile}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary float-left" onclick=make_editable()>ویرایش</button>
+        <button class="btn btn-secondary" float-left" onclick=PasswordModal()>ویرایش رمز عبور</button>
+      </div>`;
+        document.getElementById("profile-container").innerHTML = tag;
+    }
+
+    async function make_editable() {
+      const username = getCookie("username")
+      const request_link = 'http://' + location.host + "/GetMyUserProfile/";
+      const response = await fetch(request_link).then(response => response.json());
+      const profile = response.profile;
+
+      let tag = `
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+                <div class="avatar-wrapper uploader">
+                    <img class="profile-pic" src="${profile.avatar}" />
+                    <div class="upload-button">
+                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+                    </div>
+                    <input class="file-upload" type="file" accept="image/*"/>
+                </div>
+              <h5 class="my-3">${username}</h5>
+
+              <div class="mb-3">
+                  <label for="expertise">زمینه تخصصی: </label>
+                  <select class="form-control" id="expertise">
+                  </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="role">نوع کاربری:</label>
+                <select class="form-control" id="role">
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">نام</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="first_name" value="${profile.first_name}">
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">نام خانوادگی</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="last_name" value="${profile.last_name}">
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">ایمیل</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="email" value="${profile.email}">
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">تلفن</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="mobile" value="${profile.mobile}">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary float-left" onclick=SetMyUserProfile()>ذخیره تغییرات</button>
+        </div>`;
+      document.getElementById("profile-container").innerHTML = tag;
+      getUserRoles(profile.role);
+      setFileUploader();
+    }
+
+    async function SetMyUserProfile() {
+        const first_name = document.getElementById("first_name").value
+        const last_name = document.getElementById("last_name").value
+        const email = document.getElementById("email").value
+        const mobile = document.getElementById("mobile").value
+        const role = document.getElementById("role").value
+
+        {% comment %} const expertise = document.getElementById("expertise").value      {% endcomment %}
+
+        if (first_name === "" || last_name === "" || email === "" || mobile === "" || role === "") {
+            notyf.error("لطفا همه فیلدها را پر کنید");
+            return;
+        }
+
+        const request_link = 'http://' + location.host + "/SetMyUserProfile/";
+        const response = await fetch(request_link, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                firstname: first_name,
+                lastname: last_name,
+                email: email,
+                phonenumber: mobile,
+                role: role,
+                avatar: image,
+            })
+        }).then(response => response.json());
+
+        if (response.status === "OK") {
+            notyf.success("تغییرات با موفقیت انجام شد");
+            return init();
+        } else {
+          if (response.status === "duplicated email") {
+            notyf.error("ایمیل تکراری می باشد");
+            return
+          }
+        }
+    }
+
+    async function PasswordModal() {
+    $('#password_modal').modal('show');
+    }
+
+    async function changePassword() {
+    const username = getCookie("username")
+    const old_password = document.getElementById("old_password").value
+    const new_password = document.getElementById("new_password").value
+    const confirm_password = document.getElementById("confirm_password").value
+
+    if (old_password === "" || new_password === "" || confirm_password === "") {
+        notyf.error("لطفا همه فیلدها را پر کنید");
+        return;
+    }
+
+    if (new_password !== confirm_password) {
+        notyf.error("رمز عبور جدید و تکرار آن باید یکسان باشد");
+        return;
+    }
+
+    const request_link = 'http://' + location.host + "/ChangePassword/" + old_password + "/" + new_password + "/";
+    const response = await fetch(request_link).then(response => response.json());
+
+    if (response.status === "OK") {
+        notyf.success("رمز عبور با موفقیت تغییر یافت");
+        $('#password_modal').modal('hide');
+        document.getElementById("old_password").innerHTML = "";
+        document.getElementById("new_password").innerHTML = "";
+        document.getElementById("confirm_password").innerHTML = "";
+        return init();
+    } else {
+      if (response.status === "wrong password") {
+        notyf.error("رمز عبور فعلی اشتباه است");
+        return
+      }
+    }
+    }
+
+    async function getUserRoles(user_role) {
+      const request_link = 'http://' + location.host + "/GetUserRole/";
+      let response = await fetch(request_link);
+      response = await response.json();
+      const user_roles = response["user_roles"]
+      console.log(user_roles)
+      for (const role of user_roles) {
+          var tag = "<option value=" + role["id"] + " >" + role["name"] + "</option>";
+          if (role["name"] == user_role) {
+              tag = "<option value=" + role["id"] + " selected >" + role["name"] + "</option>";
+          }
+          document.getElementById("role").innerHTML += tag;
+      }
+    }
+
+    function setFileUploader() {
+        let readURL = function(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    image = e.target.result;
+                    $('.profile-pic').attr('src', image);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(".file-upload").on('change', function(){
+            readURL(this);
+        });
+
+        $(".upload-button").on('click', function() {
+           $(".file-upload").click();
+        });
+    }
+
+</script>
+
+</body>
+</html>

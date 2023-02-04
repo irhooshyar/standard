@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+
+    <!-- Footable  -->
+    <script src="../../static/js/en_js/footable/demo-rows.js"></script>
+    <script src="../../static/js/en_js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/en_js/footable/footable.js"></script>
+    <link href="../../static/styles/en_style/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/en_style/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/styles/en_style/index.css">
+
+    <meta charset="UTF-8">
+
+    <style>
+        #definition_container_table td:not(:first-child) {
+            text-align: left !important;
+        }
+    </style>
+
+    <title>Одобрения</title>
+
+</head>
+
+<body>
+    <!-- Menu -->
+    <div class="topnav fixed-top" id="myTopnav">
+        <a href="javascript:void(0);" id="menu_icon">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a href="{% url 'ru_index' %}" id="brand_name"><i id="brand_logo" class="bi bi-x-diamond-fill px-1 pl-0"
+                style="position: relative; top:-1px;"></i>
+            Кибер карта </a>
+        <a href="{% url 'ru_information' %}" style="font-size: 12px;" class="active">
+            <img width="18px;" src="../../static/icons/docs.png" alt="">
+            Одобрения
+        </a>
+        <a href="{% url 'ru_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph4.png" alt="">
+            График утверждений
+        </a>
+        <a href="{% url 'ru_search' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/search2.png" alt="">
+            Поиск разрешений
+        </a>
+        <a href="{% url 'ru_subject' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/subject2.png" alt="">
+            Субъективный анализ
+        </a>
+        <a href="{% url 'ru_subject_statistics' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/amar_subject.png" alt="">
+            Статистический анализ
+        </a>
+        <a href="{% url 'ru_adaptation' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/adaptation2.png" alt="">
+            Субъективная адаптация
+        </a>
+        <a href="{% url 'ru_votes_analysis' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/ara13.png" alt="">
+            Анализ голосов
+        </a>
+        <a href="{% url 'ru_subject_graph' %}" style="font-size: 12px;">
+            <img width="18px;" src="../../static/icons/graph2.png" alt="">
+            Субъективный график
+        </a>
+
+        <select dir="ltr" id="language" name="language" class="d-inline-block p-1 text-left mr-2 rounded float-right">
+            <option value="Iran">Iran</option>
+            <option value="England">England</option>
+            <option selected value="Russia">Russia</option>
+        </select>
+        <!-- <a href="#logout" id="logout">
+            Exit
+            <i id="logout_icon" class="fa fa-sign-out" aria-hidden="true"></i>
+        </a> -->
+
+    </div>
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Language selection -->
+    <script>
+        $(document).ready(function () {
+            $('select#language').on('change', function (e) {
+
+                selected_language = this.value;
+                current_url = window.location.href;
+                if (selected_language == 'Iran') {
+                    window.location = "{% url 'index' %}";
+                } else if (selected_language == 'England') {
+                    window.location = "{% url 'en_index' %}";
+                }
+
+            })
+        });
+    </script>
+    <!-- End of Menu -->
+
+
+    <!-- Main Container -->
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0">
+
+        <!-- Form Inputs -->
+        <form action="" id="information_form" class="custom-control mx-auto needs-validation"
+            enctype="multipart/form-data" method="post" novalidate>
+            <div class="row mx-auto">
+
+                <!-- Country select -->
+                <div class="col-md-6 col-12 col-lg-2 bg-light pt-3  mt-1">
+
+                    <label for="country" class="text-left bg-light float-left">страна:</label>
+
+                    <select dir="ltr" id="country" name="country" class="form-select text-left float-left"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+                        <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- selected document -->
+                <div class="col-md-6 pt-3 col-6 col-lg-6 bg-light mt-1">
+
+                    <label for="document" class="text-left bg-light float-left">НАЗВАНИЕ документа:</label>
+                    <select id="document" dir="ltr" name="document" class="form-select text-left float-left"
+                        onchange="ShowResult()" disabled>
+                    </select>
+
+                </div>
+
+                <!-- select document -->
+                <div class="col-lg-4 px-0 col-md-2 pt-5 col-12 mt-1">
+
+                    <button id="document_select" type="button" class="btn float-left mx-0" data-bs-toggle="modal"
+                        data-bs-target="#SelectDocumentModal">
+                        Выберите документ
+                    </button>
+
+                    <!-- Download button -->
+                    <button id="document_download" class="btn float-left ml-2">
+                        <a type="buttun" id="download_link" download>Скачать</a>
+                    </button>
+                </div>
+
+                <!-- Download button -->
+
+            </div>
+        </form>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills  mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="doc_info_tab" class="nav-link active" data-bs-toggle="pill" data-bs-target="#doc_info_pane"
+                    type="button" role="tab" aria-controls="doc_info_pane" aria-selected="true">Статистика</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="def_keywords_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#def_keywords_pane"
+                    type="button" role="tab" aria-controls="def_keywords_pane"
+                    aria-selected="false">Определения</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="multiple_terms_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#multiple_terms_pane" type="button" role="tab" aria-controls="multiple_terms_pane"
+                    aria-selected="false">Биграммы/триграммы</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="reference_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#reference_pane"
+                    type="button" role="tab" aria-controls="reference_pane" aria-selected="false">использованная
+                    литература</button>
+            </li>
+            <li class="nav-item float-left" role="presentation">
+                <button id="subject_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#subject_analysis_pane" type="button" role="tab"
+                    aria-controls="subject_analysis_pane" aria-selected="false">Субъективный анализ</button>
+            </li>
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="actor_analysis_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#actor_analysis_pane" type="button" role="tab" aria-controls="actor_analysis_pane"
+                    aria-selected="false">Анализ актеров</button>
+            </li>
+        </ul>
+
+        <div id="original_pane" class="tab-content float-left bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <!-- Statistical Info Pane -->
+            <div id="doc_info_pane" class="tab-pane w-100 fade show active float-right" role="tabpanel"
+                aria-labelledby="doc_info_tab">
+
+                <!-- statistical doc info segment -->
+                <h6 class="Term_count_header pr-2">
+                    <label class="text-left float-left mt-5">Количество слов в документе:</label>
+                </h6>
+                <div dir="ltr" class="doc_info_table">
+                    <table class="table table-light">
+                        <thead class="table bg-secondary">
+                            <tr>
+                                <th class="text-center" scope="col">Всего слов</th>
+                                <th class="text-center" scope="col">Стоп-слова</th>
+                                <th class="text-center" scope="col">Отдельные слова</th>
+                                <th class="text-center" scope="col">Ссылка на утверждение</th>
+                                <th class="text-center" scope="col">Дата утверждения</th>
+                                <th class="text-center" scope="col">Уровень документа</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" id="total_words">-</td>
+                                <td class="text-center" id="stop_words">-</td>
+                                <td class="text-center" id="distinct_words">-</td>
+                                <td class="text-center" id="approval_reference">-</td>
+                                <td class="text-center" id="approval_date">-</td>
+                                <td class="text-center" id="document_level">-</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TF-IDF Segment -->
+                <h6 class="TF_IDF_header pr-2">
+                    <label class="text-left float-left mt-4">Слова с высоким TF-IDF</label>
+                </h6>
+
+                <div dir="ltr" class="doc_info_table">
+                    <table class="table table-light table-striped">
+                        <thead class="table bg-secondary">
+                            <tr>
+                                <th class="text-center" scope="col">#</th>
+                                <th class="text-center" scope="col">Слово</th>
+                                <th class="text-center" scope="col">Частота</th>
+                                <th class="text-center" scope="col">TF-IDF</th>
+                            </tr>
+                        </thead>
+                        <tbody id="TFIDF_table">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Definition and keywords Pane -->
+            <div id="def_keywords_pane" class="tab-pane w-100 fade float-right  px-0 border-0" role="tabpanel"
+                aria-labelledby="def_keywords_tab">
+
+                <!-- Definition Segment -->
+                <h6 id="Definition_header" class="header mt-4  text-white d-block w-100 pt-2 px-2 float-left">
+                    <label for="definition_container" class="text-left float-left d-block"><i
+                            class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Определения и идиомы</label>
+                </h6>
+                <div id="definition_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+
+                </div>
+
+
+                <!-- Final Keywords Segment -->
+                <h6 id="Final_Keywords_header"
+                    class="header bg-secondary mt-0 border text-white d-block w-100 pt-2 px-2 float-left">
+                    <label class="text-left float-left"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Окончательные ключевые слова</label>
+                </h6>
+
+                <div id="final_Keywords_container" dir="ltr" class="text-left bg-light border p-4">
+
+                </div>
+
+            </div>
+
+            <!-- Multiple Terms Pane -->
+            <div class="tab-pane fade float-left w-100 " id="multiple_terms_pane" role="tabpanel"
+                aria-labelledby="multiple_terms_tab">
+
+                <div class="row mt-4 w-100 flex-row mx-auto">
+
+                    <!-- container for 2-gram words whit (h and table) -->
+                    <div dir="ltr" class="col-md-6 px-0 col-12 col-lg-6 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            Биграммы
+                        </h6>
+                        <div class=" mt-0 pl-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table">
+                                    <tr>
+                                        <th class="text-center" scope="col">#</th>
+                                        <th class="text-center" scope="col">Слово</th>
+                                        <th class="text-center" scope="col">Счет</th>
+                                        <th class="text-center" scope="col">Частота</th>
+                                        <th class="text-center" scope="col">Подтверждать</th>
+                                        <th class="text-center" scope="col">Удалить</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="2gram_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 2Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-left ngram-textbox"
+                                placeholder="первое ключевое слово/ второе ключевое слово/ ..." type="text" required=""
+                                name="2gram_TextBox" id="2gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('2gram')"
+                                class="btn float-left mx-0">
+                                спасти
+                            </button>
+                        </div>
+
+
+                    </div>
+
+                    <!-- container for 3-gram words with (h and table) -->
+                    <div dir="ltr" class="col-md-6 px-0 col-12 col-lg-6 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            Триграммы
+                        </h6>
+                        <div class="mt-0 pr-2">
+                            <table class="table table-light table-striped table-bordered border-secondary">
+                                <thead class="table bg-secondary">
+                                    <tr>
+                                        <th class="text-center" scope="col">#</th>
+                                        <th class="text-center" scope="col">Слово</th>
+                                        <th class="text-center" scope="col">Счет</th>
+                                        <th class="text-center" scope="col">Частота</th>
+                                        <th class="text-center" scope="col">Подтверждать</th>
+                                        <th class="text-center" scope="col">Удалить</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="3gram_table">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <!-- 3Gram txt box and save btn -->
+                        <div class="ngram-div">
+                            <input class="float-left form-control text-left ngram-textbox"
+                                placeholder="первое ключевое слово/ второе ключевое слово/ ..." type="text" required=""
+                                name="3gram_TextBox" id="3gram_TextBox" value="">
+
+                            <button id="save_2Gram" type="button" onclick="SaveGram_function('3gram')"
+                                class="btn float-left mx-0">
+                                спасти
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <!-- Reference Pane -->
+            <div class="tab-pane w-100 fade float-left" id="reference_pane" role="tabpanel"
+                aria-labelledby="reference_tab">
+                <!-- References in doc -->
+                <h6 class="header mt-4 border text-white d-block w-100 pt-2 px-2 float-left">
+                    <label class="text-left float-left "><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Документы, на которые ссылается документ</label>
+                </h6>
+
+
+                <div class="text-left bg-light border border-top-0  px-4 mt-5">
+                    <ul dir="ltr" id="references_list">
+                    </ul>
+                </div>
+
+                <!-- Docs referenced to this doc -->
+                <h6 class="header mt-0 border text-white d-block w-100 pt-2 px-2 float-left">
+                    <label class="text-left float-left"><i class="header_icon bi bi-pin-angle-fill p-1"></i>
+                        Ссылка на документ </label>
+                </h6>
+
+                <div class="text-left bg-light border px-4">
+                    <ul dir="ltr" id="citation_list">
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Subject Pane -->
+            <div class="tab-pane fade float-right w-100" id="subject_analysis_pane" role="tabpanel"
+                aria-labelledby="subject_analysis_tab">
+                <!-- Subject distribution segment -->
+                <h6 class="subject_distribution pr-2 w-100 mt-4 text-left float-left">
+                    Распределение предметов
+                </h6>
+                <br>
+
+
+                <div id="subject_chart_container" style="height: 400px" class="bg-white w-100 p-5 pb-2">
+
+                </div>
+
+                <!-- Keywords for each subject segment -->
+                <h6 class="subject_keywords pr-2">
+                    <label for="doc_info" class="text-left float-left mt-5">Ключевые слова документа по теме</label>
+                </h6>
+                <div dir="ltr" class="table-responsive">
+                    <table class="table table-light table-striped  caption-top">
+                        <thead class="table">
+                            <tr>
+                                <th class="text-center" scope="col">#</th>
+                                <th class="text-center" scope="col">Тематика</th>
+                                <th class="text-center" scope="col">Ключевые слова в тексте</th>
+                                <th class="text-center" scope="col">Ключевые слова в заголовке</th>
+                                <th class="text-center" scope="col">Профессиональный справочник</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subject_table">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Actors Pane -->
+            <div class="tab-pane fade float-right w-100" id="actor_analysis_pane" role="tabpanel"
+                aria-labelledby="actor_analysis_tab">
+
+                <!-- Acotrs distribution segment -->
+                <h6 class="actors_distribution pr-2 w-100 mt-4 text-left float-left">
+                    Распределение актеров
+                </h6>
+                <br>
+
+                <div id="actors_chart_container" style="height: 400px" class="bg-white w-100 p-4">
+                </div>
+
+                <!-- Actors paragraphs-->
+
+                <div class="accordion" id="actors_paragraph_container">
+
+                    <!-- Motevalian paragraphs -->
+                    <div class="accordion-item float-left w-100">
+
+                        <h2 class="accordion-header d-block w-100 float-left" id="motevalian_hader">
+                            <button
+                                class="accordion-button accordin_header text-left float-left d-inline-block w-100 px-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#motevalian_collapse"
+                                aria-expanded="true" aria-controls="motevalian_collapse">
+                                <i class="header_icon bi bi-pin-angle-fill p-1 ml-0"></i>
+                                Руководители
+                            </button>
+                        </h2>
+
+                        <div id="motevalian_collapse" class="accordion-collapse w-100 collapse show float-left"
+                            aria-labelledby="motevalian_hader">
+
+                            <div class="accordion-body bg-light text-left">
+
+                                <ul dir="ltr" class="" id="motevalian_list">
+
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hamkaran paragraphs -->
+                    <div class="accordion-item float-left w-100">
+                        <h2 class="accordion-header d-block w-100 float-left" id="hamkaran_header">
+                            <button
+                                class="accordion-button accordin_header text-left float-right d-inline-block w-100 collapsed px-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#hamkaran_collapse"
+                                aria-expanded="true" aria-controls="hamkaran_collapse">
+                                <i class="header_icon bi bi-pin-angle-fill p-1 ml-0"></i>
+                                Кооператоры
+                            </button>
+                        </h2>
+                        <div id="hamkaran_collapse" class="accordion-collapse collapse  w-100 float-left"
+                            aria-labelledby="hamkaran_header">
+                            <div class="accordion-body bg-light text-left">
+                                <ul dir="ltr" class="" id="hamkaran_list">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salahiat paragraphs -->
+                    <div class="accordion-item float-left w-100">
+                        <h2 class="accordion-header d-block w-100 float-left" id="salahiat_header">
+                            <button
+                                class="accordion-button accordin_header text-left float-right d-inline-block w-100 collapsed px-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#salahiat_collapse"
+                                aria-expanded="true" aria-controls="salahiat_collapse">
+                                <i class="header_icon bi bi-pin-angle-fill p-1 ml-0"></i>
+                                Компетентный орган
+                            </button>
+                        </h2>
+                        <div id="salahiat_collapse" class="accordion-collapse collapse w-100 float-left"
+                            aria-labelledby="salahiat_header">
+                            <div class="accordion-body bg-light text-left">
+                                <ul dir="ltr" class="" id="salahiat_list">
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+        <!-- Modal Container -->
+        <div class="modal fade" id="SelectDocumentModal">
+            <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="ModalHeader" class="modal-title">Выбор документа</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+
+                    <!-- Modal body -->
+                    <div id="ModalBody" class="modal-body text-justify">
+                        <div class="container">
+                            <table class="table table-striped PopUpTable">
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Container -->
+        <div class="modal fade" id="ShowDefinitionInPlain">
+            <div style="max-width: 1200px !important;" class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="ModalHeader2" class="modal-title"> Определения и идиомы</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+
+
+                    <!-- Modal body -->
+                    <div id="ModalBody2" class="modal-body text-justify">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ChartModal Container -->
+        <button type="button" id="actors_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#actors_modal"></button>
+        <div class="modal fade" id="actors_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="modal_header" class="modal-title">Title</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="actor_paragraphs" class="modal-body text-justify">
+                        <div id="modal_body">
+                            <ul>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрывать
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- References Container -->
+        <button type="button" id="references_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+            data-bs-target="#references_modal"></button>
+
+        <div class="modal fade" id="references_modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div style="direction: ltr !important;" class="modal-header">
+                        <h5 id="references_modal_header" class="modal-title">Заголовок</h5>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div id="references_modal_paragraphs" class="modal-body text-justify">
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div id="modal_footer" class="modal-footer">
+                        <button class="btn btn-secondary" id="references_modal_btn">близко
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+        <!-- <i class="bi bi-chevron-up"></i> -->
+        <!-- <i class="bi bi-chevron-double-up"></i> -->
+        <!-- <i class="bi bi-arrow-up-circle"></i> -->
+    </button>
+    <script src="../../static/js/scroll_button_handler.js">
+    </script>
+
+
+
+    <script>
+
+        /* Gloabal Constants */
+        init()
+
+        async function init() {
+            const url = new URL(window.location.href);
+            var document_id = url.searchParams.get("id");
+
+            if (document_id) {
+                const request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+                let response = await fetch(request_link).then(response => response.json());
+                response = response["document_information"][0]
+
+                document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+                document.getElementById("country").value = response["country_id"]
+                ShowResult();
+            } else {
+                const text = "Select Document"
+                document.getElementById("document").innerHTML = "<option value=" + 0 + " >" + text + "</option>";
+            }
+
+            CountryChanged();
+        }
+
+        async function CountryChanged() {
+            document.getElementById("document_select").disabled = true;
+            const country_id = document.getElementById("country").value
+            const request_link = 'http://' + location.host + "/en" + "/GetDocumentsByCountryId_Modal/" + country_id + "/"
+            var response = await fetch(request_link).then(response => response.json());
+            let documentsList = response["documentsList"]
+            jQuery(function ($) {
+                $('.PopUpTable').footable({
+                    "paging": {
+                        "enabled": true,
+                        strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+                    },
+                    "filtering": {
+                        "enabled": true
+                    },
+                    "sorting": {
+                        "enabled": true
+                    },
+                    "empty": "Not Found.",
+                    "columns": [{
+                        "name": "id",
+                        "title": "#",
+                        "breakpoints": "xs sm",
+                        "type": "number",
+                        "style": {
+                            "width": 80,
+                            "maxWidth": 80
+                        }
+                    }, {
+                        "name": "document_name",
+                        "title": "Document Name"
+                    }, {
+                        "name": "tag",
+                        "title": "Select"
+                    },],
+                    "rows": documentsList
+                });
+            });
+            document.getElementById("document_select").disabled = false;
+        }
+
+        async function SelectDocumentFunction(document_id) {
+            const request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+            document.getElementById("document").innerHTML = "<option value=" + response["id"] + " >" + response["name"] + "</option>";
+            ShowResult();
+        }
+
+        async function DownloadLinkSet() {
+            var country_id = document.getElementById("country").value;
+            const request_link = 'http://' + location.host + "/en" + "/GetCountryById/" + country_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["country_information"][0]
+            const country_folder = response["folder"];
+            const country_name = response["name"];
+            var document_name = document.getElementById("document").innerText;
+            if (document_name !== "Select Document") {
+                var file_path = "";
+                if (country_name.includes("فاوا")) {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.docx';
+                } else {
+                    file_path = 'http://' + location.host + '/media/data/' + country_folder + '\\' + document_name + '.txt';
+                }
+                document.getElementById("download_link").href = file_path;
+            } else {
+                document.getElementById("download_link").href = "#";
+                return false;
+            }
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        function deCapitalizeFirstLetter(string) {
+            return string.charAt(0).toLowerCase() + string.slice(1);
+        }
+
+
+        async function SubjectDetailFunction(document_id, subject_id, subject_name) {
+            document.getElementById("detailModalHeader").innerText = "Subject : " + subject_name
+            document.getElementById("detailModalBody").innerHTML = ""
+            request_link = 'http://' + location.host + "/en" + "/get_subject_detail/" +
+                document_id + "/" + subject_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            console.log(response)
+            let paragraphs = response["paragraphs"]
+            let keywords = response["keywords"]
+            let result = "";
+            for (let k = 0; k < paragraphs.length; k++) {
+                let txt = paragraphs[k]
+                for (let h = 0; h < keywords.length; h++) {
+
+                    let cap = capitalizeFirstLetter(keywords[h])
+                    let deCap = deCapitalizeFirstLetter(keywords[h])
+                    txt = txt.replaceAll(cap, "<span class='bg-success text-white rounded px-1'>" + cap + "</span>")
+                    txt = txt.replaceAll(deCap, "<span class='bg-success text-white rounded px-1'>" + deCap + "</span>")
+                }
+                result += "<li class='pb-2' '>" + txt + "</li>"
+            }
+            document.getElementById("detailModalBody").innerHTML = "<ul>" + result + "</ul>"
+
+        }
+
+
+        async function ShowResult() {
+            await DownloadLinkSet();
+            // edited
+            const document_id = $('#document option').val()
+
+            /******************************* Features **********************************/
+
+            let request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            response = response["document_information"][0]
+
+            document.getElementById("total_words").innerText = response["word_count"];
+            document.getElementById("stop_words").innerText = response["stopword_count"];
+            document.getElementById("distinct_words").innerText = response["distinct_word_count"];
+            document.getElementById("approval_reference").innerText = response["approval_reference"];
+            document.getElementById("approval_date").innerText = response["approval_date"];
+            document.getElementById("document_level").innerText = response["level"];
+
+
+            /******************************* Definition **********************************/
+            // request_link = 'http://' + location.host + "/en" + "/GetDefinitionByDocumentId/" + document_id + "/";
+            // response = await fetch(request_link).then(response => response.json());
+            // let definitions_list = response['definitions']
+            // let keywords_list = response['keywords']
+            // response = response["documents_definition"][0]
+            // let text = response['text']
+            // if (text === "Couldn't find any Definition in this Document.")
+            //     document.getElementById("definition_container").innerText = text
+            // else {
+            //     document.getElementById("definition_container").innerHTML = '<div class="table-responsive mt-4">';
+            //     document.getElementById("definition_container").innerHTML += '<table class="table table-striped definition_container_table" id="definition_container_table">';
+            //     document.getElementById("definition_container").innerHTML += '</table>'
+            //     document.getElementById("definition_container").innerHTML += '</div>'
+            //     document.getElementById("definition_container").innerHTML += '<button id="definition_select" type="button" class="btn mx-0" style="background-color: var(--menu_color);color: white;margin: 1rem 0" data-bs-toggle="modal" data-bs-target="#ShowDefinitionInPlain">Show Definitions in plain text</button>'
+
+            //     let document_result = [];
+            //     for (let k = 0; k < definitions_list.length; k++) {
+            //         const index = k + 1;
+            //         const word = keywords_list[k]
+            //         const def = definitions_list[k]
+            //         const row = {
+            //             "index": index, "Keyword": word, "Definition": def
+            //         }
+            //         document_result.push(row)
+            //     }
+            //     document.getElementById("definition_container_table").innerHTML = "";
+            //     $('.definition_container_table').footable({
+            //         "paging": {
+            //             "enabled": true,
+            //strings: {
+            //             first: '»',
+             //            prev:'›',
+             //            next: '‹',
+              //           last: '«'
+              //       }
+            //         },
+            //         "filtering": {
+            //             "enabled": false
+            //         },
+            //         "sorting": {
+            //             "enabled": true
+            //         },
+            //         "empty": "Couldn't find any Definition in this Document.",
+            //         "columns": [{
+            //             "name": "index",
+            //             "title": "index",
+            //             "breakpoints": "xs sm",
+            //             "type": "number",
+            //             "style": {
+            //                 "width": "5%",
+            //             }, "sorted": true,
+            //         }, {
+            //             "name": "Keyword",
+            //             "title": "Keyword",
+            //             "style": {
+            //                 "width": "20%"
+            //             }
+            //         }, {
+            //             "name": "Definition",
+            //             "title": "Definition",
+            //             "style": {
+            //                 "width": "75%"
+            //             }
+            //         }],
+            //         "rows": document_result
+            //     });
+            // }
+
+            // document.getElementById("ModalBody2").innerText = text;
+            // document.getElementById("final_Keywords_container").innerText = response["keywords"]
+
+
+            /******************************* Subject **********************************/
+            // request_link = 'http://' + location.host+ "/en" + "/GetSubjectByDocumentId/" + document_id + "/" + 1 + "/";
+            // response = await fetch(request_link).then(response => response.json());
+            // response = response["document_subject_list"]
+            // console.log(response)
+
+            // document.getElementById("subject_table").innerHTML = ""
+
+            // let chart_value_list = []
+
+            // for (let i = 0; i < response.length; i++) {
+            //     const subject = response[i]["subject"]
+            //     const subject_id = response[i]["subject_id"]
+            //     const weight = response[i]["weight"] * 100  /* For Scale To 0-100*/
+            //     const keywords_text = response[i]["keywords_text"]
+            //     const keywords_title = response[i]["keywords_title"]
+            //     const special_references = response[i]["special_references"]
+
+            //     const detail_function = "SubjectDetailFunction(" + document_id + "," + subject_id + "," +"'" + subject + "'" + ")"
+            //     const detail = '<button type="button" class="btn modal_btn" data-bs-toggle="modal" ' +
+            //         ' onclick="' + detail_function + '" data-bs-target="#subject_detail_modal">Detail</button>'
+
+
+            //     tag = "<tr>" +
+            //         "<td class='col-1'>" + (i + 1) + "</td>" +
+            //         "<td class='col-2'>" + subject + "</td>" +
+            //         "<td class='col-3'>" + keywords_text + "</td>" +
+            //         "<td class='col-3'>" + keywords_title + "</td>" +
+            //         "<td class='col-2'>" + special_references + "</td>" +
+            //         "<td class='col-1'>" + detail + "</td>" +
+            //         "</tr>";
+
+            //     document.getElementById("subject_table").innerHTML += tag;
+
+            //     chart_value_list.push([subject, weight])
+            // }
+
+            // document.getElementById("subject_chart_container").innerHTML = "";
+            // showChart(chart_value_list.slice(0,10), "subject_chart_container");
+
+
+
+            /******************************* TFIDF **********************************/
+            request_link = 'http://' + location.host + "/en" + "/GetTFIDFByDocumentId/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["documents_tfidf_list"]
+            let show_count = 10
+            document.getElementById("TFIDF_table").innerHTML = "";
+
+            for (var i = 0; i < show_count; i++) {
+                const index = i + 1;
+                const word = response[i]["word"]
+                const count = response[i]["count"]
+                const weight = response[i]["weight"]
+
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-4'>" + word + "</td>" +
+                    "<td class='col-3'>" + count + "</td>" +
+                    "<td class='col-3'>" + weight + "</td>" +
+                    "</tr>";
+
+                document.getElementById("TFIDF_table").innerHTML += tag;
+            }
+
+
+            /******************************* 2-Gram **********************************/
+
+            request_link = 'http://' + location.host + "/en" + "/GetNGramByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("2gram_table").innerHTML = "";
+
+            for (let i = 0; i < show_count; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-3'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+                document.getElementById("2gram_table").innerHTML += tag;
+            }
+
+
+            /******************************* 3-Gram **********************************/
+
+            request_link = 'http://' + location.host + "/en" + "/GetNGramByDocumentId/" + document_id + "/" + 3 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_ngram_list"]
+            show_count = 10
+            document.getElementById("3gram_table").innerHTML = "";
+
+            for (let i = 0; i < show_count; i++) {
+                const index = i + 1;
+
+                const id = response[i]["id"]
+                const word = response[i]["text"]
+                const count = response[i]["count"]
+                const score = response[i]["score"]
+
+                let status = ""
+                if (score === 1) {
+                    status = "checked";
+                }
+
+                const checkBox = "<input type='checkbox' id='" + id + "' " + status + ">"
+                const deleteBox = '<span style="cursor: pointer" class="bi bi-trash" onclick="DeleteNGramWords(' + id + ')"></span>'
+                let tag = "<tr>" +
+                    "<td class='col-1'>" + index + "</td>" +
+                    "<td class='col-5'>" + word + "</td>" +
+                    "<td class='col-2'>" + score + "</td>" +
+                    "<td class='col-2'>" + count + "</td>" +
+                    "<td class='col-2'>" + checkBox + "</td>" +
+                    "<td class='col-1'>" + deleteBox + "</td>"
+                "</tr>";
+
+
+                document.getElementById("3gram_table").innerHTML += tag;
+            }
+
+            /******************************* References List **********************************/
+            request_link = 'http://' + location.host + "/en" + "/GetReferencesByDocumentId/" + document_id + "/" + 1 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+
+            if (response.length > 0) {
+                document.getElementById("references_list").innerHTML = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    const doc_id = response[i]["doc_id"]
+                    const doc_name = response[i]["doc_name"]
+                    let tag = "<li onclick='References_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></li>"
+                    document.getElementById("references_list").innerHTML += tag;
+                }
+            } else {
+                document.getElementById("references_list").innerText = "Not References Found.";
+            }
+
+
+
+            /******************************* Citation List **********************************/
+            request_link = 'http://' + location.host + "/en" + "/GetReferencesByDocumentId/" + document_id + "/" + 2 + "/";
+            response = await fetch(request_link).then(response => response.json());
+            response = response["document_references_list"]
+
+            if (response.length > 0) {
+                document.getElementById("citation_list").innerHTML = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    const doc_id = response[i]["doc_id"]
+                    const doc_name = response[i]["doc_name"]
+                    let tag = "<li onclick='Citation_Show_Paragraphs(this)' id=" + doc_id + "><a href='#'>" + doc_name + "</a></li>"
+                    document.getElementById("citation_list").innerHTML += tag;
+                }
+            } else {
+                document.getElementById("citation_list").innerText = "Not Citation Found.";
+            }
+        }
+
+        async function References_Show_Paragraphs(tag) {
+            // edited
+            const main_doc_id = $('#document option').val()
+            let request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/en" + "/information?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "References To:" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/en" + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const references = response["references_from_doc1"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of references) {
+                const tag = "<span class='text-primary'>" + document_name + "</span>"
+                const text = paragraph.replaceAll(document_name, tag)
+                result_tag += "<li class='mb-3' >" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+        async function Citation_Show_Paragraphs(tag) {
+            // edited
+            const main_doc_id = $('#document option').val()
+
+            let request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + main_doc_id + "/";
+            let response = await fetch(request_link).then(response => response.json());
+            const main_document_name = response["document_information"][0]["name"]
+
+            const document_id = tag.id;
+            request_link = 'http://' + location.host + "/en" + "/GetDocumentById/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const document_name = response["document_information"][0]["name"]
+
+            const link = 'http://' + location.host + "/en" + "/information?id=" + document_id
+            document.getElementById("references_modal_header").innerHTML = "Citation from" + "<a href=" + link + ">" + document_name + "</a>"
+
+            /* References Between 2 Doc */
+            request_link = 'http://' + location.host + "/en" + "/GetReferences2Doc/" + main_doc_id + "/" + document_id + "/";
+            response = await fetch(request_link).then(response => response.json());
+            const citations = response["references_from_doc2"]
+
+            let result_tag = "<ul>"
+            for (const paragraph of citations) {
+                const tag = "<span class='text-primary'>" + main_document_name + "</span>"
+                const text = paragraph.replaceAll(main_document_name, tag)
+                console.log(text)
+                result_tag += "<li class='mb-3'>" + text + "</li>"
+            }
+            result_tag += "</ul>"
+            document.getElementById("references_modal_paragraphs").innerHTML = result_tag;
+            $("#references_modal_btn").click();
+
+        }
+
+        function showChart(data, position) {
+            chart = anychart.column();
+
+            // create a column series and set the data
+            var series = chart.column(data);
+
+
+            chart.animation(true);
+            chart.background().fill('#f8f9fa');
+
+            chart.background().fill('white');
+
+            series.normal().fill("#488fb8", 1);
+            series.normal().stroke("#488fb8", 0);
+
+            // x axix labels font setting
+            var xAxisLabels = chart.xAxis().labels();
+            xAxisLabels.fontFamily("vazir");
+
+            var yAxisLabels = chart.yAxis().labels();
+            yAxisLabels.fontFamily("vazir");
+
+            // Not allow labels overlapping
+            var xAxis = chart.xAxis();
+            xAxis.overlapMode("noOverlap");
+
+            // tooltip content font setting
+            var tooltip = chart.tooltip();
+            tooltip.fontFamily("vazir");
+
+            // tooltip title font setting
+            var title = chart.tooltip().title();
+            title.fontFamily("vazir");
+
+            chart.tooltip().hAlign('center').format("%{%value}");
+
+            // set all axis title
+            var xAxis = chart.xAxis();
+            xAxis.title("Subject");
+            xAxis.title().fontFamily('vazir');
+
+            var yAxis = chart.yAxis();
+            yAxis.title("Similarity");
+            yAxis.title().fontFamily('vazir');
+            chart.yAxis().labels().format("٪{%value}");
+
+            chart.xAxis().labels().height(30);
+
+            chart.container(position);
+            chart.draw();
+        }
+
+        async function SaveGram_function(name) {
+            // edited
+            const document_id = $('#document option').val()
+            const gram = parseInt(name.charAt(0))
+
+            const table_id = name + "_table";
+
+            const checkedBoxesId = $("#" + table_id).find("input[type=checkbox]:checked").map(function () {
+                return this.id;
+            }).get();
+
+            let checkedBoxesConcatedId = "-1"
+            if (checkedBoxesId.length > 0) {
+                checkedBoxesConcatedId = checkedBoxesId.join("__")
+            }
+            const request_link = 'http://' + location.host + "/en" + "/UpdateNgramScore/" + document_id + "/" + gram + "/" + checkedBoxesConcatedId + "/";
+            await fetch(request_link).then(response => response.json());
+
+
+            const textbox_id = name + "_TextBox"
+            const textbox_value = document.getElementById(textbox_id).value.replaceAll("/", "__")
+
+            if (textbox_value.trim() !== "") {
+                const request_link = 'http://' + location.host + "/en" + "/InsertNgram/" + document_id + "/" + gram + "/" + textbox_value + "/";
+
+                await fetch(request_link).then(response => response.json());
+
+                document.getElementById(textbox_id).value = ""
+            }
+
+            ShowResult();
+
+        }
+
+        async function DeleteNGramWords(id) {
+            const request_link = 'http://' + location.host + "/en" + "/DeleteNgram/" + id + "/";
+            await fetch(request_link).then(response => response.json());
+            ShowResult();
+        }
+
+
+    </script>
+</body>
+
+</html>

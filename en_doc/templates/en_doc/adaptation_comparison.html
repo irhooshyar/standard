@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'styles/en_style/index.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/adaptation_comparison.css' %}">
+    <meta charset="UTF-8">
+
+    <title>Document and Draft Comparison</title>
+
+</head>
+
+<body>
+
+  
+
+    <!-- Menu -->
+    <div class="topnav fixed-top" id="myTopnav">
+        <a href="javascript:void(0);" id="menu_icon">
+            <i class="fa fa-bars"></i>
+        </a>
+        <a href="{% url 'en_index' %}" id="brand_name"><i id="brand_logo" class="bi bi-x-diamond-fill px-1"
+                style="position: relative; top:-1px;"></i>
+            Cyber Map </a>
+        <a href="{% url 'en_information' %}">
+            <img width="20px;" src="{% static 'icons/docs.png' %}" alt="">
+            Approvals
+        </a>
+        <a href="{% url 'en_graph' %}">
+            <img width="20px;" src="{% static 'icons/graph4.png' %}" alt="">
+            Approvals Graph
+        </a>
+        <a href="{% url 'en_search' %}">
+            <img width="20px;" src="{% static 'icons/search2.png' %}" alt="">
+            Approvals Search
+        </a>
+        <a href="{% url 'en_subject' %}">
+            <img width="20px;" src="{% static 'icons/subject2.png' %}" alt="">
+            Subjective Analysis
+        </a>
+        <a href="{% url 'en_named_entities' %}" >
+            <img width="20px;" src="../../static/icons/graph2.png" alt="">
+            Named Entity Recognation
+        </a>
+        <a href="{% url 'en_subject_statistics' %}">
+            <img width="20px;" src="{% static 'icons/amar_subject.png' %}" alt="">
+            Statistical Analysis
+        </a>
+        <a href="{% url 'en_adaptation' %}" >
+            <img width="20px;" src="{% static 'icons/adaptation2.png' %}" alt="">
+            Subjective Adaptation
+        </a>
+        <a href="{% url 'en_votes_analysis' %}">
+            <img width="20px;" src="{% static 'icons/ara13.png' %}" alt="">
+            Judgment Analysis
+        </a>
+        <a href="{% url 'en_subject_graph' %}">
+            <img width="20px;" src="{% static 'icons/graph2.png' %}" alt="">
+            Subjective Graph
+        </a>
+
+        <select dir="ltr" id="language" name="language" class="d-inline-block p-1 text-left mr-2 rounded float-right">
+            <option value="Iran">Iran</option>
+            <option selected value="England">England</option>
+            <option value="Russia" >Russia</option>
+        </select>
+        <!-- <a href="#logout" id="logout">
+        Exit
+        <i id="logout_icon" class="fa fa-sign-out" aria-hidden="true"></i>
+    </a> -->
+
+    </div>
+    <script src="../../static/js/topnav_handler.js"></script>
+
+    <!-- Language selection -->
+    <script>
+        $(document).ready(function () {
+            $('select#language').on('change', function (e) {
+
+                selected_language = this.value;
+                current_url = window.location.href;
+                if (selected_language == 'Iran') {
+                    window.location = "{% url 'index' %}";
+                }else if (selected_language == 'Russia'){
+                    window.location = "{% url 'ru_index' %}";
+                }
+
+            })
+        });
+    
+    </script>
+    <!-- End of Menu -->
+
+    <!-- Main Container -->
+    <div class="row flex-row px-0 py-5 px-md-5 py-md-5 m-0">
+        <!-- Form Fields -->
+        <form action="" class="custom-control mx-auto needs-validation" id="info_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <!-- Primary Fields in First Row -->
+            <div class="row flex-row mt-2 mx-auto">
+
+                <!-- Paragraph type Input -->
+                <div class="col-md-6  pt-3 col-12 col-lg-3 bg-light">
+
+                    <label class=" text-left bg-light float-left" style="direction: ltr;;">Paragraph Type:</label>
+                    <select dir="ltr" id="paragraph_type" name="paragraph_type"
+                        class="form-select text-left float-left" style="direction: ltr;">
+
+                        <option value="all">All</option>
+                        <option value="withSearchedKeywords">With Searched Keywords</option>
+                        <option value="withCommonKeywords">With Common Keywords</option>
+
+                    </select>
+
+                </div>
+
+                <!--  Buttons -->
+                <div class="col-lg-4 col-md-6 pt-5 col-12">
+                    <button type="button" id="document_search" onclick="ShowResult()"
+                        class="btn d-flex float-left mr-1">
+                        Show
+                    </button>
+                </div>
+
+                <div id="common_keywords_column" class="keywords_column col-12  pt-4">
+                    <div class="row pl-1">
+                        <label class="d-inline-block w-100 text-left" style="direction: ltr;">Common Keywords:</label>
+                        <div id="common_keywords_container" class="w-100 border bg-white  rounded">
+                            <div class="form-check form-check-inline float-left py-2 pb-1"><input
+                                    id="all_common_keywords" class="form-check-input" checked type="checkbox"
+                                    value="all">
+                                <label class="form-check-label">All</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div id="searched_keywords_column" class="keywords_column col-12  pt-4">
+                    <div class="row pl-1">
+                        <label class="d-inline-block w-100 text-left" style="direction: ltr;">Searched Keywords:</label>
+                        <div id="searched_keywords_container" class="w-100 border bg-white rounded">
+                            <div class="form-check form-check-inline float-left py-2 pb-1"><input
+                                    id="all_searched_keywords" class="form-check-input" checked type="checkbox"
+                                    value="all">
+                                <label class="form-check-label">All</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </form>
+
+        <!--Original Tabs: Only show on large screens -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-left  d-block" id="pills-tab"
+            role="tablist">
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="motevalian_tab" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#motevalian_ejra_pane" type="button" role="tab" aria-controls="motevalian_ejra_pane"
+                    aria-selected="true">Executives</button>
+            </li>
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="hamkaran_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#hamkaran_pane"
+                    type="button" role="tab" aria-controls="hamkaran_pane" aria-selected="false">Cooperators</button>
+            </li>
+
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="salahiat_ekhtiari_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#salahiat_ekhtiari_pane" type="button" role="tab"
+                    aria-controls="salahiat_ekhtiari_pane" aria-selected="false">Competent Authority</button>
+            </li>
+
+            <li class="nav-item float-left" role="presentation">
+                <button id="chart_info_tab" class="nav-link" data-bs-toggle="pill" data-bs-target="#chart_info_pane"
+                    type="button" role="tab" aria-controls="chart_info_pane" aria-selected="false">Actors Distribution</button>
+            </li>
+
+
+        </ul>
+
+        <div id="original_pane" class="tab-content float-left bg-white px-1" style="position: relative;"
+            id="pills-tabContent">
+
+            <!-- motevalian_ejra Pane -->
+            <div id="motevalian_ejra_pane" class="tab-pane w-100 fade show active float-left" role="tabpanel"
+                aria-labelledby="motevalian_ejra_tab">
+
+                <div class="row mt-2 px-2 justify-content-between">
+                    <div class="col-6 mx-0">
+                        <h6 id="draft_motevalian_header"
+                            class="header mt-4  text-white d-block w-100 pt-2 px-2 float-left">
+                            <label for="draft_motevalian_container" class="text-left float-left d-block"><i
+                                    class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                Draft: {{comparison_data.draft_name}}
+                            </label>
+                        </h6>
+                        <div id="draft_motevalian_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                            <ul>
+                                {% for paragraph in comparison_data.draft_motevali_ejra_paragraphs %}
+                                <li dir="ltr" class="text-left px-3 pt-2 lh-lg">{{paragraph}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 mx-0">
+                        <h6 id="document_motevalian_header"
+                            class="header mt-4 text-truncate  text-white d-block w-100 pt-2 px-2 float-left">
+                            <label for="draft_motevalian_container" class="text-left float-left d-block"><i
+                                    class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                <a href="" target="to_blank" title="{{comparison_data.document_name}}"
+                                    class="d-inline-block text-white">{{comparison_data.document_name}}</a>
+                            </label>
+                        </h6>
+                        <div id="document_motevalian_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                            <ul>
+                                {% for paragraph in comparison_data.document_motevali_ejra_paragraphs %}
+                                <li dir="ltr" class="text-left px-3 pt-2 lh-lg">{{paragraph}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Hamkaran Pane -->
+            <div id="hamkaran_pane" class="tab-pane w-100 fade float-left" role="tabpanel"
+                aria-labelledby="hamkaran_tab">
+                <div class="row mt-2 px-2 justify-content-between">
+                    <div class="col-6 mx-0">
+                        <h6 id="draft_hamkaran_header"
+                            class="header mt-4  text-white d-block w-100 pt-2 px-2 float-left">
+                            <label for="draft_hamkaran_container" class="text-left float-left d-block"><i
+                                    class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                Draft: {{comparison_data.draft_name}}
+                            </label>
+                        </h6>
+                        <div id="draft_hamkaran_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                            <ul>
+                                {% for paragraph in comparison_data.draft_hamkaran_paragraphs %}
+                                <li dir="ltr" class="text-left px-3 pt-2 lh-lg">{{paragraph}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 mx-0">
+                        <h6 id="document_hamkaran_header"
+                            class="header mt-4 text-truncate  text-white d-block w-100 pt-2 px-2 float-left">
+                            <label for="document_hamkaran_container" class="text-left float-left d-block"><i
+                                    class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                <a href="" target="to_blank" title="{{comparison_data.document_name}}"
+                                    class="d-inline-block  text-white">{{comparison_data.document_name}}</a>
+                            </label>
+                        </h6>
+                        <div id="document_hamkaran_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                            <ul>
+                                {% for paragraph in comparison_data.document_hamkaran_paragraphs %}
+                                <li dir="ltr" class="text-left px-3 pt-2 lh-lg">{{paragraph}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salahiat ekhtiari Pane -->
+            <div id="salahiat_ekhtiari_pane" class="tab-pane w-100 fade float-left" role="tabpanel"
+                aria-labelledby="salahiat_ekhtiari_tab">
+
+                <div class="row mt-2 px-2 justify-content-between">
+                    <div class="col-6 mx-0">
+                        <h6 id="draft_salahiat_header"
+                            class="header mt-4  text-white d-block w-100 pt-2 px-2 float-left">
+                            <label for="draft_salahiat_container" class="text-left float-left d-block"><i
+                                    class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                Draft: {{comparison_data.draft_name}}
+                            </label>
+                        </h6>
+                        <div id="draft_salahiat_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                            <ul>
+                                {% for paragraph in comparison_data.draft_salahiat_ekhtiar_paragraphs %}
+                                <li dir="ltr" class="text-left px-3 pt-2 lh-lg">{{paragraph}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 mx-0">
+                        <h6 id="document_salahiat_header"
+                            class="header mt-4 text-truncate text-white d-block w-100 pt-2 px-2 float-left">
+                            <label for="document_salahiat_container" class="text-left float-left d-block"><i
+                                    class="header_icon bi bi-pin-angle-fill p-1"></i>
+                                <a href="" target="to_blank" title="{{comparison_data.document_name}}"
+                                    class="d-inline-block text-white">{{comparison_data.document_name}}</a>
+                            </label>
+                        </h6>
+                        <div id="document_salahiat_container" dir="ltr" class="text-left bg-light border p-4 mt-5">
+                            <ul>
+                                {% for paragraph in comparison_data.document_salahiat_ekhtiar_paragraphs %}
+                                <li dir="ltr" class="text-left px-3 pt-2 lh-lg">{{paragraph}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Chart Info Pane -->
+            <div class="tab-pane w-100 fade float-left  px-0 border-0" id="chart_info_pane" role="tabpanel"
+                aria-labelledby="chart_info_tab">
+
+                <div class="row mt-4 w-100 flex-row mx-0 px-0">
+                    <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                        <!-- Motevalian chart segment -->
+                        <h5 id="motevalian_chart_header"
+                            class="chart_header w-100 mt-4 text-center float-left pt-3 pb-3">
+                            Executives
+                        </h5>
+                        <br>
+                        <div style="margin-left: 1px !important;" id="motevalian_chart_container"
+                            class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical chart_container">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-4 w-100 flex-row mx-0 px-0">
+                    <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+                        <!-- Hamkaran chart segment -->
+                        <h5 id="hamkaran_chart_header"
+                            class="chart_header w-100 mt-4 text-center float-left pt-3 pb-3">
+                            Cooperators
+                        </h5>
+                        <br>
+                        <div style="margin-left: 1px !important;" id="hamkaran_chart_container"
+                            class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical chart_container">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-4 w-100 flex-row mx-0 px-0">
+                    <div class="col-md-4 px-4 col-12 col-lg-12 p-3 border">
+
+                        <!-- Salahiat chart segment -->
+                        <h5 id="salahiat_chart_header"
+                            class="chart_header w-100 mt-4 text-center float-left pt-3 pb-3">
+                            Competent Authority
+                        </h5>
+                        <br>
+                        <div style="margin-left: 1px !important;" id="salahiat_chart_container"
+                            class="bg-white w-100 mx-auto py-4 px-1 border border-2 pb-2 vertical chart_container">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ChartModal Container -->
+    <button type="button" id="actor_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+        data-bs-target="#actor_modal"></button>
+    <div class="modal fade" id="actor_modal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: ltr !important;" class="modal-header">
+                    <h5 id="modal_header" class="modal-title">عنوان</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="actor_paragraphs" class="modal-body text-justify">
+                    <h6 id="modal_body_header" class="bold"></h6>
+                    <div id="modal_body">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- Modal footer -->
+                <div id="modal_footer" class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button> {% load static %}
+    <script src="{% static 'js/scroll_button_handler.js' %}">
+    </script>
+
+</body>
+
+<script>
+    $(document).ready(function () {
+
+        $('#paragraph_type').on('change', function () {
+            if ($(this).val() == 'all') {
+                $('.keywords_column').slideUp(500);
+
+            } else if ($(this).val() == 'withCommonKeywords') {
+                $('#common_keywords_column').slideDown(500);
+                $('#searched_keywords_column').slideUp(500);
+
+
+            } else {
+                $('#searched_keywords_column').slideDown(500);
+                $('#common_keywords_column').slideUp(500);
+            }
+        });
+
+        $('#all_common_keywords').change(function () {
+
+            if (this.checked) {
+                // select all subjects
+                keywords = document.getElementsByClassName('common_keyword_input');
+                for (keyword of keywords) {
+                    if (!keyword.checked) {
+                        keyword.checked = true;
+                    }
+                }
+                $('.common_keyword_input').attr('disabled', true);
+
+
+            } else {
+                $('.common_keyword_input').attr('disabled', false);
+                keywords = document.getElementsByClassName('common_keyword_input');
+                for (keyword of keywords) {
+                    if (keyword.checked) {
+                        keyword.checked = false;
+                    }
+                }
+            }
+        })
+
+        $('#all_searched_keywords').change(function () {
+
+            if (this.checked) {
+                // select all subjects
+                keywords = document.getElementsByClassName('searched_keyword_input');
+                for (keyword of keywords) {
+                    if (!keyword.checked) {
+                        keyword.checked = true;
+                    }
+                }
+                $('.searched_keyword_input').attr('disabled', true);
+
+
+            } else {
+                $('.searched_keyword_input').attr('disabled', false);
+                keywords = document.getElementsByClassName('searched_keyword_input');
+                for (keyword of keywords) {
+                    if (keyword.checked) {
+                        keyword.checked = false;
+                    }
+                }
+            }
+        })
+
+
+    });
+</script>
+
+<script>
+    /* Gloabal Constants */
+    const punctuations = ['.', '،', 'ـ', '-', ':'];
+    const hamkaran_punctuations = ['،', ')', ':']
+    const motevali_keywords = ['موظف است', 'مکلف است'];
+    const hamkaran_keywords = ['با همکاری', 'باهمکاری'];
+    const salahiat_keywords = ['مختار است', 'اختیار دارد', 'می‌تواند', 'می تواند'];
+    const modal_body_header_dict = {
+
+        'motevalian': 'متولی اجرا',
+        'hamkaran': 'همکار',
+        'salahiat': 'Competent Authority'
+    }
+
+    let actors_list = []
+
+    /* Keywords List */
+    let common_keywords_list = [];
+    let searched_keywords_list = [];
+
+    /* Paragraphs List */
+    let document_motevalian_paragraphs_list = [];
+    let draft_motevalian_paragraphs_list = [];
+
+    let document_hamkaran_paragraphs_list = [];
+    let draft_hamkaran_paragraphs_list = [];
+
+    let document_salahiat_paragraphs_list = [];
+    let draft_salahiat_paragraphs_list = [];
+
+    init()
+
+
+    async function init() {
+
+        let link = 'http://' + location.host + "/information?id=" + "{{comparison_data.document_id}}"
+        $('#document_name a').attr('href', link);
+        $('#document_motevalian_header label a').attr('href', link);
+        $('#document_hamkaran_header label a').attr('href', link);
+        $('#document_salahiat_header label a').attr('href', link);
+        $('#document_header_chart label a').attr('href', link);
+
+
+        const common_keywords = "{{comparison_data.common_keywords}}"
+        const searched_keywords = "{{comparison_data.searched_keywords}}"
+
+        common_keywords_list = common_keywords.split(' - ');
+        searched_keywords_list = searched_keywords.split(' - ');
+
+        $('.keywords_column').slideUp(500);
+        createKeywordsOption('common', 'common_keywords_container', common_keywords_list);
+        createKeywordsOption('searched', 'searched_keywords_container', searched_keywords_list);
+
+
+        const request_link = 'http://' + location.host + "/GetActorsList/";
+        let response = await fetch(request_link).then(response => response.json());
+        actors_list = response["actorsList"]
+
+        /* Highlight  Motevalian in Document & Draft */
+        highlightMotevalian('document_motevalian_container', document_motevalian_paragraphs_list, motevali_keywords, 'bg-success', 'border-success');
+        highlightMotevalian('draft_motevalian_container', draft_motevalian_paragraphs_list, motevali_keywords, 'bg-warning', 'border-warning');
+
+        /* Highlight  Hamkaran in Document & Draft */
+        highlightHamkaran('document_hamkaran_container', document_hamkaran_paragraphs_list, hamkaran_keywords, 'bg-success', 'border-success');
+        highlightHamkaran('draft_hamkaran_container', draft_hamkaran_paragraphs_list, hamkaran_keywords, 'bg-warning', 'border-warning');
+
+        /* Highlight  Hamkaran in Document & Draft */
+        highlightSalahiat('document_salahiat_container', document_salahiat_paragraphs_list, salahiat_keywords, 'bg-success', 'border-success');
+        highlightSalahiat('draft_salahiat_container', draft_salahiat_paragraphs_list, salahiat_keywords, 'bg-warning', 'border-warning');
+
+        createChartData('motevalian_container', 'motevalian_chart_container');
+        createChartData('hamkaran_container', 'hamkaran_chart_container');
+        createChartData('salahiat_container', 'salahiat_chart_container');
+
+    };
+
+
+    function createKeywordsOption(keywords_type, keywords_container, keywords_list) {
+
+        let keyword_input_type = keywords_type + '_keyword_input'
+
+        let sorted_keywords_list = sortKeywords(keywords_list)
+
+        for (keyword of sorted_keywords_list) {
+            let tag = '<div class="form-check form-check-inline float-left py-2 pb-1"><input class="form-check-input ' + keyword_input_type + '" disabled checked="true" type="checkbox" value="' + keyword + '"><label class="form-check-label">' + keyword + '</label></div>'
+            document.getElementById(keywords_container).innerHTML += tag;
+        }
+
+    }
+
+    function sortKeywords(keywords_list) {
+        keywords_dict = {}
+        sorted_keywords_list = [];
+        for (keyword of keywords_list) {
+
+            if (!(keyword in keywords_dict)) {
+                tokens_count = keyword.split(' ').length
+                keywords_dict[keyword] = tokens_count
+            }
+        }
+
+        // Create items array
+        var items = Object.keys(keywords_dict).map(function (key) {
+            return [key, keywords_dict[key]];
+        });
+
+        // Sort the array based on the second element
+        items.sort(function (first, second) {
+            return second[1] - first[1];
+        });
+
+        for (item of items) {
+            sorted_keywords_list.push(item[0])
+        }
+        return sorted_keywords_list;
+
+    }
+
+
+    function highlightMotevalian(paragraphs_container, paragraphs_list, pattern_keywords, bg_color, border_color) {
+
+        const paragraph_selector = '#' + paragraphs_container + ' ul li';
+
+        $(paragraph_selector).each(function () {
+
+            let paragraph = $(this).html();
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+                for (actor of actors_list) {
+                    actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                    paragraph = paragraph.replaceAll(actor + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                }
+
+                /* Highlight without actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'موظف است') {
+                    regex = /موظف است/gi;
+                } else {
+                    regex = /مکلف است/gi;
+                }
+
+                while ((result = regex.exec(paragraph))) {
+                    indices.push(result.index);
+                }
+
+                for (index of indices) {
+
+
+                    let start_index = (index - 1);
+                    let reference = '';
+                    let reference_tag = '';
+
+
+                    for (let i = (start_index); i >= 0; i--) {
+
+                        if (punctuations.includes(paragraph[i]) || i == 0) {
+
+
+                            if (paragraph[i + 1] == ' ') {
+
+                                reference = paragraph.substring((i != 0 ? (i + 2) : i), start_index);
+
+                            } else {
+                                reference = paragraph.substring((i != 0 ? (i + 1) : i), start_index);
+                            }
+
+                            reference_tag = "<span class='detected_reference border border-2 " + border_color + " rounded px-1'>" + reference + "</span> "
+
+                            break;
+
+                        }
+                    };
+
+                    if (reference != ' ' && reference.length > 1) {
+
+                        let pattern_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span> "
+
+                        paragraph = paragraph.replaceAll(reference + ' ' + pattern_keyword, reference_tag + ' ' + pattern_tag);
+
+                    }
+
+
+                }
+
+            }
+
+            paragraphs_list.push(paragraph);
+            $(this).html(paragraph);
+
+        });
+    }
+
+
+    function highlightHamkaran(paragraphs_container, paragraphs_list, pattern_keywords, bg_color, border_color) {
+        const paragraph_selector = '#' + paragraphs_container + ' ul li';
+        const window_length = 100; 
+
+        $(paragraph_selector).each(function () {
+
+            let paragraph = $(this).html();
+
+            let space_counter = 0;
+
+            /* Highlight pattern keywords and references */
+            for (pattern_keyword of pattern_keywords) {
+
+
+                /* Highlight more with actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'با همکاری') {
+                    regex = /با همکاری/gi;
+                } else {
+                    regex = /باهمکاری/gi;
+                }
+
+                while ((result = regex.exec(paragraph))) {
+                    indices.push(result.index);
+                }
+
+                for (const index of indices) {
+
+                    let start_index = (index + pattern_keyword.length);
+                    let substring = paragraph.substring(start_index, start_index + window_length);
+                    let current_substring = substring;
+
+                    for (actor of actors_list) {
+
+                        actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                        substring = substring.replaceAll(' ' + actor + ' ', ' ' + actor_tag + ' ');
+                        substring = substring.replaceAll('(' + actor + ')', '(' + actor_tag + ')');
+
+                        for (symbol of hamkaran_punctuations) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor + symbol, ' ' + actor_tag + symbol);
+
+                        }
+
+                        actor_without_prefix = actor.replaceAll('وزارت ', '').replaceAll('سازمان ', '')
+
+                        if (actor_without_prefix != 'اطلاعات' && actor_without_prefix != 'کشور' && !substring.includes(actor)) {
+
+                            actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                            substring = substring.replaceAll(' ' + actor_without_prefix + ' ', ' ' + actor_tag + ' ');
+                            substring = substring.replaceAll('(' + actor_without_prefix + ')', '(' + actor_tag + ')');
+
+                            for (symbol of hamkaran_punctuations) {
+
+                                actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                                substring = substring.replaceAll(' ' + actor_without_prefix + symbol, ' ' + actor_tag + symbol);
+
+                            }
+
+                        }
+
+                    }
+
+                    paragraph = paragraph.replaceAll(current_substring, substring);
+
+                }
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+
+                paragraph = paragraph.replaceAll(pattern_keyword, pattern_keyword_tag);
+
+            }
+
+
+
+            paragraphs_list.push(paragraph);
+            $(this).html(paragraph);
+
+        });
+
+    }
+
+
+    function highlightSalahiat(paragraphs_container, paragraphs_list, pattern_keywords, bg_color, border_color) {
+
+
+        const paragraph_selector = '#' + paragraphs_container + ' ul li';
+
+        $(paragraph_selector).each(function () {
+
+            let paragraph = $(this).html();
+
+
+            for (pattern_keyword of pattern_keywords) {
+
+                /* Highlight with actors list */
+                let pattern_keyword_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span>"
+                for (actor of actors_list) {
+                    actor_tag = "<span class='" + bg_color + " text-white rounded px-1 reference'>" + actor + "</span>"
+                    paragraph = paragraph.replaceAll(actor + ' ' + pattern_keyword, actor_tag + ' ' + pattern_keyword_tag);
+                }
+
+                /* Highlight without actors list */
+                let regex = '', result, indices = [];
+
+                if (pattern_keyword == 'مختار است') {
+                    regex = /مختار است/gi;
+                } else if (pattern_keyword == 'اختیار دارد') {
+                    regex = /اختیار دارد/gi;
+                } else if (pattern_keyword == 'می‌تواند') {
+                    regex = /می‌تواند/gi
+
+                } else if (pattern_keyword == 'می تواند') {
+                    regex = /می تواند/gi
+                }
+
+                while ((result = regex.exec(paragraph))) {
+                    indices.push(result.index);
+                }
+
+                for (index of indices) {
+
+
+                    let start_index = (index - 1);
+                    let reference = '';
+                    let reference_tag = '';
+
+
+                    for (let i = (start_index); i >= 0; i--) {
+
+                        if (punctuations.includes(paragraph[i]) || i == 0) {
+
+
+                            if (paragraph[i + 1] == ' ') {
+
+                                reference = paragraph.substring((i != 0 ? (i + 2) : i), start_index);
+
+                            } else {
+                                reference = paragraph.substring((i != 0 ? (i + 1) : i), start_index);
+                            }
+
+                            reference_tag = "<span class='detected_reference border border-2 " + border_color + " rounded px-1'>" + reference + "</span> "
+
+                            break;
+
+                        }
+                    };
+
+                    if (reference != ' ' && reference.length > 1) {
+
+                        let pattern_tag = "<span class='bg-secondary text-white rounded px-1'>" + pattern_keyword + "</span> "
+
+                        paragraph = paragraph.replaceAll(reference + ' ' + pattern_keyword, reference_tag + ' ' + pattern_tag);
+
+                    }
+
+
+                }
+
+            }
+
+            paragraphs_list.push(paragraph);
+            $(this).html(paragraph);
+
+        });
+    }
+
+
+    function ShowResult() {
+
+        paragraph_type = document.getElementById('paragraph_type').value;
+
+
+        if (paragraph_type == 'all') {
+
+            showAllParagraphs('document_motevalian_container', document_motevalian_paragraphs_list);
+            showAllParagraphs('draft_motevalian_container', draft_motevalian_paragraphs_list);
+
+            showAllParagraphs('document_hamkaran_container', document_hamkaran_paragraphs_list);
+            showAllParagraphs('draft_hamkaran_container', draft_hamkaran_paragraphs_list);
+
+            showAllParagraphs('document_salahiat_container', document_salahiat_paragraphs_list);
+            showAllParagraphs('draft_salahiat_container', draft_salahiat_paragraphs_list);
+
+        } else {
+
+            let checkbox_selector = '';
+
+            if (paragraph_type == 'withCommonKeywords') {
+                checkbox_selector = 'common_keyword'
+            } else {
+                checkbox_selector = 'searched_keyword'
+            }
+
+            keywords = document.getElementsByClassName(checkbox_selector + '_input');
+            selected_keywords_list = []
+
+            for (keyword of keywords) {
+                if (keyword.checked) {
+                    selected_keywords_list.push(keyword.value);
+                }
+            }
+
+            highlightKeywords('document_motevalian_container', document_motevalian_paragraphs_list, selected_keywords_list);
+            highlightKeywords('draft_motevalian_container', draft_motevalian_paragraphs_list, selected_keywords_list);
+
+            highlightKeywords('document_hamkaran_container', document_hamkaran_paragraphs_list, selected_keywords_list);
+            highlightKeywords('draft_hamkaran_container', draft_hamkaran_paragraphs_list, selected_keywords_list);
+
+            highlightKeywords('document_salahiat_container', document_salahiat_paragraphs_list, selected_keywords_list);
+            highlightKeywords('draft_salahiat_container', draft_salahiat_paragraphs_list, selected_keywords_list);
+
+        }
+
+        createChartData('motevalian_container', 'motevalian_chart_container');
+        createChartData('hamkaran_container', 'hamkaran_chart_container');
+        createChartData('salahiat_container', 'salahiat_chart_container');
+
+    }
+
+    function showAllParagraphs(paragraphs_container, paragraphs_list) {
+
+        const container_selector = '#' + paragraphs_container + ' ul';
+
+        // clear paragraphs container
+        $(container_selector).empty();
+
+        for (paragraph of paragraphs_list) {
+            $(container_selector).append('<li dir="ltr" class="text-left px-3 pt-2 lh-lg">' + paragraph + '</li>');
+        }
+
+    }
+
+    function highlightKeywords(paragraphs_container, paragraphs_list, selected_keywords) {
+
+        const container_selector = '#' + paragraphs_container + ' ul';
+
+        // clear paragraphs container
+        $(container_selector).empty();
+
+        for (paragraph of paragraphs_list) {
+            let keyword_count = 0;
+
+            for (keyword of selected_keywords) {
+
+                if (paragraph.includes((' ' + keyword + ' '))) {
+
+                    keyword_count += 1;
+
+                    let tag = "<span class='bg-primary text-white px-1 rounded'>" + keyword + "</span>"
+
+                    if (paragraph.startsWith(keyword))
+                        paragraph = paragraph.replaceAll(keyword + ' ', tag + ' ');
+
+                    paragraph = paragraph.replaceAll(' ' + keyword + ' ', ' ' + tag + ' ');
+
+                }
+
+            }
+
+            if (keyword_count > 0) {
+                $(container_selector).append('<li dir="ltr" class="text-left px-3 pt-2 lh-lg">' + paragraph + '</li>')
+            }
+
+
+        }
+
+        removeKeywordTagInsideReferenceTag();
+    }
+
+    function removeKeywordTagInsideReferenceTag() {
+
+        $('span.reference').each(function () {
+            if ($(this).children().length > 0) {
+                $(this).html($(this).text());
+            }
+        });
+
+        $('span.detected_reference').each(function () {
+            if ($(this).children().length > 0) {
+                $(this).html($(this).text());
+            }
+        });
+
+    }
+
+    function createChartData(tab_container, chart_container) {
+
+        let references_dict = { 'document': {}, 'draft': {} }
+
+
+        const document_paragraphs_selector = '#document_' + tab_container + ' ul li';
+        const draft_paragraphs_selector = '#draft_' + tab_container + ' ul li';
+
+
+        $(document_paragraphs_selector).each(function () {
+
+            refs = $(this).children('span.reference')
+
+            $(refs).each(function () {
+
+                ref = $(this).text();
+
+                if (ref in references_dict['document']) {
+                    references_dict['document'][ref] += 1;
+
+                } else {
+                    references_dict['document'][ref] = 1;
+                }
+            })
+
+        });
+
+
+        $(draft_paragraphs_selector).each(function () {
+
+            refs = $(this).children('span.reference')
+
+            $(refs).each(function () {
+
+                ref = $(this).text();
+
+                if (ref in references_dict['draft']) {
+                    references_dict['draft'][ref] += 1;
+
+                } else {
+                    references_dict['draft'][ref] = 1;
+                }
+            })
+
+        });
+
+        let total_reference_dict = {} // {actor: [doc_frequency, draft_frequency]}
+
+        for (const actor in references_dict['document']) {
+            let acotr_frequency = references_dict['document'][actor]
+            let temp_array = [];
+            temp_array.push(acotr_frequency);
+            temp_array.push(0);
+            total_reference_dict[actor] = temp_array;
+        }
+
+        for (const actor in references_dict['draft']) {
+
+            if (actor in total_reference_dict) {
+                let actor_frequency = references_dict['draft'][actor];
+
+                total_reference_dict[actor][1] = actor_frequency;
+
+            } else {
+
+                let actor_frequency = references_dict['draft'][actor]
+                let temp_array = [];
+                temp_array.push(0);
+                temp_array.push(actor_frequency);
+                total_reference_dict[actor] = temp_array;
+            }
+
+
+        }
+
+
+        data_rows = [];
+
+        for (actor in total_reference_dict) {
+            column_data = [actor, total_reference_dict[actor][0], total_reference_dict[actor][1]]
+            data_rows.push(column_data);
+        }
+
+
+        showChart(chart_container, data_rows);
+    }
+
+    function showChart(chart_container, chart_data) {
+
+        document.getElementById(chart_container).innerHTML = ""
+        // create a data set
+        var data = anychart.data.set(chart_data);
+
+        // map the data
+        var document_series_data = data.mapAs({ x: 0, value: 1 });
+        var draft_series_data = data.mapAs({ x: 0, value: 2 });
+
+
+        // create a chart
+        var chart = anychart.column();
+
+        chart
+            .animation(true)
+            .padding([80, 60, 10, 0])
+
+        chart.background().fill('#ffffff');
+
+
+        // x axix labels font setting
+        var xAxisLabels = chart.xAxis().labels();
+        xAxisLabels.fontFamily("vazir");
+
+        var yAxisLabels = chart.yAxis().labels();
+        yAxisLabels.fontFamily("vazir");
+
+        // Not allow labels overlapping
+        var xAxis = chart.xAxis();
+        xAxis.overlapMode("noOverlap");
+
+        var yAxis = chart.yAxis();
+        yAxis.title("Document Count");
+        yAxis.title().fontFamily('vazir');
+        yAxis.title().height(40);
+
+
+        chart.yScale().minimum(0);
+        chart.yScale().ticks().allowFractional(false);
+        // tooltip content font setting
+        var tooltip = chart.tooltip();
+        tooltip.fontFamily("vazir");
+
+        // tooltip title font setting
+        var title = chart.tooltip().title();
+        title.fontFamily("vazir");
+
+
+        // set the container id
+        chart.container(chart_container);
+
+
+        // create the first series, set the data and name
+        var document_series = chart.column(document_series_data);
+
+        // configure the visual settings of the first series
+        document_series.normal().fill("#28a745");
+        document_series.normal().stroke("#28a745", 0);
+        document_series.name("Document");
+
+        // create the second series, set the data and name
+        var draft_series = chart.column(draft_series_data);
+        draft_series.normal().stroke("#28a745", 0);
+
+        // configure the visual settings of the second series
+        draft_series.normal().fill("#ffc107");
+
+        draft_series.name("Draft");
+
+
+        // enable the legend
+        chart.legend(true);
+
+        var legend = chart.legend();
+        legend.fontFamily('vazir')
+
+        // set position mode
+        legend.positionMode("inside");
+        // set position and alignement
+        legend.position("top");
+        legend.align("center");
+        legend.itemsLayout("horizontalExpandable");
+        // initiate drawing the chart
+        chart.draw();
+
+
+        // document columns
+        document_series.listen('click', function (e) {
+
+            /* Modal Headers */
+            const click_tag = e.domTarget.tag;
+            const column_index = click_tag["index"]
+            const actor_name = chart_data[column_index][0];
+            const actor_type = chart_container.split('_')[0];// motevalian , hamkaran or salahiat
+
+            const document_link = $('#document_motevalian_header a').attr('href');
+            const document_name = "{{comparison_data.document_name}}";
+
+            const title_tag = '<a  href="' + document_link + '" target = "_blank">' + document_name + ' </a>';
+
+
+            $('#modal_header').html(title_tag);
+            $('#modal_body_header').text(modal_body_header_dict[actor_type] + ': ' + actor_name);
+
+            /* Modal Body */
+            $('#modal_body ul').empty();
+            const paragraphs_container_selector = '#document' + '_' + actor_type + '_' + 'container ul li'
+            let body_result = ''
+            let bg_color = 'bg-success';
+
+
+            $(paragraphs_container_selector).each(function () {
+                let paragraph = $(this).html();
+                let actor_tag = '<span class="' + bg_color + ' text-white rounded px-1 reference">' + actor_name + '</span>'
+
+                if (paragraph.includes(actor_tag)) {
+                    let li_tag = '<li dir="ltr" class="text-left py-2 lh-lg">' + paragraph + '</li>'
+                    $('#modal_body ul').append(li_tag);
+                }
+
+
+            })
+
+            $("#actor_modal_btn").click();
+
+        });
+
+
+        // draft columns
+        draft_series.listen('click', function (e) {
+
+            /* Modal Headers */
+            const click_tag = e.domTarget.tag;
+            const column_index = click_tag["index"]
+            const actor_name = chart_data[column_index][0];
+            const actor_type = chart_container.split('_')[0];// motevalian , hamkaran or salahiat
+
+            const document_link = "#";
+            const document_name = "Draft: {{comparison_data.draft_name}}";
+
+            let title_tag = '<a  href="' + document_link + '">' + document_name + ' </a>';
+
+
+            $('#modal_header').html(title_tag);
+            $('#modal_body_header').text(modal_body_header_dict[actor_type] + ': ' + actor_name);
+
+            /* Modal Body */
+            $('#modal_body ul').empty();
+            const paragraphs_container_selector = '#draft' + '_' + actor_type + '_' + 'container ul li'
+            let body_result = ''
+            let bg_color = 'bg-warning';
+
+            $(paragraphs_container_selector).each(function () {
+                let paragraph = $(this).html();
+                let actor_tag = '<span class="' + bg_color + ' text-white rounded px-1 reference">' + actor_name + '</span>'
+
+                if (paragraph.includes(actor_tag)) {
+                    let li_tag = '<li dir="ltr" class="text-left py-2 lh-lg">' + paragraph + '</li>'
+                    $('#modal_body ul').append(li_tag);
+                }
+
+
+            })
+
+            $("#actor_modal_btn").click();
+
+        });
+
+
+
+    }
+
+</script>
+
+</html>

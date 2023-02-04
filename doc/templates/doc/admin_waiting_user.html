@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+
+    <!-- commented for dropdown menu hover bug -->
+    <!-- <link href="../../static/library/bootstrap-theme.min-3.3.6.css" rel="stylesheet"> -->
+
+
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="../../static/library/bootstrap-icons-1.3.0.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css"  />
+    <link rel="stylesheet" href="../../static/library/font-awesome.min-4.7.0.css">
+
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/search_chart.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/jquerysctipttop.css">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+    <meta charset="UTF-8">
+
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>-->
+
+    <title>تایید کاربران</title>
+    {% include "doc/title_icon.html" %}
+
+    <script src="../../static/js/signout_function.js"></script>
+
+</head>
+
+<body>
+<!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+            // Active panel
+            $('#AdminDropdown').addClass('active');
+            $('#admin_waiting_user').addClass('active');
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+<!--container-->
+<div class="container-users mt-4">
+    <div class="row">
+        <div class="col">
+
+            <!--confirm-users data table-->
+            <div class="row data-table">
+                <div class="col">
+                </div>
+                <div class="col-10">
+                <br>
+                <br>
+                <br>
+                    <div class="text"><p
+                            class="user-list align-content-center">
+                    <button class="btn float-left p-0 px-1 mt-2" id="ExportExcel" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="خروجی اکسل" onclick="ExportExcelSerachResultFunction()"
+                    type="button">
+                    <i class="far fa-file-excel text-success m-0" style="font-size: 25px;margin: 0px;"></i>
+                    </button>
+                        لیست انتظار :</p></div>
+                    <hr style="color:darkblue">
+                    <div class="searching">
+                        <form class="d-flex pb-2">
+                            <input class="form-control me-2" id="myInput" type="search"
+                                   placeholder="جستجو......" aria-label="Search">
+                        </form>
+                    </div>
+                    <div class="table-responsive tbl">
+                        <table id="waiting_user_table" class="table-striped table footable waiting_user_table">
+                            <thead>
+                            <tr>
+                                <th scope="col">ردیف</th>
+                                <th scope="col">نام</th>
+                                <th scope="col">نام خانوادگی</th>
+                                <th scope="col">کد ملی</th>
+                                <th scope="col">ایمیل</th>
+                                <th scope="col">شماره تماس</th>
+                                <th scope="col">نام کاربری</th>
+                                <th scope="col">تایید ثبت‌نام کاربر</th>
+                            </tr>
+                            </thead>
+                            <tbody id="user-table">
+
+                            {% for i in data %}
+                                <tr>
+                                    <td class="row-n"></td>
+                                    <td>{{ i.first_name }}</td>
+                                    <td>{{ i.last_name }}</td>
+                                    <td>{{ i.national_code }}</td>
+                                    <td>{{ i.email }}</td>
+                                    <td>{{ i.mobile }}</td>
+                                    <td>{{ i.username }}</td>
+                                    <td>
+                                        <div class="">
+                                            <button type="button" data-change-to="accepted"
+                                                    class="btn btn-success btn-change-user-state"
+                                                    data-user-id="{{ i.id }}"><i class="bi bi-check"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="پذیرش"></i></button>
+                                            <button type="button" data-change-to="rejected"
+                                                    class="btn btn-danger btn-change-user-state"
+                                                    data-user-id="{{ i.id }}"><i class="bi bi-x"
+                                                                                 data-bs-toggle="tooltip"
+                                                                                 data-bs-placement="top"
+                                                                                 title="عدم پذیرش"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <!--end confirm-users data table-->
+        </div>
+    </div>
+</div>
+<!--end container-->
+<script src="../../static/library/notyf.min.js"></script>
+
+<script>
+    const notyf = new Notyf();
+
+    function listen_on_buttons() {
+        const rows = document.querySelectorAll('#user-table tr');
+        let inc = 1;
+
+        for (const row of rows) {
+            row.querySelector('td.row-n').innerText = inc.toString()
+            inc += 1;
+
+            const buttons = row.querySelectorAll('.btn-change-user-state');
+            for (const button of buttons) {
+                button.addEventListener('click', async function () {
+                    state = button.getAttribute("data-change-to");
+                    user_id = button.getAttribute("data-user-id");
+                    const request_link = 'http://' + location.host + "/changeUserState/" + user_id + "/" + state + "/";
+                    let response = await fetch(request_link);
+                    try {
+                        response = await response.json();
+                        if (state == "accepted") {
+                            notyf.success('کاربر با موفقیت پذیرفته شده است');
+                            row.remove();
+                        } else if (state == "rejected") {
+                            notyf.error('کاربر با موفقیت رد شده است');
+                            row.remove();
+
+                        }
+                    } catch (err) {
+                        notyf.error('عملیات ناموفق بوده است');
+                    }
+
+                })
+            }
+
+        }
+
+    }
+
+    $('#waiting_user_table').footable({
+            "on": {"ready.ft.table":function (e, ft){listen_on_buttons()}},
+            "sorting": {
+                "enabled": true
+            },
+            "paging": {
+                    "enabled": true,
+                     strings: {
+                         first: '»',
+                         prev:'›',
+                         next: '‹',
+                         last: '«'
+                     }
+            },
+            "filtering": {
+                    "enabled": false
+            },
+            "empty": "لیست انتظار خالی است.",
+            "columns": [{
+                "name": "id",
+                "title": "ردیف",
+                "breakpoints": "xs sm",
+                "type": "number",
+                "style": {
+                    "width": 80,
+                    "maxWidth": 80
+                }    }],
+     });
+
+
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#user-table tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

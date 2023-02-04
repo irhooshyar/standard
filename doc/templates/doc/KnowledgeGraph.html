@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-4.5.2.css">
+    <script src="../../static/js/jquery_351/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/bootstrap.min-5.1.2npm.css">
+    <script src="../../static/library/bootstrap-5.1.2.bundle.min.js"></script>
+
+    <!--BS Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- Fontawesome Icons -->
+
+    <link rel="stylesheet" href="../../static/library/fontawesome-5.10.0.all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- anychart modules -->
+    <script src="../../static/library/anychart-8.10.0-core.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-graph.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-pie.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-exports.min.js"></script>
+    <script src="../../static/library/anychart-8.10.0-cartesian.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../static/library/tom-select-2.2.1.css">
+    <script src="../../static/library/tom-select.complete-2.2.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/searchable-select.js"></script>
+
+    <link rel="stylesheet" href="../../static/styles/index2.css">
+    <link rel="stylesheet" href="../../static/styles/graph.css">
+    <meta charset="UTF-8">
+
+    <!-- Intro Js -->
+    <script src="../../static/library/intro.min-4.3.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs.min-4.3.0.css">
+    <link rel="stylesheet" type="text/css" href="../../static/library/introjs-rtl.min-4.3.0.css">
+    <link rel="stylesheet" href="../../static/styles/user_guide_tour.css">
+
+    <!-- Notyf  -->
+    <link rel="stylesheet" type="text/css" href="../../static/library/notyf.min-npm.css">
+    <script src="../../static/library/notyf.min.js"></script>
+
+    <script type="text/javascript" src="http://l2.io/ip.js?var=myip">
+    </script>
+
+    <script src="../../static/library/g6.min-4.3.11.js"></script>
+    <script src="../../static/library/jquery-ui.min-1.11.4.js"></script>
+
+    <!-- Footable  -->
+    <script src="../../static/js/footable/demo-rows.js"></script>
+    <script src="../../static/js/footable/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../static/js/footable/footable.js"></script>
+    <link href="../../static/styles/footable/footable.bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/styles/footable/docs.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.Glyphicons.css" rel="stylesheet">
+    <link href="../../static/styles/footable/FooTable.FontAwesome.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../static/js/GraphClass.js"></script>
+
+    <script src="../../static/js/zipDownload/jszip.min.js"></script>
+    <script src="../../static/js/zipDownload/FileSaver.min.js"></script>
+    <script src="../../static/js/ChartColumnInteractivity.js"></script>
+
+    <script src="../../static/js/chart.js"></script>
+
+    <title>گراف دانش</title>
+    {% include "doc/title_icon.html" %}
+</head>
+
+<body>
+
+
+    <!-- Menu -->
+    <nav dir="rtl" class="navbar nav_menu navbar-expand-lg fixed-top p-0 mt-0">
+        {% include "doc/header2.html" %}
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+
+
+            // Active panel
+            $('#AIDropdown').addClass('active');
+            $('#knowledgeGraph').addClass('active');
+
+
+            $('select#language').on('change', function (e) {
+
+                let selected_language = this.value;
+                let current_url = window.location.href;
+                if (selected_language === 'England') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'en')
+                    window.location = requested_url;
+                } else if (selected_language === 'Russia') {
+                    let page_name = current_url.split('/')[3]
+                    let requested_url = current_url.replace(page_name, 'ru')
+                    window.location = requested_url;
+                }
+
+            });
+        });
+    </script>
+
+
+
+    <div class="row flex-row-reverse px-0 py-5 px-md-5 py-md-5 m-0 mt-4">
+        <form action="" class="custom-control mx-auto needs-validation" id="graph_form" enctype="multipart/form-data"
+            method="post" novalidate>
+
+            <div class="row mb-0 flex-row-reverse mx-auto">
+
+                <!-- Country Input -->
+                <div class="col-md-6  pt-3 col-12 col-lg-2 bg-light" dir="rtl">
+                    <label for="country" class=" text-right bg-light float-right" style="direction: rtl;;">مجموعه سند:</label>
+                    <select dir="rtl" id="country" name="country"
+                        class="form-select text-right float-right searchable-select" style="direction: rtl;"
+                        onchange="CountryChanged()">
+                        {% for k,v in countries.items %}
+
+                        <option value="{{ k }}">{{ v }}- قوانین</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6  pt-3 col-12 col-lg-3 bg-light" dir="rtl">
+                    <label for="graph_select" class=" text-right bg-light float-right" style="direction: rtl;">انتخاب گراف:</label>
+                    <select dir="rtl" id="graph_select" name="graph_select" class="form-select text-right float-right searchable-select" style="direction: rtl;">
+                        <option value="0">انتخاب نمایید</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3 mr-0 col-md-6 pt-5 col-12">
+                    <!-- Show result btn -->
+                    <button type="button" id="graph_show" class="btn float-right" onclick="ShowGraph()">نمایش</button>
+                </div>
+            </div>
+        </form>
+
+        <!--Original Tabs -->
+        <ul id="original_tabs" class="nav nav-pills mt-5 mx-auto  pr-3 pr-sm-0  float-right  d-block" id="graph_tab"
+            role="tablist">
+
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="show_knowledge__graph_tab" class="nav-link active" data-bs-toggle="pill"
+                    data-bs-target="#show_knowledge__graph_pane" type="button" role="tab"
+                    aria-controls="show_knowledge__graph_pane" aria-selected="false">نمایش گراف دانش</button>
+            </li>
+
+            <li class="nav-item float-right" role="presentation">
+                <button id="knowledge_graph_tab" class="nav-link" data-bs-toggle="pill"
+                    data-bs-target="#knowledge_graph_pane" type="button" role="tab"
+                    aria-controls="knowledge_graph_pane" aria-selected="false">ساخت گراف دانش</button>
+            </li>
+
+        </ul>
+
+        <!-- Original Panes -->
+        <div id="original_pane" class="tab-content float-right px-1 bg-white" id="pills-tabContent">
+
+            <!--  Show Graph Pane -->
+            <div id="show_knowledge__graph_pane" class="tab-pane w-100 show active fade float-right" role="tabpanel"
+                aria-labelledby="show_knowledge__graph_tab">
+
+                <div class="row mt-4 w-100 mx-auto pb-5 px-4" dir="rtl">
+
+                    <div class="d-flex">
+                        <div class="col-md-6 p-1 col-12 col-lg-6 mt-3">
+                            <div class="source_header bg-white row mx-auto p-1">
+                                <label class="text-center my-0" style="direction: rtl;">نحوه نمایش</label>
+                            </div>
+                            <div class="source_container p-4 row mx-auto">
+                                <select id="show_knowledge__ChangeLayout" name="show_knowledge__ChangeLayout" class="form-select text-right float-right searchable-select" style="direction: rtl;">
+                                    <option value="grid">مربعی</option>
+                                    <option value="circular"> دایره ای </option>
+                                    <option value="force">ساده</option>
+                                    <option value="dagre">بالا به پایین</option>
+                                    <option value="radial">شعاعی</option>
+                                    <option value="concentric">متحدالمرکز</option>
+                                    <option value="comboForce">خوشه ای</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 p-1 col-12 col-lg-6 mt-3">
+                            <div class="source_header bg-white row mx-auto p-1">
+                                <label class="text-center my-0" style="direction: rtl;">جستجو در نام گره</label>
+                            </div>
+                            <div class="source_container p-4 d-flex">
+                                <input style="direction: rtl;" class="form-control text-right" placeholder="جستجو در نام گره ها ..." type="text" required="" name="show_knowledge__SearchBox" id="show_knowledge__SearchBox" value="">
+                                <button type="button" id="show_knowledge__SearchBtn" class="btn modal_btn mr-2">جست‌وجو</button>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 p-1 col-12 col-lg-6 mt-1 d-flex">
+
+                        </div>
+                    </div>
+
+                    <div dir="ltr">
+                        <img style="width: 4%; cursor: pointer; margin-top: 20px;" id="show_knowledge__SelectNeighbourImg" src="../../static/image/neighbourhood.png">
+                        <img style="width: 3%; cursor: pointer; margin-top: 20px;" id="show_knowledge__ShowHideImg" src="../../static/image/hide_nodes.png">
+                    </div>
+
+                    <div id="show_knowledge__graph_container" class="border mt-1 position-static" style="height:500px; overflow: hidden;">
+                    </div>
+
+                    <div dir="rtl" style="display: flex; margin-bottom: 50px;">
+                        <div class="col-md-6 px-0 col-12 col-lg-5 pt-1">
+                            <h6 class="table_header text-center  p-2  mb-0">
+                                گره های انتخاب شده
+                            </h6>
+                            <table id="show_knowledge__selected_node_table" class="table table-striped PopUpTable" style="width: 95%;margin: auto;">
+
+                            </table>
+                        </div>
+
+                        <div class="col-md-6 px-0 col-12 col-lg-7 pt-1">
+                        <h6 class="table_header text-center  p-2  mb-0">
+                            یال های انتخاب شده
+                        </h6>
+                        <table id="show_knowledge__selected_edge_table" class="table table-striped PopUpTable" style="width: 95%;margin: auto;">
+
+                        </table>
+                    </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!--  Create Graph Pane -->
+            <div id="knowledge_graph_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                aria-labelledby="knowledge_graph_tab">
+                <div class="row mt-4 w-100 mx-auto pb-5 px-4" dir="rtl">
+
+                    <div style="display: flex; text-align: center">
+                        <p class="col-3"><span style="font-weight: bold; color: blue;"> کلیک روی صفحه: </span> اضافه کردن گره جدید </p>
+                        <p class="col-3"><span style="font-weight: bold; color: blue;"> کلیک روی گره: </span> اضافه کردن یال جدید </p>
+                        <p class="col-3"><span style="font-weight: bold; color: blue;"> دابل کلیک روی گره: </span> تغییر اطلاعات یا حذف گره </p>
+                        <p class="col-3"><span style="font-weight: bold; color: blue;"> دابل کلیک روی یال: </span> تغییر اطلاعات یا حذف یال </p>
+                    </div>
+                    <div class="pt-1" dir="rtl">
+                        <label for="edit_graph_select" class="text-right float-right ml-3 pt-2" style="direction: rtl;">ویرایش گراف:</label>
+                        <select dir="rtl" id="edit_graph_select" name="edit_graph_select" class="col-4 form-select text-right float-right searchable-select" style="direction: rtl;">
+                            <option value="0">گراف خام (خالی)</option>
+                        </select>
+                        <button type="button" id="delete_graph" onclick="delete_selected_graph()" class="btn float-right btnclass mr-2">حذف گراف</button>
+                    </div>
+
+                    <div class="d-flex">
+                        <div id="node_input_div" style="display: none; margin:20px auto">
+                            <input type="text" class="form-control text-right" id="node_input_name" placeholder="نام فارسی گره">
+                            <button type="button" id="translate_node_input" class="btn float-right btnclass mx-2">ترجمه</button>
+                            <input type="text" class="form-control text-right" id="node_input_EN_name" placeholder="نام انگلیسی گره">
+                            <input type="number" class="form-control text-right mr-2" id="node_input_weight" placeholder="وزن گره">
+                            <button type="button" id="save_node_input" class="btn float-right btnclass mr-2">ذخیره</button>
+                            <button type="button" id="delete_selected_node" class="btn graph_show float-right mr-2 btnclass">حذف</button>
+                        </div>
+                        <div id="edge_input_div" style="display: none; margin:20px auto">
+                            <input type="number" class="form-control text-right" id="edge_input_weight" placeholder="وزن یال">
+                            <button type="button" id="save_edge_input" class="btn float-right btnclass mr-2">ذخیره</button>
+                            <button type="button" id="delete_selected_edge" class="btn graph_show float-right mr-2 btnclass">حذف</button>
+                        </div>
+                    </div>
+
+                    <div id="knowledge_graph_container" class="border mt-1 position-static" style="height:500px; overflow: hidden;">
+                    </div>
+
+                    <div id="save_graph_div" style="margin-top: 35px; display: flex; justify-content: left">
+                        <input type="text" class="form-control text-right w-50" id="knowledgeGraphName" placeholder="نام گراف دانش ...">
+                        <button type="button" onclick="saveKnowledgeGraph()" id="save_graph" class="btn float-right btnclass mr-2">ذخیره گراف</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Scrollbar -->
+    <button id="scroll_btn" class="p-0" title="بالای صفحه" onclick="topFunction()">
+        <i class="far fa-caret-square-up"></i>
+    </button>
+
+
+    <button type="button" id="paraDetailModal_modal_btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+    data-bs-target="#paraDetailModal"></button>
+    <div class="modal fade" id="paraDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl" style="max-width: 75%">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="paraModalHeader" class="modal-title">جزئیات</h5>
+                    <div class="d-flex" style="width: 75%">
+                        <label for="language_select" class=" text-right pl-3 pt-3" style="direction: rtl;"> زبان:</label>
+                        <select dir="rtl" id="language_select" name="language_select" class="col-4 form-select text-right searchable-select" style="direction: rtl;">
+                            <option value="IRI">ایران</option>
+                            <option value="UK">انگلستان</option>
+                            <option value="US">آمریکا</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body text-justify">
+
+                    <ul id="result_modal_tabs" style="border-bottom: 1px solid var(--header_color);" class="nav nav-pills mx-auto w-100 pr-3 pr-sm-0 float-right  d-block" role="tablist">
+                        <li class="nav-item float-right" role="presentation">
+                            <button id="OrResultData_tab" class="nav-link active" data-bs-toggle="pill"
+                                data-bs-target="#OrResultData_pane" type="button" role="tab"
+                                aria-controls="OrResultData_pane" aria-selected="false">نتایج جستجو OR</button>
+                        </li>
+                        <li class="nav-item float-right" role="presentation">
+                            <button id="ORChartData_tab" class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#ORChartData_pane" type="button" role="tab"
+                                aria-controls="ORChartData_pane" aria-selected="false">اطلاعات نموداری OR</button>
+                        </li>
+                        <li class="nav-item float-right" role="presentation">
+                            <button id="AndResultData_tab" class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#AndResultData_pane" type="button" role="tab"
+                                aria-controls="AndResultData_pane" aria-selected="false">نتایج جستجو AND (حکم)</button>
+                        </li>
+                        <li class="nav-item float-right" role="presentation">
+                            <button id="ANDChartData_tab" class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#ANDChartData_pane" type="button" role="tab"
+                                aria-controls="ANDChartData_pane" aria-selected="false">اطلاعات نموداری  AND (حکم)</button>
+                        </li>
+                        <li class="nav-item float-right" role="presentation">
+                            <button id="AndDocResultData_tab" class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#AndDocResultData_pane" type="button" role="tab"
+                                aria-controls="AndDocResultData_pane" aria-selected="false">نتایج جستجو AND (سند)</button>
+                        </li>
+                        <li class="nav-item float-right" role="presentation">
+                            <button id="ANDDocChartData_tab" class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#ANDDocChartData_pane" type="button" role="tab"
+                                aria-controls="ANDDocChartData_pane" aria-selected="false">اطلاعات نموداری  AND (سند)</button>
+                        </li>
+                    </ul>
+
+
+                    <!-- Original Panes -->
+                    <div id="result_modal_pane" class="tab-content w-100 float-right px-1 mt-4">
+                        <div id="OrResultData_pane" class="tab-pane w-100 show active fade float-right" role="tabpanel" aria-labelledby="OrResultData_tab">
+                            <h6 id="ORDocsCount" class='text-secondary'></h6>
+                            <div id="ORparaDetailText" class="text-justify mx-2">
+                            </div>
+                            <button id="ORLoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left" style="color: #0e3f8b">
+                                <i class="fa fa-plus pl-2" style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+                        </div>
+
+                        <div id="ORChartData_pane" class="tab-pane w-100 fade float-right" role="tabpanel" aria-labelledby="ORChartData_tab">
+                            <div class="charts-list-container">
+                                <div id="or_year_container" class="full" chart-height="850px">
+                                </div>
+
+                                <div id="or_level_container" class="full">
+                                </div>
+
+                                <div id="or_approval_container" class="full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="AndResultData_pane" class="tab-pane w-100 fade float-right" role="tabpanel" aria-labelledby="AndResultData_tab">
+                            <h6 id="ANDDocsCount" class='text-secondary'></h6>
+                            <div id="ANDparaDetailText" class="text-justify mx-2">
+                            </div>
+                            <button id="ANDLoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left" style="color: #0e3f8b">
+                                <i class="fa fa-plus pl-2" style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+                        </div>
+
+                        <div id="ANDChartData_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                             aria-labelledby="ANDChartData_tab">
+                            <div class="charts-list-container">
+                                <div id="and_year_container" class="full" chart-height="850px">
+                                </div>
+
+                                <div id="and_level_container" class="full">
+                                </div>
+
+                                <div id="and_approval_container" class="full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="AndDocResultData_pane" class="tab-pane w-100 fade float-right" role="tabpanel" aria-labelledby="AndDocResultData_tab">
+                            <h6 id="ANDDocDocsCount" class='text-secondary'></h6>
+                            <div id="ANDDocparaDetailText" class="text-justify mx-2">
+                            </div>
+                            <button id="ANDDocLoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left" style="color: #0e3f8b">
+                                <i class="fa fa-plus pl-2" style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+                        </div>
+
+                        <div id="ANDDocChartData_pane" class="tab-pane w-100 fade float-right" role="tabpanel"
+                             aria-labelledby="ANDDocChartData_tab">
+                            <div class="charts-list-container">
+                                <div id="and_doc_year_container" class="full" chart-height="850px">
+                                </div>
+
+                                <div id="and_doc_level_container" class="full">
+                                </div>
+
+                                <div id="and_doc_approval_container" class="full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Modal footer -->
+                <div id="detail_modal_footer" dir="ltr" class="modal-footer">
+                    <button id="close_btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="interactivityDetailModal__btn" class="btn d-none modal_btn" data-bs-toggle="modal"
+    data-bs-target="#interactivityDetailModal"></button>
+    <div class="modal fade" id="interactivityDetailModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div style="direction: rtl !important;" class="modal-header">
+                    <h5 id="interactivityModalHeader" class="modal-title">جزئیات</h5>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body text-justify">
+
+                    <div id="OrResultData_pane" class="tab-pane w-100 show active fade float-right" role="tabpanel" aria-labelledby="OrResultData_tab">
+                            <h6 id="interactivityDocsCount" class='text-secondary'></h6>
+                            <div id="interactivityparaDetailText" class="text-justify mx-2">
+                            </div>
+                            <button id="interactivityLoadMoreDocuments" class="btn btn-white w-100 mb-1 float-left" style="color: #0e3f8b">
+                                <i class="fa fa-plus pl-2" style="position:relative;top:3px;"></i>نمایش بیش‌تر
+                            </button>
+                    </div>
+
+                </div>
+                <!-- Modal footer -->
+                <div id="detail_modal_footer" dir="ltr" class="modal-footer">
+                    <button id="close_btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../../static/js/logincheck.js"></script>
+
+    <script src="../../static/js/scroll_button_handler.js"></script>
+    <!-- Intro Js -->
+    <script src="../../static/js/graph/graph_tour.js"></script>
+    <script src="../../static/js/tour.js"></script>
+
+    <script>
+        initSearchableSelects()
+        
+        $('#translate_node_input').on('click',async function(){
+            startFullPageBlockUI();
+            persian_node_name =  document.getElementById("node_input_name").value
+            const request_link = 'http://' + location.host + "/auto_translator/" + persian_node_name + "/"
+            const response = await fetch(request_link).then(response => response.json());
+            result = response['result']
+            console.log(result)
+            document.getElementById("node_input_EN_name").value = result
+            stopFullPageBlockUI("دریافت ترجمه")
+            $('#node_input_EN_name').focus();
+        })
+        $("#interactivityDetailModal").on('hidden.bs.modal', function () {
+            $("#paraDetailModal_modal_btn").click()
+        })
+
+        let graph_object;
+        let data_graph;
+        let ShowedGraphObject;
+
+        init()
+
+        container_id_list = []
+        container_id_list2 = []
+
+        or_container_list = ["ORDocsCount", "ORparaDetailText", "ORLoadMoreDocuments"] //count, body, load_btn, modal_btn
+        or_chart_container_list = ["or_year_container", "or_level_container", "or_approval_container"] // year, level, approval
+        and_container_list = ["ANDDocsCount", "ANDparaDetailText", "ANDLoadMoreDocuments"]
+        and_chart_container_list = ["and_year_container", "and_level_container", "and_approval_container"]
+        and_doc_container_list = [ "ANDDocDocsCount", "ANDDocparaDetailText", "ANDDocLoadMoreDocuments"]
+        and_doc_chart_container_list = ["and_doc_year_container", "and_doc_level_container", "and_doc_approval_container"]
+
+        interactivity_container_list = ["interactivityDocsCount", "interactivityparaDetailText", "interactivityLoadMoreDocuments"]
+
+
+        function clearPrevResults(container_id_list) {
+            for (container_id of container_id_list) {
+                document.getElementById(container_id).innerHTML = "";
+            }
+        }
+
+        async function init() {
+
+            // Get List of Knowledge Graph
+            const user_name = getCookie("username")
+            const request_link = 'http://' + location.host + "/GetAllKnowledgeGraphList/" + user_name + "/"
+            const response = await fetch(request_link).then(response3 => response3.json());
+            const knowledge_graph_list = response["knowledge_graph_list"]
+
+            let select_options = [{ text: "انتخاب نمایید", value: "0" }]
+            let edit_options = [{ text: "انتخاب نمایید", value: "0" }]
+
+            for (const row of knowledge_graph_list)
+            {
+                select_options.push({ text: row["name"], value: row["id"] })
+                if(row["username"] === user_name)
+                {
+                    edit_options.push({ text: row["name"], value: row["id"] })
+                }
+            }
+            
+            syncSelectOptions("graph_select", select_options);
+            syncSelectOptions("edit_graph_select", edit_options);
+
+            data_graph = {nodes: [], edges: []};
+            CreateNewKnowledgeGraph("knowledge_graph_container")
+
+            document.getElementById("edit_graph_select").onchange = function () {edit_graph_changed()}
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش پنل"
+            form_data.append('detail_type', detail_type);
+            UserLog(form_data)
+
+        }
+
+        function CreateNewKnowledgeGraph(container_id)
+        {
+            // Create Knowledge Graph
+            let addedCount = 0;
+            G6.registerBehavior('click-add-edge', {
+              getEvents() {
+                return {
+                  'node:click': 'onClick',
+                   mousemove: 'onMousemove',
+                  'edge:click': 'onEdgeClick'
+                };
+              },
+              onClick(ev) {
+                graph_object.getEdges().forEach((edge) => {graph_object.setItemState(edge, 'selected', false);})
+                graph_object.getNodes().forEach((node) => {graph_object.setItemState(node, 'selected', false);})
+                document.getElementById("node_input_div").style.display = "none"
+                document.getElementById("edge_input_div").style.display = "none"
+                const node = ev.item;
+                const graph = graph_object
+                const point = {
+                  x: ev.x,
+                  y: ev.y
+                };
+                const model = node.getModel();
+                if (this.addingEdge && this.edge) {
+                  graph.updateItem(this.edge, {
+                    target: model.id
+                  });
+                  this.edge = null;
+                  this.addingEdge = false;
+                } else {
+                  this.edge = graph.addItem('edge', {
+                    source: model.id,
+                    target: point,
+                    weight: 1,
+                    label: 1
+                  });
+                  this.addingEdge = true;
+                }
+              },
+              onMousemove(ev) {
+                const point = {
+                  x: ev.x,
+                  y: ev.y
+                };
+                if (this.addingEdge && this.edge) {
+                  graph_object.updateItem(this.edge, {
+                    target: point
+                  });
+                }
+              },
+              onEdgeClick(ev) {
+                const currentEdge = ev.item;
+                if (this.addingEdge && this.edge == currentEdge) {
+                  graph_object.removeItem(this.edge);
+                  this.edge = null;
+                  this.addingEdge = false;
+                }
+              }
+            });
+
+            G6.registerBehavior('click-add-node', {
+              getEvents() {
+                return {
+                  'canvas:click': 'onClick'
+                };
+              },
+              onClick(ev) {
+                const selected_nodes = graph_object.findAllByState('node', 'selected');
+                const selected_edges = graph_object.findAllByState('edge', 'selected');
+
+                if(selected_nodes.length > 0 || selected_edges.length > 0)
+                {
+                    graph_object.getEdges().forEach((edge) => {graph_object.setItemState(edge, 'selected', false);})
+                    graph_object.getNodes().forEach((node) => {graph_object.setItemState(node, 'selected', false);})
+                    document.getElementById("node_input_div").style.display = "none"
+                    document.getElementById("edge_input_div").style.display = "none"
+                }
+                else
+                {
+                    const node = graph_object.addItem('node', {
+                        x: ev.canvasX,
+                        y: ev.canvasY,
+                        id: `node-${addedCount}`,
+                        name:"",
+                        EN_name:"",
+                        weight: 1
+                    });
+                    addedCount++;
+                }
+              }
+            });
+
+            const container = document.getElementById(container_id);
+            container.innerHTML = ""
+            const width = 0.88 * window.innerWidth
+            const height = container.scrollHeight  || 500;
+
+
+            graph_object = new G6.Graph({
+              container: container_id,
+              width: width,
+              height: height,
+              // The set of interaction Modes
+              modes: {
+                default: ['click-add-node', 'click-add-edge', 'drag-node', 'zoom-canvas', 'drag-canvas'],
+              },
+              layout: {type: "dagre", preventOverlap: true},
+              // The node styles in different states
+              defaultNode: {
+                  size:50,
+                  size:50,
+              },
+              nodeStateStyles: {
+                  selected: {
+                      stroke: '#666',
+                      lineWidth: 2,
+                      fill: 'steelblue'
+                  },
+                  cursor: "pointer",
+                  size:50,
+              },
+              defaultEdge: {
+                  size:6,
+                  style: {
+                      endArrow: {path: 'M 0,0 L 8,4 L 8,-4 Z', fill: '#404040'}
+                  }
+              },
+              edgeStateStyles: {
+                  cursor: "pointer",
+              },
+
+            });
+
+            graph_object.data(data_graph);
+            graph_object.render();
+
+            function handleNodeDblClick(event) {
+                const node_item = event.item;
+                graph_object.getEdges().forEach((edge) => {graph_object.setItemState(edge, 'selected', false);})
+                graph_object.getNodes().forEach((node) => {graph_object.setItemState(node, 'selected', false);})
+                graph_object.setItemState(node_item, 'selected', true);
+
+                document.getElementById("node_input_name").value = node_item._cfg.model.name
+                document.getElementById("node_input_EN_name").value = node_item._cfg.model.EN_name
+                document.getElementById("node_input_weight").value = node_item._cfg.model.weight
+
+                document.getElementById("node_input_div").style.display = "flex"
+                document.getElementById("edge_input_div").style.display = "none"
+
+
+                document.getElementById("save_node_input").onclick = function () {
+                    const name_value = document.getElementById("node_input_name").value
+                    const EN_name_value = document.getElementById("node_input_EN_name").value
+                    const weight_value = document.getElementById("node_input_weight").value
+                    graph_object.updateItem(node_item, {name: name_value, EN_name: EN_name_value, weight: weight_value, label:name_value});
+                    graph_object.setItemState(node_item, 'selected', false);
+                    document.getElementById("node_input_div").style.display = "none"
+                    Swal.fire({
+                          icon: 'success',
+                          html: "اطلاعات گره باموفقیت تغییر یافت",
+                          showCloseButton: true,
+                          showConfirmButton: false,
+                          customClass:{
+                              "icon": "styleSwalIcon"
+                          }
+                    })
+                }
+
+                document.getElementById("delete_selected_node").onclick = function () {
+                    graph_object.removeItem(node_item);
+                    document.getElementById("node_input_div").style.display = "none"
+                    Swal.fire({
+                          icon: 'success',
+                          text: "گره انتخابی با موفقیت حذف شد",
+                          showCloseButton: true,
+                          showConfirmButton: false,
+                          customClass:{
+                              "icon": "styleSwalIcon"
+                          }
+                    })
+                }
+
+
+            }
+            graph_object.on('node:dblclick', handleNodeDblClick);
+
+            function handleEdgeDblClick(event) {
+                const edge_item = event.item;
+                graph_object.getEdges().forEach((edge) => {graph_object.setItemState(edge, 'selected', false);})
+                graph_object.getNodes().forEach((node) => {graph_object.setItemState(node, 'selected', false);})
+                graph_object.setItemState(edge_item, 'selected', true);
+
+
+                document.getElementById("edge_input_weight").value = edge_item._cfg.model.weight
+
+                document.getElementById("node_input_div").style.display = "none"
+                document.getElementById("edge_input_div").style.display = "flex"
+
+                document.getElementById("save_edge_input").onclick = function () {
+                    const weight_value = document.getElementById("edge_input_weight").value
+                    graph_object.updateItem(edge_item, {weight: weight_value, label: weight_value.toString()});
+                    graph_object.setItemState(edge_item, 'selected', false);
+                    document.getElementById("edge_input_div").style.display = "none"
+                    Swal.fire({
+                          icon: 'success',
+                          text: "اطلاعات یال باموفقیت تغییر یافت",
+                          showCloseButton: true,
+                          showConfirmButton: false,
+                          customClass:{
+                              "icon": "styleSwalIcon"
+                          }
+                    })
+                }
+
+                document.getElementById("delete_selected_edge").onclick = function () {
+                    graph_object.removeItem(edge_item);
+                    document.getElementById("edge_input_div").style.display = "none"
+                    Swal.fire({
+                          icon: 'success',
+                          text: "یال انتخابی با موفقیت حذف شد",
+                          showCloseButton: true,
+                          showConfirmButton: false,
+                          customClass:{
+                              "icon": "styleSwalIcon"
+                          }
+                    })
+                }
+
+            }
+            graph_object.on('edge:dblclick', handleEdgeDblClick);
+        }
+
+        async function CountryChanged() {
+            init()
+        }
+
+        async function edit_graph_changed()
+        {
+            const graph_id = document.getElementById("edit_graph_select").value
+            if (graph_id === "0")
+            {
+                data_graph = {nodes: [], edges: []};
+                CreateNewKnowledgeGraph("knowledge_graph_container")
+
+                document.getElementById("knowledgeGraphName").value = ""
+
+            }
+            else
+            {
+                const request_link = 'http://' + location.host + "/GetKnowledgeGraphData/" + graph_id + "/"
+                let response = await fetch(request_link).then(response => response.json());
+                data_graph = {nodes: response["Nodes_data"], edges: response["Edges_data"]};
+                CreateNewKnowledgeGraph("knowledge_graph_container")
+
+                document.getElementById("knowledgeGraphName").value = document.getElementById("edit_graph_select").options[document.getElementById("edit_graph_select").selectedIndex].text
+
+            }
+        }
+
+        async function saveKnowledgeGraph()
+        {
+            let nodes_data = []
+            graph_object.getNodes().forEach((node) => {
+                nodes_data.push([node._cfg.model.id, node._cfg.model.name, node._cfg.model.EN_name, node._cfg.model.weight])
+            })
+
+            let edges_data = []
+            graph_object.getEdges().forEach((edge) => {
+                if (edge._cfg.model.source !== edge._cfg.model.target) {
+                    edges_data.push([edge._cfg.model.source, edge._cfg.source._cfg.model.name, edge._cfg.source._cfg.model.EN_name,
+                                     edge._cfg.model.target, edge._cfg.target._cfg.model.name, edge._cfg.target._cfg.model.EN_name,
+                                     edge._cfg.model.weight])
+                }
+            })
+
+            const graph_name = document.getElementById("knowledgeGraphName").value
+
+            const saved_data = graph_object.save()
+            const user_name = getCookie("username")
+            const graph_id = document.getElementById("edit_graph_select").value
+            let link_request = 'http://' + location.host + "/SaveKnowledgeGraph/" + graph_name + "/" + user_name + "/" + graph_id + "/";
+
+            let form_data = new FormData();
+            form_data.append('nodes_data', nodes_data)
+            form_data.append('edges_data', edges_data)
+            form_data.append('saved_data', saved_data)
+
+            $.ajax({
+                url: link_request,
+                data: form_data,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                async: false,
+            }).done(function (response) {
+                Swal.fire({
+                  icon: 'success',
+                  text: "باموفقیت ذخیره شد",
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  customClass:{
+                      "icon": "styleSwalIcon"
+                  }
+                })
+
+                document.getElementById("node_input_div").style.display = "none"
+                document.getElementById("edge_input_div").style.display = "none"
+
+                if (response["version_id"] !== 0)
+                {
+                    graph_object.clear();
+                    let select = document.getElementById('graph_select');
+                    let control = select.tomselect;
+                    control.addOption({value: response["version_id"], text:graph_name});
+                    control.addItem(response["version_id"]);
+
+                    select = document.getElementById('edit_graph_select');
+                    control = select.tomselect;
+                    control.addOption({value: response["version_id"], text:graph_name});
+                    control.addItem(response["version_id"]);
+                }
+                else
+                {
+
+                    const selected_graph = $("#edit_graph_select").find("option:selected").val()
+
+                    graph_object.clear();
+                    let select = document.getElementById('graph_select');
+                    let control = select.tomselect;
+                    console.log(control, selected_graph)
+                    control.updateOption((selected_graph).toString(), {text:graph_name, value:selected_graph});
+
+                    select = document.getElementById('edit_graph_select');
+                    control = select.tomselect;
+                    console.log(control, selected_graph)
+                    control.updateOption((selected_graph).toString(), {text:graph_name, value:selected_graph});
+                }
+
+            }).fail(function (response) {
+                console.log(response);
+            });
+        }
+
+        async function ShowGraph()
+        {
+            const Knowledge_graph_id = document.getElementById("graph_select").value
+            const request_link = 'http://' + location.host + "/GetKnowledgeGraphData/" + Knowledge_graph_id + "/"
+            let response = await fetch(request_link).then(response => response.json());
+
+            const Nodes_data = response["Nodes_data"];
+            const Edges_data = response["Edges_data"];
+
+            let container = document.getElementById("show_knowledge__graph_container");
+            const width = 0.88 * window.innerWidth
+            const height = container.scrollHeight  || 500;
+
+            ShowedGraphObject = new MyGraph("show_knowledge__graph_container", Nodes_data, Edges_data, {"EN_name": "نام انگلیسی" , "weight": "وزن"}, {}, width, height, "dagre", "show_knowledge__ChangeLayout", true,
+                "Yellow", "", "", 1, 1, "show_knowledge__selected_node_table", "show_knowledge__selected_edge_table",
+                "show_knowledge__SelectNeighbourImg", "show_knowledge__ShowHideImg", "شباهت", KnowledgeGraphNodeDblClick, "",
+                "show_knowledge__SearchBox", "show_knowledge__SearchBtn")
+
+            await ShowedGraphObject.show()
+
+            //user log
+            let form_data = new FormData()
+            let detail_type = "نمایش گراف"
+            let country_name = $("#country option:selected").text();
+            let graph_id = $("#graph_select option:selected").text();
+            form_data.append('detail_type', detail_type);
+            form_data.append('country_name', country_name);
+            form_data.append('graph_id', graph_id);
+            UserLog(form_data)
+        }
+
+        async function KnowledgeGraphNodeDblClick(node_data)
+        {
+            startFullPageBlockUI()
+
+            $("#language_select").prop("selectedIndex", 0);
+
+            const roots_list = ShowedGraphObject.getRoot()
+
+            let result_path = null
+            let result_path_ids = null
+            let result_path_names_scores = null
+            let result_weight = 0
+
+            // Find route with max weight
+            for (const root of roots_list)
+            {
+                let all_path_list = ShowedGraphObject.findAllPath(root.id, node_data.id, true)
+                for (const path of all_path_list)
+                {
+                    let path_ids = []
+                    let path_names_scores = []
+                    for (const node of path) {
+                        path_ids.push(node["id"])
+                        path_names_scores.push([node["name"], node["EN_name"], node["weight"]])
+                    }
+
+                    let path_weight = ShowedGraphObject.calculatePathWeight(path_ids)
+
+                    if (path_weight > result_weight)
+                    {
+                        result_path = path
+                        result_path_ids = path_ids
+                        result_path_names_scores = path_names_scores
+                        result_weight = path_weight
+                    }
+                }
+
+            }
+            ShowedGraphObject.highlightGraphPath(result_path_ids)
+
+            // Get Paragraphs With Path Nodes Name
+            const country_id = document.getElementById("country").value
+
+            document.getElementById("ORparaDetailText").innerHTML = ''
+            document.getElementById("ANDparaDetailText").innerHTML = ''
+
+            let form_data = new FormData()
+            form_data.append('cluster_name', "")
+            form_data.append('cluster_id', null)
+            form_data.append('cluser_keyword_data', result_path_names_scores)
+            form_data.append('cluster_delete_data', [])
+
+            await ShowDetail("OR", or_container_list, or_chart_container_list, form_data, "0", "0", "IRI")
+
+            await ShowDetail("AND", and_container_list, and_chart_container_list, form_data, "0", "0", "IRI")
+
+            await ShowDetail("AND_DOC", and_doc_container_list, and_doc_chart_container_list, form_data, "0", "0", "IRI")
+
+            $("#paraDetailModal_modal_btn").click()
+
+            document.getElementById("language_select").onchange = async function () {
+
+                startFullPageBlockUI()
+
+                let language = document.getElementById("language_select").value
+
+                await ShowDetail("OR", or_container_list, or_chart_container_list, form_data, "0", "0", language)
+                await ShowDetail("AND", and_container_list, and_chart_container_list, form_data, "0", "0", language)
+                await ShowDetail("AND_DOC", and_doc_container_list, and_doc_chart_container_list, form_data, "0", "0", language)
+
+                stopFullPageBlockUI("نمایش")
+            }
+
+            // Level Search
+            const graph_level_data = ShowedGraphObject.bfsAlgorithm(roots_list[0]["id"])
+
+            stopFullPageBlockUI("نمایش")
+        }
+
+        function showChartData(country_id, search_type, filed_name, data, container, keySort, xAxisTitle, yAxisTitle, form_data, title) {
+            let chart_data = []
+            for (column of data) {
+
+                key = column["key"]
+                value = column["doc_count"]
+
+                chart_data.push([key, value])
+            }
+            showBaseChart(country_id, search_type, filed_name, chart_data, container, keySort, xAxisTitle, yAxisTitle, form_data, title)
+        }
+
+        function showHistogramChart(country_id, search_type, filed_name, data, container, sortKeys, xAxisTitle, yAxisTitle, form_data, title) {
+            // dict { 'approval_reference': [{ x: count, y: 1 }]
+            const references = {};
+            data.forEach(ref => {
+                references[ref.key] = [{x: String(ref.doc_count), y: 1}]
+            });
+            const options = {
+                data: references,
+                sortKeys,
+                xAxisTitle,
+                title,
+                showLabels: true,
+                yAxisTitle,
+                onClick: async function (event, data) {
+
+                    const click_tag = event.domTarget.tag;
+                    const index = click_tag["index"]
+
+                    let field_value = data.row(index)[0];
+                    let language = document.getElementById("language_select").value
+
+                    if (search_type === "OR") {
+                        await ShowDetail(search_type, interactivity_container_list, [], form_data, filed_name, field_value, language)
+                    } else if (search_type === "AND") {
+                        await ShowDetail(search_type, interactivity_container_list, [], form_data, filed_name, field_value, language)
+                    } else if (search_type === "AND_DOC") {
+                        await ShowDetail(search_type, interactivity_container_list, [], form_data, filed_name, field_value, language)
+                    }
+
+                    $("#interactivityDetailModal__btn").click()
+
+                }
+            };
+
+            newStackedColumnChart(container, options)
+        }
+
+        async function showBaseChart(country_id, search_type, filed_name, data, position, sortKeys, xAxisTitle, yAxisTitle, form_data, title) {
+            const options = {
+                title,
+                xAxisTitle,
+                yAxisTitle,
+                sortKeys,
+                data,
+                onClick: async function (event, data) {
+
+                    const click_tag = event.domTarget.tag;
+                    const index = click_tag["index"]
+
+                    let field_value = data.row(index)[0];
+                    let language = document.getElementById("language_select").value
+
+                    if (search_type === "OR") {
+                        await ShowDetail(search_type, interactivity_container_list, [], form_data, filed_name, field_value, language)
+                    } else if (search_type === "AND") {
+                        await ShowDetail(search_type, interactivity_container_list, [], form_data, filed_name, field_value, language)
+                    } else if (search_type === "AND_DOC") {
+                        await ShowDetail(search_type, interactivity_container_list, [], form_data, filed_name, field_value, language)
+                    }
+
+                    $("#interactivityDetailModal__btn").click()
+
+                }
+            }
+            newBarChart(position, options)
+        }
+
+        async function delete_selected_graph()
+        {
+            const graph_id = document.getElementById("edit_graph_select").value
+
+            if (graph_id === "0")
+            {
+                Swal.fire({
+                  icon: 'warning',
+                  html: "<span>لطفا یک گراف را انتخاب نمایید.</span>",
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  customClass:{
+                      "icon": "styleSwalIcon"
+                  }
+              })
+            }
+            else {
+
+                let link_request1 = 'http://' + location.host + "/DeleteKnowledgeGraph/" + graph_id + "/";
+                await fetch(link_request1).then(response => response.json());
+
+
+                const selected_graph = $("#edit_graph_select").find("option:selected").val()
+
+                let select = document.getElementById('graph_select');
+                let control = select.tomselect;
+                control.removeOption((selected_graph).toString());
+                control.setValue('0');
+
+                select = document.getElementById('edit_graph_select');
+                control = select.tomselect;
+                control.removeOption((selected_graph).toString());
+                control.setValue('0');
+
+                data_graph = {nodes: [], edges: []};
+                CreateNewKnowledgeGraph("knowledge_graph_container")
+
+                                Swal.fire({
+                    icon: 'success',
+                    text: "باموفقیت حذف شد",
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    customClass: {
+                        "icon": "styleSwalIcon"
+                    }
+                })
+            }
+        }
+
+        async function ShowDetail(search_type, container_list, chart_container_list, form_data, filed_name, field_value, language)
+        {
+            await clearPrevResults(container_list.slice(0,-1))
+
+            let link_request = null;
+            let search_level = "paragraphs";
+            const country_id = document.getElementById("country").value
+
+            let y_label = "تعداد احکام"
+            let result_message = "حکم"
+            if (search_type.includes("DOC"))
+            {
+                y_label = "تعداد اسناد"
+                result_message = "سند"
+            }
+
+
+            if (search_type === "OR")
+            {
+                link_request = 'http://' + location.host + "/BoostingSearchKnowledgeGraph_ES/" + country_id + "/" + filed_name + "/" + field_value + "/" + language + "/" + search_type + "/";
+            }
+            else if (search_type === "AND")
+            {
+                link_request = 'http://' + location.host + "/BoostingSearchKnowledgeGraph_ES/" + country_id + "/" + filed_name + "/" + field_value + "/" + language + "/" + search_type + "/";
+            }
+            else if (search_type === "AND_DOC")
+            {
+                link_request = 'http://' + location.host + "/BoostingSearchKnowledgeGraph_ES/" + country_id + "/" + filed_name + "/" + field_value + "/" + language + "/" + search_type + "/";
+                search_level = "documents"
+            }
+
+            const MAX_RESULT_WINDOW = 5000
+            const SEARCH_RESULT_SIZE = 25
+
+            const request_configs = {
+                "link": link_request,
+                "search_result_size": SEARCH_RESULT_SIZE,
+                "max_result_window": MAX_RESULT_WINDOW,
+                "data_type": "form_data",
+                "form_data": form_data
+            }
+
+            const highlight_configs = {
+                "parameters": null,
+                "highlight_enabled": false,
+                "custom_function": null
+            }
+
+            const modal_configs = {
+                "body_id": container_list[1],
+                "modal_load_more_btn_id": container_list[2],
+                "result_size_container_id": container_list[0],
+                "result_size_message": result_message,
+                "list_type": "ordered",
+                "custom_body_function": null,
+                "body_parameters": null
+            }
+
+            const export_configs = {
+                "link": null,
+                "btn_id": null
+            }
+
+            segmentation_config = {
+                "parameters": null,
+                "keyword": null,
+                "enable": false,
+                "aggregation_keyword":null
+            }
+
+            const result_object = new ColumnInteractivity(search_level, request_configs, export_configs, modal_configs, highlight_configs,segmentation_config)
+
+            const result_data = await result_object.load_content();
+
+            $("#" + container_list[1] + " > ol > li").css({"text-align": "right", "direction": "rtl"})
+            if (language === "UK" || language === "US")
+            {
+                $("#" + container_list[1] + " > ol > li").css({"text-align": "left", "direction": "ltr"})
+            }
+
+
+            if (chart_container_list.length > 0 && result_data["total_hits"] > 0)
+            {
+                await clearPrevResults(chart_container_list)
+
+                const ES_Aggregations = result_data["aggregations"]
+
+                const approval_references_data = ES_Aggregations['approval-ref-agg']['buckets']
+                const approval_year_data = ES_Aggregations['approval-year-agg']['buckets']
+                const level_data = ES_Aggregations['level-agg']['buckets']
+
+                showChartData(country_id, search_type, "approval_year", approval_year_data, chart_container_list[0], true, "سال تصویب سند", y_label, form_data, "توزیع احکام براساس سال تصویب")
+                showChartData(country_id, search_type, "level_name", level_data, chart_container_list[1], false, "سطح سند", y_label, form_data, "توزیع احکام براساس سطح احکام")
+                showHistogramChart(country_id, search_type, "approval_reference_name", approval_references_data, chart_container_list[2], false, "مرجع تصویب سند", y_label, form_data, "توزیع احکام براساس مرجع تصویب")
+
+            }
+
+            if (result_data["total_hits"] === 0)
+            {
+                const tag = '<span style="color: red; font-size: 25px;display: flex; width: 100%; justify-content: center;">موردی یافت نشد</span>'
+                document.getElementById(container_list[0]).innerHTML = tag
+                if (chart_container_list.length > 0)
+                {
+                    for (const container of chart_container_list)
+                    {
+                        document.getElementById(container).innerHTML = tag
+                    }
+                }
+            }
+
+
+        }
+        async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = myip
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip["ip"] + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+        }
+
+    </script>
+
+
+</body>
+
+
+<!-- Intro Js -->
+<script src="../../static/js/tour.js"></script>
+
+{#<script src="../../static/js/UserLogSave.js"></script>#}
+<script src="../../static/js/signout_function.js"></script>
+
+<!-- BS Tooltips handler -->
+<script src="../../static/js/tooltip_handler.js"></script>
+
+
+<!-- Blocking UI -->
+<script src="../../static/js/blockUI.js"></script>
+<script src="../../static/js/blockUI_handler.js"></script>
+<link rel="stylesheet" href="../../static/styles/loader.css">
+
+<!-- save log user -->
+<script>
+    async function UserLog(form_data){
+            if (getCookie("username") !== "") {
+                const user_name = getCookie("username")
+                let page_url = window.location.pathname
+                const user_ip = myip
+
+                page_url = page_url.slice(0, -1);
+                if(page_url==="")
+                {
+                    page_url = "/0";
+                }
+
+
+                let link_request = 'http://' + location.host + "/UserLogSaved/" + user_name + page_url + "/"+ user_ip["ip"] + "/";
+
+                $.ajax({
+                    url: link_request,
+                    data: form_data,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    async: true,
+
+
+                }).done(function (res) {
+                    console.log("done")
+
+                }).fail(function (res) {
+                    console.log("fail")
+                });
+
+            }
+        }
+</script>
+
+
+</html>

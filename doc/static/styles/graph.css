@@ -1,0 +1,26 @@
+#similarity_chart_column {
+    position: relative;
+    top: -30px;
+}
+
+#similarity_chart_container {
+    border: 1px solid #ccc;
+}
+
+.list-group li {
+    border: 0;
+}
+
+.color_picker {
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 50%;
+    ;
+}
+
+#update_chart_btn {
+    background-color: #1481c0;
+    color: white;
+}

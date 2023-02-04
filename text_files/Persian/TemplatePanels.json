@@ -1,0 +1,86 @@
+{
+    "Panels":[
+        {
+            "id": 1,
+            "name":"portal",
+            "page_title": "تحلیل درگاه",
+
+            "keyword_list":[
+                {
+                    "name":"سامانه",
+                    "searched_template": " سامانه",
+                    "highlight_template": ["سامانه"],
+                    "after_terms_count": 0
+                },
+                {
+                    "name":"درگاه",
+                    "searched_template": " درگاه",
+                    "highlight_template": ["درگاه"],
+                    "after_terms_count": 0
+                },
+                {
+                    "name":"سکو",
+                    "searched_template": " سکو ",
+                    "highlight_template": [" سکو "],
+                    "after_terms_count": 0
+                }
+            ],
+
+            "optional_keyword_list":[
+                {
+                    "name":"به منظور",
+                    "searched_template": "به منظور",
+                    "highlight_template": ["به منظور"],
+                    "after_terms_count": 2
+                },
+                {
+                    "name":"نسبت به",
+                    "searched_template": "نسبت به",
+                    "highlight_template": ["نسبت به"],
+                    "after_terms_count": 2
+                }
+                
+            ]
+
+        },
+        {
+            "id": 2,
+            "name":"keywords",
+            "page_title": "پنل تحلیل مالی",
+
+            "keyword_list":[
+                {
+                    "name":"اقتصاد",
+                    "searched_template": "اقتصاد ",
+                    "highlight_template": ["اقتصاد "],
+                    "after_terms_count": 0
+                },
+                {
+                    "name":"بورس",
+                    "searched_template": "بورس ",
+                    "highlight_template": ["بورس "],
+                    "after_terms_count": 0
+                }
+            ],
+
+            "optional_keyword_list":[
+                {
+                    "name":"به منظور",
+                    "searched_template": "به منظور",
+                    "highlight_template": ["به منظور"],
+                    "after_terms_count": 2
+                },
+                {
+                    "name":"نسبت به",
+                    "searched_template": "نسبت به",
+                    "highlight_template": ["نسبت به"],
+                    "after_terms_count": 2
+                }
+                
+            ]
+
+        }
+    
+    ]
+
+}

@@ -1,0 +1,43 @@
+.chart_container {
+    height: 750px;
+    text-align: center;
+}
+
+.document_year,
+.document_subject,
+.document_level,
+.Keywords_Info_header,
+.keywords_distribution,
+.extractected_references {
+    color: #488fb8;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1); /* IE */
+  -moz-transform: scale(1); /* FF */
+  -webkit-transform: scale(1); /* Safari and Chrome */
+  -o-transform: scale(1); /* Opera */
+  transform: scale(1);
+  padding: 0px;
+}
+
+.doc_checkbox {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    ;
+    bottom: 3px;
+}
+
+#showResult {
+    background-color: #1481c0;
+    color: white;
+}
+
+#AraCount {
+    position: relative;
+    top: 10px;
+
+}

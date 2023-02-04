@@ -1,0 +1,24 @@
+
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1); /* IE */
+  -moz-transform: scale(1); /* FF */
+  -webkit-transform: scale(1); /* Safari and Chrome */
+  -o-transform: scale(1); /* Opera */
+  transform: scale(1);
+  padding: 0px;
+}
+
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    ;
+    top: 4px;
+}
+
+.form-check-label {
+    /* font-size: 14px; */
+}
