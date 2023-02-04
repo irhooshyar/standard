@@ -103,10 +103,7 @@ def deleter(name, filename, only_result):
 
 def upload_zip_file(request):
     # documents = ZipFile.objects.filter(uploader=request.user)
-    query_set1 = Country.objects.filter()
-    query_set2 = en_model.Country.objects.filter()
-
-    documents = chain(query_set1, query_set2)
+    documents = Country.objects.filter()
 
     # if request.user.is_superuser:
     FileField(label='Select a file', help_text='max. 10 megabytes')
@@ -125,10 +122,8 @@ def upload_zip_file(request):
             file.delete()
             deleter(file.name, file.file.name, False)
             # documents = Country.objects.filter(uploader=request.user)
-            query_set1 = Country.objects.filter()
-            query_set2 = en_model.Country.objects.filter()
+            documents = Country.objects.filter()
 
-            documents = chain(query_set1, query_set2)
             return render(request, 'doc/upload.html',
                           {'status': 'File deleted successfully', 'color': 'green', 'form': ZipFileForm(),
                            'files': documents})
@@ -146,10 +141,7 @@ def upload_zip_file(request):
             file.save()
             StratAutomating.apply.after_response(folder_name, file)
             # documents = Country.objects.filter(uploader=request.user)
-            query_set1 = Country.objects.filter()
-            query_set2 = en_model.Country.objects.filter()
-
-            documents = chain(query_set1, query_set2)
+            documents = Country.objects.filter()
             return render(request, 'doc/upload.html',
                           {'status': 'File updated successfully', 'form': ZipFileForm(), 'files': documents})
         else:
@@ -203,7 +195,7 @@ def update_doc(request, id, language, ):
     if language == 'کتاب':
         StratAutomating.apply.after_response(folder_name, file, "DocsAreaGraphCubeData", host_url)
     else:
-        pass
+        StratAutomating.apply.after_response(folder_name, file, "DocsReferencesExtractor", host_url)
         # StratAutomating.apply.after_response(folder_name, file, "DocsParagraphsClustering",host_url)  # AdvanceARIMAExtractor_ ActorTimeSeriesPrediction _DocsSubjectExtractor_DocsLevelExtractor_DocsReferencesExtractor_DocsActorsTimeSeriesDataExtractor_DocsCreateDocumentsListCubeData_DocsCreateSubjectCubeData_DocsCreateVotesCubeData_DocsCreateSubjectStatisticsCubeData_DocsCreateTemplatePanelsCubeData_DocsAnalysisLeadershipSlogan_DocsCreatePrinciplesCubeData_DocCreateBusinessAdvisorCubeData_DocsCreateRegularityLifeCycleCubeData_DocsExecutiveParagraphsExtractor_DocsClauseExtractor_DocsGraphCubeData_DocsCreateMandatoryRegulationsCubeData_DocsExecutiveClausesExtractor_DocsCreateActorInformationStackChartCubeData
 
         # StratAutomating.apply.after_response(folder_name, file, "IngestDocumentsToElastic_IngestParagraphsToElastic", host_url)#_DocsSubjectExtractor_DocsLevelExtractor_DocsReferencesExtractor_DocsActorsTimeSeriesDataExtractor_DocsCreateDocumentsListCubeData_DocsCreateSubjectCubeData_DocsCreateVotesCubeData_DocsCreateSubjectStatisticsCubeData_DocsCreateTemplatePanelsCubeData_DocsAnalysisLeadershipSlogan_DocsCreatePrinciplesCubeData_DocCreateBusinessAdvisorCubeData_DocsCreateRegularityLifeCycleCubeData_DocsExecutiveParagraphsExtractor_DocsClauseExtractor_DocsGraphCubeData_DocsCreateMandatoryRegulationsCubeData_DocsExecutiveClausesExtractor_DocsCreateActorInformationStackChartCubeData
@@ -707,6 +699,7 @@ def ingest_standard_documents_to_index(request, id, language):
     my_file = str(os.path.basename(my_file))
     dot_index = my_file.rfind('.')
     folder_name = my_file[:dot_index]
+    print(folder_name)
 
     IngestStandardDocumentsToElastic.apply(folder_name, file)
     return redirect('zip')

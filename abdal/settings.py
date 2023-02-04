@@ -44,11 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     "corsheaders",
     'doc',
-    'en_doc',
-    'ru_doc',
     'django_extensions',
     'after_response',
-    'rest_framework'
     ]
 
 MIDDLEWARE = [
@@ -105,8 +102,8 @@ DATABASES = {
     'Fa_DataBase': {
         'ENGINE': 'django.db.backends.mysql',
         'CONN_MAX_AGE': 60,
-        'NAME': 'HooshyarDB_FA' if os.environ.get('DB_FA_NAME') is None else os.environ.get('DB_FA_NAME'),
-        # 'NAME': 'StandardDB',
+        # 'NAME': 'HooshyarDB_FA' if os.environ.get('DB_FA_NAME') is None else os.environ.get('DB_FA_NAME'),
+        'NAME': 'StandardDB',
         'USER': 'dbadmin',
         'PASSWORD': '123456789',
         'HOST': 'localhost' if os.environ.get('DB_URL') is None else
@@ -120,20 +117,6 @@ DATABASES = {
         #     'charset': 'utf8mb4'  # This is the important line
         # }
     },
-    'En_DataBase': {
-            'ENGINE': 'django.db.backends.mysql',
-            'CONN_MAX_AGE': 60,
-            'NAME': 'HooshyarDB_EN' if os.environ.get('DB_EN_NAME') is None else os.environ.get('DB_EN_NAME'),
-            'USER': 'dbadmin',
-            'PASSWORD': '123456789',
-            'HOST': 'localhost' if os.environ.get('DB_URL') is None else
-            os.environ.get('DB_URL'),  # Or an IP Address that your DB is hosted on
-            'PORT': '3306' if os.environ.get('DB_PORT') is None else os.environ.get('DB_PORT')
-            ,
-            # 'OPTIONS': {
-            #     'charset': 'utf8mb4'  # This is the important line
-            # }
-        },
 }
 
 

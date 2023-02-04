@@ -809,21 +809,21 @@ def create_judgments_table_from_excel(Country):
 def create_standard_table_from_excel(folder_name,Country):
     t = time.time()
     
-    # print('Update_Standard_Search_Parameter')
-    # update_standard_search_parameter()
+    print('Update_Standard_Search_Parameter')
+    update_standard_search_parameter()
 
-    # print("Standards_Insert_fromExcel ...")
-    # Standards_Insert_fromExcel(Country)
+    print("Standards_Insert_fromExcel ...")
+    Standards_Insert_fromExcel(Country)
 
     print("StandardSearchParameters_Insert ...")
     StandardSearchParameters_Insert(Country)
 
 
-    # print("update_file_name_extention ...")
-    # update_file_name_extention(folder_name, Country)
+    print("update_file_name_extention ...")
+    update_file_name_extention(folder_name, Country)
 
-    # print("revoked_types_to_db ...")
-    # revoked_types_to_db(Country)
+    print("revoked_types_to_db ...")
+    revoked_types_to_db(Country)
 
     print("time ", time.time() - t)
 
