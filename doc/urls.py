@@ -237,7 +237,6 @@ urlpatterns = [
     path('standard_information/', views.standard_information, name='standard_information'),
     path('standard_search/', views.standard_search, name='standard_search'),
     path('standard_graph/', views.standard_graph, name='standard_graph'),
-    path("admin_standard_upload/", views.admin_standard_upload, name="admin_standard_upload"),
     path('GetStandardDocumentById/<int:document_id>/', views.GetStandardDocumentById, name="GetStandardDocumentById"),
     path('GetStandardsSearchParameters/<int:country_id>/', views.GetStandardsSearchParameters,
          name="GetStandardsSearchParameters"),

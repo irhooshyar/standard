@@ -1,6 +1,0 @@
-.dotted_border {
-    border: 2px dashed var(--menu_color);
-    padding: 0 2px;
-    border-radius: 5px;
-
-}

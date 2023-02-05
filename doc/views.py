@@ -18117,10 +18117,6 @@ def SearchDocument_ES_Standard(request, country_id, branch, subject_category, st
         'total_hits': total_hits})
 
 
-@allowed_users('admin_standard_upload')
-def admin_standard_upload(request):
-    return render(request, 'doc/admin_standard_upload.html')
-
 
 def GetJudgementTypeByCountryId(request, country_id):
     type_list = JudgmentGraphType.objects.filter(country_id_id=country_id)

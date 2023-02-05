@@ -18,7 +18,6 @@ AllPanels = {
             'standard_information': 'پروفایل اسناد',
             'standard_search': 'جست‌و‌جوی اسناد',
             'standard_graph': 'گراف اسناد',
-            'admin_standard_upload': 'آپلود فایل',
             'standard_graph_v2': 'گراف دانش استاندارد',
         }
     },
