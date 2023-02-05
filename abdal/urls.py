@@ -23,9 +23,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     # app urls
     path('', include('doc.urls')),
-    path('en/', include('en_doc.urls')),
-    path('ru/', include('ru_doc.urls')),
-    
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
