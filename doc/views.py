@@ -21290,3 +21290,9 @@ def GetRahbariTypeDetail(request, document_id):
             chart_data.append({"key": rahbari_type.name, "doc_count": 0})
 
     return JsonResponse({"rahbari_type_data": result, "rahbari_type_chart_data": chart_data })
+
+
+def delete_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return JsonResponse({"status": "ok"})

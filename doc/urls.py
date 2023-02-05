@@ -1219,5 +1219,5 @@ urlpatterns = [
     path("GetRahbariLabels/", views.GetRahbariLabels, name='GetRahbariLabels'),
     path('GetRahbariTypeDetail/<int:document_id>/', views.GetRahbariTypeDetail, name='getRahbariGraphData'),
 
-
+    path("delete_user/", views.delete_user, name='delete_user'),
 ]

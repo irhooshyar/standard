@@ -22,12 +22,4 @@ AllPanels = {
             'standard_graph_v2': 'گراف دانش استاندارد',
         }
     },
-
-    'interactions_and_notes': {
-        'persian_name': 'تعاملات و یادداشت ها',
-        'sub_panels': {
-            'recommendation': 'انتقادات و پیشنهادات',
-            'report_bug': 'گزارش خطا',
-        }
-    }
 }
