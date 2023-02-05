@@ -18,7 +18,6 @@ import time
 from elasticsearch import helpers
 from collections import deque
 from scripts.Persian.Preprocessing import standardIndexName
-from en_doc import models as en_model
 
 
 # ---------------------------------------------------------------------------------
@@ -94,15 +93,9 @@ def apply(folder, country):
 
     country_lang = country.language
 
-    if country_lang == "انگلیسی":
-        settings = es_config.Document_Actor_Settings
-        mappings = es_config.Document_Actor_Mappings
-        model = en_model.DocumentActor
-
-    else:
-        settings = es_config.Paragraphs_Settings_2
-        mappings = es_config.Document_Actor_Mappings
-        model = DocumentActor
+    settings = es_config.Paragraphs_Settings_2
+    mappings = es_config.Document_Actor_Mappings
+    model = DocumentActor
 
     data = model.objects.filter(document_id__country_id__id=country.id). \
         annotate(_id=F('id')). \

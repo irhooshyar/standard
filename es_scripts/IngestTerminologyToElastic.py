@@ -19,7 +19,6 @@ import time
 from elasticsearch import helpers
 from collections import deque
 from scripts.Persian.Preprocessing import standardIndexName
-from en_doc import models as en_model
 
 
 # ---------------------------------------------------------------------------------
@@ -73,16 +72,9 @@ def apply(folder, Country):
 
     country_lang = Country.language
 
-    if country_lang == "انگلیسی":
-        # settings = es_config.EN_Settings
-        # mappings = es_config.EN_Mappings
-        # Document_Model = en_model.DocumentGeneralDefinition
-        return
-    
-    else:
-        settings = es_config.FA_Settings
-        mappings = es_config.Terminology_Mappings
-        Document_Model = DocumentGeneralDefinition
+    settings = es_config.FA_Settings
+    mappings = es_config.Terminology_Mappings
+    Document_Model = DocumentGeneralDefinition
 
 
     documents = Document_Model.objects.filter(document_id__country_id__id=Country.id).annotate(

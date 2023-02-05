@@ -19,7 +19,6 @@ import time
 from elasticsearch import helpers
 from collections import deque
 from scripts.Persian.Preprocessing import standardIndexName
-from en_doc import models as en_model
 from doc.models import ParagraphsTopic
 
 from hazm import *

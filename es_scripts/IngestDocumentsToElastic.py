@@ -19,7 +19,6 @@ import time
 from elasticsearch import helpers
 from collections import deque
 from scripts.Persian.Preprocessing import standardIndexName
-from en_doc import models as en_model
 
 
 # ---------------------------------------------------------------------------------
@@ -111,56 +110,6 @@ class DocumentIndex(ES_Index):
 
 
 
-class EN_Model_DocumentIndex(ES_Index):
-    def __init__(self, name, settings,mappings):
-        super().__init__(name, settings,mappings)
-    
-    def generate_docs(self, files_dict, documents):
-
-        for doc in documents:
-
-            doc_id = int(doc['id'])
-            doc_name = doc['name']
-
-            doc_file_name = ""
-            
-            if 'file_name' in doc and doc['file_name'] != None:
-                doc_file_name = doc['file_name']
-            else:
-                doc_file_name = doc_name
-
-            doc_level = doc['level_name'] if doc['level_name'] != None else 'Unknown'
-            doc_approval_reference = doc['approval_reference_name'] if doc['approval_reference_name'] != None else 'Unknown'
-
-            doc_approval_date = doc['approval_date'] if doc['approval_date'] != None else 0
-            
-            if doc_approval_date!= 0 and len(doc_approval_date) > 5:
-                doc_approval_date = doc_approval_date.split('-')[0] # year-month-day => 0:year
-
-            if doc_file_name in files_dict:
-                base64_file = files_dict[doc_file_name]
-
-                new_doc = {
-                    "document_id": doc_id,
-                    "name": doc_name,
-                    "approval_reference_name": doc_approval_reference,
-                    "approval_date": doc_approval_date,
-                    "approval_year": doc_approval_date,
-                    "raw_file_name": doc_file_name,
-                    "level_name": doc_level,
-                    "data": base64_file
-                }
-
-
-                new_document = {
-                    "_index": self.name,
-                    "_id": doc_id,
-                    "pipeline":"attachment",
-                    "_source":new_doc,
-                }
-                yield new_document
-
-
 
 
 def apply(folder, Country):
@@ -172,25 +121,15 @@ def apply(folder, Country):
 
     country_lang = Country.language
     
-    if country_lang == "انگلیسی":
-        settings = es_config.EN_Settings
-        mappings = es_config.EN_Mappings
-        Document_Model = en_model.Document
-        new_index = EN_Model_DocumentIndex(index_name, settings, mappings)
-    
-    else:
-        settings = es_config.FA_Settings
-        mappings = es_config.FA_Mappings
-        Document_Model = Document
-        new_index = DocumentIndex(index_name, settings, mappings)
-
+    settings = es_config.FA_Settings
+    mappings = es_config.FA_Mappings
+    Document_Model = Document
+    new_index = DocumentIndex(index_name, settings, mappings)
 
     documents = Document_Model.objects.filter(country_id__id=Country.id).annotate(
         approval_year=Cast(Substr('approval_date', 1, 4), IntegerField())).annotate(communicated_year=Cast(Substr('communicated_date', 1, 4), IntegerField())).values()
 
 
-
-
     new_index.create()
     new_index.bulk_insert_documents(folder,documents,do_parallel=True)
-
+    

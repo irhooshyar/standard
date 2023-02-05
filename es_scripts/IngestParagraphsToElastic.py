@@ -19,7 +19,6 @@ import time
 from elasticsearch import helpers
 from collections import deque
 from scripts.Persian.Preprocessing import standardIndexName
-from en_doc import models as en_model
 
 
 # ---------------------------------------------------------------------------------
@@ -85,16 +84,10 @@ def apply(folder, Country,is_for_ref):
         
     country_lang = Country.language
 
-    if country_lang in ["فارسی","استاندارد"]:
-        settings = es_config.Paragraphs_Settings_2 if is_for_ref == 1 else es_config.Paragraphs_Settings_3
-        mappings = es_config.Paragraphs_Mappings
+    settings = es_config.Paragraphs_Settings_2 if is_for_ref == 1 else es_config.Paragraphs_Settings_3
+    mappings = es_config.Paragraphs_Mappings
 
-    elif country_lang == "انگلیسی":
-        settings = es_config.EN_Settings
-        mappings = es_config.EN_Paragraphs_Mappings
-
-
-    Paragraphs_Model = DocumentParagraphs if country_lang in ['فارسی','استاندارد'] else en_model.DocumentParagraphs
+    Paragraphs_Model = DocumentParagraphs
 
     paragraphs = Paragraphs_Model.objects.filter(
         document_id__country_id__id = Country.id).annotate(

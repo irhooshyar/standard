@@ -12,7 +12,6 @@ from django.forms import FileField
 from doc.forms import ZipFileForm
 from doc.models import *
 from django.db.models import Avg
-from en_doc import models as en_model
 from es_scripts.persian_automate import ExecutiveClausesExtractor
 from es_scripts.util.Clause import get_clause_by_paragraph, get_paragraphs_by_clause, get_document_paragraphs
 from scripts import ZipFileExtractor, StratAutomating
@@ -177,10 +176,7 @@ def update_doc(request, id, language, ):
     print("===================host_url================")
     print(host_url)
 
-    if language == 'فارسی' or language == 'کتاب' or language == 'استاندارد':
-        file = get_object_or_404(Country, id=id)
-    else:
-        file = get_object_or_404(en_model.Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     # file = Country.objects.get(file_id=id)
     # deleter(file.name, file.file.name, True)
@@ -237,13 +233,8 @@ def UploadFile(request, country, language, tasks_list):
         elif file_ext != "zip":
             return JsonResponse({"response": "wrong format"})
         else:
-            if language == 'فارسی' or language == 'کتاب' or language == 'استاندارد':
-                country_object = Country(name=country, language=language, file=inputFile, file_name=inputFile.name,
-                                         status="Running")
-            else:
-                country_object = en_model.Country(name=country, language=language, file=inputFile,
-                                                  file_name=inputFile.name,
-                                                  status="Running")
+            country_object = Country(name=country, language=language, file=inputFile, file_name=inputFile.name,
+                                        status="Running")
             country_object.save()
             ZipFileExtractor.extractor(country_object, country_object, tasks_list, host_url)
             return JsonResponse({"response": "Ok"})
@@ -260,12 +251,8 @@ def detect_level(request, id):
 def static_data_import_db(request, id, language):
     file = get_object_or_404(Country, id=id)
 
-    if language == 'English':
-        from scripts.English import StaticDataImportDB
-        StaticDataImportDB.apply(None, file)
-    elif language == 'Persian':
-        from scripts.Persian import StaticDataImportDB
-        StaticDataImportDB.apply(None, file)
+    from scripts.Persian import StaticDataImportDB
+    StaticDataImportDB.apply(None, file)
 
     return redirect('zip')
 
@@ -282,12 +269,9 @@ def insert_docs_to_rahbari_table(request, id):
 
 
 def slogan_key_synonymous_words(request, language):
-    if language == 'English':
-        from scripts.English import StaticDataImportDB
-        # StaticDataImportDB.apply(None, file)
-    elif language == 'Persian':
-        from scripts.Persian import StaticDataImportDB
-        StaticDataImportDB.Slogan_Key_And_Synonymous_Words_Insert()
+
+    from scripts.Persian import StaticDataImportDB
+    StaticDataImportDB.Slogan_Key_And_Synonymous_Words_Insert()
 
     return redirect('zip')
 
@@ -367,34 +351,11 @@ def document_json_list(request, id):
     DocsCreateDocumentsListCubeData.apply(None, file)
     return redirect('zip')
 
-
-def docs_approval_reference_extractor(request, id):
-    file = get_object_or_404(Country, id=id)
-    from scripts.English import DocsApprovalReferenceExtractor
-    DocsApprovalReferenceExtractor.apply(None, file)
-    return redirect('zip')
-
-
-def docs_definitions_extractor(request, id):
-    file = get_object_or_404(Country, id=id)
-    from scripts.English import DocsDefinitionsExtractor
-    DocsDefinitionsExtractor.apply(None, file)
-    return redirect('zip')
-
-
 def docs_general_definitions_extractor(request, id):
     file = get_object_or_404(Country, id=id)
     from scripts.Persian import DocsGeneralDefinitionsExtractor
     DocsGeneralDefinitionsExtractor.apply(None, file)
     return redirect('zip')
-
-
-def docs_subject_extractor(request, id):
-    file = get_object_or_404(Country, id=id)
-    from scripts.English import DocsSubjectExtractor
-    DocsSubjectExtractor.apply(None, file)
-    return redirect('zip')
-
 
 def docs_subject_area_extractor(request, id):
     file = get_object_or_404(Country, id=id)
@@ -555,10 +516,7 @@ def actors_new_graph_extractor(request, id):
 
 
 def ingest_documents_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestDocumentsToElastic
 
@@ -572,10 +530,7 @@ def ingest_documents_to_index(request, id, language):
 
 
 def ingest_document_actor_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestDocumentActorToElastic
 
@@ -589,10 +544,7 @@ def ingest_document_actor_to_index(request, id, language):
 
 
 def ingest_actor_supervisor_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestActorSupervisorToElastic
 
@@ -620,10 +572,7 @@ def ingest_spatiotemporal_to_index(request, id):
 
 
 def ingest_judgments_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestJudgmentsToElastic
 
@@ -637,10 +586,7 @@ def ingest_judgments_to_index(request, id, language):
 
 
 def ingest_revoked_documents(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestRevokedDocument
 
@@ -654,10 +600,7 @@ def ingest_revoked_documents(request, id, language):
 
 
 def ingest_paragraphs_to_index(request, id, language, is_for_ref):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestParagraphsToElastic
 
@@ -671,10 +614,7 @@ def ingest_paragraphs_to_index(request, id, language, is_for_ref):
 
 
 def ingest_clustering_paragraphs_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestClusteringParagraphsToElastic
 
@@ -688,10 +628,7 @@ def ingest_clustering_paragraphs_to_index(request, id, language):
 
 
 def ingest_standard_documents_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestStandardDocumentsToElastic
 
@@ -706,10 +643,7 @@ def ingest_standard_documents_to_index(request, id, language):
 
 
 def ingest_standard_documents_to_sim_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestDocumentsToSimilarityIndex
 
@@ -726,10 +660,7 @@ def ingest_standard_documents_to_sim_index(request, id, language):
 
 
 def ingest_terminology_to_index(request, id, language):
-    if language == 'انگلیسی':
-        file = get_object_or_404(en_model.Country, id=id)
-    else:
-        file = get_object_or_404(Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from es_scripts import IngestTerminologyToElastic
 
@@ -979,10 +910,7 @@ def create_CUBE_MaxMinEffectActorsInArea(request, id):
 def delete_doc(request, id, language):
     # Country.objects.filter(id=id).delete()
     # return redirect('zip')
-    if language == 'فارسی' or language == 'کتاب' or language == 'استاندارد':
-        file = Country.objects.get(id=id)
-    else:
-        file = en_model.Country.objects.get(id=id)
+    file = Country.objects.get(id=id)
 
     deleter(file.name, file.file.name, False)
     file.delete()
@@ -2049,10 +1977,7 @@ def GetGraphEdgesByDocumentsList_AdvisoryOpinions(request, measure_id):
 
 
 def create_advisory_opinion_count(request, id, language):
-    if language == 'فارسی':
-        file = get_object_or_404(Country, id=id)
-    else:
-        file = get_object_or_404(en_model.Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from scripts.Persian import CreateAdvisoryOpinionsReferences
 
@@ -2061,10 +1986,7 @@ def create_advisory_opinion_count(request, id, language):
 
 
 def create_interpretation_rules_count(request, id, language):
-    if language == 'فارسی':
-        file = get_object_or_404(Country, id=id)
-    else:
-        file = get_object_or_404(en_model.Country, id=id)
+    file = get_object_or_404(Country, id=id)
 
     from scripts.Persian import CreateInterpretationRulesReferences
 

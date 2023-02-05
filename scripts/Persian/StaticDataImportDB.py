@@ -34,7 +34,6 @@ import docx2txt
 import time
 from elasticsearch import helpers
 from collections import deque
-from en_doc import models as en_model
 import textract
 
 def standardFileName(name):
