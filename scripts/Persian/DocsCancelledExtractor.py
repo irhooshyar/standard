@@ -19,7 +19,7 @@ from abdal import es_config
 import time
 from elasticsearch import Elasticsearch
 from scripts.Persian.Preprocessing import standardIndexName
-from es_scripts import IngestRevokedDocument, IngestDocumentsToElastic
+from es_scripts import IngestDocumentsToElastic
 import re
 
 es_url = es_config.ES_URL
@@ -131,7 +131,6 @@ def apply(folder_name, Country):
 
     update_document_revoked_type(Country)
 
-    IngestRevokedDocument.apply(folder_name, Country)
     IngestDocumentsToElastic.apply(folder_name, Country)
 
     print("revoked documents added.")

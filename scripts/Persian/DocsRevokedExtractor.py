@@ -20,7 +20,7 @@ from abdal import es_config
 import time
 from elasticsearch import Elasticsearch
 from scripts.Persian.Preprocessing import standardIndexName
-from es_scripts import IngestRevokedDocument,IngestDocumentsToElastic
+from es_scripts import IngestDocumentsToElastic
 import re
 import numpy as np
 
@@ -169,7 +169,6 @@ def apply(folder_name, Country):
     print(f"{Not_Found_Docs_Count} revoked documents not found.")
     
 
-    # IngestRevokedDocument.apply(folder_name, Country)
     # IngestDocumentsToElastic.apply(folder_name,Country)
 
 
