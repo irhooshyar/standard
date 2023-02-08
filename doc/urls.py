@@ -266,7 +266,7 @@ urlpatterns = [
 
 
     # added for sample_template/portal
-    path('UserLogSaved/<str:username>/<str:url>/<str:sub_url>/<str:ip>/', views.UserLogSaved, name='UserLogSaved'),
+    path('UserLogSaved/<str:username>/<str:url>/<str:ip>/', views.UserLogSaved, name='UserLogSaved'),
 
     path('getUserLogs/<int:user_id>/<str:time_start>/<str:time_end>/', views.getUserLogs, name='getUserLogs'),
     path('getChartLogs/<int:user_id>/<str:time_start>/<str:time_end>/', views.getChartLogs, name='getChartLogs'),
@@ -528,5 +528,6 @@ urlpatterns = [
     path('GetGraphEdgesByDocumentsList/<int:measure_id>/', views.GetGraphEdgesByDocumentsList,
          name='GetGraphEdgesByDocumentsList'),
     path('GetSimilarity/<int:document_id>/', views.GetSimilarity, name='GetSimilarity'),
-
+    path('GetBookGraphNodesEdges/<int:country_id>/<int:measure_id>/<str:minimum_weight>/', views.GetBookGraphNodesEdges,
+         name='GetBookGraphNodesEdges'),
 ]

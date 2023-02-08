@@ -6756,6 +6756,12 @@ def GetGraphEdgesByDocumentsList(request, measure_id):
     return JsonResponse({'graph_edge_list': result, "graph_type": graph_type})
 
 
+def decode_str(string):
+    string = string.split('--')
+    string = string[:len(string) - 1]
+    return string
+
+
 def GetSimilarity(request, document_id):
     data = {'docs': []}
     # TFIDFWeightObj = TFIDFWeight.objects.get(document=document_id)
@@ -6838,3 +6844,12 @@ def GetSimilarity(request, document_id):
         data['docs'].append(book)
     return JsonResponse(data)
 
+
+def GetBookGraphNodesEdges(request, country_id, measure_id, minimum_weight):
+    Graph_Cube_OBJ = DocumentSimilarityCube.objects.get(country_id_id=country_id, similarity_type_id=measure_id,
+                                                        threshold=float(minimum_weight))
+
+    Nodes_data = Graph_Cube_OBJ.nodes_data
+    Edges_data = Graph_Cube_OBJ.edges_data
+
+    return JsonResponse({'Nodes_data': Nodes_data, "Edges_data": Edges_data})
