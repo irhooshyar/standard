@@ -6715,3 +6715,126 @@ def GetBookGraphDistribution(request, country_id, measure_id):
         result.append(res)
 
     return JsonResponse({'graph_distribution': result})
+
+def GetGraphEdgesByDocumentsList(request, measure_id):
+    documents_id_list = [int(id) for id in request.POST.get('documents_id_list').split(',')]
+    graph_edge_list = Graph.objects.filter(
+        src_document_id__in=documents_id_list, dest_document_id__in=documents_id_list,
+        measure_id__id=measure_id)
+
+    result = []
+    for edge in graph_edge_list:
+
+        src_id = edge.src_document_id_id
+        src_name = edge.src_document_id.name
+        src_color = "#0"
+        if edge.src_document_id.type_id != None:
+            src_color = edge.src_document_id.type_id.color
+
+        dest_id = edge.dest_document_id_id
+        dest_name = edge.dest_document_id.name
+        dest_color = "#0"
+        if edge.dest_document_id.type_id != None:
+            dest_color = edge.dest_document_id.type_id.color
+
+        weight = edge.weight
+
+        res = {
+            "src_id": src_id,
+            "src_name": src_name,
+            "src_color": src_color,
+            "dest_id": dest_id,
+            "dest_name": dest_name,
+            "dest_color": dest_color,
+            "weight": weight,
+        }
+
+        result.append(res)
+
+    graph_type = Measure.objects.get(id=measure_id).type
+
+    return JsonResponse({'graph_edge_list': result, "graph_type": graph_type})
+
+
+def GetSimilarity(request, document_id):
+    data = {'docs': []}
+    # TFIDFWeightObj = TFIDFWeight.objects.get(document=document_id)
+    # all_doc_weights = TFIDFWeight.objects.all().filter(document__country_id=TFIDFWeightObj.document.country_id).exclude(document=document_id)
+
+    all_doc_ids = []
+
+    # BM25Obj = SimilarityType.objects.get(name="BM25")
+    # all_docBM25Score = DocumentSimilarity.objects.filter(similarity_type__name ="BM25").filter(Q(doc1=document_id) | Q(doc2=document_id))
+    all_docBM25Score = DocumentSimilarity.objects.filter(similarity_type__name="BM25").filter(
+        doc1=document_id).order_by('-similarity')[:10]
+
+    # DFRObj = SimilarityType.objects.get(name="DFR")
+    # all_docDFRScore = DocumentSimilarity.objects.filter(similarity_type__name="DFR").filter(Q(doc1=document_id) | Q(doc2=document_id))
+    all_docDFRScore = DocumentSimilarity.objects.filter(similarity_type__name="DFR").filter(doc1=document_id).order_by(
+        '-similarity')[:10]
+
+    # DFIObj = SimilarityType.objects.get(name="DFI")
+    # all_docDFIScore = DocumentSimilarity.objects.filter(similarity_type__name="DFI").filter(Q(doc1=document_id) | Q(doc2=document_id))
+    all_docDFIScore = DocumentSimilarity.objects.filter(similarity_type__name="DFI").filter(doc1=document_id).order_by(
+        '-similarity')[:10]
+
+    print(all_docDFRScore.values('doc2_id', 'similarity'))
+
+    all_doc_ids = list(all_docBM25Score.values_list('doc2_id', flat=True)) + \
+                  list(all_docDFIScore.values_list('doc2_id', flat=True)) + \
+                  list(all_docDFRScore.values_list('doc2_id', flat=True))
+
+    all_doc_ids = list(set(all_doc_ids))
+
+    print(all_doc_ids)
+    docs = {}
+
+    DocLDAScoreObj = DocLDAScore.objects.get(document=document_id)
+    all_DocLDAScore = DocLDAScore.objects.filter(document__id__in=all_doc_ids).exclude(document=document_id)
+
+    for doc_score in all_DocLDAScore:
+        first = decode_str(DocLDAScoreObj.scores)
+        second = decode_str(doc_score.scores)
+        res = cosine_similarity([first], [second])
+        # docs[doc_score.document.id]['LDA_similarity'] = round(res[0][0]*100, 2)
+
+        docs[doc_score.document.id] = {
+            'document_id': doc_score.document.id,
+            'document_name': doc_score.document.name,
+            'LDA_similarity': round(res[0][0] * 100, 2)
+        }
+
+    for doc_id in docs:
+        print(doc_id)
+        doc_id = int(doc_id)
+
+        try:
+            docs[doc_id]['BM25_similarity'] = DocumentSimilarity.objects.filter(
+                similarity_type__name='BM25',
+                doc1__id=document_id, doc2__id=doc_id)[0].similarity
+        except:
+            docs[doc_id]['BM25_similarity'] = 0
+
+        try:
+            docs[doc_id]['DFR_similarity'] = DocumentSimilarity.objects.filter(
+                similarity_type__name='DFR',
+                doc1__id=document_id, doc2__id=doc_id)[0].similarity
+        except:
+            docs[doc_id]['DFR_similarity'] = 0
+
+        try:
+            docs[doc_id]['DFI_similarity'] = DocumentSimilarity.objects.filter(
+                similarity_type__name='DFI',
+                doc1__id=document_id, doc2__id=doc_id)[0].similarity
+        except:
+            docs[doc_id]['DFI_similarity'] = 0
+
+        docs[doc_id]['average_similarity'] = round(
+            (docs[doc_id]['BM25_similarity'] + docs[doc_id]['DFR_similarity'] + docs[doc_id]['DFI_similarity']) / 3, 2)
+
+    books = docs.values()
+    books = sorted(books, key=lambda k: k['average_similarity'], reverse=True)
+    for book in books:
+        data['docs'].append(book)
+    return JsonResponse(data)
+

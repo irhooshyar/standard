@@ -525,4 +525,8 @@ urlpatterns = [
          name='GetBookSimilarityMeasureByCountry'),
     path('GetBookGraphDistribution/<int:country_id>/<int:measure_id>/', views.GetBookGraphDistribution,
          name='GetBookGraphDistribution'),
+    path('GetGraphEdgesByDocumentsList/<int:measure_id>/', views.GetGraphEdgesByDocumentsList,
+         name='GetGraphEdgesByDocumentsList'),
+    path('GetSimilarity/<int:document_id>/', views.GetSimilarity, name='GetSimilarity'),
+
 ]
