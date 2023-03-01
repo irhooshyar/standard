@@ -101,7 +101,7 @@ DATABASES = {
     'default': {},
     'Fa_DataBase': {
         'ENGINE': 'django.db.backends.mysql',
-        'CONN_MAX_AGE': 60,
+        'CONN_MAX_AGE': 30,
         # 'NAME': 'HooshyarDB_FA' if os.environ.get('DB_FA_NAME') is None else os.environ.get('DB_FA_NAME'),
         'NAME': 'StandardDB',
         'USER': 'dbadmin',
